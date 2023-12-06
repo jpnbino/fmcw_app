@@ -90,7 +90,7 @@
       </widget>
      </item>
      <item row="1" column="5">
-      <widget class="QLineEdit" name="lineEdit_11"/>
+      <widget class="QLineEdit" name="uvDelayTimeoutLineEdit"/>
      </item>
      <item row="3" column="2">
       <widget class="QLabel" name="label_9">
@@ -113,7 +113,7 @@
       <widget class="QLineEdit" name="uvLockoutLineEdit"/>
      </item>
      <item row="3" column="5">
-      <widget class="QLineEdit" name="lineEdit_13"/>
+      <widget class="QLineEdit" name="openWireTimingLineEdit"/>
      </item>
      <item row="4" column="2">
       <widget class="QLabel" name="label_18">
@@ -140,7 +140,7 @@
       <widget class="QLineEdit" name="eocVoltageLineEdit"/>
      </item>
      <item row="0" column="6">
-      <widget class="QComboBox" name="comboBox_1">
+      <widget class="QComboBox" name="ovDelayTimeoutCombo">
        <item>
         <property name="text">
          <string>μs</string>
@@ -164,7 +164,7 @@
       </widget>
      </item>
      <item row="2" column="5">
-      <widget class="QLineEdit" name="lineEdit_12"/>
+      <widget class="QLineEdit" name="sleepDelayLineEdit"/>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_15">
@@ -218,7 +218,7 @@
       <widget class="QLineEdit" name="LowVoltageChargeLineEdit"/>
      </item>
      <item row="0" column="5">
-      <widget class="QLineEdit" name="lineEdit_10"/>
+      <widget class="QLineEdit" name="ovDelayTimeoutLineEdit"/>
      </item>
      <item row="4" column="1">
       <widget class="QLineEdit" name="uvRecoverLineEdit"/>
@@ -262,7 +262,7 @@
       <widget class="QLineEdit" name="ovLockoutLineEdit"/>
      </item>
      <item row="1" column="6">
-      <widget class="QComboBox" name="comboBox_2">
+      <widget class="QComboBox" name="uvDelayTimeoutCombo">
        <item>
         <property name="text">
          <string>μs</string>
@@ -286,7 +286,7 @@
       </widget>
      </item>
      <item row="2" column="6">
-      <widget class="QComboBox" name="comboBox_3">
+      <widget class="QComboBox" name="sleepDelayUnitCombo">
        <item>
         <property name="text">
          <string>μs</string>
@@ -310,7 +310,7 @@
       </widget>
      </item>
      <item row="3" column="6">
-      <widget class="QComboBox" name="comboBox_4">
+      <widget class="QComboBox" name="openWireTimingCombo">
        <item>
         <property name="text">
          <string>μs</string>
@@ -343,7 +343,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>70</x>
