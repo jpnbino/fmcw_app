@@ -1,9 +1,15 @@
 from qtpy.QtWidgets import QApplication, QMainWindow, QLineEdit, QPushButton
 from qtpy.QtUiTools import QUiLoader
 from qtpy.QtCore import QFile, QIODevice
+from qtpy.QtGui import QIcon
 import sys
 
+MASK_1BIT = 0x0001
+MASK_2BIT = 0x0003
+MASK_10BIT = 0x03FF
+MASK_11BIT = 0x07FF
 MASK_12BIT = 0x0FFF
+
 VOLTAGE_CELL_MULTIPLIER = (1.8 * 8.0) / (4095.0 * 3.0) # 0,0011721611721612
 
 class ISL94203:
@@ -68,8 +74,8 @@ class BMSConfiguration:
         self.open_wire_timing_unit = 0
         self.sleep_delay_unit = 0
 
-                # Mapping of codes to text values
-        self.unit_mapping = {00: "us", 1: "ms", 2: "s", 3: "min"}
+        # Mapping of codes to text values
+        self.unit_mapping = {00: "μs", 1: "ms", 2: "s", 3: "min"}
 
     def get_default_config(self):
         return self.configuration_default
@@ -96,19 +102,17 @@ class BMSConfiguration:
         self.sleep_voltage = self.apply_mask_and_multiplier(int(''.join(values[68:70][::-1]), 16))
 
         #Timing
-        self.ov_delay_timeout =     ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 0)  & 0x01ff
-        self.ov_delay_timeout_unit= ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 10)  & 0x0003
+        self.ov_delay_timeout =     ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 0)  & MASK_10BIT
+        self.ov_delay_timeout_unit= ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 10)  & MASK_2BIT
 
-        self.uv_delay_timeout =     ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 0)  & 0x03ff
-        self.uv_delay_timeout_unit = ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 10)  & 0x0003
+        self.uv_delay_timeout =     ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 0)  & MASK_10BIT
+        self.uv_delay_timeout_unit = ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 10)  & MASK_2BIT
 
         self.open_wire_timing =     ((int(''.join(values[0x14:0x16][::-1]), 16)) >> 0)  & 0x01ff
-        self.open_wire_timing_unit = ((int(''.join(values[0x14:0x16][::-1]), 16)) >> 9)  & 0x0001
+        self.open_wire_timing_unit = ((int(''.join(values[0x14:0x16][::-1]), 16)) >> 9)  & MASK_1BIT
 
         self.sleep_delay =          ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 0)  & 0x01ff
-        self.sleep_delay_unit =     ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 9)  & 0x0003
-
-        self.printValuesOnterminal(values)
+        self.sleep_delay_unit =     ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 9)  & MASK_2BIT
         
     
     def read_from_values(self, values):
@@ -128,7 +132,7 @@ class BMSConfiguration:
         byte0 = int(self.config_values_int[address])
         byte1 = int(self.config_values_int[address+1] ) 
         
-        tmp = byte1 << 8|  byte0
+        tmp = (byte1 << 8)|  byte0
 
         tmp = (tmp << shift) & ~mask
         tmp = tmp | (value << shift)
@@ -149,17 +153,6 @@ class BMSConfiguration:
         result = masked_value * VOLTAGE_CELL_MULTIPLIER
         return result
     
-    def printValuesOnterminal(self, values):
-        print(hex(int(''.join(values[0:2][::-1]), 16)))
-        print(hex(int(''.join(values[2:4][::-1]), 16)))
-        print(hex(int(''.join(values[4:6][::-1]), 16)))
-        print(hex(int(''.join(values[6:8][::-1]), 16)))
-        print(hex(int(''.join(values[8:10][::-1]), 16)))
-        print(hex(int(''.join(values[10:12][::-1]), 16)))
-        print(hex(int(''.join(values[12:14][::-1]), 16)))
-        print(hex(int(''.join(values[20:22][::-1]), 16)))
-        print(hex (int(''.join(values[0x44:0x46][::-1]), 16)))
-
 class BMSGUI:
     def __init__(self, ui, bms_config):
         self.ui = ui
@@ -185,6 +178,12 @@ class BMSGUI:
         ]:
             line_edit.textChanged.connect(self.on_line_edit_changed)
 
+    #read the combobox and return the unit chosen by user
+    def get_unit_from_combo(self, combo):
+        selected_text = combo.currentText()
+        unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
+        return unit
+    
     def read_bms_config(self):
 
         #@todo: Implemetar para usar a serial.
@@ -205,12 +204,11 @@ class BMSGUI:
         self.ui.sleepVoltageLineEdit.setText(f"{self.bms_config.sleep_voltage:.2f}")
         self.ui.LowVoltageChargeLineEdit.setText(f"{self.bms_config.low_voltage_charge:.2f}")
         self.ui.uvLockoutLineEdit.setText(f"{self.bms_config.uv_lockout:.2f}")
-        self.ui.ovDelayTimeoutLineEdit.setText(f"{self.bms_config.ov_delay_timeout:.2f}")
-        self.ui.uvDelayTimeoutLineEdit.setText(f"{self.bms_config.uv_delay_timeout:.2f}")
-        self.ui.sleepDelayLineEdit.setText(f"{self.bms_config.sleep_delay:.2f}")
-        self.ui.openWireTimingLineEdit.setText(f"{self.bms_config.open_wire_timing:.2f}")
 
-        selected_code = 2
+        self.ui.ovDelayTimeoutLineEdit.setText(f"{int(self.bms_config.ov_delay_timeout)}")
+        self.ui.uvDelayTimeoutLineEdit.setText(f"{int(self.bms_config.uv_delay_timeout)}")
+        self.ui.sleepDelayLineEdit.setText(f"{int(self.bms_config.sleep_delay)}")
+        self.ui.openWireTimingLineEdit.setText(f"{int(self.bms_config.open_wire_timing)}")
 
         # Update the combo box with the selected value
         self.ui.ovDelayTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.ov_delay_timeout_unit), 'Unknown'))
@@ -259,7 +257,36 @@ class BMSGUI:
         
         sleep_voltage_hex = int(sleep_voltage / VOLTAGE_CELL_MULTIPLIER)
         
-        self.bms_config.reg_write( 0x00, ov_hex, 0x3ff, 0x00)
+        self.bms_config.reg_write( 0x00, ov_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x02, ov_recover_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x04, uv_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x06, uv_recover_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x08, ov_lockout_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x0a, uv_lockout_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x0c, eoc_voltage_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x0e, low_voltage_charge_hex, MASK_12BIT, 0x00)
+        self.bms_config.reg_write( 0x44, sleep_voltage_hex, MASK_12BIT, 0x00)
+        
+        #time register
+         # Get the values from the QLineEdit fields
+        ov_delay_timeout = int(self.ui.ovDelayTimeoutLineEdit.text()) #reg00
+        uv_delay_timeout = int(self.ui.uvDelayTimeoutLineEdit.text())
+        
+        open_wire_sample_time = int(self.ui.openWireTimingLineEdit.text())
+        sleep_delay = int(self.ui.sleepDelayLineEdit.text())        
+        
+        #Read unit and shift the values according to position in the register
+        ov_delay_timeout_unit = self.get_unit_from_combo(self.ui.ovDelayTimeoutCombo) << 10
+        uv_delay_timeout_unit = self.get_unit_from_combo(self.ui.uvDelayTimeoutCombo) << 10
+        sleep_delay_unit = self.get_unit_from_combo(self.ui.sleepDelayUnitCombo) << 9
+        open_wire_sample_time_unit = self.get_unit_from_combo(self.ui.openWireTimingCombo) << 9
+
+        #Joins values and units, and write the configuration
+        self.bms_config.reg_write( 0x10, ov_delay_timeout_unit|ov_delay_timeout, MASK_12BIT, 0)
+        self.bms_config.reg_write( 0x12, uv_delay_timeout_unit|uv_delay_timeout, MASK_12BIT, 0)
+        self.bms_config.reg_write( 0x14, open_wire_sample_time_unit |open_wire_sample_time, MASK_10BIT, 0)
+        self.bms_config.reg_write( 0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)  
+
 
         register_cfg = self.bms_config.get_config()
         print("exit write_bms_config:", register_cfg)
@@ -290,6 +317,10 @@ class FMCWApplication(QMainWindow):
         # Set the window title
         self.setWindowTitle("FMCW Application")
 
+        # Set the application icon for the window and taskbar
+        icon_path = "images/icons/icon_circle.png"  # Replace this with the path to your icon file
+        self.setWindowIcon(QIcon(icon_path))
+                           
         # Set the initial size of the window
         self.resize(800, 600)
 
@@ -307,7 +338,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     # Some code to obtain the form file name, ui_file_name
-    ui_file_name = "C:/Users/bino/Desktop/fmcw/app/qt/qt_designer/fmcw.ui"
+    ui_file_name = "qt/qt_designer/fmcw.ui"
 
     # Create an instance of the FMCWApplication class
     fmcw_app = FMCWApplication(ui_file_name)
