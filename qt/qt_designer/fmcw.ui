@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>546</width>
-    <height>550</height>
+    <width>591</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,56 +31,19 @@
       <x>30</x>
       <y>40</y>
       <width>441</width>
-      <height>271</height>
+      <height>272</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <property name="horizontalSpacing">
       <number>10</number>
      </property>
-     <item row="3" column="4">
-      <widget class="QLabel" name="label_38">
-       <property name="text">
-        <string>Open Wire Sample Time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_5">
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_3">
        <property name="text">
         <string>V</string>
        </property>
       </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>End of Charge</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="ovRecoverLineEdit"/>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="underVoltageLineEdit"/>
-     </item>
-     <item row="5" column="2">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>V</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="QLabel" name="label_37">
-       <property name="text">
-        <string>Sleep Volt Delay Time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="ovLineEdit"/>
      </item>
      <item row="7" column="2">
       <widget class="QLabel" name="label_35">
@@ -89,101 +52,17 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="5">
-      <widget class="QLineEdit" name="uvDelayTimeoutLineEdit"/>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="label_9">
+     <item row="6" column="2">
+      <widget class="QLabel" name="label_34">
        <property name="text">
         <string>V</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="2">
-      <widget class="QLabel" name="label_33">
+     <item row="3" column="4">
+      <widget class="QLabel" name="label_38">
        <property name="text">
-        <string>V</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLineEdit" name="sleepVoltageLineEdit"/>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLineEdit" name="uvLockoutLineEdit"/>
-     </item>
-     <item row="3" column="5">
-      <widget class="QLineEdit" name="openWireTimingLineEdit"/>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="label_18">
-       <property name="text">
-        <string>V</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="text">
-        <string>Sleep Voltage</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Over Voltage</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="eocVoltageLineEdit"/>
-     </item>
-     <item row="0" column="6">
-      <widget class="QComboBox" name="ovDelayTimeoutCombo">
-       <item>
-        <property name="text">
-         <string>μs</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ms</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>s</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>min</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="5">
-      <widget class="QLineEdit" name="sleepDelayLineEdit"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_15">
-       <property name="text">
-        <string>Under Voltage</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QLabel" name="label_36">
-       <property name="text">
-        <string>UV Delay Time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_13">
-       <property name="text">
-        <string>UV Recover</string>
+        <string>Open Wire Sample Time</string>
        </property>
       </widget>
      </item>
@@ -200,89 +79,11 @@
        </property>
       </spacer>
      </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>UV Lockout</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_3">
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_9">
        <property name="text">
         <string>V</string>
        </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLineEdit" name="LowVoltageChargeLineEdit"/>
-     </item>
-     <item row="0" column="5">
-      <widget class="QLineEdit" name="ovDelayTimeoutLineEdit"/>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="uvRecoverLineEdit"/>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>V</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2">
-      <widget class="QLabel" name="label_34">
-       <property name="text">
-        <string>V</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_16">
-       <property name="text">
-        <string>Low V Charge</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>OV Recover</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>OV Delay Time</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="ovLockoutLineEdit"/>
-     </item>
-     <item row="1" column="6">
-      <widget class="QComboBox" name="uvDelayTimeoutCombo">
-       <item>
-        <property name="text">
-         <string>μs</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ms</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>s</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>min</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="2" column="6">
@@ -309,6 +110,132 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_1">
+       <property name="text">
+        <string>OV Lockout</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Over Voltage</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QLabel" name="label_36">
+       <property name="text">
+        <string>UV Delay Time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="QLineEdit" name="uvDelayTimeoutLineEdit"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="ovLineEdit"/>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="sleepVoltageLineEdit"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>UV Recover</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>End of Charge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>Sleep Voltage</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="ovLockoutLineEdit"/>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>V</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="QComboBox" name="uvDelayTimeoutCombo">
+       <item>
+        <property name="text">
+         <string>μs</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ms</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>s</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>min</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>UV Lockout</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="eocVoltageLineEdit"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_16">
+       <property name="text">
+        <string>Low V Charge</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QLabel" name="label_33">
+       <property name="text">
+        <string>V</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>Under Voltage</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLineEdit" name="ovDelayTimeoutLineEdit"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>OV Delay Time</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="6">
       <widget class="QComboBox" name="openWireTimingCombo">
        <item>
@@ -323,12 +250,85 @@
        </item>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_1">
+     <item row="3" column="5">
+      <widget class="QLineEdit" name="openWireTimingLineEdit"/>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="LowVoltageChargeLineEdit"/>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLabel" name="label_18">
        <property name="text">
-        <string>OV Lockout</string>
+        <string>V</string>
        </property>
       </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="uvRecoverLineEdit"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="ovRecoverLineEdit"/>
+     </item>
+     <item row="2" column="4">
+      <widget class="QLabel" name="label_37">
+       <property name="text">
+        <string>Sleep Volt Delay Time</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="uvLockoutLineEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>OV Recover</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="underVoltageLineEdit"/>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>V</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QComboBox" name="ovDelayTimeoutCombo">
+       <item>
+        <property name="text">
+         <string>μs</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ms</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>s</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>min</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>V</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QLineEdit" name="sleepDelayLineEdit"/>
      </item>
     </layout>
    </widget>

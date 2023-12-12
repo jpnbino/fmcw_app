@@ -1,7 +1,7 @@
 import serial
 import time
 
-def receive_and_log_data(serial_port, log_file_path="C:/Users/bino/Desktop/fmcw/python/log.txt"):
+def receive_and_log_data(serial_port, log_file_path="app/src/log.txt"):
     # Open the serial port
     with serial.Serial(serial_port, 115200, timeout=1) as ser:
         # Open the log file in append mode

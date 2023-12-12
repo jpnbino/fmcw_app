@@ -36,4 +36,4 @@ def parse_and_plot(file_path):
     plt.show()
 
 # Use the function with your data file
-parse_and_plot('log.txt')
+parse_and_plot('app/data/log.txt')
