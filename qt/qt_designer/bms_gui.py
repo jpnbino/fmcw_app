@@ -41,6 +41,7 @@ class BMSGUI:
 
         self.bms_config.update_registers(configuration)
 
+        #Voltage Limits
         # Set the values in the corresponding QLineEdit fields with formatting to three decimal places
         self.ui.ovLockoutLineEdit.setText(f"{self.bms_config.ov_lockout:.2f}")
         self.ui.ovLineEdit.setText(f"{self.bms_config.ov:.2f}")
@@ -52,27 +53,61 @@ class BMSGUI:
         self.ui.LowVoltageChargeLineEdit.setText(f"{self.bms_config.low_voltage_charge:.2f}")
         self.ui.uvLockoutLineEdit.setText(f"{self.bms_config.uv_lockout:.2f}")
 
+        #Timers
         self.ui.ovDelayTimeoutLineEdit.setText(f"{int(self.bms_config.ov_delay_timeout)}")
         self.ui.uvDelayTimeoutLineEdit.setText(f"{int(self.bms_config.uv_delay_timeout)}")
         self.ui.sleepDelayLineEdit.setText(f"{int(self.bms_config.sleep_delay)}")
         self.ui.openWireTimingLineEdit.setText(f"{int(self.bms_config.open_wire_timing)}")
 
-        # Update the combo box with the selected value
+        #-- Update the combo box with the selected value
         self.ui.ovDelayTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.ov_delay_timeout_unit), 'Unknown'))
         self.ui.uvDelayTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.uv_delay_timeout_unit), 'Unknown'))
         self.ui.sleepDelayUnitCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.sleep_delay_unit), 'Unknown'))
         self.ui.openWireTimingCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.open_wire_timing_unit), 'Unknown'))
 
+        self.ui.timerIdleDozeLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
+        self.ui.timerSleepLineEdit.setText(f"{int(self.bms_config.timer_sleep)}")
+        self.ui.timerWDTLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
+
+        #Cell Configuration 
+        self.ui.CellConfigurationLineEdit.setText(f"{int(self.bms_config.cell_config_code[self.bms_config.cell_config])}")
+        
+        #Cell Balance Limits
+        self.ui.CBUpperLimLineEdit.setText(f"{self.bms_config.cb_upper_lim:.2f}")
+        self.ui.CBLowerLimLineEdit.setText(f"{self.bms_config.cb_lower_lim:.2f}")
+        self.ui.CBMaxDeltaLineEdit.setText(f"{self.bms_config.cb_max_delta:.2f}")
+        self.ui.CBMinDeltaLineEdit.setText(f"{self.bms_config.cb_min_delta:.2f}")
+        self.ui.CBOverTempLineEdit.setText(f"{self.bms_config.cb_over_temp:.2f}")
+        self.ui.CBOTRecoverLineEdit.setText(f"{self.bms_config.cb_ot_recover:.2f}")
+        self.ui.CBUTRecoverLineEdit.setText(f"{self.bms_config.cb_ut_recover:.2f}")
+        self.ui.CBUnderTempLineEdit.setText(f"{self.bms_config.cb_under_temp:.2f}")
+       
+        self.ui.CBOnTimeLineEdit.setText(f"{int(self.bms_config.cb_on_time)}")
+        self.ui.CBOffTimeLineEdit.setText(f"{int(self.bms_config.cb_off_time)}")
+        self.ui.CBOnTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
+        self.ui.CBOffTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
+
+        #Temperature Limits
+        self.ui.TLChargeOverTempLineEdit.setText(f"{self.bms_config.tl_charge_over_temp:.2f}")
+        self.ui.TLChargeOTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ot_recover:.2f}")
+        self.ui.TLChargeUTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ut_recover:.2f}")
+        self.ui.TLChargeUnderTempLineEdit.setText(f"{self.bms_config.tl_charge_under_temp:.2f}")
+
+        self.ui.TLDiscOverTempLineEdit.setText(f"{self.bms_config.tl_disch_over_temp:.2f}")
+        self.ui.TLDischOTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ot_recover:.2f}")
+        self.ui.TLDischUTRecoverLineEdit.setText(f"{self.bms_config.tl_disch_ut_recover:.2f}")
+        self.ui.TLDischUnderTempLineEdit.setText(f"{self.bms_config.tl_disch_under_temp:.2f}")
+        self.ui.TLInternalOverTempLineEdit.setText(f"{self.bms_config.tl_internal_over_temp:.2f}")
+        self.ui.TLInternalOTRecoverLineEdit.setText(f"{self.bms_config.tl_internal_ot_recover:.2f}")
         
 
     def write_bms_config(self):
 
         register_cfg = self.bms_config.get_config()
 
-        print("enter write_bms_config:", register_cfg)
+        print("entered write_bms_config:", register_cfg)
 
-#Convert Editline values to HEX
-
+        # Convert Editline values to HEX
         # Get the values from the QLineEdit fields
         ov = float(self.ui.ovLineEdit.text()) #reg00
         ov_recover = float(self.ui.ovRecoverLineEdit.text())
