@@ -532,7 +532,7 @@
         <number>10</number>
        </property>
        <item row="0" column="1">
-        <widget class="QComboBox" name="ovDelayTimeoutCombo_2">
+        <widget class="QComboBox" name="CLDischargeOCVoltageCombo">
          <item>
           <property name="text">
            <string>4mV</string>
@@ -597,7 +597,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="uvDelayTimeoutLineEdit_2"/>
+        <widget class="QLineEdit" name="CLDischargeOCTimeoutLineEdit"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_46">
@@ -607,7 +607,7 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="QComboBox" name="openWireTimingCombo_4">
+        <widget class="QComboBox" name="CLDischargeSCTimeoutCombo">
          <item>
           <property name="text">
            <string>μs</string>
@@ -618,13 +618,23 @@
            <string>ms</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>s</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>min</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="openWireTimingLineEdit_2"/>
+        <widget class="QLineEdit" name="CLChargeOCTimeoutLineEdit"/>
        </item>
        <item row="4" column="1">
-        <widget class="QComboBox" name="ovDelayTimeoutCombo_4">
+        <widget class="QComboBox" name="CLDischargeSCVoltageCombo">
          <item>
           <property name="text">
            <string>16mV</string>
@@ -668,7 +678,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QComboBox" name="uvDelayTimeoutCombo_2">
+        <widget class="QComboBox" name="CLDischargeOCTimeoutCombo">
          <item>
           <property name="text">
            <string>μs</string>
@@ -699,7 +709,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QComboBox" name="ovDelayTimeoutCombo_3">
+        <widget class="QComboBox" name="CLChargeOCVoltageCombo">
          <item>
           <property name="text">
            <string>1mV</string>
@@ -743,10 +753,10 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="openWireTimingLineEdit_3"/>
+        <widget class="QLineEdit" name="CLDischargeSCTimeoutLineEdit"/>
        </item>
        <item row="3" column="2">
-        <widget class="QComboBox" name="openWireTimingCombo_2">
+        <widget class="QComboBox" name="CLChargeOCTimeoutCombo">
          <item>
           <property name="text">
            <string>μs</string>
@@ -755,6 +765,16 @@
          <item>
           <property name="text">
            <string>ms</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>s</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>min</string>
           </property>
          </item>
         </widget>
@@ -1568,42 +1588,42 @@
          <number>10</number>
         </property>
         <item row="5" column="0">
-         <widget class="QCheckBox" name="checkBox_2">
+         <widget class="QCheckBox" name="poCascadeCheckBox">
           <property name="text">
            <string>Cascade two ISL94203</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox">
+         <widget class="QCheckBox" name="poT2MonitorsFETTempCheckBox">
           <property name="text">
            <string>xT2 Monitors FET Temp</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QCheckBox" name="checkBox_4">
+         <widget class="QCheckBox" name="poEnableUVLOCheckBox">
           <property name="text">
            <string>Enable UVLO Power Down</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QCheckBox" name="checkBox_5">
+         <widget class="QCheckBox" name="poEnableCELLFpsdCheckBox">
           <property name="text">
            <string>Enable CELLF PSD Action</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QCheckBox" name="checkBox_3">
+         <widget class="QCheckBox" name="poEnableOpenWireScanCheckBox">
           <property name="text">
            <string>Enable Open Wire Scan</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QCheckBox" name="checkBox_6">
+         <widget class="QCheckBox" name="poEnableOpenWirePSDCheckBox">
           <property name="text">
            <string>Enable Open Wire PSD</string>
           </property>

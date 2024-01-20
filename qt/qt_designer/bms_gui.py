@@ -53,7 +53,6 @@ class BMSGUI:
         self.ui.LowVoltageChargeLineEdit.setText(f"{self.bms_config.low_voltage_charge:.2f}")
         self.ui.uvLockoutLineEdit.setText(f"{self.bms_config.uv_lockout:.2f}")
 
-        #Timers
         self.ui.ovDelayTimeoutLineEdit.setText(f"{int(self.bms_config.ov_delay_timeout)}")
         self.ui.uvDelayTimeoutLineEdit.setText(f"{int(self.bms_config.uv_delay_timeout)}")
         self.ui.sleepDelayLineEdit.setText(f"{int(self.bms_config.sleep_delay)}")
@@ -65,6 +64,7 @@ class BMSGUI:
         self.ui.sleepDelayUnitCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.sleep_delay_unit), 'Unknown'))
         self.ui.openWireTimingCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.open_wire_timing_unit), 'Unknown'))
 
+        #Timers
         self.ui.timerIdleDozeLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
         self.ui.timerSleepLineEdit.setText(f"{int(self.bms_config.timer_sleep)}")
         self.ui.timerWDTLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
@@ -100,6 +100,33 @@ class BMSGUI:
         self.ui.TLInternalOverTempLineEdit.setText(f"{self.bms_config.tl_internal_over_temp:.2f}")
         self.ui.TLInternalOTRecoverLineEdit.setText(f"{self.bms_config.tl_internal_ot_recover:.2f}")
         
+
+        #Current Limit
+        self.ui.CLDischargeOCVoltageCombo.setCurrentText(self.bms_config.doc_mapping.get(int(self.bms_config.disch_oc_voltage), 'Unknown'))
+        self.ui.CLChargeOCVoltageCombo.setCurrentText(self.bms_config.coc_mapping.get(int(self.bms_config.charge_oc_voltage), 'Unknown'))
+        self.ui.CLDischargeSCVoltageCombo.setCurrentText(self.bms_config.dsc_mapping.get(int(self.bms_config.disch_sc_voltage), 'Unknown'))
+
+        self.ui.CLDischargeOCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.disch_oc_timeout_unit), 'Unknown'))
+        self.ui.CLChargeOCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.charge_oc_timeout_unit), 'Unknown'))
+        self.ui.CLDischargeSCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.disch_sc_timeout_unit), 'Unknown'))
+
+        self.ui.CLDischargeOCTimeoutLineEdit.setText(f"{int(self.bms_config.disch_oc_timeout)}")
+        self.ui.CLChargeOCTimeoutLineEdit.setText(f"{int(self.bms_config.charge_oc_timeout)}")
+        self.ui.CLDischargeSCTimeoutLineEdit.setText(f"{int(self.bms_config.disch_sc_timeout)}")
+        
+        #Pack Option
+        self.ui.poT2MonitorsFETTempCheckBox.setChecked(self.bms_config.bit_t2_monitors_fet)
+        self.ui.poEnableCELLFpsdCheckBox.setChecked(self.bms_config.bit_enable_cellf_psd)
+        self.ui.poEnableOpenWirePSDCheckBox.setChecked(self.bms_config.bit_enable_openwire_psd)
+        self.ui.poEnableUVLOCheckBox.setChecked(self.bms_config.bit_enable_uvlo_pd)
+        self.ui.poEnableOpenWireScanCheckBox.setChecked(self.bms_config.bit_enable_openwire_scan)
+        self.ui.poCascadeCheckBox.setChecked(True)
+        
+        self.ui.CBDuringChargeCheckBox.setChecked(self.bms_config.bit_cb_during_charge)
+        self.ui.CBDuringDischargeCheckBox.setChecked(self.bms_config.bit_cb_during_discharge)
+        self.ui.CBDuringEOCCheckBox.setChecked(self.bms_config.bit_cb_during_eoc)
+        
+
 
     def write_bms_config(self):
 

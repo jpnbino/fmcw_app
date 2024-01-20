@@ -8,7 +8,10 @@ class BMSConfiguration:
         self.configuration_default = "2A,1E,D4,0D,FF,18,FF,09,7F,0E,00,06,FF,0D,AA,07,01,08,01,08,14,02,A0,44,A0,44,C8,60,55,0A,70,0D,10,00,AB,01,02,08,02,08,F2,0B,93,0A,B6,04,3E,05,B6,04,3E,05,F2,0B,93,0A,B6,04,3E,05,F2,0B,93,0A,7C,06,21,06,AA,06,0F,FC,FF,83,00,00,00,00,00,00,00,00,00,00,40,22,00,00,03,00,00,00,8F,0A,BE,0A,15,00,91,0A,BE,0A,00,00,00,00,00,00,00,00,8F,0A,92,0A,7B,02,D2,04,D2,04,68,03,09,0B,2A,00,"
 
         # Mapping of codes to text values
-        self.unit_mapping = {00: "μs", 1: "ms", 2: "s", 3: "min"}
+        self.unit_mapping = {0: "μs", 1: "ms", 2: "s", 3: "min"}
+        self.doc_mapping = {0: "4mV", 1: "8mV", 2: "16mV", 3: "24mV", 4: "32mV", 5: "48mV", 6: "64mV", 7: "96mV"}
+        self.coc_mapping = {0: "1mV", 1: "2mV", 2: "4mV", 3: "6mV", 4: "8mV", 5: "12mV", 6: "16mV", 7: "24mV"}
+        self.dsc_mapping = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
 
         # Split the input line by commas and remove spaces
         self.config_values = [val.strip() for val in self.configuration_default.split(',')[:] if val.strip()]
@@ -68,6 +71,10 @@ class BMSConfiguration:
         self.cb_on_time_unit = 0 
         self.cb_off_time_unit = 0 
 
+        self.bit_cb_during_charge = False
+        self.bit_cb_during_discharge = False
+        self.bit_cb_during_eoc = False
+
         #Temperature Limits
         self.tl_charge_over_temp = 0
         self.tl_charge_ot_recover = 0
@@ -82,8 +89,26 @@ class BMSConfiguration:
         self.tl_internal_over_temp = 0
         self.tl_internal_ot_recover = 0
 
+        #Pack Options
+        self.bit_t2_monitors_fet = False
+        self.bit_enable_cellf_psd = False
+        self.bit_enable_openwire_psd = False
+        self.bit_enable_uvlo_pd = False
+        self.bit_enable_openwire_scan = False
 
 
+        
+        #Current Limits
+        self.disch_oc_voltage = 0
+        self.disch_oc_timeout = 0
+        self.disch_oc_timeout_unit = 0
+        self.charge_oc_voltage = 0
+        self.charge_oc_timeout = 0
+        self.charge_oc_timeout_unit = 0
+        self.disch_sc_voltage = 0
+        self.disch_sc_timeout = 0
+        self.disch_sc_timeout_unit = 0
+        
 
     def get_default_config(self):
         return self.configuration_default
@@ -109,7 +134,7 @@ class BMSConfiguration:
         self.low_voltage_charge = self.apply_mask_and_multiplier(int(''.join(values[14:16][::-1]), 16))
         self.sleep_voltage = self.apply_mask_and_multiplier(int(''.join(values[68:70][::-1]), 16))
 
-        #Timers
+        
         self.ov_delay_timeout =     ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 0)  & MASK_10BIT
         self.ov_delay_timeout_unit= ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 10)  & MASK_2BIT
 
@@ -122,12 +147,36 @@ class BMSConfiguration:
         self.sleep_delay =          ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 0)  & 0x01ff
         self.sleep_delay_unit =     ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 9)  & MASK_2BIT
         
+        #Timers
         self.timer_wdt = ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 11)  & 0x001f
         self.timer_idle_doze = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 0)  & 0x000f
         self.timer_sleep = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 0)  & 0x00ff
         
         #Cell Configutarion
         self.cell_config = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 8)  & 0x00ff
+
+        #Pack Options
+
+        
+        self.bit_enable_openwire_psd = bool(((int(''.join(values[0x4A]), 16)) >> 0) & MASK_1BIT)
+        self.bit_enable_openwire_scan = bool(((int(''.join(values[0x4A]), 16)) >> 1) & MASK_1BIT)
+        #bit2:PCFETE
+        #bit3:Reserved
+        #bit4:TGAIN
+        self.bit_t2_monitors_fet =  bool(((int(''.join(values[0x4A]), 16)) >> 5) & MASK_1BIT)
+        #bit6:Reserved
+        self.bit_enable_cellf_psd = bool(((int(''.join(values[0x4A]), 16)) >> 7) & MASK_1BIT)
+
+
+        self.bit_cb_during_eoc =  bool(((int(''.join(values[0x4B]), 16)) >> 0) & MASK_1BIT)   
+        #bit1:Reserved
+        #bit2:Reserved
+        self.bit_enable_uvlo_pd = bool(((int(''.join(values[0x4B]), 16)) >> 3) & MASK_1BIT) 
+        #bit4:CFET
+        #bit5:DFET
+        self.bit_cb_during_charge = bool(((int(''.join(values[0x4B]), 16)) >> 6) & MASK_1BIT)
+        self.bit_cb_during_discharge = bool(((int(''.join(values[0x4B]), 16)) >> 7) & MASK_1BIT)
+        
 
         #Cell Balance Limits
         self.cb_lower_lim =  self.apply_mask_and_multiplier(int(''.join(values[0x1C:0x1E][::-1]), 16))
@@ -145,6 +194,19 @@ class BMSConfiguration:
         self.cb_ut_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2A:0x2C][::-1]), 16))  
         self.cb_over_temp =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x2C:0x2E][::-1]), 16)) 
         self.cb_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2E:0x30][::-1]), 16))   
+        
+        #Current Limits
+        self.disch_oc_voltage = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 12)  & MASK_3BIT
+        self.disch_oc_timeout = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 0)  & MASK_10BIT
+        self.disch_oc_timeout_unit = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 10)  & MASK_2BIT
+        
+        self.charge_oc_voltage = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 12)  & MASK_3BIT
+        self.charge_oc_timeout = ((int(''.join(values[0x18:0x1A][::-1]), 16)) >> 0)  & MASK_10BIT
+        self.charge_oc_timeout_unit = ((int(''.join(values[0x18:0x1A][::-1]), 16)) >> 10)  & MASK_2BIT
+
+        self.disch_sc_voltage = ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 12)  & MASK_3BIT
+        self.disch_sc_timeout =   ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 0)  & MASK_10BIT
+        self.disch_sc_timeout_unit = ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 10)  & MASK_2BIT      
 
         #Temperature Limits
         self.tl_charge_over_temp  =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x30:0x32][::-1]), 16))
@@ -160,8 +222,7 @@ class BMSConfiguration:
         self.tl_internal_over_temp = self.apply_mask_and_multiplier_temp(int(''.join(values[0x40:0x42][::-1]), 16))
         self.tl_internal_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x42:0x44][::-1]), 16))
 
-        
-    
+
     def read_from_values(self, values):
         # Assuming the input format is a comma-separated string
         # Split the input line by commas and remove spaces
