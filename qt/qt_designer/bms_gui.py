@@ -125,6 +125,22 @@ class BMSGUI:
         self.ui.CBDuringChargeCheckBox.setChecked(self.bms_config.bit_cb_during_charge)
         self.ui.CBDuringDischargeCheckBox.setChecked(self.bms_config.bit_cb_during_discharge)
         self.ui.CBDuringEOCCheckBox.setChecked(self.bms_config.bit_cb_during_eoc)
+
+        #RAM
+        self.ui.vcell1LineEdit.setText(f"{self.bms_config.vcell1:.2f}")
+        self.ui.vcell2LineEdit.setText(f"{self.bms_config.vcell2:.2f}")
+        self.ui.vcell3LineEdit.setText(f"{self.bms_config.vcell3:.2f}")
+        self.ui.vcell4LineEdit.setText(f"{self.bms_config.vcell4:.2f}")
+        self.ui.vcell5LineEdit.setText(f"{self.bms_config.vcell5:.2f}")
+        self.ui.vcell6LineEdit.setText(f"{self.bms_config.vcell6:.2f}")
+        self.ui.vcell7LineEdit.setText(f"{self.bms_config.vcell7:.2f}")
+        self.ui.vcell8LineEdit.setText(f"{self.bms_config.vcell8:.2f}")
+        
+        self.ui.vcellMinLineEdit.setText(f"{self.bms_config.vcell_min:.2f}")
+        self.ui.vcellMaxLineEdit.setText(f"{self.bms_config.vcell_max:.2f}")
+        
+        self.ui.vcellBattLineEdit.setText(f"{self.bms_config.vbatt:.2f}")
+        self.ui.vcellVrgoLineEdit.setText(f"{self.bms_config.vrgo:.2f}")
         
 
 

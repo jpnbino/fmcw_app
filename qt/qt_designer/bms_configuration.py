@@ -108,6 +108,22 @@ class BMSConfiguration:
         self.disch_sc_voltage = 0
         self.disch_sc_timeout = 0
         self.disch_sc_timeout_unit = 0
+
+        #Ram
+        self.vcell1 = 0
+        self.vcell2 = 0
+        self.vcell3 = 0
+        self.vcell4 = 0
+        self.vcell5 = 0
+        self.vcell6 = 0
+        self.vcell7 = 0
+        self.vcell8 = 0
+        self.vcell_min = 0
+        self.vcell_max = 0
+        self.vbatt = 0
+        self.vrgo = 0
+
+
         
 
     def get_default_config(self):
@@ -115,6 +131,21 @@ class BMSConfiguration:
 
     def get_config(self):
         return self.config_values
+
+    def get_ram_16bits(self, address, values):
+        """
+        Extracts a 16-bit value from 'values' starting at the specified 'address'.
+
+        Parameters:
+        - address (int): The starting address.
+        - values (list): The list of values from which to extract the 16 bits.
+
+        Returns:
+        - int: The 16-bit integer value.
+        """
+        address_index = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+        print( hex(address_index), values[address_index],values[address_index+1] )
+        return int(''.join(values[address_index:address_index+2][::-1]), 16)
     
     def update_registers(self,values):
         self.config_values = values
@@ -222,6 +253,21 @@ class BMSConfiguration:
         self.tl_internal_over_temp = self.apply_mask_and_multiplier_temp(int(''.join(values[0x40:0x42][::-1]), 16))
         self.tl_internal_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x42:0x44][::-1]), 16))
 
+        #RAM
+        self.vcell1 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x90,values)) 
+        self.vcell2 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x92,values)) 
+        self.vcell3 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x94,values)) 
+        self.vcell4 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x96,values)) 
+        self.vcell5 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x98,values)) 
+        self.vcell6 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9A,values)) 
+        self.vcell7 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9C,values)) 
+        self.vcell8 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9E,values)) 
+
+        self.vcell_min = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8A,values))
+        self.vcell_max = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8C,values))
+        self.vbatt = self.apply_mask_and_multiplier_pack(self.get_ram_16bits(0xA6,values))
+        self.vrgo =  self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(0xA8,values))
+
 
     def read_from_values(self, values):
         # Assuming the input format is a comma-separated string
@@ -259,6 +305,20 @@ class BMSConfiguration:
         masked_value = value & MASK_12BIT
         # Apply multiplier
         result = masked_value * VOLTAGE_CELL_MULTIPLIER
+        return result
+
+    def apply_mask_and_multiplier_pack(self, value):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * VOLTAGE_PACK_MULTIPLIER
+        return result
+
+    def apply_mask_and_multiplier_vrgo(self, value):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * VOLTAGE_VRGO_MULTIPLIER
         return result
     
     def apply_mask_and_multiplier_temp(self, value):

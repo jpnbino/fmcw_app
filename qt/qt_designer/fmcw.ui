@@ -1659,7 +1659,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="LowVoltageChargeLineEdit_11"/>
+         <widget class="QLineEdit" name="vcellMaxLineEdit"/>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_126">
@@ -1676,7 +1676,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="uvLockoutLineEdit_6"/>
+         <widget class="QLineEdit" name="vcellMinLineEdit"/>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_129">
@@ -1700,7 +1700,7 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="sleepVoltageLineEdit_6"/>
+         <widget class="QLineEdit" name="vcell2LineEdit"/>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_101">
@@ -1710,7 +1710,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="eocVoltageLineEdit_6"/>
+         <widget class="QLineEdit" name="vcell5LineEdit"/>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_102">
@@ -1734,10 +1734,10 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="ovRecoverLineEdit_7"/>
+         <widget class="QLineEdit" name="vcell6LineEdit"/>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="underVoltageLineEdit_6"/>
+         <widget class="QLineEdit" name="vcell3LineEdit"/>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_105">
@@ -1754,7 +1754,7 @@
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLineEdit" name="LowVoltageChargeLineEdit_10"/>
+         <widget class="QLineEdit" name="vcell1LineEdit"/>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_107">
@@ -1806,7 +1806,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="ovLockoutLineEdit_6"/>
+         <widget class="QLineEdit" name="vcell8LineEdit"/>
         </item>
         <item row="6" column="2">
          <widget class="QLabel" name="label_124">
@@ -1816,7 +1816,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="uvRecoverLineEdit_6"/>
+         <widget class="QLineEdit" name="vcell4LineEdit"/>
         </item>
         <item row="7" column="2">
          <widget class="QLabel" name="label_125">
@@ -1826,7 +1826,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="ovLineEdit_9"/>
+         <widget class="QLineEdit" name="vcell7LineEdit"/>
         </item>
        </layout>
       </item>
@@ -1850,7 +1850,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="LowVoltageChargeLineEdit_12"/>
+         <widget class="QLineEdit" name="vcellBattLineEdit"/>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_132">
@@ -1867,7 +1867,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="uvLockoutLineEdit_7"/>
+         <widget class="QLineEdit" name="vcellVrgoLineEdit"/>
         </item>
        </layout>
       </item>
