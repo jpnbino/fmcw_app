@@ -110,6 +110,45 @@ class BMSConfiguration:
         self.disch_sc_timeout_unit = 0
 
         #Ram
+        #adress 0x80
+        self.bit_ov = False
+        self.bit_ovlo = False
+        self.bit_uv = False
+        self.bit_uvlo = False
+        self.bit_dot = False
+        self.bit_dut = False
+        self.bit_cot = False
+        self.bit_cut = False
+
+        #adress 0x81
+        self.bit_iot = False
+        self.bit_coc = False
+        self.bit_doc = False
+        self.bit_dsc = False
+        self.bit_cellf = False
+        self.bit_open = False
+        self.bit_eochg = False
+
+        #adress 0x82
+        self.bit_ld_prsnt = False
+        self.bit_ch_prsnt = False
+        self.bit_ching = False
+        self.bit_dching = False
+        self.bit_ecc_used = False
+        self.bit_ecc_fail = False
+        self.bit_int_scan = False
+        self.bit_lvchg = False
+        
+        #adress 0x83
+        self.bit_cbot = False
+        self.bit_cbut = False
+        self.bit_cbov = False
+        self.bit_cbuv = False
+        self.bit_in_idle = False
+        self.bit_in_doze = False
+        self.bit_in_sleep = False
+
+
         self.vcell1 = 0
         self.vcell2 = 0
         self.vcell3 = 0
@@ -147,6 +186,21 @@ class BMSConfiguration:
         print( hex(address_index), values[address_index],values[address_index+1] )
         return int(''.join(values[address_index:address_index+2][::-1]), 16)
     
+    def get_boolean_value(self, values, byte_address, bit_position):
+        """
+        Extracts a boolean value from 'values' based on the specified byte address and bit position.
+
+        Parameters:
+        - values (list): The list of values from which to extract the boolean value.
+        - byte_address (int): The byte address.
+        - bit_position (int): The bit position within the byte.
+
+        Returns:
+        - bool: The boolean value.
+        """
+        byte_value = int(''.join(values[byte_address]), 16)
+        return bool((byte_value >> bit_position) & MASK_1BIT)
+
     def update_registers(self,values):
         self.config_values = values
         self.config_values_int = [int(val,16) for val in values]
@@ -189,24 +243,24 @@ class BMSConfiguration:
         #Pack Options
 
         
-        self.bit_enable_openwire_psd = bool(((int(''.join(values[0x4A]), 16)) >> 0) & MASK_1BIT)
-        self.bit_enable_openwire_scan = bool(((int(''.join(values[0x4A]), 16)) >> 1) & MASK_1BIT)
+        self.bit_enable_openwire_psd = self.get_boolean_value( values, 0x4A, 0)
+        self.bit_enable_openwire_scan = self.get_boolean_value( values, 0x4A, 1)
         #bit2:PCFETE
         #bit3:Reserved
         #bit4:TGAIN
-        self.bit_t2_monitors_fet =  bool(((int(''.join(values[0x4A]), 16)) >> 5) & MASK_1BIT)
+        self.bit_t2_monitors_fet = self.get_boolean_value(values, 0x4A, 5)
         #bit6:Reserved
-        self.bit_enable_cellf_psd = bool(((int(''.join(values[0x4A]), 16)) >> 7) & MASK_1BIT)
+        self.bit_enable_cellf_psd = self.get_boolean_value(values, 0x4A, 7)
 
 
-        self.bit_cb_during_eoc =  bool(((int(''.join(values[0x4B]), 16)) >> 0) & MASK_1BIT)   
+        self.bit_cb_during_eoc =  self.get_boolean_value(values, 0x4B, 0)
         #bit1:Reserved
         #bit2:Reserved
-        self.bit_enable_uvlo_pd = bool(((int(''.join(values[0x4B]), 16)) >> 3) & MASK_1BIT) 
+        self.bit_enable_uvlo_pd = self.get_boolean_value(values, 0x4B, 3)
         #bit4:CFET
         #bit5:DFET
-        self.bit_cb_during_charge = bool(((int(''.join(values[0x4B]), 16)) >> 6) & MASK_1BIT)
-        self.bit_cb_during_discharge = bool(((int(''.join(values[0x4B]), 16)) >> 7) & MASK_1BIT)
+        self.bit_cb_during_charge = self.get_boolean_value(values, 0x4B, 6)
+        self.bit_cb_during_discharge = self.get_boolean_value(values, 0x4B, 7)
         
 
         #Cell Balance Limits
