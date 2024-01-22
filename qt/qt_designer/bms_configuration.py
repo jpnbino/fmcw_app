@@ -209,40 +209,38 @@ class BMSConfiguration:
         # Extract values for the specified fields
 
         #Voltage Limits
-        self.ov =            self.apply_mask_and_multiplier(int(''.join(values[0:2][::-1]), 16))
-        self.ov_recover =    self.apply_mask_and_multiplier(int(''.join(values[2:4][::-1]), 16))
-        self.under_voltage = self.apply_mask_and_multiplier(int(''.join(values[4:6][::-1]), 16))
-        self.uv_recover =    self.apply_mask_and_multiplier(int(''.join(values[6:8][::-1]), 16))
-        self.ov_lockout =    self.apply_mask_and_multiplier(int(''.join(values[8:10][::-1]), 16))
-        self.uv_lockout =    self.apply_mask_and_multiplier(int(''.join(values[10:12][::-1]), 16))
-        self.eoc_voltage =    self.apply_mask_and_multiplier(int(''.join(values[12:14][::-1]), 16))
-        self.low_voltage_charge = self.apply_mask_and_multiplier(int(''.join(values[14:16][::-1]), 16))
-        self.sleep_voltage = self.apply_mask_and_multiplier(int(''.join(values[68:70][::-1]), 16))
+        self.ov =            self.calculate_voltage(values, 0x00)
+        self.ov_recover =    self.calculate_voltage(values, 0x02)
+        self.under_voltage = self.calculate_voltage(values, 0x04)
+        self.uv_recover =    self.calculate_voltage(values, 0x06)
+        self.ov_lockout =    self.calculate_voltage(values, 0x08)
+        self.uv_lockout =    self.calculate_voltage(values, 0x0A)
+        self.eoc_voltage =   self.calculate_voltage(values, 0x0C)
+        self.low_voltage_charge = self.calculate_voltage(values, 0x0E)
+        self.sleep_voltage = self.calculate_voltage(values, 0x44)
 
         
-        self.ov_delay_timeout =     ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 0)  & MASK_10BIT
-        self.ov_delay_timeout_unit= ((int(''.join(values[0x10:0x12][::-1]), 16)) >> 10)  & MASK_2BIT
+        self.ov_delay_timeout =     self.get_reg_val(values, 0x10, 0, MASK_10BIT) 
+        self.ov_delay_timeout_unit= self.get_reg_val(values, 0x10, 10,MASK_2BIT)  
 
-        self.uv_delay_timeout =     ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 0)  & MASK_10BIT
-        self.uv_delay_timeout_unit = ((int(''.join(values[0x12:0x14][::-1]), 16)) >> 10)  & MASK_2BIT
+        self.uv_delay_timeout =      self.get_reg_val(values, 0x12, 0, MASK_10BIT)
+        self.uv_delay_timeout_unit = self.get_reg_val(values, 0x12, 10,MASK_2BIT) 
 
-        self.open_wire_timing =     ((int(''.join(values[0x14:0x16][::-1]), 16)) >> 0)  & 0x01ff
-        self.open_wire_timing_unit = ((int(''.join(values[0x14:0x16][::-1]), 16)) >> 9)  & MASK_1BIT
+        self.open_wire_timing =      self.get_reg_val(values, 0x14, 0, MASK_9BIT)
+        self.open_wire_timing_unit = self.get_reg_val(values, 0x14, 9, MASK_1BIT)
 
-        self.sleep_delay =          ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 0)  & 0x01ff
-        self.sleep_delay_unit =     ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 9)  & MASK_2BIT
+        self.sleep_delay =           self.get_reg_val(values, 0x46, 0, MASK_9BIT)
+        self.sleep_delay_unit =      self.get_reg_val(values, 0x46, 9,MASK_2BIT) 
         
         #Timers
-        self.timer_wdt = ((int(''.join(values[0x46:0x48][::-1]), 16)) >> 11)  & 0x001f
-        self.timer_idle_doze = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 0)  & 0x000f
-        self.timer_sleep = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 0)  & 0x00ff
+        self.timer_wdt = self.get_reg_val(values, 0x46, 11, MASK_5BIT)
+        self.timer_idle_doze = self.get_reg_val(values, 0x48, 0, MASK_4BIT)
+        self.timer_sleep = self.get_reg_val(values, 0x48, 0, MASK_8BIT)
         
         #Cell Configutarion
-        self.cell_config = ((int(''.join(values[0x48:0x4A][::-1]), 16)) >> 8)  & 0x00ff
+        self.cell_config = self.get_reg_val(values, 0x48, 8, MASK_8BIT)
 
         #Pack Options
-
-        
         self.bit_enable_openwire_psd = self.get_boolean_value( values, 0x4A, 0)
         self.bit_enable_openwire_scan = self.get_boolean_value( values, 0x4A, 1)
         #bit2:PCFETE
@@ -264,16 +262,16 @@ class BMSConfiguration:
         
 
         #Cell Balance Limits
-        self.cb_lower_lim =  self.apply_mask_and_multiplier(int(''.join(values[0x1C:0x1E][::-1]), 16))
-        self.cb_upper_lim =  self.apply_mask_and_multiplier(int(''.join(values[0x1E:0x20][::-1]), 16)) 
-        self.cb_min_delta =  self.apply_mask_and_multiplier(int(''.join(values[0x20:0x22][::-1]), 16)) 
-        self.cb_max_delta =  self.apply_mask_and_multiplier(int(''.join(values[0x22:0x24][::-1]), 16)) 
+        self.cb_lower_lim =  self.calculate_voltage(values, 0x1C)
+        self.cb_upper_lim =  self.calculate_voltage(values, 0x1E)
+        self.cb_min_delta =  self.calculate_voltage(values, 0x20)
+        self.cb_max_delta =  self.calculate_voltage(values, 0x22)
 
-        self.cb_on_time =    ((int(''.join(values[0x24:0x26][::-1]), 16))>> 0)  & MASK_10BIT
-        self.cb_on_time_unit = ((int(''.join(values[0x24:0x26][::-1]), 16))>> 10) & MASK_2BIT 
+        self.cb_on_time =      self.get_reg_val(values, 0x24, 0,MASK_10BIT)
+        self.cb_on_time_unit = self.get_reg_val(values, 0x24, 10,MASK_2BIT)
 
-        self.cb_off_time =   ((int(''.join(values[0x26:0x28][::-1]), 16))>> 0) & MASK_10BIT         
-        self.cb_off_time_unit = ((int(''.join(values[0x26:0x28][::-1]), 16))>> 10)  & MASK_2BIT
+        self.cb_off_time =      self.get_reg_val(values, 0x26, 0,MASK_10BIT)
+        self.cb_off_time_unit = self.get_reg_val(values, 0x26, 10,MASK_2BIT)
 
         self.cb_under_temp = self.apply_mask_and_multiplier_temp(int(''.join(values[0x28:0x2A][::-1]), 16))
         self.cb_ut_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2A:0x2C][::-1]), 16))  
@@ -281,31 +279,32 @@ class BMSConfiguration:
         self.cb_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2E:0x30][::-1]), 16))   
         
         #Current Limits
-        self.disch_oc_voltage = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 12)  & MASK_3BIT
-        self.disch_oc_timeout = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 0)  & MASK_10BIT
-        self.disch_oc_timeout_unit = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 10)  & MASK_2BIT
-        
-        self.charge_oc_voltage = ((int(''.join(values[0x16:0x18][::-1]), 16)) >> 12)  & MASK_3BIT
-        self.charge_oc_timeout = ((int(''.join(values[0x18:0x1A][::-1]), 16)) >> 0)  & MASK_10BIT
-        self.charge_oc_timeout_unit = ((int(''.join(values[0x18:0x1A][::-1]), 16)) >> 10)  & MASK_2BIT
 
-        self.disch_sc_voltage = ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 12)  & MASK_3BIT
-        self.disch_sc_timeout =   ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 0)  & MASK_10BIT
-        self.disch_sc_timeout_unit = ((int(''.join(values[0x1A:0x1C][::-1]), 16)) >> 10)  & MASK_2BIT      
+        self.disch_oc_voltage =       self.get_reg_val(values, 0x16, 12, MASK_3BIT)
+        self.disch_oc_timeout =       self.get_reg_val(values, 0x16, 0, MASK_10BIT)
+        self.disch_oc_timeout_unit =  self.get_reg_val(values, 0x16, 10, MASK_2BIT)
+
+        self.charge_oc_voltage =      self.get_reg_val(values, 0x18, 12, MASK_3BIT)
+        self.charge_oc_timeout =      self.get_reg_val(values, 0x18, 0, MASK_10BIT)
+        self.charge_oc_timeout_unit = self.get_reg_val(values, 0x18, 10, MASK_2BIT)
+
+        self.disch_sc_voltage =       self.get_reg_val(values, 0x1A, 12, MASK_3BIT)
+        self.disch_sc_timeout =       self.get_reg_val(values, 0x1A, 0, MASK_10BIT)
+        self.disch_sc_timeout_unit =  self.get_reg_val(values, 0x1A, 10, MASK_2BIT)   
 
         #Temperature Limits
-        self.tl_charge_over_temp  =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x30:0x32][::-1]), 16))
-        self.tl_charge_ot_recover =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x32:0x34][::-1]), 16))
-        self.tl_charge_under_temp =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x34:0x36][::-1]), 16)) 
-        self.tl_charge_ut_recover =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x36:0x38][::-1]), 16)) 
+        self.tl_charge_over_temp  =  self.calculate_temp_voltage(values, 0x30)
+        self.tl_charge_ot_recover =  self.calculate_temp_voltage(values, 0x32)
+        self.tl_charge_under_temp =  self.calculate_temp_voltage(values, 0x34)
+        self.tl_charge_ut_recover =  self.calculate_temp_voltage(values, 0x36)
 
-        self.tl_disch_over_temp  =   self.apply_mask_and_multiplier_temp(int(''.join(values[0x38:0x3A][::-1]), 16))
-        self.tl_disch_ot_recover =   self.apply_mask_and_multiplier_temp(int(''.join(values[0x3A:0x3C][::-1]), 16))
-        self.tl_disch_under_temp  =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x3C:0x3E][::-1]), 16))
-        self.tl_disch_ut_recover =   self.apply_mask_and_multiplier_temp(int(''.join(values[0x3E:0x40][::-1]), 16))
+        self.tl_disch_over_temp  =   self.calculate_temp_voltage(values, 0x38)
+        self.tl_disch_ot_recover =   self.calculate_temp_voltage(values, 0x3A)
+        self.tl_disch_under_temp  =  self.calculate_temp_voltage(values, 0x3C)
+        self.tl_disch_ut_recover =   self.calculate_temp_voltage(values, 0x3E)
 
-        self.tl_internal_over_temp = self.apply_mask_and_multiplier_temp(int(''.join(values[0x40:0x42][::-1]), 16))
-        self.tl_internal_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x42:0x44][::-1]), 16))
+        self.tl_internal_over_temp = self.calculate_temp_voltage(values, 0x40)
+        self.tl_internal_ot_recover = self.calculate_temp_voltage(values, 0x42)
 
         #RAM
         self.vcell1 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x90,values)) 
@@ -319,6 +318,7 @@ class BMSConfiguration:
 
         self.vcell_min = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8A,values))
         self.vcell_max = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8C,values))
+
         self.vbatt = self.apply_mask_and_multiplier_pack(self.get_ram_16bits(0xA6,values))
         self.vrgo =  self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(0xA8,values))
 
@@ -353,7 +353,33 @@ class BMSConfiguration:
     def write_to_values(self):
 
         return 0
-    
+
+    def calculate_voltage(self, values, address):
+        """
+        Calculate voltage based on values and address.
+
+        Parameters:
+        - values (list): The list of values from which to extract the voltage.
+        - address (int): The starting address.
+
+        Returns:
+        - float: The calculated voltage.
+        """
+        return self.apply_mask_and_multiplier(int(''.join(values[address:address+2][::-1]), 16))
+
+    def calculate_temp_voltage(self, values, address):
+        """
+        Calculate voltage based on values and address.
+
+        Parameters:
+        - values (list): The list of values from which to extract the voltage.
+        - address (int): The starting address.
+
+        Returns:
+        - float: The calculated voltage.
+        """
+        return self.apply_mask_and_multiplier_temp(int(''.join(values[address:address+2][::-1]), 16))
+       
     def apply_mask_and_multiplier(self, value):
         # Apply masking
         masked_value = value & MASK_12BIT
@@ -381,3 +407,20 @@ class BMSConfiguration:
         # Apply multiplier
         result = masked_value * TEMPERATURE_MULTIPLIER
         return result
+    
+    def get_reg_val(self, values, start_address, bit_shift, bit_mask):
+        """
+        Extract a value from 'values' based on the specified parameters.
+
+        Parameters:
+        - values (list): The list of values from which to extract the value.
+        - start_address (int): The starting address.
+        - bit_shift (int): The bit shift for the value.
+        - bit_mask (int): The bitmask for the value.
+
+        Returns:
+        - int: The extracted value.
+        """
+        raw_value = int(''.join(values[start_address:start_address+2][::-1]), 16)
+        value = (raw_value >> bit_shift) & bit_mask
+        return value
