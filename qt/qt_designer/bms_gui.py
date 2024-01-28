@@ -1,4 +1,5 @@
 from bms_constants import *
+from PyQt5.QtGui import QPalette, QColor
 
 class BMSGUI:
     def __init__(self, ui, bms_config):
@@ -142,7 +143,58 @@ class BMSGUI:
         self.ui.vcellBattLineEdit.setText(f"{self.bms_config.vbatt:.2f}")
         self.ui.vcellVrgoLineEdit.setText(f"{self.bms_config.vrgo:.2f}")
         
+        #Status Bits from addresses 0x80, 0x81, 0x82, 0x83
+        self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_ov)
+        self.show_status_bit(self.ui.bitOVLOlabel,  self.bms_config.bit_ovlo)
+        self.show_status_bit(self.ui.bitEOCHGlabel, self.bms_config.bit_uv)
+        self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_uvlo)
+        self.show_status_bit(self.ui.bitOVLOlabel,  self.bms_config.bit_dot)
+        self.show_status_bit(self.ui.bitEOCHGlabel, self.bms_config.bit_dut)        
+        self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_cot)
+        self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_cut)
+        
+        #address 0x81
+        self.show_status_bit(self.ui.bitIOTlabel,   self.bms_config.bit_iot)
+        self.show_status_bit(self.ui.bitCOClabel,   self.bms_config.bit_coc)
+        self.show_status_bit(self.ui.bitDOClabel,   self.bms_config.bit_doc)
+        self.show_status_bit(self.ui.bitDSClabel,   self.bms_config.bit_dsc)
+        self.show_status_bit(self.ui.bitCELLFlabel, self.bms_config.bit_cellf)
+        self.show_status_bit(self.ui.bitOPENlabel,  self.bms_config.bit_open)
+        self.show_status_bit(self.ui.bitEOCHGlabel, self.bms_config.bit_eochg)
+     
+        #address 0x82
+        self.show_status_bit(self.ui.bitLDPRSNTlabel, self.bms_config.bit_ld_prsnt)
+        self.show_status_bit(self.ui.bitCHPRSNTlabel, self.bms_config.bit_ch_prsnt)
+        self.show_status_bit(self.ui.bitCHINGlabel,   self.bms_config.bit_ching)
+        self.show_status_bit(self.ui.bitDCHINGlabel,  self.bms_config.bit_dching)
+        #self.show_status_bit(self.ui.bitlabel,  self.bms_config.bit_ecc_used)
+        #self.show_status_bit(self.ui.bitlabel, self.bms_config.bit_ecc_fail)        
+        #self.show_status_bit(self.ui.bitlabel,    self.bms_config.bit_int_scan)
+        self.show_status_bit(self.ui.bitLVCHRGlabel,    self.bms_config.bit_lvchg)        
+        
+        #address 0x83
+        self.show_status_bit(self.ui.bitCBOTlabel,    self.bms_config.bit_cbot)
+        self.show_status_bit(self.ui.bitCBUTlabel,  self.bms_config.bit_cbut)
+        self.show_status_bit(self.ui.bitCBOVlabel, self.bms_config.bit_cbov)
+        self.show_status_bit(self.ui.bitCBUVlabel,    self.bms_config.bit_cbuv)
+        self.show_status_bit(self.ui.bitIDLElabel,  self.bms_config.bit_in_idle)
+        self.show_status_bit(self.ui.bitDOZElabel, self.bms_config.bit_in_doze)
+        self.show_status_bit(self.ui.bitSLEEPlabel,    self.bms_config.bit_in_sleep)
+        
+        self.ui.CSGainLineEdit.setText(f"{int(self.bms_config.i_gain)}")
+        
 
+    def show_status_bit(self, label, bit_config ):
+        if ( bit_config):
+            self.set_label_background_color ( label, QColor(0, 255, 0))
+        else:
+            self.set_label_background_color ( label, QColor(255, 255, 255))
+
+
+    def set_label_background_color(self, label, color):
+        # Set the background color using style sheet
+        current_style = label.styleSheet()
+        label.setStyleSheet(f"{current_style} background-color: {color.name()};")
 
     def write_bms_config(self):
 
@@ -211,6 +263,7 @@ class BMSGUI:
         self.bms_config.reg_write( 0x12, uv_delay_timeout_unit|uv_delay_timeout, MASK_12BIT, 0)
         self.bms_config.reg_write( 0x14, open_wire_sample_time_unit |open_wire_sample_time, MASK_10BIT, 0)
         self.bms_config.reg_write( 0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)  
+
 
 
         register_cfg = self.bms_config.get_config()

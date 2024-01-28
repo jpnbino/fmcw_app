@@ -149,6 +149,16 @@ class BMSConfiguration:
         self.bit_in_sleep = False
 
 
+        #Cell Configuration
+        # Create a dictionary mapping binary patterns to connected cell counts
+        self.current_gain_code = {
+            0b00: 50,
+            0b01: 5,
+            0b10: 500,
+            0b11: 500
+            }
+        self.i_pack = 0
+        self.i_gain = 0
         self.vcell1 = 0
         self.vcell2 = 0
         self.vcell3 = 0
@@ -198,7 +208,12 @@ class BMSConfiguration:
         Returns:
         - bool: The boolean value.
         """
-        byte_value = int(''.join(values[byte_address]), 16)
+        if ( byte_address >= ADDR_RAM_BEGIN):
+            real_address = byte_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+        else:
+            real_address = byte_address
+
+        byte_value = int(''.join(values[real_address]), 16)
         return bool((byte_value >> bit_position) & MASK_1BIT)
 
     def update_registers(self,values):
@@ -307,6 +322,8 @@ class BMSConfiguration:
         self.tl_internal_ot_recover = self.calculate_temp_voltage(values, 0x42)
 
         #RAM
+        self.i_pack =  self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(0x8E,values))
+        self.i_gain =  self.current_gain_code[self.get_reg_val(values, 0x85, 4,MASK_2BIT)]
         self.vcell1 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x90,values)) 
         self.vcell2 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x92,values)) 
         self.vcell3 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x94,values)) 
@@ -321,6 +338,48 @@ class BMSConfiguration:
 
         self.vbatt = self.apply_mask_and_multiplier_pack(self.get_ram_16bits(0xA6,values))
         self.vrgo =  self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(0xA8,values))
+
+
+        #adress 0x80
+        self.bit_ov   =   self.get_boolean_value(values, 0x80, 0)
+        self.bit_ovlo =   self.get_boolean_value(values, 0x80, 1)
+        self.bit_uv   =   self.get_boolean_value(values, 0x80, 2)
+        self.bit_uvlo =   self.get_boolean_value(values, 0x80, 3)
+        self.bit_dot  =   self.get_boolean_value(values, 0x80, 4)
+        self.bit_dut  =   self.get_boolean_value(values, 0x80, 5)
+        self.bit_cot  =   self.get_boolean_value(values, 0x80, 6)
+        self.bit_cut  =   self.get_boolean_value(values, 0x80, 7)
+
+        #adress 0x81
+        self.bit_iot   =   self.get_boolean_value(values, 0x81, 0)
+        self.bit_coc   =   self.get_boolean_value(values, 0x81, 1)
+        self.bit_doc   =   self.get_boolean_value(values, 0x81, 2)
+        self.bit_dsc   =   self.get_boolean_value(values, 0x81, 3)
+        self.bit_cellf =   self.get_boolean_value(values, 0x81, 4)
+        self.bit_open  =   self.get_boolean_value(values, 0x81, 5)
+        self.bit_eochg =   self.get_boolean_value(values, 0x81, 7)
+
+        #adress 0x82
+        self.bit_ld_prsnt = self.get_boolean_value(values, 0x82, 0)
+        self.bit_ch_prsnt = self.get_boolean_value(values, 0x82, 1)
+        self.bit_ching =    self.get_boolean_value(values, 0x82, 2)
+        self.bit_dching =   self.get_boolean_value(values, 0x82, 3)
+        self.bit_ecc_used = self.get_boolean_value(values, 0x82, 4)
+        self.bit_ecc_fail = self.get_boolean_value(values, 0x82, 5)
+        self.bit_int_scan = self.get_boolean_value(values, 0x82, 6)
+        self.bit_lvchg =    self.get_boolean_value(values, 0x82, 7)
+        
+        #adress 0x83
+        self.bit_cbot =     self.get_boolean_value(values, 0x83, 0)
+        self.bit_cbut =     self.get_boolean_value(values, 0x83, 1)
+        self.bit_cbov =     self.get_boolean_value(values, 0x83, 2)
+        self.bit_cbuv =     self.get_boolean_value(values, 0x83, 3)
+        self.bit_in_idle =  self.get_boolean_value(values, 0x83, 4)
+        self.bit_in_doze =  self.get_boolean_value(values, 0x83, 5)
+        self.bit_in_sleep = self.get_boolean_value(values, 0x83, 6)
+
+
+
 
 
     def read_from_values(self, values):
@@ -387,6 +446,13 @@ class BMSConfiguration:
         result = masked_value * VOLTAGE_CELL_MULTIPLIER
         return result
 
+    def apply_mask_and_multiplier_pack_current(self, value):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * CURRENT_CELL_MULTIPLIER
+        return result
+
     def apply_mask_and_multiplier_pack(self, value):
         # Apply masking
         masked_value = value & MASK_12BIT
@@ -421,6 +487,9 @@ class BMSConfiguration:
         Returns:
         - int: The extracted value.
         """
+        if ( start_address >= ADDR_RAM_BEGIN):
+            start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+
         raw_value = int(''.join(values[start_address:start_address+2][::-1]), 16)
         value = (raw_value >> bit_shift) & bit_mask
         return value

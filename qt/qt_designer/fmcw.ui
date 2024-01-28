@@ -1892,14 +1892,14 @@
          <number>10</number>
         </property>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="ovRecoverLineEdit_8">
+         <widget class="QLineEdit" name="ResistorLineEdit">
           <property name="styleSheet">
            <string notr="true">background-color: rgba(255, 255, 127, 200);</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="ovLockoutLineEdit_7"/>
+         <widget class="QLineEdit" name="packCurrentVLineEdit"/>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_139">
@@ -1916,10 +1916,10 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="ovLineEdit_10"/>
+         <widget class="QLineEdit" name="packCurrentALineEdit"/>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="eocVoltageLineEdit_7"/>
+         <widget class="QLineEdit" name="CSGainLineEdit"/>
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_148">
@@ -2099,7 +2099,7 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_20">
+        <widget class="QLabel" name="bitCOClabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2135,7 +2135,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_19">
+        <widget class="QLabel" name="bitCHINGlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2178,7 +2178,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_21">
+        <widget class="QLabel" name="bitDOClabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2207,7 +2207,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="label_22">
+        <widget class="QLabel" name="bitDSClabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2236,7 +2236,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_23">
+        <widget class="QLabel" name="bitLDPRSNTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2265,7 +2265,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="bitDCHINGlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2320,7 +2320,7 @@ border-radius: 10px;
         </spacer>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="label_24">
+        <widget class="QLabel" name="bitCHPRSNTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2388,7 +2388,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_30">
+        <widget class="QLabel" name="bitOVLOlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2424,7 +2424,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="label_49">
+        <widget class="QLabel" name="bitCBUVlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2460,7 +2460,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_43">
+        <widget class="QLabel" name="bitCBOVlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2489,7 +2489,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="10" column="0">
-        <widget class="QLabel" name="label_64">
+        <widget class="QLabel" name="bitCELLFlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2538,7 +2538,7 @@ border-radius: 10px;
         </spacer>
        </item>
        <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_40">
+        <widget class="QLabel" name="bitOVlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2574,7 +2574,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_27">
+        <widget class="QLabel" name="bitEOCHGlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2603,7 +2603,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_32">
+        <widget class="QLabel" name="bitLVCHRGlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2639,7 +2639,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_31">
+        <widget class="QLabel" name="bitUVlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2695,7 +2695,7 @@ border-radius: 10px;
         </spacer>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="label_29">
+        <widget class="QLabel" name="bitUVLOlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2724,7 +2724,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="11" column="0">
-        <widget class="QLabel" name="label_65">
+        <widget class="QLabel" name="bitOPENlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2778,7 +2778,7 @@ border-radius: 10px;
         <number>10</number>
        </property>
        <item row="10" column="0">
-        <widget class="QLabel" name="label_153">
+        <widget class="QLabel" name="bitDOZElabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2814,7 +2814,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_190">
+        <widget class="QLabel" name="bitCUTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2843,7 +2843,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="9" column="0">
-        <widget class="QLabel" name="label_193">
+        <widget class="QLabel" name="bitIDLElabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2892,7 +2892,7 @@ border-radius: 10px;
         </spacer>
        </item>
        <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_66">
+        <widget class="QLabel" name="bitDOTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2921,7 +2921,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="label_136">
+        <widget class="QLabel" name="bitDUTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -2950,7 +2950,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_152">
+        <widget class="QLabel" name="bitCBUTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3013,7 +3013,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_134">
+        <widget class="QLabel" name="bitCOTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3056,7 +3056,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_135">
+        <widget class="QLabel" name="bitIOTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3092,7 +3092,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="label_137">
+        <widget class="QLabel" name="bitCBOTlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3128,7 +3128,7 @@ border-radius: 10px;
         </widget>
        </item>
        <item row="11" column="0">
-        <widget class="QLabel" name="label_195">
+        <widget class="QLabel" name="bitSLEEPlabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
