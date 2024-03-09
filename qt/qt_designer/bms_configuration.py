@@ -148,17 +148,20 @@ class BMSConfiguration:
         self.bit_in_doze = False
         self.bit_in_sleep = False
 
-
-        #Cell Configuration
-        # Create a dictionary mapping binary patterns to connected cell counts
+        #Current calculation
+        #Create a dictionary mapping binary patterns current gains
         self.current_gain_code = {
             0b00: 50,
             0b01: 5,
             0b10: 500,
             0b11: 500
             }
-        self.i_pack = 0
+        
+        self.v_sense = 0.0 #voltage over Sense Resistor
+        self.i_pack = 0.0 #current over Sense Resistor (Pack current)
         self.i_gain = 0
+
+        #Cell voltages
         self.vcell1 = 0
         self.vcell2 = 0
         self.vcell3 = 0
@@ -170,7 +173,7 @@ class BMSConfiguration:
         self.vcell_min = 0
         self.vcell_max = 0
         self.vbatt = 0
-        self.vrgo = 0
+        self.vrgo = 0        
 
 
         
@@ -322,8 +325,8 @@ class BMSConfiguration:
         self.tl_internal_ot_recover = self.calculate_temp_voltage(values, 0x42)
 
         #RAM
-        self.i_pack =  self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(0x8E,values))
         self.i_gain =  self.current_gain_code[self.get_reg_val(values, 0x85, 4,MASK_2BIT)]
+        self.v_sense = self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(0x8E,values),self.i_gain)
         self.vcell1 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x90,values)) 
         self.vcell2 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x92,values)) 
         self.vcell3 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x94,values)) 
@@ -446,11 +449,11 @@ class BMSConfiguration:
         result = masked_value * VOLTAGE_CELL_MULTIPLIER
         return result
 
-    def apply_mask_and_multiplier_pack_current(self, value):
+    def apply_mask_and_multiplier_pack_current(self, value, gain):
         # Apply masking
         masked_value = value & MASK_12BIT
         # Apply multiplier
-        result = masked_value * CURRENT_CELL_MULTIPLIER
+        result = masked_value * CURRENT_CELL_MULTIPLIER / (gain)
         return result
 
     def apply_mask_and_multiplier_pack(self, value):

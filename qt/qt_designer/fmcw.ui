@@ -1896,10 +1896,20 @@
           <property name="styleSheet">
            <string notr="true">background-color: rgba(255, 255, 127, 200);</string>
           </property>
+          <property name="text">
+           <string>5</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="packCurrentVLineEdit"/>
+         <widget class="QLineEdit" name="packCurrentVLineEdit">
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_139">
@@ -1916,10 +1926,18 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="packCurrentALineEdit"/>
+         <widget class="QLineEdit" name="packCurrentALineEdit">
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="CSGainLineEdit"/>
+         <widget class="QLineEdit" name="CSGainLineEdit">
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_148">
@@ -1978,66 +1996,86 @@
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="ovRecoverLineEdit_9"/>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="ovLockoutLineEdit_8"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_141">
-          <property name="text">
-           <string>ISense(R)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_144">
-          <property name="text">
-           <string>ISense(V)</string>
-          </property>
-         </widget>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="tempITDegLineEdit"/>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="ovLineEdit_11"/>
+         <widget class="QLineEdit" name="tempITVoltaqeLineEdit"/>
         </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="eocVoltageLineEdit_8"/>
-        </item>
-        <item row="2" column="2">
-         <widget class="QLabel" name="label_149">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_144">
           <property name="text">
-           <string>mOhm</string>
+           <string>iT</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="tempXT1VoltaqeLineEdit"/>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="tempXT2VoltaqeLineEdit"/>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_149">
+          <property name="text">
+           <string>degC</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
          <widget class="QLabel" name="label_151">
           <property name="text">
-           <string>ISense(A)</string>
+           <string>Vadc</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
+         <widget class="QLabel" name="label_141">
+          <property name="text">
+           <string>xT1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
          <widget class="QLabel" name="label_142">
           <property name="text">
-           <string>CS Gain</string>
+           <string>xT2</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_146">
-          <property name="text">
-           <string>mA</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
+        <item row="1" column="3">
          <widget class="QLabel" name="label_147">
           <property name="text">
-           <string>mV</string>
+           <string>degC</string>
           </property>
          </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_152">
+          <property name="text">
+           <string>V</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_153">
+          <property name="text">
+           <string>Input</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QLabel" name="label_146">
+          <property name="text">
+           <string>degC</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLineEdit" name="tempXT1DegLineEdit"/>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLineEdit" name="tempXT2DegLineEdit"/>
         </item>
        </layout>
       </item>

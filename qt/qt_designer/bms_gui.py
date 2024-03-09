@@ -142,6 +142,15 @@ class BMSGUI:
         
         self.ui.vcellBattLineEdit.setText(f"{self.bms_config.vbatt:.2f}")
         self.ui.vcellVrgoLineEdit.setText(f"{self.bms_config.vrgo:.2f}")
+
+        #Current
+        resistor = float(self.ui.ResistorLineEdit.text())/1000
+        current = float(self.bms_config.v_sense/resistor)
+        voltage = self.bms_config.v_sense
+
+        self.ui.CSGainLineEdit.setText(f"{int(self.bms_config.i_gain)}")
+        self.ui.packCurrentVLineEdit.setText(f"{voltage*1000:.4f}") #in millivolts
+        self.ui.packCurrentALineEdit.setText(f"{int(current*1000)}") # in milliamperes
         
         #Status Bits from addresses 0x80, 0x81, 0x82, 0x83
         self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_ov)
@@ -173,16 +182,13 @@ class BMSGUI:
         self.show_status_bit(self.ui.bitLVCHRGlabel,    self.bms_config.bit_lvchg)        
         
         #address 0x83
-        self.show_status_bit(self.ui.bitCBOTlabel,    self.bms_config.bit_cbot)
+        self.show_status_bit(self.ui.bitCBOTlabel,  self.bms_config.bit_cbot)
         self.show_status_bit(self.ui.bitCBUTlabel,  self.bms_config.bit_cbut)
-        self.show_status_bit(self.ui.bitCBOVlabel, self.bms_config.bit_cbov)
-        self.show_status_bit(self.ui.bitCBUVlabel,    self.bms_config.bit_cbuv)
+        self.show_status_bit(self.ui.bitCBOVlabel,  self.bms_config.bit_cbov)
+        self.show_status_bit(self.ui.bitCBUVlabel,  self.bms_config.bit_cbuv)
         self.show_status_bit(self.ui.bitIDLElabel,  self.bms_config.bit_in_idle)
-        self.show_status_bit(self.ui.bitDOZElabel, self.bms_config.bit_in_doze)
-        self.show_status_bit(self.ui.bitSLEEPlabel,    self.bms_config.bit_in_sleep)
-        
-        self.ui.CSGainLineEdit.setText(f"{int(self.bms_config.i_gain)}")
-        
+        self.show_status_bit(self.ui.bitDOZElabel,  self.bms_config.bit_in_doze)
+        self.show_status_bit(self.ui.bitSLEEPlabel, self.bms_config.bit_in_sleep)
 
     def show_status_bit(self, label, bit_config ):
         if ( bit_config):
