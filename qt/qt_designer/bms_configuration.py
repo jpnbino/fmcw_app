@@ -96,7 +96,8 @@ class BMSConfiguration:
         self.bit_enable_uvlo_pd = False
         self.bit_enable_openwire_scan = False
 
-
+        #Temperature gain
+        self.bit_tgain = False
         
         #Current Limits
         self.disch_oc_voltage = 0
@@ -160,6 +161,11 @@ class BMSConfiguration:
         self.v_sense = 0.0 #voltage over Sense Resistor
         self.i_pack = 0.0 #current over Sense Resistor (Pack current)
         self.i_gain = 0
+
+        #Temperature
+        self.temp_internal = 0.0
+        self.temp_xt1 = 0.0
+        self.temp_xt2 = 0.0
 
         #Cell voltages
         self.vcell1 = 0
@@ -263,7 +269,7 @@ class BMSConfiguration:
         self.bit_enable_openwire_scan = self.get_boolean_value( values, 0x4A, 1)
         #bit2:PCFETE
         #bit3:Reserved
-        #bit4:TGAIN
+        self.bit_tgain = self.get_boolean_value(values, 0x4A, 4) 
         self.bit_t2_monitors_fet = self.get_boolean_value(values, 0x4A, 5)
         #bit6:Reserved
         self.bit_enable_cellf_psd = self.get_boolean_value(values, 0x4A, 7)
@@ -297,7 +303,6 @@ class BMSConfiguration:
         self.cb_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2E:0x30][::-1]), 16))   
         
         #Current Limits
-
         self.disch_oc_voltage =       self.get_reg_val(values, 0x16, 12, MASK_3BIT)
         self.disch_oc_timeout =       self.get_reg_val(values, 0x16, 0, MASK_10BIT)
         self.disch_oc_timeout_unit =  self.get_reg_val(values, 0x16, 10, MASK_2BIT)
@@ -338,6 +343,10 @@ class BMSConfiguration:
 
         self.vcell_min = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8A,values))
         self.vcell_max = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8C,values))
+
+        self.temp_internal = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA0,values)) 
+        self.temp_xt1 = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA2,values))
+        self.temp_xt2 = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA4,values))
 
         self.vbatt = self.apply_mask_and_multiplier_pack(self.get_ram_16bits(0xA6,values))
         self.vrgo =  self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(0xA8,values))
@@ -380,8 +389,6 @@ class BMSConfiguration:
         self.bit_in_idle =  self.get_boolean_value(values, 0x83, 4)
         self.bit_in_doze =  self.get_boolean_value(values, 0x83, 5)
         self.bit_in_sleep = self.get_boolean_value(values, 0x83, 6)
-
-
 
 
 

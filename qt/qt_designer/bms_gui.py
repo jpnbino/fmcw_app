@@ -127,6 +127,8 @@ class BMSGUI:
         self.ui.CBDuringDischargeCheckBox.setChecked(self.bms_config.bit_cb_during_discharge)
         self.ui.CBDuringEOCCheckBox.setChecked(self.bms_config.bit_cb_during_eoc)
 
+        self.ui.tGainCheckBox.setChecked(self.bms_config.bit_tgain)
+
         #RAM
         self.ui.vcell1LineEdit.setText(f"{self.bms_config.vcell1:.2f}")
         self.ui.vcell2LineEdit.setText(f"{self.bms_config.vcell2:.2f}")
@@ -142,6 +144,21 @@ class BMSGUI:
         
         self.ui.vcellBattLineEdit.setText(f"{self.bms_config.vbatt:.2f}")
         self.ui.vcellVrgoLineEdit.setText(f"{self.bms_config.vrgo:.2f}")
+        
+        gain = 0
+        if(self.bms_config.bit_tgain):
+            gain = 1
+            self.ui.TemperatureGainLabel.setText("Now the gain is 1x")
+        else:
+            gain = 2
+            self.ui.TemperatureGainLabel.setText("Now the gain is 2x")
+            
+        self.ui.tempITVoltaqeLineEdit.setText(f"{self.bms_config.temp_internal:.2f}")
+        internal_temp_celsius = ((self.bms_config.temp_internal *1000)/(gain*0.92635)) - 273.15
+        self.ui.tempITDegLineEdit.setText(f"{internal_temp_celsius:.2f}")
+
+        self.ui.tempXT1VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt1:.2f}")
+        self.ui.tempXT2VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt2:.2f}")
 
         #Current
         resistor = float(self.ui.ResistorLineEdit.text())/1000
