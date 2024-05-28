@@ -8,7 +8,6 @@ class SerialWidget:
         self.init_ui()
 
     def init_ui(self):
-        # Use existing widgets from the UI
         self.serialComboBox = self.ui.serialComboBox
         self.serialOpenCloseButton = self.ui.serialOpenCloseButton
 
@@ -21,11 +20,21 @@ class SerialWidget:
         self.timer.start(5000)
 
     def update_serial_ports(self):
+        current_selection = self.serialComboBox.currentText()
         ports = get_available_ports()
         self.serialComboBox.clear()
+        
+        # Repopulate the combo box
         for device, description in ports:
             display_text = f"{device}: {description}"
             self.serialComboBox.addItem(display_text)
+
+        # Restore the previous selection if it still exists
+        index = self.serialComboBox.findText(current_selection)
+        if index != -1:
+            self.serialComboBox.setCurrentIndex(index)
+        else:
+            self.serialComboBox.setCurrentIndex(0)
 
     def toggle_serial(self):
         selected_item = self.serialComboBox.currentText()

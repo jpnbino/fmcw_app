@@ -1,5 +1,5 @@
 from serial.tools import list_ports
-from serial_communication import SerialCommunication
+from serial_setup import SerialSetup
 
 def get_available_ports():
     ports = list_ports.comports()
@@ -7,7 +7,7 @@ def get_available_ports():
 
 def open_serial_port(port):
     try:
-        serial_comm = SerialCommunication()
+        serial_comm = SerialSetup()
         serial_comm.open_serial(port)
         return serial_comm
     except Exception as e:
