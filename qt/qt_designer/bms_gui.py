@@ -1,5 +1,7 @@
 from bms_constants import *
 from PyQt5.QtGui import QPalette, QColor
+from serial_setup import SerialSetup
+from serial_protocol import *
 
 class BMSGUI:
     def __init__(self, ui, bms_config):
@@ -292,7 +294,17 @@ class BMSGUI:
         register_cfg = self.bms_config.get_config()
         print("exit write_bms_config:", register_cfg)
 
-#Write values in the correct position
+        register_cfg_int = [int(val, 16) for val in register_cfg]
+
+            # Access the shared serial_setup
+        serial_setup = self.ui.serial_setup
+
+        if serial_setup and serial_setup.is_open():
+            # Send the configuration data over serial
+            serial_protocol = SerialProtocol(serial_setup)
+            serial_protocol.send_command(CMD_WRITE_EEPROM, register_cfg_int)    
+        else:
+            print("Serial port is not open")
+ 
     def on_line_edit_changed(self, text):
         print(f"Line Edit Changed: {text}")
-        # Add your desired actions here

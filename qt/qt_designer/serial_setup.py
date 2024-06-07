@@ -27,3 +27,6 @@ class SerialSetup:
         if self.ser.is_open:
             self.ser.close()
             print(f"Serial port {self.current_port} closed\n")  # Print the current port name
+
+    def is_open(self):
+        return self.ser.is_open

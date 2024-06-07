@@ -25,6 +25,8 @@ class FMCWApplication(QMainWindow, Ui_MainWindow ):
         self.gui = BMSGUI(self, self.bms_config)
         self.serial_widget = SerialWidget(self)
 
+        self.serial_setup = None
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ui_file_name = "qt/qt_designer/fmcw.ui"

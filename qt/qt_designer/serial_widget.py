@@ -23,7 +23,7 @@ class SerialWidget:
         current_selection = self.serialComboBox.currentText()
         ports = get_available_ports()
         self.serialComboBox.clear()
-        
+
         # Repopulate the combo box
         for device, description in ports:
             display_text = f"{device}: {description}"
@@ -39,10 +39,12 @@ class SerialWidget:
     def toggle_serial(self):
         selected_item = self.serialComboBox.currentText()
         com_port = selected_item.split(":")[0].strip()  # Extract the port device name
+
         if self.serialOpenCloseButton.text() == "Open":
-            self.ui.serial_comm = open_serial_port(com_port)
-            if self.ui.serial_comm:
+            self.ui.serial_setup = open_serial_port(com_port)
+            if self.ui.serial_setup and self.ui.serial_setup.is_open():
                 self.serialOpenCloseButton.setText("Close")
         else:
-            close_serial_port(self.ui.serial_comm)
+            if self.ui.serial_setup and self.ui.serial_setup.is_open():
+                close_serial_port(self.ui.serial_setup)
             self.serialOpenCloseButton.setText("Open")
