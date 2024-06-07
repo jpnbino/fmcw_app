@@ -1,48 +1,35 @@
-import serial
-import time
+from PySide6.QtUiTools import loadUiType
+from qtpy.QtWidgets import QApplication, QMainWindow 
+from qtpy.QtGui import QIcon
 
-def receive_and_log_data(serial_port, log_file_path="app/src/log_2023_12_13.txt"):
-    # Open the serial port
-    with serial.Serial(serial_port, 115200, timeout=1) as ser:
-        # Open the log file in append mode
-        with open(log_file_path, "a") as log_file:
-            while True:
-                # Check if there is data available to be read
-                if ser.in_waiting > 0:
-                    # Read the data from the serial port
-                    data = ser.readline().decode("utf-8").strip()
 
-                    # Add a timestamp
-                    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-                    data_with_timestamp = f"{timestamp}, {data}"
+from bms_configuration import BMSConfiguration
+from bms_gui import BMSGUI
+from serial_widget import SerialWidget
 
-                    # Log the data to the file
-                    log_file.write(data_with_timestamp + "\n")
+import sys
 
-                    # Parse the data
-                    parsed_data = parse_data(data)
+Ui_MainWindow, _ = loadUiType("app/qt/fmcw.ui") 
 
-                    print("Data with timestamp:", data_with_timestamp)
-                    print("Parsed data:", parsed_data)
+class FMCWApplication(QMainWindow, Ui_MainWindow ):
+    def __init__(self, ui_file_name):
+        super().__init__()
 
-                # Wait for 10 seconds before the next iteration
-                time.sleep(10)
+        self.setupUi(self)
+        self.setWindowTitle("FMCW Application")
+        icon_path = "app/images/icons/icon_circle.png"
+        self.setWindowIcon(QIcon(icon_path))
+        self.resize(1200,800)
 
-def parse_data(data):
-    # Split the data into individual values
-    values = data.split(",")
+        self.bms_config = BMSConfiguration()
+        self.gui = BMSGUI(self, self.bms_config)
+        self.serial_widget = SerialWidget(self)
 
-    # Example parsing - adjust based on your data format
-    parsed_data = {
-        "Voltage": int(values[0], 16) << 8 | int(values[1], 16),
-        "Current": int(values[2], 16),
-        "OtherValue": int(values[3], 16),
-        # Add more fields based on your data format
-    }
+        self.serial_setup = None
 
-    return parsed_data
-
-if __name__ == "__main__":
-    serial_port = "COM25"  # Change this to the correct serial port on your system
-
-    receive_and_log_data(serial_port)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ui_file_name = "qt/qt_designer/fmcw.ui"
+    fmcw_app = FMCWApplication(ui_file_name)
+    fmcw_app.show()
+    sys.exit(app.exec_())
