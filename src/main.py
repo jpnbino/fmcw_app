@@ -1,13 +1,23 @@
+
+import sys
+import os
+
+# Add the project directories to the sys.path
+base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+src_path = os.path.join(base_path, 'src')
+sys.path.append(src_path)
+sys.path.append(os.path.join(src_path, 'bms'))
+sys.path.append(os.path.join(src_path, 'gui'))
+sys.path.append(os.path.join(src_path, 'serialbsp'))
+
 from PySide6.QtUiTools import loadUiType
 from qtpy.QtWidgets import QApplication, QMainWindow 
 from qtpy.QtGui import QIcon
 
+from bms.configuration import BMSConfiguration
+from gui.bms import BMSGUI
+from gui.serial import SerialWidget
 
-from bms_configuration import BMSConfiguration
-from bms_gui import BMSGUI
-from serial_widget import SerialWidget
-
-import sys
 
 Ui_MainWindow, _ = loadUiType("app/qt/fmcw.ui") 
 

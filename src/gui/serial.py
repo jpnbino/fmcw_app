@@ -1,6 +1,5 @@
-from PySide6.QtWidgets import QWidget
 from PySide6.QtCore import QTimer
-from serial_manager import get_available_ports, open_serial_port, close_serial_port
+from serialbsp.manager import get_available_ports, open_serial_port, close_serial_port
 
 class SerialWidget:
     def __init__(self, ui):

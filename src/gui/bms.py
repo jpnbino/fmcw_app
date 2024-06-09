@@ -1,7 +1,6 @@
-from bms_constants import *
-from PyQt5.QtGui import QPalette, QColor
-from serial_setup import SerialSetup
-from serial_protocol import *
+from PyQt5.QtGui import QColor
+from bms.constants import *
+from serialbsp.protocol import *
 
 class BMSGUI:
     def __init__(self, ui, bms_config):

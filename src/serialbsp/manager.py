@@ -1,5 +1,5 @@
 from serial.tools import list_ports
-from serial_setup import SerialSetup
+from serialbsp.setup import SerialSetup
 
 def get_available_ports():
     ports = list_ports.comports()

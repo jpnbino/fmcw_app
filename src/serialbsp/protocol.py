@@ -1,5 +1,3 @@
-from serial_setup import SerialSetup
-
 START_BYTE = 0xAA
 
 CMD_READ_ALL_MEMORY = 0x01

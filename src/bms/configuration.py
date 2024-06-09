@@ -1,4 +1,4 @@
-from bms_constants import *
+from bms.constants import *
 
 class BMSConfiguration:
     
