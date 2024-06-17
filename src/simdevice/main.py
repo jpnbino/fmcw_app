@@ -67,7 +67,8 @@ class SimulatedDevice:
             packet = self.read_packet()
             if packet:
                 cmd, data = packet
-                print(f"Received command: {cmd}, data: {data}")
+                data_str = ' '.join(format(byte, '02X') for byte in data)  # Convert data to a string of hex values
+                print(f"Received command: {cmd}, data: {data_str}")
 
                 if cmd == CMD_READ_ALL_MEMORY:
                     response_data = [0x10, 0x20, 0x30, 0x40]  # Example data

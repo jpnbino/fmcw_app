@@ -4,9 +4,37 @@ class BMSConfiguration:
     
     def __init__(self):
 
-        #Default from datasheet:      1E2A  0DD4  18FF  09FF  0E7F  0600  0DFF  07AA  0801  0801  0214  44A0  44A0  60C8  0A55  0D70  0010  01AB  0802  0802  0BF2  0A93  04B6  053E  04B6  053E  0BF2  0A93  04B6  053E  0BF2  0A93  067C  0621  06AA  FC0F  83FF       |USER EEPROM  8bytes    |0000  2240  0000  0003  0000  0A8F  0ABE  0015  0A91  0ABE  0000  0000  0000  0000  0A8F  0A92  027B  04D2  04D2  0368  0B09  002A              
-        self.configuration_default = "2A,1E,D4,0D,FF,18,FF,09,7F,0E,00,06,FF,0D,AA,07,01,08,01,08,14,02,A0,44,A0,44,C8,60,55,0A,70,0D,10,00,AB,01,02,08,02,08,F2,0B,93,0A,B6,04,3E,05,B6,04,3E,05,F2,0B,93,0A,B6,04,3E,05,F2,0B,93,0A,7C,06,21,06,AA,06,0F,FC,FF,83,00,00,00,00,00,00,00,00,00,00,40,22,00,00,03,00,00,00,8F,0A,BE,0A,15,00,91,0A,BE,0A,00,00,00,00,00,00,00,00,8F,0A,92,0A,7B,02,D2,04,D2,04,68,03,09,0B,2A,00,"
-
+        #Default from datasheet:      
+        # 1E2A  0DD4  18FF  09FF  0E7F 
+        # 0600  0DFF  07AA  0801  0801 
+        # 0214  44A0  44A0  60C8  0A55
+        # 0D70  0010  01AB  0802  0802
+        # 0BF2  0A93  04B6  053E  04B6 
+        # 053E  0BF2  0A93  04B6  053E 
+        # 0BF2  0A93  067C  0621  06AA 
+        # FC0F  83FF  
+        # |USER EEPROM  8bytes    |
+        # 0000  2240  0000  0003  0000
+        # 0A8F  0ABE  0015  0A91  0ABE 
+        # 0000  0000  0000  0000  0A8F
+        # 0A92  027B  04D2  04D2  0368
+        # 0B09  002A              
+        #self.configuration_default = "2A,1E,D4,0D,FF,18,FF,09,7F,0E,00,06,FF,0D,AA,07,01,08,01,08,14,02,A0,44,A0,44,C8,60,55,0A,70,0D,10,00,AB,01,02,08,02,08,F2,0B,93,0A,B6,04,3E,05,B6,04,3E,05,F2,0B,93,0A,B6,04,3E,05,F2,0B,93,0A,7C,06,21,06,AA,06,0F,FC,FF,83,00,00,00,00,00,00,00,00,00,00,40,22,00,00,03,00,00,00,8F,0A,BE,0A,15,00,91,0A,BE,0A,00,00,00,00,00,00,00,00,8F,0A,92,0A,7B,02,D2,04,D2,04,68,03,09,0B,2A,00,"
+        self.configuration_default = [
+            0x2A, 0x1E, 0xD4, 0x0D, 0xFF, 0x18, 0xFF, 0x09, 0x7F, 0x0E,
+            0x00, 0x06, 0xFF, 0x0D, 0xAA, 0x07, 0x01, 0x08, 0x01, 0x08, 
+            0x14, 0x02, 0xA0, 0x44, 0xA0, 0x44, 0xC8, 0x60, 0x55, 0x0A,
+            0x70, 0x0D, 0x10, 0x00, 0xAB, 0x01, 0x02, 0x08, 0x02, 0x08,
+            0xF2, 0x0B, 0x93, 0x0A, 0xB6, 0x04, 0x3E, 0x05, 0xB6, 0x04,
+            0x3E, 0x05, 0xF2, 0x0B, 0x93, 0x0A, 0xB6, 0x04, 0x3E, 0x05,
+            0xF2, 0x0B, 0x93, 0x0A, 0x7C, 0x06, 0x21, 0x06, 0xAA, 0x06,
+            0x0F, 0xFC, 0xFF, 0x83, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x40, 0x22, 0x00, 0x00, 0x03, 0x00,
+            0x00, 0x00, 0x8F, 0x0A, 0xBE, 0x0A, 0x15, 0x00, 0x91, 0x0A,
+            0xBE, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x8F, 0x0A, 0x92, 0x0A, 0x7B, 0x02, 0xD2, 0x04, 0xD2, 0x04,
+            0x68, 0x03, 0x09, 0x0B, 0x2A, 0x00
+        ]
         # Mapping of codes to text values
         self.unit_mapping = {0: "μs", 1: "ms", 2: "s", 3: "min"}
         self.doc_mapping = {0: "4mV", 1: "8mV", 2: "16mV", 3: "24mV", 4: "32mV", 5: "48mV", 6: "64mV", 7: "96mV"}
@@ -14,7 +42,7 @@ class BMSConfiguration:
         self.dsc_mapping = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
 
         # Split the input line by commas and remove spaces
-        self.config_values = [val.strip() for val in self.configuration_default.split(',')[:] if val.strip()]
+        self.config_values = self.configuration_default
         self.config_values_int = []
         self.ov_lockout = 0.0
         self.ov_recover = 0.0
@@ -188,6 +216,8 @@ class BMSConfiguration:
         return self.configuration_default
 
     def get_config(self):
+        # TODO: get the configuration values. and update the config_values.
+
         return self.config_values
 
     def get_ram_16bits(self, address, values):
@@ -202,9 +232,12 @@ class BMSConfiguration:
         - int: The 16-bit integer value.
         """
         address_index = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-        print( hex(address_index), values[address_index],values[address_index+1] )
-        return int(''.join(values[address_index:address_index+2][::-1]), 16)
+        # Extract the 16-bit value from 'values' starting at 'address_index'
+        # Assuming little-endian byte order (LSB first)
+        raw_value = (values[address_index + 1] << 8) | values[address_index]
+        return raw_value
     
+
     def get_boolean_value(self, values, byte_address, bit_position):
         """
         Extracts a boolean value from 'values' based on the specified byte address and bit position.
@@ -217,17 +250,20 @@ class BMSConfiguration:
         Returns:
         - bool: The boolean value.
         """
-        if ( byte_address >= ADDR_RAM_BEGIN):
+        if byte_address >= ADDR_RAM_BEGIN:
             real_address = byte_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
         else:
             real_address = byte_address
 
-        byte_value = int(''.join(values[real_address]), 16)
-        return bool((byte_value >> bit_position) & MASK_1BIT)
+        # Extract the byte value from values
+        byte_value = values[real_address]
+
+        # Calculate the boolean value based on the bit position
+        return bool((byte_value >> bit_position) & 0x01)
 
     def update_registers(self,values):
         self.config_values = values
-        self.config_values_int = [int(val,16) for val in values]
+        self.config_values_int = values
         print(values)
 
         # Extract values for the specified fields
@@ -297,10 +333,10 @@ class BMSConfiguration:
         self.cb_off_time =      self.get_reg_val(values, 0x26, 0,MASK_10BIT)
         self.cb_off_time_unit = self.get_reg_val(values, 0x26, 10,MASK_2BIT)
 
-        self.cb_under_temp = self.apply_mask_and_multiplier_temp(int(''.join(values[0x28:0x2A][::-1]), 16))
-        self.cb_ut_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2A:0x2C][::-1]), 16))  
-        self.cb_over_temp =  self.apply_mask_and_multiplier_temp(int(''.join(values[0x2C:0x2E][::-1]), 16)) 
-        self.cb_ot_recover = self.apply_mask_and_multiplier_temp(int(''.join(values[0x2E:0x30][::-1]), 16))   
+        self.cb_under_temp = self.apply_mask_and_multiplier_temp((values[0x29] << 8) | values[0x28])
+        self.cb_ut_recover = self.apply_mask_and_multiplier_temp((values[0x2B] << 8) | values[0x2A])
+        self.cb_over_temp  = self.apply_mask_and_multiplier_temp((values[0x2D] << 8) | values[0x2C])
+        self.cb_ot_recover = self.apply_mask_and_multiplier_temp((values[0x2F] << 8) | values[0x2E])  
         
         #Current Limits
         self.disch_oc_voltage =       self.get_reg_val(values, 0x16, 12, MASK_3BIT)
@@ -434,7 +470,15 @@ class BMSConfiguration:
         Returns:
         - float: The calculated voltage.
         """
-        return self.apply_mask_and_multiplier(int(''.join(values[address:address+2][::-1]), 16))
+        # Extract the two bytes from values starting from the given address
+        byte1 = values[address]
+        byte2 = values[address + 1]
+
+        # Combine bytes into a single 16-bit value (little-endian format)
+        combined_value = (byte2 << 8) | byte1
+
+        # Apply mask and multiplier and return the calculated voltage
+        return self.apply_mask_and_multiplier(combined_value)
 
     def calculate_temp_voltage(self, values, address):
         """
@@ -447,8 +491,33 @@ class BMSConfiguration:
         Returns:
         - float: The calculated voltage.
         """
-        return self.apply_mask_and_multiplier_temp(int(''.join(values[address:address+2][::-1]), 16))
-       
+        # Extract the 16-bit value from 'values' starting at 'address'
+        raw_value = (values[address + 1] << 8) | values[address]
+
+        # Apply mask and multiplier to calculate the voltage
+        return self.apply_mask_and_multiplier_temp(raw_value)
+
+    def get_reg_val(self, values, start_address, bit_shift, bit_mask):
+        """
+        Extract a value from 'values' based on the specified parameters.
+
+        Parameters:
+        - values (list): The list of values from which to extract the value.
+        - start_address (int): The starting address.
+        - bit_shift (int): The bit shift for the value.
+        - bit_mask (int): The bitmask for the value.
+
+        Returns:
+        - int: The extracted value.
+        """
+        if start_address >= ADDR_RAM_BEGIN:
+            start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+
+        # Assuming start_address points to the index in values directly
+        raw_value = (values[start_address + 1] << 8) | values[start_address]
+        value = (raw_value >> bit_shift) & bit_mask
+        return value
+          
     def apply_mask_and_multiplier(self, value):
         # Apply masking
         masked_value = value & MASK_12BIT
@@ -483,23 +552,3 @@ class BMSConfiguration:
         # Apply multiplier
         result = masked_value * TEMPERATURE_MULTIPLIER
         return result
-    
-    def get_reg_val(self, values, start_address, bit_shift, bit_mask):
-        """
-        Extract a value from 'values' based on the specified parameters.
-
-        Parameters:
-        - values (list): The list of values from which to extract the value.
-        - start_address (int): The starting address.
-        - bit_shift (int): The bit shift for the value.
-        - bit_mask (int): The bitmask for the value.
-
-        Returns:
-        - int: The extracted value.
-        """
-        if ( start_address >= ADDR_RAM_BEGIN):
-            start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-
-        raw_value = int(''.join(values[start_address:start_address+2][::-1]), 16)
-        value = (raw_value >> bit_shift) & bit_mask
-        return value
