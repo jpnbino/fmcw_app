@@ -39,9 +39,23 @@ class BMSGUI:
         # Serial read
         # save values
         # mostra na tela
-        configuration =   self.bms_config.get_config()   
+        # Access the shared serial_setup
+        serial_setup = self.ui.serial_setup        
+        register_cfg_int = []
+        if serial_setup and serial_setup.is_open():
+            # Send the configuration data over serial
+            serial_protocol = SerialProtocol(serial_setup)
+            serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
+            packet = serial_protocol.read_packet()
+            _ , register_cfg_int = packet
+        else:
+            print("Serial port is not open")
 
-        self.bms_config.update_registers(configuration)
+        configuration =  register_cfg_int
+
+        self.bms_config.update_registers(list(configuration))
+
+        print(f"read_bms_config: {list(configuration)}")
 
         #Voltage Limits
         # Set the values in the corresponding QLineEdit fields with formatting to three decimal places
@@ -295,7 +309,7 @@ class BMSGUI:
 
         register_cfg_int = [int(val, 16) for val in register_cfg]
 
-            # Access the shared serial_setup
+        # Access the shared serial_setup
         serial_setup = self.ui.serial_setup
 
         if serial_setup and serial_setup.is_open():
