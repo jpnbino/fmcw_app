@@ -23,12 +23,11 @@ class BMSGUI:
             self.ui.LowVoltageChargeLineEdit,
             self.ui.uvLockoutLineEdit,
             self.ui.ovDelayTimeoutLineEdit,
-
         ]:
             line_edit.textChanged.connect(self.on_line_edit_changed)
 
-    #read the combobox and return the unit chosen by user
     def get_unit_from_combo(self, combo):
+        """Read the combobox and return the unit chosen by user."""
         selected_text = combo.currentText()
         unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
         return unit
@@ -57,109 +56,162 @@ class BMSGUI:
 
         print(f"read_bms_config: {list(configuration)}")
 
+        self.update_ui_fields()
+
+    def update_ui_fields(self):
+
+        """Updates the UI fields with the current BMS configuration."""
         #Voltage Limits
-        # Set the values in the corresponding QLineEdit fields with formatting to three decimal places
-        self.ui.ovLockoutLineEdit.setText(f"{self.bms_config.ov_lockout:.2f}")
-        self.ui.ovLineEdit.setText(f"{self.bms_config.ov:.2f}")
-        self.ui.ovRecoverLineEdit.setText(f"{self.bms_config.ov_recover:.2f}")
-        self.ui.eocVoltageLineEdit.setText(f"{self.bms_config.eoc_voltage:.2f}")
-        self.ui.uvRecoverLineEdit.setText(f"{self.bms_config.uv_recover:.2f}")
-        self.ui.underVoltageLineEdit.setText(f"{self.bms_config.under_voltage:.2f}")
-        self.ui.sleepVoltageLineEdit.setText(f"{self.bms_config.sleep_voltage:.2f}")
-        self.ui.LowVoltageChargeLineEdit.setText(f"{self.bms_config.low_voltage_charge:.2f}")
-        self.ui.uvLockoutLineEdit.setText(f"{self.bms_config.uv_lockout:.2f}")
+        voltage_fields = [
+            (self.ui.ovLockoutLineEdit, self.bms_config.ov_lockout),
+            (self.ui.ovLineEdit, self.bms_config.ov),
+            (self.ui.ovRecoverLineEdit, self.bms_config.ov_recover),
+            (self.ui.eocVoltageLineEdit, self.bms_config.eoc_voltage),
+            (self.ui.uvRecoverLineEdit, self.bms_config.uv_recover),
+            (self.ui.underVoltageLineEdit, self.bms_config.under_voltage),
+            (self.ui.sleepVoltageLineEdit, self.bms_config.sleep_voltage),
+            (self.ui.LowVoltageChargeLineEdit, self.bms_config.low_voltage_charge),
+            (self.ui.uvLockoutLineEdit, self.bms_config.uv_lockout)
+        ]
+        
+        for line_edit, value in voltage_fields:
+            line_edit.setText(f"{value:.2f}")
 
         self.ui.ovDelayTimeoutLineEdit.setText(f"{int(self.bms_config.ov_delay_timeout)}")
         self.ui.uvDelayTimeoutLineEdit.setText(f"{int(self.bms_config.uv_delay_timeout)}")
         self.ui.sleepDelayLineEdit.setText(f"{int(self.bms_config.sleep_delay)}")
         self.ui.openWireTimingLineEdit.setText(f"{int(self.bms_config.open_wire_timing)}")
 
-        #-- Update the combo box with the selected value
-        self.ui.ovDelayTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.ov_delay_timeout_unit), 'Unknown'))
-        self.ui.uvDelayTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.uv_delay_timeout_unit), 'Unknown'))
-        self.ui.sleepDelayUnitCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.sleep_delay_unit), 'Unknown'))
-        self.ui.openWireTimingCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.open_wire_timing_unit), 'Unknown'))
+        self.update_combo_boxes()
+        self.update_timer_fields()
+        self.update_cell_balance_limits()
+        self.update_temperature_limits()
+        self.update_current_limits()
+        self.update_pack_option()
+        self.update_ram_values()
+        self.update_status_bits()
 
-        #Timers
-        self.ui.timerIdleDozeLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
-        self.ui.timerSleepLineEdit.setText(f"{int(self.bms_config.timer_sleep)}")
-        self.ui.timerWDTLineEdit.setText(f"{int(self.bms_config.timer_idle_doze)}")
+    
+    def update_combo_boxes(self):
+        """Update the combo boxes with the selected values."""
+        combo_boxes = [
+            (self.ui.ovDelayTimeoutCombo, self.bms_config.ov_delay_timeout_unit),
+            (self.ui.uvDelayTimeoutCombo, self.bms_config.uv_delay_timeout_unit),
+            (self.ui.sleepDelayUnitCombo, self.bms_config.sleep_delay_unit),
+            (self.ui.openWireTimingCombo, self.bms_config.open_wire_timing_unit)
+        ]
+        for combo, value in combo_boxes:
+            combo.setCurrentText(self.bms_config.unit_mapping.get(int(value), 'Unknown'))
 
-        #Cell Configuration 
+    def update_timer_fields(self):
+        """Update timer-related fields."""
+        timer_fields = {
+            self.ui.timerIdleDozeLineEdit: self.bms_config.timer_idle_doze,
+            self.ui.timerSleepLineEdit: self.bms_config.timer_sleep,
+            self.ui.timerWDTLineEdit: self.bms_config.timer_idle_doze
+        }
+        for line_edit, value in timer_fields.items():
+            line_edit.setText(f"{int(value)}")
+
+    def update_cell_balance_limits(self):
+        """Update cell balance limits fields."""
         self.ui.CellConfigurationLineEdit.setText(f"{int(self.bms_config.cell_config_code[self.bms_config.cell_config])}")
         
-        #Cell Balance Limits
-        self.ui.CBUpperLimLineEdit.setText(f"{self.bms_config.cb_upper_lim:.2f}")
-        self.ui.CBLowerLimLineEdit.setText(f"{self.bms_config.cb_lower_lim:.2f}")
-        self.ui.CBMaxDeltaLineEdit.setText(f"{self.bms_config.cb_max_delta:.2f}")
-        self.ui.CBMinDeltaLineEdit.setText(f"{self.bms_config.cb_min_delta:.2f}")
-        self.ui.CBOverTempLineEdit.setText(f"{self.bms_config.cb_over_temp:.2f}")
-        self.ui.CBOTRecoverLineEdit.setText(f"{self.bms_config.cb_ot_recover:.2f}")
-        self.ui.CBUTRecoverLineEdit.setText(f"{self.bms_config.cb_ut_recover:.2f}")
-        self.ui.CBUnderTempLineEdit.setText(f"{self.bms_config.cb_under_temp:.2f}")
-       
+        cell_balance_limits = {
+            self.ui.CBUpperLimLineEdit: self.bms_config.cb_upper_lim,
+            self.ui.CBLowerLimLineEdit: self.bms_config.cb_lower_lim,
+            self.ui.CBMaxDeltaLineEdit: self.bms_config.cb_max_delta,
+            self.ui.CBMinDeltaLineEdit: self.bms_config.cb_min_delta,
+            self.ui.CBOverTempLineEdit: self.bms_config.cb_over_temp,
+            self.ui.CBOTRecoverLineEdit: self.bms_config.cb_ot_recover,
+            self.ui.CBUTRecoverLineEdit: self.bms_config.cb_ut_recover,
+            self.ui.CBUnderTempLineEdit: self.bms_config.cb_under_temp,
+        }
+        for line_edit, value in cell_balance_limits.items():
+            line_edit.setText(f"{value:.2f}")    
+
         self.ui.CBOnTimeLineEdit.setText(f"{int(self.bms_config.cb_on_time)}")
         self.ui.CBOffTimeLineEdit.setText(f"{int(self.bms_config.cb_off_time)}")
         self.ui.CBOnTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
         self.ui.CBOffTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
 
-        #Temperature Limits
-        self.ui.TLChargeOverTempLineEdit.setText(f"{self.bms_config.tl_charge_over_temp:.2f}")
-        self.ui.TLChargeOTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ot_recover:.2f}")
-        self.ui.TLChargeUTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ut_recover:.2f}")
-        self.ui.TLChargeUnderTempLineEdit.setText(f"{self.bms_config.tl_charge_under_temp:.2f}")
+    def update_temperature_limits(self):
+        """Update temperature limits fields."""
+        temp_limits = {
+            self.ui.TLChargeOverTempLineEdit: self.bms_config.tl_charge_over_temp,
+            self.ui.TLChargeOTRecoverLineEdit: self.bms_config.tl_charge_ot_recover,
+            self.ui.TLChargeUTRecoverLineEdit: self.bms_config.tl_charge_ut_recover,
+            self.ui.TLChargeUnderTempLineEdit: self.bms_config.tl_charge_under_temp,
+            self.ui.TLDiscOverTempLineEdit: self.bms_config.tl_disch_over_temp,
+            self.ui.TLDischOTRecoverLineEdit: self.bms_config.tl_disch_ot_recover,
+            self.ui.TLDischUTRecoverLineEdit: self.bms_config.tl_disch_ut_recover,
+            self.ui.TLDischUnderTempLineEdit: self.bms_config.tl_disch_under_temp,
+            self.ui.TLInternalOverTempLineEdit: self.bms_config.tl_internal_over_temp,
+            self.ui.TLInternalOTRecoverLineEdit: self.bms_config.tl_internal_ot_recover
+        }
+        for line_edit, value in temp_limits.items():
+            line_edit.setText(f"{value:.2f}") 
 
-        self.ui.TLDiscOverTempLineEdit.setText(f"{self.bms_config.tl_disch_over_temp:.2f}")
-        self.ui.TLDischOTRecoverLineEdit.setText(f"{self.bms_config.tl_charge_ot_recover:.2f}")
-        self.ui.TLDischUTRecoverLineEdit.setText(f"{self.bms_config.tl_disch_ut_recover:.2f}")
-        self.ui.TLDischUnderTempLineEdit.setText(f"{self.bms_config.tl_disch_under_temp:.2f}")
-        self.ui.TLInternalOverTempLineEdit.setText(f"{self.bms_config.tl_internal_over_temp:.2f}")
-        self.ui.TLInternalOTRecoverLineEdit.setText(f"{self.bms_config.tl_internal_ot_recover:.2f}")
-        
+    def update_current_limits(self):
+        """Update current limits fields."""
+        current_limits = {
+            self.ui.CLDischargeOCVoltageCombo: (self.bms_config.disch_oc_voltage, self.bms_config.doc_mapping),
+            self.ui.CLChargeOCVoltageCombo: (self.bms_config.charge_oc_voltage, self.bms_config.coc_mapping),
+            self.ui.CLDischargeSCVoltageCombo: (self.bms_config.disch_sc_voltage, self.bms_config.dsc_mapping),
+            self.ui.CLDischargeOCTimeoutCombo: (self.bms_config.disch_oc_timeout_unit, self.bms_config.unit_mapping),
+            self.ui.CLChargeOCTimeoutCombo: (self.bms_config.charge_oc_timeout_unit, self.bms_config.unit_mapping),
+            self.ui.CLDischargeSCTimeoutCombo: (self.bms_config.disch_sc_timeout_unit, self.bms_config.unit_mapping)
+        }
+        for combo, (value, mapping) in current_limits.items():
+            combo.setCurrentText(mapping.get(int(value), 'Unknown'))
 
-        #Current Limit
-        self.ui.CLDischargeOCVoltageCombo.setCurrentText(self.bms_config.doc_mapping.get(int(self.bms_config.disch_oc_voltage), 'Unknown'))
-        self.ui.CLChargeOCVoltageCombo.setCurrentText(self.bms_config.coc_mapping.get(int(self.bms_config.charge_oc_voltage), 'Unknown'))
-        self.ui.CLDischargeSCVoltageCombo.setCurrentText(self.bms_config.dsc_mapping.get(int(self.bms_config.disch_sc_voltage), 'Unknown'))
+        current_fields = {
+            self.ui.CLDischargeOCTimeoutLineEdit: self.bms_config.disch_oc_timeout,
+            self.ui.CLChargeOCTimeoutLineEdit: self.bms_config.charge_oc_timeout,
+            self.ui.CLDischargeSCTimeoutLineEdit: self.bms_config.disch_sc_timeout
+        }
+        for line_edit, value in current_fields.items():
+            line_edit.setText(f"{int(value)}")
 
-        self.ui.CLDischargeOCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.disch_oc_timeout_unit), 'Unknown'))
-        self.ui.CLChargeOCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.charge_oc_timeout_unit), 'Unknown'))
-        self.ui.CLDischargeSCTimeoutCombo.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.disch_sc_timeout_unit), 'Unknown'))
+    def update_pack_option(self):
+        """Update pack option fields."""
+        options = {
+            self.ui.poT2MonitorsFETTempCheckBox: self.bms_config.bit_t2_monitors_fet,
+            self.ui.poEnableCELLFpsdCheckBox: self.bms_config.bit_enable_cellf_psd,
+            self.ui.poEnableOpenWirePSDCheckBox: self.bms_config.bit_enable_openwire_psd,
+            self.ui.poEnableUVLOCheckBox: self.bms_config.bit_enable_uvlo_pd,
+            self.ui.poEnableOpenWireScanCheckBox: self.bms_config.bit_enable_openwire_scan,
+            self.ui.poCascadeCheckBox: True,
+            self.ui.CBDuringChargeCheckBox: self.bms_config.bit_cb_during_charge,
+            self.ui.CBDuringDischargeCheckBox: self.bms_config.bit_cb_during_discharge,
+            self.ui.CBDuringEOCCheckBox: self.bms_config.bit_cb_during_eoc,
+            self.ui.tGainCheckBox: self.bms_config.bit_tgain
+            }
+        for checkbox, value in options.items():
+            checkbox.setChecked(value)
 
-        self.ui.CLDischargeOCTimeoutLineEdit.setText(f"{int(self.bms_config.disch_oc_timeout)}")
-        self.ui.CLChargeOCTimeoutLineEdit.setText(f"{int(self.bms_config.charge_oc_timeout)}")
-        self.ui.CLDischargeSCTimeoutLineEdit.setText(f"{int(self.bms_config.disch_sc_timeout)}")
-        
-        #Pack Option
-        self.ui.poT2MonitorsFETTempCheckBox.setChecked(self.bms_config.bit_t2_monitors_fet)
-        self.ui.poEnableCELLFpsdCheckBox.setChecked(self.bms_config.bit_enable_cellf_psd)
-        self.ui.poEnableOpenWirePSDCheckBox.setChecked(self.bms_config.bit_enable_openwire_psd)
-        self.ui.poEnableUVLOCheckBox.setChecked(self.bms_config.bit_enable_uvlo_pd)
-        self.ui.poEnableOpenWireScanCheckBox.setChecked(self.bms_config.bit_enable_openwire_scan)
-        self.ui.poCascadeCheckBox.setChecked(True)
-        
-        self.ui.CBDuringChargeCheckBox.setChecked(self.bms_config.bit_cb_during_charge)
-        self.ui.CBDuringDischargeCheckBox.setChecked(self.bms_config.bit_cb_during_discharge)
-        self.ui.CBDuringEOCCheckBox.setChecked(self.bms_config.bit_cb_during_eoc)
-
-        self.ui.tGainCheckBox.setChecked(self.bms_config.bit_tgain)
-
+    def update_ram_values(self):
         #RAM
-        self.ui.vcell1LineEdit.setText(f"{self.bms_config.vcell1:.2f}")
-        self.ui.vcell2LineEdit.setText(f"{self.bms_config.vcell2:.2f}")
-        self.ui.vcell3LineEdit.setText(f"{self.bms_config.vcell3:.2f}")
-        self.ui.vcell4LineEdit.setText(f"{self.bms_config.vcell4:.2f}")
-        self.ui.vcell5LineEdit.setText(f"{self.bms_config.vcell5:.2f}")
-        self.ui.vcell6LineEdit.setText(f"{self.bms_config.vcell6:.2f}")
-        self.ui.vcell7LineEdit.setText(f"{self.bms_config.vcell7:.2f}")
-        self.ui.vcell8LineEdit.setText(f"{self.bms_config.vcell8:.2f}")
-        
-        self.ui.vcellMinLineEdit.setText(f"{self.bms_config.vcell_min:.2f}")
-        self.ui.vcellMaxLineEdit.setText(f"{self.bms_config.vcell_max:.2f}")
-        
-        self.ui.vcellBattLineEdit.setText(f"{self.bms_config.vbatt:.2f}")
-        self.ui.vcellVrgoLineEdit.setText(f"{self.bms_config.vrgo:.2f}")
-        
+        #Voltage values: Cells, Min, Max, Batt, Vrgo
+        voltage_fields = [
+            (self.ui.vcell1LineEdit, self.bms_config.vcell1),
+            (self.ui.vcell2LineEdit, self.bms_config.vcell2),
+            (self.ui.vcell3LineEdit, self.bms_config.vcell3),
+            (self.ui.vcell4LineEdit, self.bms_config.vcell4),
+            (self.ui.vcell5LineEdit, self.bms_config.vcell5),
+            (self.ui.vcell6LineEdit, self.bms_config.vcell6),
+            (self.ui.vcell7LineEdit, self.bms_config.vcell7),
+            (self.ui.vcell8LineEdit, self.bms_config.vcell8),
+            (self.ui.vcellMinLineEdit, self.bms_config.vcell_min),
+            (self.ui.vcellMaxLineEdit, self.bms_config.vcell_max),
+            (self.ui.vcellBattLineEdit, self.bms_config.vbatt),
+            (self.ui.vcellVrgoLineEdit, self.bms_config.vrgo),
+        ]
+        for line_edit, value in voltage_fields:
+            line_edit.setText(f"{value:.2f}")
+
+
+        #Temperature      
         gain = 0
         if(self.bms_config.bit_tgain):
             gain = 1
@@ -184,6 +236,7 @@ class BMSGUI:
         self.ui.packCurrentVLineEdit.setText(f"{voltage*1000:.4f}") #in millivolts
         self.ui.packCurrentALineEdit.setText(f"{int(current*1000)}") # in milliamperes
         
+    def update_status_bits(self):
         #Status Bits from addresses 0x80, 0x81, 0x82, 0x83
         self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_ov)
         self.show_status_bit(self.ui.bitOVLOlabel,  self.bms_config.bit_ovlo)
