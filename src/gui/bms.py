@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QColor
+from PySide6.QtGui import QColor
 from bms.constants import *
 from serialbsp.protocol import *
 
@@ -35,13 +35,13 @@ class BMSGUI:
                 self.bms_config.update_registers(list(configuration))
 
                 logging.info(f"read_bms_config: {list(configuration)}")
-                self.ui.statusLabel.setText("Configuration read successfully.")
+                self.ui.statusBar.showMessage("Configuration read successfully.")
             else:
                 logging.error("Serial port is not open")
-                self.ui.statusLabel.setText("Error: Serial port is not open.")
+                self.ui.statusBar.showMessage("Error: Serial port is not open.")
         except Exception as e:
             logging.error(f"Failed to read BMS configuration: {e}")
-            self.ui.statusLabel.setText(f"Error: {e}")
+            self.ui.statusBar.showMessage(f"Error: {e}")
 
         self.update_ui_fields()
 

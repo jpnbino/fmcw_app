@@ -11,8 +11,8 @@ sys.path.append(os.path.join(src_path, 'gui'))
 sys.path.append(os.path.join(src_path, 'serialbsp'))
 
 from PySide6.QtUiTools import loadUiType
-from qtpy.QtWidgets import QApplication, QMainWindow 
-from qtpy.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QStatusBar
+from PySide6.QtGui import QIcon
 
 from bms.configuration import BMSConfiguration
 from gui.bms import BMSGUI
@@ -30,7 +30,7 @@ class FMCWApplication(QMainWindow, Ui_MainWindow ):
         icon_path = "app/images/icons/icon_circle.png"
         self.setWindowIcon(QIcon(icon_path))
         self.resize(1200,800)
-
+        
         self.bms_config = BMSConfiguration()
         self.gui = BMSGUI(self, self.bms_config)
         self.serial_widget = SerialWidget(self)
