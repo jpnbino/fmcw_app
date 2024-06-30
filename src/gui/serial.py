@@ -1,6 +1,9 @@
 from PySide6.QtCore import QTimer
 from serialbsp.manager import get_available_ports, open_serial_port, close_serial_port
 
+REFRESH_RATE = 5000
+MESSAGE_DURATION = 5000
+
 class SerialWidget:
     def __init__(self, ui):
         self.ui = ui
@@ -16,7 +19,7 @@ class SerialWidget:
 
         self.timer = QTimer(self.ui)
         self.timer.timeout.connect(self.update_serial_ports)
-        self.timer.start(5000)
+        self.timer.start(REFRESH_RATE)
 
     def update_serial_ports(self):
         current_selection = self.serialComboBox.currentText()
@@ -43,7 +46,9 @@ class SerialWidget:
             self.ui.serial_setup = open_serial_port(com_port)
             if self.ui.serial_setup and self.ui.serial_setup.is_open():
                 self.serialOpenCloseButton.setText("Close")
+                self.ui.statusBar.showMessage(f"Serial port {com_port} opened successfully.", MESSAGE_DURATION)       
         else:
             if self.ui.serial_setup and self.ui.serial_setup.is_open():
                 close_serial_port(self.ui.serial_setup)
             self.serialOpenCloseButton.setText("Open")
+            self.ui.statusBar.showMessage(f"Serial port {com_port} closed successfully.", MESSAGE_DURATION) 
