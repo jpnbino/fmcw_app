@@ -20,28 +20,28 @@ class BMSGUI:
         return unit
     
     def read_bms_config(self):
-
-        #@todo: Implemetar para usar a serial.
-        # Serial read
-        # save values
-        # mostra na tela
-        # Access the shared serial_setup
+        """Read the BMS configuration from the device."""
         serial_setup = self.ui.serial_setup        
         register_cfg_int = []
-        if serial_setup and serial_setup.is_open():
-            # Send the configuration data over serial
-            serial_protocol = SerialProtocol(serial_setup)
-            serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
-            packet = serial_protocol.read_packet()
-            _ , register_cfg_int = packet
-        else:
-            print("Serial port is not open")
+        try:
+            if serial_setup and serial_setup.is_open():
+                # Send the configuration data over serial
+                serial_protocol = SerialProtocol(serial_setup)
+                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
+                packet = serial_protocol.read_packet()
+                _ , register_cfg_int = packet
+                configuration =  register_cfg_int
 
-        configuration =  register_cfg_int
+                self.bms_config.update_registers(list(configuration))
 
-        self.bms_config.update_registers(list(configuration))
-
-        print(f"read_bms_config: {list(configuration)}")
+                logging.info(f"read_bms_config: {list(configuration)}")
+                self.ui.statusLabel.setText("Configuration read successfully.")
+            else:
+                logging.error("Serial port is not open")
+                self.ui.statusLabel.setText("Error: Serial port is not open.")
+        except Exception as e:
+            logging.error(f"Failed to read BMS configuration: {e}")
+            self.ui.statusLabel.setText(f"Error: {e}")
 
         self.update_ui_fields()
 
