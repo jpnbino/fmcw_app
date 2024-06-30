@@ -33,6 +33,7 @@ class BMSGUI:
                 configuration =  register_cfg_int
 
                 self.bms_config.update_registers(list(configuration))
+                self.update_ui_fields()
 
                 logging.info(f"read_bms_config: {list(configuration)}")
                 self.ui.statusBar.showMessage("Configuration read successfully.")
@@ -43,7 +44,7 @@ class BMSGUI:
             logging.error(f"Failed to read BMS configuration: {e}")
             self.ui.statusBar.showMessage(f"Error: {e}")
 
-        self.update_ui_fields()
+        
 
     def update_ui_fields(self):
 
@@ -334,18 +335,22 @@ class BMSGUI:
 
     def write_bms_config(self):
 
-        register_cfg = self.bms_config.get_config()
+        if self.ui.serial_setup and self.ui.serial_setup.is_open():
+            register_cfg = self.bms_config.get_config()
 
-        print("entered write_bms_config:", register_cfg)       
+            print("entered write_bms_config:", register_cfg)       
 
-        self.write_voltage_registers()
-        self.write_time_registers()
+            self.write_voltage_registers()
+            self.write_time_registers()
 
-        register_cfg = self.bms_config.get_config()
-        print("exit write_bms_config:", register_cfg)
-        register_cfg_int = [int(val, 16) for val in register_cfg]
+            register_cfg = self.bms_config.get_config()
+            print("exit write_bms_config:", register_cfg)
+            register_cfg_int = [int(val, 16) for val in register_cfg]
 
-        self.send_serial_command(CMD_WRITE_EEPROM, register_cfg_int)
+            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg_int)
+        else: 
+            logging.error("Serial port is not open")
+            self.ui.statusBar.showMessage("Error: Serial port is not open.")
 
 
  
