@@ -1,4 +1,5 @@
 from bms.constants import *
+import logging
 
 class BMSConfiguration:
     
@@ -265,10 +266,23 @@ class BMSConfiguration:
     def update_registers(self,values):
         self.config_values = values
         self.config_values_int = values
-        print(values)
+        logging.info(f"Updating registers with values: {values}")
 
-        # Extract values for the specified fields
+        try:
+            self.update_voltage_limits(values)
+            self.update_timing(values)
+            self.cell_configuration(values)
+            self.update_pack_options(values)
+            self.update_cell_balance(values)
+            self.update_current_limits(values)
+            self.update_temperature_limits(values)
+            self.update_ram_values(values)
+            self.update_feature_controls(values)
+        except Exception as e:
+            print(f"Error updating configuration: {e}")
 
+        
+    def update_voltage_limits(self, values):
         #Voltage Limits
         voltage_mappping = {
             0x00: 'ov',
@@ -281,10 +295,19 @@ class BMSConfiguration:
             0x0E: 'low_voltage_charge',
             0x44: 'sleep_voltage'
         }
-        for address, attr in voltage_mappping.items():
-            setattr(self, attr, self.calculate_voltage(values, address))
+        for addr, attr in voltage_mappping.items():
+            try:
+                value = self.calculate_voltage(values, addr)
+                setattr(self, attr, value)
+            except Exception as e:
+                print(f"Error updating voltage limits: {e}")
             
-        delay_mappping = {
+    def update_timing(self, values):
+        '''Update the timing attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the timing attributes.
+        '''
+        timing_mapping = {
             (0x10,0, MASK_10BIT): 'ov_delay_timeout',
             (0x10,10,MASK_2BIT): 'ov_delay_timeout_unit',
             (0x12,0, MASK_10BIT): 'uv_delay_timeout',
@@ -298,15 +321,22 @@ class BMSConfiguration:
             (0x48,4, MASK_8BIT): 'timer_sleep',
             (0x48,8, MASK_8BIT): 'cell_config'
          }
-        for address, bit_shift, bit_mask in delay_mappping.keys():
-            setattr(self,attr, self.get_reg_val(values, address, bit_shift, bit_mask))
-        
-        
-        
-        #Cell Configutarion
+        for (addr, bit_shift, bit_mask),attr in timing_mapping.items():
+            try:
+                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                setattr(self,attr, value)
+            except Exception as e:
+                print(f"Error updating timing: {e}")
+
+    def cell_configuration(self, values):    
+        #Cell Configuration
         self.cell_config = self.get_reg_val(values, 0x48, 8, MASK_8BIT)
 
-        #Pack Options ( Addresses 0x4A and 0x4B)
+    def update_pack_options(self, values):
+        '''Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the pack options attributes.
+        '''
         pack_options_mapping = {
             (0x4A, 0): 'bit_enable_openwire_psd',
             (0x4A, 1): 'bit_enable_openwire_scan',
@@ -320,10 +350,16 @@ class BMSConfiguration:
         }
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
-            setattr(self, attr, self.get_boolean_value(values, addr, bit_pos))
+            try:
+                setattr(self, attr, self.get_boolean_value(values, addr, bit_pos))
+            except Exception as e:
+                print(f"Error updating pack options: {e}")
         
-
-        #Cell Balance Limits
+    def update_cell_balance(self, values):
+        '''Update the cell balance attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the cell balance attributes.
+        '''    
         cell_balance_mapping = {
             0x1C: 'cb_lower_lim',
             0x1E: 'cb_upper_lim',
@@ -332,7 +368,10 @@ class BMSConfiguration:
         }
 
         for addr, attr in cell_balance_mapping.items():
-            setattr(self, attr, self.calculate_voltage(values, addr))
+            try:
+                setattr(self, attr, self.calculate_voltage(values, addr))
+            except Exception as e:
+                print(f"Error updating cell balance: {e}")
 
         cell_balance_timing_mapping = {
             (0x24, 0, MASK_10BIT): 'cb_on_time',
@@ -342,7 +381,11 @@ class BMSConfiguration:
         }
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
-            setattr(self, attr, self.get_reg_val(values, addr, bit_shift, bit_mask))
+            try:
+                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                setattr(self, attr, value)
+            except Exception as e:
+                print(f"Error updating cell balance timing: {e}")
 
         temperature_mapping = {
             (0x28, 0x29): 'cb_under_temp',
@@ -352,10 +395,17 @@ class BMSConfiguration:
         }
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
-            setattr(self, attr, self.apply_mask_and_multiplier_temp((values[high_byte] << 8) | values[low_byte]))
+            try: 
+                value = self.apply_mask_and_multiplier_temp((values[high_byte] << 8) | values[low_byte])               
+                setattr(self, attr, value)
+            except Exception as e:
+                print(f"Error updating cell balance temperature: {e}")
     
-        
-        #Current Limits
+    def update_current_limits(self, values):
+        '''Update the current limit attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the current limit attributes.
+        '''     
         current_limits_mapping = {
             (0x16, 12, MASK_3BIT): 'disch_oc_voltage',
             (0x16, 0, MASK_10BIT): 'disch_oc_timeout',
@@ -369,9 +419,17 @@ class BMSConfiguration:
         }
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
-            setattr(self, attr, self.get_reg_val(values, addr, bit_shift, bit_mask))  
+            try:
+                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                setattr(self, attr, value)
+            except Exception as e:
+                print(f"Error updating current limits: {e}")
 
-        #Temperature Limits
+    def update_temperature_limits(self, values):
+        """ Update the temperature limit attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the temperature limit attributes.
+        """
         temperature_limits_mapping = {
             0x30: 'tl_charge_over_temp',
             0x32: 'tl_charge_ot_recover',
@@ -386,9 +444,16 @@ class BMSConfiguration:
         }
 
         for addr, attr in temperature_limits_mapping.items():
-            setattr(self, attr, self.calculate_temp_voltage(values, addr))
+            try:
+                setattr(self, attr, self.calculate_temp_voltage(values, addr))
+            except Exception as e:
+                print(f"Error updating temperature limits: {e}")
 
-        #RAM
+    def update_ram_values(self, values):
+        """ Update the RAM attributes based on the given values.
+        Parameters:
+        - values (list): The list of values from which to extract the RAM attributes.
+        """
         self.i_gain = self.current_gain_code[self.get_reg_val(values, 0x85, 4, MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
@@ -410,18 +475,28 @@ class BMSConfiguration:
         }
 
         for addr, attr in ram_addresses.items():
-            if 'temp' in attr:
-                setattr(self, attr, self.apply_mask_and_multiplier_temp(self.get_ram_16bits(addr, values)))
-            elif 'vcell' in attr:
-                setattr(self, attr, self.apply_mask_and_multiplier(self.get_ram_16bits(addr, values)))
-            elif attr == 'v_sense':
-                setattr(self, attr, self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(addr, values), self.i_gain))
-            elif attr == 'vbatt':
-                setattr(self, attr, self.apply_mask_and_multiplier_pack(self.get_ram_16bits(addr, values)))
-            elif attr == 'vrgo':
-                setattr(self, attr, self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(addr, values)))
+            try:
+                if 'temp' in attr:
+                    value = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(addr, values))
+                elif 'vcell' in attr:
+                    value = self.apply_mask_and_multiplier(self.get_ram_16bits(addr, values))
+                elif attr == 'v_sense':
+                    value = self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(addr, values), self.i_gain)
+                elif attr == 'vbatt':
+                    value =  self.apply_mask_and_multiplier_pack(self.get_ram_16bits(addr, values))
+                elif attr == 'vrgo':
+                    value= self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(addr, values))
+
+                setattr(self, attr, value)
+            except Exception as e:
+                print(f"Error updating RAM values: {e}")
 
 
+    def update_feature_controls(self, values):
+        """ Update the feature control attributes based on the given values.    
+        Parameters:
+        - values (list): The list of values from which to extract the feature control attributes.
+        """
         # Define the mapping of (address, bit position) to attribute names
         bit_mapping = {
             (0x80, 0): 'bit_ov',
@@ -458,7 +533,11 @@ class BMSConfiguration:
 
         # Iterate through the mapping and set the attributes
         for (address, bit_position), attr_name in bit_mapping.items():
-            setattr(self, attr_name, self.get_boolean_value(values, address, bit_position))
+            try:
+                value = self.get_boolean_value(values, address, bit_position)
+                setattr(self, attr_name, value)
+            except Exception as e:
+                print(f"Error updating feature controls: {e}")
 
 
 
