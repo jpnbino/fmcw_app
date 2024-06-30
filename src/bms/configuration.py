@@ -44,6 +44,7 @@ class BMSConfiguration:
         # Split the input line by commas and remove spaces
         self.config_values = self.configuration_default
         self.config_values_int = []
+        self.ov = 0.0
         self.ov_lockout = 0.0
         self.ov_recover = 0.0
         self.eoc_voltage = 0.0
