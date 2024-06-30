@@ -270,162 +270,195 @@ class BMSConfiguration:
         # Extract values for the specified fields
 
         #Voltage Limits
-        self.ov =            self.calculate_voltage(values, 0x00)
-        self.ov_recover =    self.calculate_voltage(values, 0x02)
-        self.under_voltage = self.calculate_voltage(values, 0x04)
-        self.uv_recover =    self.calculate_voltage(values, 0x06)
-        self.ov_lockout =    self.calculate_voltage(values, 0x08)
-        self.uv_lockout =    self.calculate_voltage(values, 0x0A)
-        self.eoc_voltage =   self.calculate_voltage(values, 0x0C)
-        self.low_voltage_charge = self.calculate_voltage(values, 0x0E)
-        self.sleep_voltage = self.calculate_voltage(values, 0x44)
-
+        voltage_mappping = {
+            0x00: 'ov',
+            0x02: 'ov_recover',
+            0x04: 'under_voltage',
+            0x06: 'uv_recover',
+            0x08: 'ov_lockout',
+            0x0A: 'uv_lockout',
+            0x0C: 'eoc_voltage',
+            0x0E: 'low_voltage_charge',
+            0x44: 'sleep_voltage'
+        }
+        for address, attr in voltage_mappping.items():
+            setattr(self, attr, self.calculate_voltage(values, address))
+            
+        delay_mappping = {
+            (0x10,0, MASK_10BIT): 'ov_delay_timeout',
+            (0x10,10,MASK_2BIT): 'ov_delay_timeout_unit',
+            (0x12,0, MASK_10BIT): 'uv_delay_timeout',
+            (0x12,10,MASK_2BIT): 'uv_delay_timeout_unit',
+            (0x14,0, MASK_9BIT): 'open_wire_timing',
+            (0x14,9, MASK_1BIT): 'open_wire_timing_unit',
+            (0x46,0, MASK_9BIT): 'sleep_delay',
+            (0x46,9, MASK_2BIT): 'sleep_delay_unit',
+            (0x46,11, MASK_5BIT): 'timer_wdt',
+            (0x48,0, MASK_4BIT): 'timer_idle_doze',
+            (0x48,4, MASK_8BIT): 'timer_sleep',
+            (0x48,8, MASK_8BIT): 'cell_config'
+         }
+        for address, bit_shift, bit_mask in delay_mappping.keys():
+            setattr(self,attr, self.get_reg_val(values, address, bit_shift, bit_mask))
         
-        self.ov_delay_timeout =     self.get_reg_val(values, 0x10, 0, MASK_10BIT) 
-        self.ov_delay_timeout_unit= self.get_reg_val(values, 0x10, 10,MASK_2BIT)  
-
-        self.uv_delay_timeout =      self.get_reg_val(values, 0x12, 0, MASK_10BIT)
-        self.uv_delay_timeout_unit = self.get_reg_val(values, 0x12, 10,MASK_2BIT) 
-
-        self.open_wire_timing =      self.get_reg_val(values, 0x14, 0, MASK_9BIT)
-        self.open_wire_timing_unit = self.get_reg_val(values, 0x14, 9, MASK_1BIT)
-
-        self.sleep_delay =           self.get_reg_val(values, 0x46, 0, MASK_9BIT)
-        self.sleep_delay_unit =      self.get_reg_val(values, 0x46, 9,MASK_2BIT) 
         
-        #Timers
-        self.timer_wdt = self.get_reg_val(values, 0x46, 11, MASK_5BIT)
-        self.timer_idle_doze = self.get_reg_val(values, 0x48, 0, MASK_4BIT)
-        self.timer_sleep = self.get_reg_val(values, 0x48, 0, MASK_8BIT)
         
         #Cell Configutarion
         self.cell_config = self.get_reg_val(values, 0x48, 8, MASK_8BIT)
 
-        #Pack Options
-        self.bit_enable_openwire_psd = self.get_boolean_value( values, 0x4A, 0)
-        self.bit_enable_openwire_scan = self.get_boolean_value( values, 0x4A, 1)
-        #bit2:PCFETE
-        #bit3:Reserved
-        self.bit_tgain = self.get_boolean_value(values, 0x4A, 4) 
-        self.bit_t2_monitors_fet = self.get_boolean_value(values, 0x4A, 5)
-        #bit6:Reserved
-        self.bit_enable_cellf_psd = self.get_boolean_value(values, 0x4A, 7)
+        #Pack Options ( Addresses 0x4A and 0x4B)
+        pack_options_mapping = {
+            (0x4A, 0): 'bit_enable_openwire_psd',
+            (0x4A, 1): 'bit_enable_openwire_scan',
+            (0x4A, 4): 'bit_tgain',
+            (0x4A, 5): 'bit_t2_monitors_fet',
+            (0x4A, 7): 'bit_enable_cellf_psd',
+            (0x4B, 0): 'bit_cb_during_eoc',
+            (0x4B, 3): 'bit_enable_uvlo_pd',
+            (0x4B, 6): 'bit_cb_during_charge',
+            (0x4B, 7): 'bit_cb_during_discharge'
+        }
 
-
-        self.bit_cb_during_eoc =  self.get_boolean_value(values, 0x4B, 0)
-        #bit1:Reserved
-        #bit2:Reserved
-        self.bit_enable_uvlo_pd = self.get_boolean_value(values, 0x4B, 3)
-        #bit4:CFET
-        #bit5:DFET
-        self.bit_cb_during_charge = self.get_boolean_value(values, 0x4B, 6)
-        self.bit_cb_during_discharge = self.get_boolean_value(values, 0x4B, 7)
+        for (addr, bit_pos), attr in pack_options_mapping.items():
+            setattr(self, attr, self.get_boolean_value(values, addr, bit_pos))
         
 
         #Cell Balance Limits
-        self.cb_lower_lim =  self.calculate_voltage(values, 0x1C)
-        self.cb_upper_lim =  self.calculate_voltage(values, 0x1E)
-        self.cb_min_delta =  self.calculate_voltage(values, 0x20)
-        self.cb_max_delta =  self.calculate_voltage(values, 0x22)
+        cell_balance_mapping = {
+            0x1C: 'cb_lower_lim',
+            0x1E: 'cb_upper_lim',
+            0x20: 'cb_min_delta',
+            0x22: 'cb_max_delta'
+        }
 
-        self.cb_on_time =      self.get_reg_val(values, 0x24, 0,MASK_10BIT)
-        self.cb_on_time_unit = self.get_reg_val(values, 0x24, 10,MASK_2BIT)
+        for addr, attr in cell_balance_mapping.items():
+            setattr(self, attr, self.calculate_voltage(values, addr))
 
-        self.cb_off_time =      self.get_reg_val(values, 0x26, 0,MASK_10BIT)
-        self.cb_off_time_unit = self.get_reg_val(values, 0x26, 10,MASK_2BIT)
+        cell_balance_timing_mapping = {
+            (0x24, 0, MASK_10BIT): 'cb_on_time',
+            (0x24, 10, MASK_2BIT): 'cb_on_time_unit',
+            (0x26, 0, MASK_10BIT): 'cb_off_time',
+            (0x26, 10, MASK_2BIT): 'cb_off_time_unit'
+        }
 
-        self.cb_under_temp = self.apply_mask_and_multiplier_temp((values[0x29] << 8) | values[0x28])
-        self.cb_ut_recover = self.apply_mask_and_multiplier_temp((values[0x2B] << 8) | values[0x2A])
-        self.cb_over_temp  = self.apply_mask_and_multiplier_temp((values[0x2D] << 8) | values[0x2C])
-        self.cb_ot_recover = self.apply_mask_and_multiplier_temp((values[0x2F] << 8) | values[0x2E])  
+        for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
+            setattr(self, attr, self.get_reg_val(values, addr, bit_shift, bit_mask))
+
+        temperature_mapping = {
+            (0x28, 0x29): 'cb_under_temp',
+            (0x2A, 0x2B): 'cb_ut_recover',
+            (0x2C, 0x2D): 'cb_over_temp',
+            (0x2E, 0x2F): 'cb_ot_recover'
+        }
+
+        for (low_byte, high_byte), attr in temperature_mapping.items():
+            setattr(self, attr, self.apply_mask_and_multiplier_temp((values[high_byte] << 8) | values[low_byte]))
+    
         
         #Current Limits
-        self.disch_oc_voltage =       self.get_reg_val(values, 0x16, 12, MASK_3BIT)
-        self.disch_oc_timeout =       self.get_reg_val(values, 0x16, 0, MASK_10BIT)
-        self.disch_oc_timeout_unit =  self.get_reg_val(values, 0x16, 10, MASK_2BIT)
+        current_limits_mapping = {
+            (0x16, 12, MASK_3BIT): 'disch_oc_voltage',
+            (0x16, 0, MASK_10BIT): 'disch_oc_timeout',
+            (0x16, 10, MASK_2BIT): 'disch_oc_timeout_unit',
+            (0x18, 12, MASK_3BIT): 'charge_oc_voltage',
+            (0x18, 0, MASK_10BIT): 'charge_oc_timeout',
+            (0x18, 10, MASK_2BIT): 'charge_oc_timeout_unit',
+            (0x1A, 12, MASK_3BIT): 'disch_sc_voltage',
+            (0x1A, 0, MASK_10BIT): 'disch_sc_timeout',
+            (0x1A, 10, MASK_2BIT): 'disch_sc_timeout_unit'
+        }
 
-        self.charge_oc_voltage =      self.get_reg_val(values, 0x18, 12, MASK_3BIT)
-        self.charge_oc_timeout =      self.get_reg_val(values, 0x18, 0, MASK_10BIT)
-        self.charge_oc_timeout_unit = self.get_reg_val(values, 0x18, 10, MASK_2BIT)
-
-        self.disch_sc_voltage =       self.get_reg_val(values, 0x1A, 12, MASK_3BIT)
-        self.disch_sc_timeout =       self.get_reg_val(values, 0x1A, 0, MASK_10BIT)
-        self.disch_sc_timeout_unit =  self.get_reg_val(values, 0x1A, 10, MASK_2BIT)   
+        for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
+            setattr(self, attr, self.get_reg_val(values, addr, bit_shift, bit_mask))  
 
         #Temperature Limits
-        self.tl_charge_over_temp  =  self.calculate_temp_voltage(values, 0x30)
-        self.tl_charge_ot_recover =  self.calculate_temp_voltage(values, 0x32)
-        self.tl_charge_under_temp =  self.calculate_temp_voltage(values, 0x34)
-        self.tl_charge_ut_recover =  self.calculate_temp_voltage(values, 0x36)
+        temperature_limits_mapping = {
+            0x30: 'tl_charge_over_temp',
+            0x32: 'tl_charge_ot_recover',
+            0x34: 'tl_charge_under_temp',
+            0x36: 'tl_charge_ut_recover',
+            0x38: 'tl_disch_over_temp',
+            0x3A: 'tl_disch_ot_recover',
+            0x3C: 'tl_disch_under_temp',
+            0x3E: 'tl_disch_ut_recover',
+            0x40: 'tl_internal_over_temp',
+            0x42: 'tl_internal_ot_recover'
+        }
 
-        self.tl_disch_over_temp  =   self.calculate_temp_voltage(values, 0x38)
-        self.tl_disch_ot_recover =   self.calculate_temp_voltage(values, 0x3A)
-        self.tl_disch_under_temp  =  self.calculate_temp_voltage(values, 0x3C)
-        self.tl_disch_ut_recover =   self.calculate_temp_voltage(values, 0x3E)
-
-        self.tl_internal_over_temp = self.calculate_temp_voltage(values, 0x40)
-        self.tl_internal_ot_recover = self.calculate_temp_voltage(values, 0x42)
+        for addr, attr in temperature_limits_mapping.items():
+            setattr(self, attr, self.calculate_temp_voltage(values, addr))
 
         #RAM
-        self.i_gain =  self.current_gain_code[self.get_reg_val(values, 0x85, 4,MASK_2BIT)]
-        self.v_sense = self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(0x8E,values),self.i_gain)
-        self.vcell1 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x90,values)) 
-        self.vcell2 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x92,values)) 
-        self.vcell3 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x94,values)) 
-        self.vcell4 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x96,values)) 
-        self.vcell5 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x98,values)) 
-        self.vcell6 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9A,values)) 
-        self.vcell7 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9C,values)) 
-        self.vcell8 =  self.apply_mask_and_multiplier(self.get_ram_16bits(0x9E,values)) 
+        self.i_gain = self.current_gain_code[self.get_reg_val(values, 0x85, 4, MASK_2BIT)]
+        ram_addresses = {
+            0x8E: 'v_sense',
+            0x90: 'vcell1',
+            0x92: 'vcell2',
+            0x94: 'vcell3',
+            0x96: 'vcell4',
+            0x98: 'vcell5',
+            0x9A: 'vcell6',
+            0x9C: 'vcell7',
+            0x9E: 'vcell8',
+            0x8A: 'vcell_min',
+            0x8C: 'vcell_max',
+            0xA0: 'temp_internal',
+            0xA2: 'temp_xt1',
+            0xA4: 'temp_xt2',
+            0xA6: 'vbatt',
+            0xA8: 'vrgo'
+        }
 
-        self.vcell_min = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8A,values))
-        self.vcell_max = self.apply_mask_and_multiplier(self.get_ram_16bits(0x8C,values))
+        for addr, attr in ram_addresses.items():
+            if 'temp' in attr:
+                setattr(self, attr, self.apply_mask_and_multiplier_temp(self.get_ram_16bits(addr, values)))
+            elif 'vcell' in attr:
+                setattr(self, attr, self.apply_mask_and_multiplier(self.get_ram_16bits(addr, values)))
+            elif attr == 'v_sense':
+                setattr(self, attr, self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(addr, values), self.i_gain))
+            elif attr == 'vbatt':
+                setattr(self, attr, self.apply_mask_and_multiplier_pack(self.get_ram_16bits(addr, values)))
+            elif attr == 'vrgo':
+                setattr(self, attr, self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(addr, values)))
 
-        self.temp_internal = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA0,values)) 
-        self.temp_xt1 = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA2,values))
-        self.temp_xt2 = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(0xA4,values))
 
-        self.vbatt = self.apply_mask_and_multiplier_pack(self.get_ram_16bits(0xA6,values))
-        self.vrgo =  self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(0xA8,values))
+        # Define the mapping of (address, bit position) to attribute names
+        bit_mapping = {
+            (0x80, 0): 'bit_ov',
+            (0x80, 1): 'bit_ovlo',
+            (0x80, 2): 'bit_uv',
+            (0x80, 3): 'bit_uvlo',
+            (0x80, 4): 'bit_dot',
+            (0x80, 5): 'bit_dut',
+            (0x80, 6): 'bit_cot',
+            (0x80, 7): 'bit_cut',
+            (0x81, 0): 'bit_iot',
+            (0x81, 1): 'bit_coc',
+            (0x81, 2): 'bit_doc',
+            (0x81, 3): 'bit_dsc',
+            (0x81, 4): 'bit_cellf',
+            (0x81, 5): 'bit_open',
+            (0x81, 7): 'bit_eochg',
+            (0x82, 0): 'bit_ld_prsnt',
+            (0x82, 1): 'bit_ch_prsnt',
+            (0x82, 2): 'bit_ching',
+            (0x82, 3): 'bit_dching',
+            (0x82, 4): 'bit_ecc_used',
+            (0x82, 5): 'bit_ecc_fail',
+            (0x82, 6): 'bit_int_scan',
+            (0x82, 7): 'bit_lvchg',
+            (0x83, 0): 'bit_cbot',
+            (0x83, 1): 'bit_cbut',
+            (0x83, 2): 'bit_cbov',
+            (0x83, 3): 'bit_cbuv',
+            (0x83, 4): 'bit_in_idle',
+            (0x83, 5): 'bit_in_doze',
+            (0x83, 6): 'bit_in_sleep'
+        }
 
-
-        #adress 0x80
-        self.bit_ov   =   self.get_boolean_value(values, 0x80, 0)
-        self.bit_ovlo =   self.get_boolean_value(values, 0x80, 1)
-        self.bit_uv   =   self.get_boolean_value(values, 0x80, 2)
-        self.bit_uvlo =   self.get_boolean_value(values, 0x80, 3)
-        self.bit_dot  =   self.get_boolean_value(values, 0x80, 4)
-        self.bit_dut  =   self.get_boolean_value(values, 0x80, 5)
-        self.bit_cot  =   self.get_boolean_value(values, 0x80, 6)
-        self.bit_cut  =   self.get_boolean_value(values, 0x80, 7)
-
-        #adress 0x81
-        self.bit_iot   =   self.get_boolean_value(values, 0x81, 0)
-        self.bit_coc   =   self.get_boolean_value(values, 0x81, 1)
-        self.bit_doc   =   self.get_boolean_value(values, 0x81, 2)
-        self.bit_dsc   =   self.get_boolean_value(values, 0x81, 3)
-        self.bit_cellf =   self.get_boolean_value(values, 0x81, 4)
-        self.bit_open  =   self.get_boolean_value(values, 0x81, 5)
-        self.bit_eochg =   self.get_boolean_value(values, 0x81, 7)
-
-        #adress 0x82
-        self.bit_ld_prsnt = self.get_boolean_value(values, 0x82, 0)
-        self.bit_ch_prsnt = self.get_boolean_value(values, 0x82, 1)
-        self.bit_ching =    self.get_boolean_value(values, 0x82, 2)
-        self.bit_dching =   self.get_boolean_value(values, 0x82, 3)
-        self.bit_ecc_used = self.get_boolean_value(values, 0x82, 4)
-        self.bit_ecc_fail = self.get_boolean_value(values, 0x82, 5)
-        self.bit_int_scan = self.get_boolean_value(values, 0x82, 6)
-        self.bit_lvchg =    self.get_boolean_value(values, 0x82, 7)
-        
-        #adress 0x83
-        self.bit_cbot =     self.get_boolean_value(values, 0x83, 0)
-        self.bit_cbut =     self.get_boolean_value(values, 0x83, 1)
-        self.bit_cbov =     self.get_boolean_value(values, 0x83, 2)
-        self.bit_cbuv =     self.get_boolean_value(values, 0x83, 3)
-        self.bit_in_idle =  self.get_boolean_value(values, 0x83, 4)
-        self.bit_in_doze =  self.get_boolean_value(values, 0x83, 5)
-        self.bit_in_sleep = self.get_boolean_value(values, 0x83, 6)
+        # Iterate through the mapping and set the attributes
+        for (address, bit_position), attr_name in bit_mapping.items():
+            setattr(self, attr_name, self.get_boolean_value(values, address, bit_position))
 
 
 
