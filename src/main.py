@@ -1,35 +1,44 @@
 
 import sys
-import os
-
-# Add the project directories to the sys.path
-base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-src_path = os.path.join(base_path, 'src')
-sys.path.append(src_path)
-sys.path.append(os.path.join(src_path, 'bms'))
-sys.path.append(os.path.join(src_path, 'gui'))
-sys.path.append(os.path.join(src_path, 'serialbsp'))
+import logging
 
 from PySide6.QtUiTools import loadUiType
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QStatusBar
+from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QIcon
 
+from config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
 from bms.configuration import BMSConfiguration
 from gui.bms import BMSGUI
 from gui.serial import SerialWidget
 
+WINDOW_WIDTH = 1126
+WINDOW_HEIGHT = 885
 
-Ui_MainWindow, _ = loadUiType("app/qt/fmcw.ui") 
+Ui_MainWindow, _ = loadUiType(UI_FILE_PATH) 
+
+def configure_logging():
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+def main():
+    configure_logging()
+    logging.info("Application started")
+    app = QApplication(sys.argv)
+
+    try:
+        fmcw_app = FMCWApplication(UI_FILE_PATH)
+        fmcw_app.show()
+        sys.exit(app.exec())
+    except Exception as e:
+        logging.error(f"Failed to start the application: {e}")
+        sys.exit(1)
 
 class FMCWApplication(QMainWindow, Ui_MainWindow ):
     def __init__(self, ui_file_name):
         super().__init__()
-
         self.setupUi(self)
-        self.setWindowTitle("FMCW Application")
-        icon_path = "app/images/icons/icon_circle.png"
-        self.setWindowIcon(QIcon(icon_path))
-        self.resize(1200,800)
+        self.setWindowTitle(WINDOW_TITLE)
+        self.setWindowIcon(QIcon(ICON_PATH))
+        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
         
         self.bms_config = BMSConfiguration()
         self.gui = BMSGUI(self, self.bms_config)
@@ -38,8 +47,4 @@ class FMCWApplication(QMainWindow, Ui_MainWindow ):
         self.serial_setup = None
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ui_file_name = "qt/qt_designer/fmcw.ui"
-    fmcw_app = FMCWApplication(ui_file_name)
-    fmcw_app.show()
-    sys.exit(app.exec_())
+    main()

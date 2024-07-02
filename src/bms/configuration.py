@@ -178,55 +178,10 @@ class BMSConfiguration:
         self.vbatt = 0
         self.vrgo = 0        
 
-
-        
-
     def get_default_config(self):
         return DEFAULT_CONFIG
 
     def get_config(self):
-
-
-    def get_ram_16bits(self, address, values):
-        """
-        Extracts a 16-bit value from 'values' starting at the specified 'address'.
-
-        Parameters:
-        - address (int): The starting address.
-        - values (list): The list of values from which to extract the 16 bits.
-
-        Returns:
-        - int: The 16-bit integer value.
-        """
-        address_index = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-        # Extract the 16-bit value from 'values' starting at 'address_index'
-        # Assuming little-endian byte order (LSB first)
-        raw_value = (values[address_index + 1] << 8) | values[address_index]
-        return raw_value
-    
-
-    def get_boolean_value(self, values, byte_address, bit_position):
-        """
-        Extracts a boolean value from 'values' based on the specified byte address and bit position.
-
-        Parameters:
-        - values (list): The list of values from which to extract the boolean value.
-        - byte_address (int): The byte address.
-        - bit_position (int): The bit position within the byte.
-
-        Returns:
-        - bool: The boolean value.
-        """
-        if byte_address >= ADDR_RAM_BEGIN:
-            real_address = byte_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-        else:
-            real_address = byte_address
-
-        # Extract the byte value from values
-        byte_value = values[real_address]
-
-        # Calculate the boolean value based on the bit position
-        return bool((byte_value >> bit_position) & 0x01)
         return self.config_values_int
 
     def update_registers(self,values):
@@ -505,21 +460,22 @@ class BMSConfiguration:
                 print(f"Error updating feature controls: {e}")
 
 
-
-    def read_from_values(self, values):
-        # Assuming the input format is a comma-separated string
-        # Split the input line by commas and remove spaces
-        values = [val.strip() for val in values.split(',') if val.strip()]
-
-        #convert to int
-        self.config_values_int = [int(val) for val in values]
-
-        
     # Assuming the values get 16bits, therefore, operations are over two consecutives addresses 
     # example:
 
     def reg_write( self, address, value , mask, shift):
+        """
+        Write a value to a register based on the specified address, mask, and shift.
 
+        Parameters:
+        - address (int): The address of the register.
+        - value (int): The value to write to the register.
+        - mask (int): The mask to apply to the value.
+        - shift (int): The shift to apply to the value.
+
+        Returns:
+        - int: The new value of the register.
+        """
         byte0 = int(self.config_values_int[address])
         byte1 = int(self.config_values_int[address+1] ) 
         
@@ -530,11 +486,6 @@ class BMSConfiguration:
 
         self.config_values_int[address] = tmp & 0xff
         self.config_values_int[address + 1] = (tmp>> 8 ) & 0xff
-
-
-    def write_to_values(self):
-
-        return 0
 
     def calculate_voltage(self, values, address):
         """
@@ -548,11 +499,11 @@ class BMSConfiguration:
         - float: The calculated voltage.
         """
         # Extract the two bytes from values starting from the given address
-        byte1 = values[address]
-        byte2 = values[address + 1]
+        byte0 = values[address]
+        byte1 = values[address + 1]
 
         # Combine bytes into a single 16-bit value (little-endian format)
-        combined_value = (byte2 << 8) | byte1
+        combined_value = (byte1 << 8) | byte0
 
         # Apply mask and multiplier and return the calculated voltage
         return self.apply_mask_and_multiplier(combined_value)
@@ -629,3 +580,44 @@ class BMSConfiguration:
         # Apply multiplier
         result = masked_value * TEMPERATURE_MULTIPLIER
         return result
+    
+    def get_ram_16bits(self, address, values):
+        """
+        Extracts a 16-bit value from 'values' starting at the specified 'address'.
+
+        Parameters:
+        - address (int): The starting address.
+        - values (list): The list of values from which to extract the 16 bits.
+
+        Returns:
+        - int: The 16-bit integer value.
+        """
+        address_index = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+        # Extract the 16-bit value from 'values' starting at 'address_index'
+        # Assuming little-endian byte order (LSB first)
+        raw_value = (values[address_index + 1] << 8) | values[address_index]
+        return raw_value
+    
+
+    def get_boolean_value(self, values, byte_address, bit_position):
+        """
+        Extracts a boolean value from 'values' based on the specified byte address and bit position.
+
+        Parameters:
+        - values (list): The list of values from which to extract the boolean value.
+        - byte_address (int): The byte address.
+        - bit_position (int): The bit position within the byte.
+
+        Returns:
+        - bool: The boolean value.
+        """
+        if byte_address >= ADDR_RAM_BEGIN:
+            real_address = byte_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+        else:
+            real_address = byte_address
+
+        # Extract the byte value from values
+        byte_value = values[real_address]
+
+        # Calculate the boolean value based on the bit position
+        return bool((byte_value >> bit_position) & 0x01)

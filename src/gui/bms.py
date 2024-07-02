@@ -38,8 +38,9 @@ class BMSGUI:
                 logging.info(f"read_bms_config: {list(configuration)}")
                 self.ui.statusBar.showMessage("Configuration read successfully.")
             else:
-                logging.error("Serial port is not open")
-                self.ui.statusBar.showMessage("Error: Serial port is not open.")
+                ERROR_MESSAGE = "Serial port is not open"
+                logging.error(ERROR_MESSAGE)
+                self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
         except Exception as e:
             logging.error(f"Failed to read BMS configuration: {e}")
             self.ui.statusBar.showMessage(f"Error: {e}")
