@@ -343,11 +343,9 @@ class BMSGUI:
             self.write_voltage_registers()
             self.write_time_registers()
 
-            register_cfg = self.bms_config.get_config()
             print("exit write_bms_config:", register_cfg)
-            register_cfg_int = [int(val, 16) for val in register_cfg]
 
-            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg_int)
+            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg)
         else: 
             logging.error("Serial port is not open")
             self.ui.statusBar.showMessage("Error: Serial port is not open.")

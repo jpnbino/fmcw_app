@@ -218,9 +218,7 @@ class BMSConfiguration:
         return self.configuration_default
 
     def get_config(self):
-        # TODO: get the configuration values. and update the config_values.
 
-        return self.config_values
 
     def get_ram_16bits(self, address, values):
         """
@@ -262,9 +260,9 @@ class BMSConfiguration:
 
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)
+        return self.config_values_int
 
     def update_registers(self,values):
-        self.config_values = values
         self.config_values_int = values
         logging.info(f"Updating registers with values: {values}")
 
@@ -566,7 +564,6 @@ class BMSConfiguration:
         self.config_values_int[address] = tmp & 0xff
         self.config_values_int[address + 1] = (tmp>> 8 ) & 0xff
 
-        self.config_values = [hex(val)[2:].zfill(2).upper() for val in self.config_values_int]
 
     def write_to_values(self):
 
