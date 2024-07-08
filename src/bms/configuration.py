@@ -271,7 +271,7 @@ class BMSConfiguration:
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
             try:
-                setattr(self, attr, self.get_boolean_value(values, addr, bit_pos))
+                setattr(self, attr, self.read_bit(values, addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
         
@@ -316,7 +316,7 @@ class BMSConfiguration:
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
             try: 
-                value = self.apply_mask_and_multiplier_temp((values[high_byte] << 8) | values[low_byte])               
+                value = self.calculate_temperature_from_raw_value((values[high_byte] << 8) | values[low_byte])               
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance temperature: {e}")
@@ -397,15 +397,15 @@ class BMSConfiguration:
         for addr, attr in ram_addresses.items():
             try:
                 if 'temp' in attr:
-                    value = self.apply_mask_and_multiplier_temp(self.get_ram_16bits(addr, values))
+                    value = self.calculate_temperature_from_raw_value(self.get_reg_val(values, addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.get_ram_16bits(addr, values))
+                    value = self.apply_mask_and_multiplier(self.get_reg_val(values, addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.get_ram_16bits(addr, values), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.get_reg_val(values, addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value =  self.apply_mask_and_multiplier_pack(self.get_ram_16bits(addr, values))
+                    value =  self.apply_mask_and_multiplier_pack(self.get_reg_val(values, addr))
                 elif attr == 'vrgo':
-                    value= self.apply_mask_and_multiplier_vrgo(self.get_ram_16bits(addr, values))
+                    value= self.calculate_vrgo_from_raw_value(self.get_reg_val(values, addr))
 
                 setattr(self, attr, value)
             except Exception as e:
@@ -454,12 +454,63 @@ class BMSConfiguration:
         # Iterate through the mapping and set the attributes
         for (address, bit_position), attr_name in bit_mapping.items():
             try:
-                value = self.get_boolean_value(values, address, bit_position)
+                value = self.read_bit(values, address, bit_position)
                 setattr(self, attr_name, value)
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
 
 
+    def apply_mask_and_multiplier(self, value):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * VOLTAGE_CELL_MULTIPLIER
+        return result
+
+    def apply_mask_and_multiplier_pack_current(self, value, gain):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * CURRENT_CELL_MULTIPLIER / (gain)
+        return result
+
+    def apply_mask_and_multiplier_pack(self, value):
+        # Apply masking
+        masked_value = value & MASK_12BIT
+        # Apply multiplier
+        result = masked_value * VOLTAGE_PACK_MULTIPLIER
+        return result
+
+    def calculate_vrgo_from_raw_value(self, value):
+        """
+        Calculates the VRGO ( Voltage regulator output) based on the raw value. should be around 2.5V.
+
+        Args:
+            value (int): Voltage raw value as stored in the register.
+
+        Returns:
+            float: Real voltage calculated from the raw value. (e.g. 2.5 V)
+        """
+        masked_value = value & MASK_12BIT
+        result = masked_value * VOLTAGE_VRGO_MULTIPLIER
+        return result
+    
+    def calculate_temperature_from_raw_value(self, value):
+        """
+        Calculates the temperature from the raw value.
+
+        Args:
+            value (int): The raw value to calculate the temperature from.
+
+        Returns:
+            float: The calculated temperature in volts. For Celsius, use thermistor datasheet.
+
+        """
+        masked_value = value & MASK_12BIT
+
+        result = masked_value * TEMPERATURE_MULTIPLIER
+        return result
+    
     # Assuming the values get 16bits, therefore, operations are over two consecutives addresses 
     # example:
 
@@ -523,15 +574,17 @@ class BMSConfiguration:
         raw_value = (values[address + 1] << 8) | values[address]
 
         # Apply mask and multiplier to calculate the voltage
-        return self.apply_mask_and_multiplier_temp(raw_value)
+        return self.calculate_temperature_from_raw_value(raw_value)
 
-    def get_reg_val(self, values, start_address, bit_shift, bit_mask):
+    def get_reg_val(self, values, start_address, bit_shift=0, bit_mask=0xffff):
         """
-        Extract a value from 'values' based on the specified parameters.
+        Extracts a value from the 'values' list based on the specified parameters.
+
+        This function considers the offset between the RAM addresses and the actual index in the 'values' list.
 
         Parameters:
         - values (list): The list of values from which to extract the value.
-        - start_address (int): The starting address.
+        - start_address (int): The starting address of the ISL94203. If the address is in RAM, it is converted to the actual index in 'values'.
         - bit_shift (int): The bit shift for the value.
         - bit_mask (int): The bitmask for the value.
 
@@ -545,61 +598,9 @@ class BMSConfiguration:
         raw_value = (values[start_address + 1] << 8) | values[start_address]
         value = (raw_value >> bit_shift) & bit_mask
         return value
-          
-    def apply_mask_and_multiplier(self, value):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * VOLTAGE_CELL_MULTIPLIER
-        return result
-
-    def apply_mask_and_multiplier_pack_current(self, value, gain):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * CURRENT_CELL_MULTIPLIER / (gain)
-        return result
-
-    def apply_mask_and_multiplier_pack(self, value):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * VOLTAGE_PACK_MULTIPLIER
-        return result
-
-    def apply_mask_and_multiplier_vrgo(self, value):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * VOLTAGE_VRGO_MULTIPLIER
-        return result
-    
-    def apply_mask_and_multiplier_temp(self, value):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * TEMPERATURE_MULTIPLIER
-        return result
-    
-    def get_ram_16bits(self, address, values):
-        """
-        Extracts a 16-bit value from 'values' starting at the specified 'address'.
-
-        Parameters:
-        - address (int): The starting address.
-        - values (list): The list of values from which to extract the 16 bits.
-
-        Returns:
-        - int: The 16-bit integer value.
-        """
-        address_index = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-        # Extract the 16-bit value from 'values' starting at 'address_index'
-        # Assuming little-endian byte order (LSB first)
-        raw_value = (values[address_index + 1] << 8) | values[address_index]
-        return raw_value
     
 
-    def get_boolean_value(self, values, byte_address, bit_position):
+    def read_bit(self, values, byte_address, bit_position):
         """
         Extracts a boolean value from 'values' based on the specified byte address and bit position.
 
@@ -611,13 +612,8 @@ class BMSConfiguration:
         Returns:
         - bool: The boolean value.
         """
-        if byte_address >= ADDR_RAM_BEGIN:
-            real_address = byte_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-        else:
-            real_address = byte_address
-
-        # Extract the byte value from values
-        byte_value = values[real_address]
-
+        # Extract the byte value from values using get_reg_val
+        byte_value = self.get_reg_val(values, byte_address, 0, 0xff)
+        
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)
