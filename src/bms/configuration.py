@@ -243,14 +243,14 @@ class BMSConfiguration:
          }
         for (addr, bit_shift, bit_mask),attr in timing_mapping.items():
             try:
-                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
                 setattr(self,attr, value)
             except Exception as e:
                 print(f"Error updating timing: {e}")
 
     def cell_configuration(self, values):    
         #Cell Configuration
-        self.cell_config = self.get_reg_val(values, 0x48, 8, MASK_8BIT)
+        self.cell_config = self.read_reg_val(values, 0x48, 8, MASK_8BIT)
 
     def update_pack_options(self, values):
         '''Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
@@ -302,7 +302,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
             try:
-                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance timing: {e}")
@@ -340,7 +340,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
             try:
-                value = self.get_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating current limits: {e}")
@@ -374,7 +374,7 @@ class BMSConfiguration:
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = self.current_gain_code[self.get_reg_val(values, 0x85, 4, MASK_2BIT)]
+        self.i_gain = self.current_gain_code[self.read_reg_val(values, 0x85, 4, MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -397,15 +397,15 @@ class BMSConfiguration:
         for addr, attr in ram_addresses.items():
             try:
                 if 'temp' in attr:
-                    value = self.calculate_temperature_from_raw_value(self.get_reg_val(values, addr))
+                    value = self.calculate_temperature_from_raw_value(self.read_reg_val(values, addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.get_reg_val(values, addr))
+                    value = self.apply_mask_and_multiplier(self.read_reg_val(values, addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.get_reg_val(values, addr), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.read_reg_val(values, addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value =  self.apply_mask_and_multiplier_pack(self.get_reg_val(values, addr))
+                    value =  self.apply_mask_and_multiplier_pack(self.read_reg_val(values, addr))
                 elif attr == 'vrgo':
-                    value= self.calculate_vrgo_from_raw_value(self.get_reg_val(values, addr))
+                    value= self.calculate_vrgo_from_raw_value(self.read_reg_val(values, addr))
 
                 setattr(self, attr, value)
             except Exception as e:
@@ -576,7 +576,7 @@ class BMSConfiguration:
         # Apply mask and multiplier to calculate the voltage
         return self.calculate_temperature_from_raw_value(raw_value)
 
-    def get_reg_val(self, values, start_address, bit_shift=0, bit_mask=0xffff):
+    def read_reg_val(self, values, start_address, bit_shift=0, bit_mask=0xffff):
         """
         Extracts a value from the 'values' list based on the specified parameters.
 
@@ -613,7 +613,7 @@ class BMSConfiguration:
         - bool: The boolean value.
         """
         # Extract the byte value from values using get_reg_val
-        byte_value = self.get_reg_val(values, byte_address, 0, 0xff)
+        byte_value = self.read_reg_val(values, byte_address, 0, 0xff)
         
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)
