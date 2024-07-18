@@ -17,35 +17,7 @@ class BMSGUI:
         """Read the combobox and return the unit chosen by user."""
         selected_text = combo.currentText()
         unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
-        return unit
-    
-    def read_bms_config(self):
-        """Read the BMS configuration from the device."""
-        serial_setup = self.ui.serial_setup        
-        register_cfg_int = []
-        try:
-            if serial_setup and serial_setup.is_open():
-                # Send the configuration data over serial
-                serial_protocol = SerialProtocol(serial_setup)
-                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
-                packet = serial_protocol.read_packet()
-                _ , register_cfg_int = packet
-                configuration =  register_cfg_int
-
-                self.bms_config.update_registers(list(configuration))
-                self.update_ui_fields()
-
-                logging.info(f"read_bms_config: {list(configuration)}")
-                self.ui.statusBar.showMessage("Configuration read successfully.")
-            else:
-                ERROR_MESSAGE = "Serial port is not open"
-                logging.error(ERROR_MESSAGE)
-                self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
-        except Exception as e:
-            logging.error(f"Failed to read BMS configuration: {e}")
-            self.ui.statusBar.showMessage(f"Error: {e}")
-
-        
+        return unit       
 
     def update_ui_fields(self):
 
@@ -329,6 +301,9 @@ class BMSGUI:
                 # Send the configuration data over serial
                 serial_protocol = SerialProtocol(serial_setup)
                 serial_protocol.send_command(command, data)
+                packet = serial_protocol.read_packet()
+                _ , response = packet
+                print(f"response: {response}")
             else:
                 logging.warning("Serial port is not open")
         except Exception as e:
@@ -339,17 +314,40 @@ class BMSGUI:
         if self.ui.serial_setup and self.ui.serial_setup.is_open():
             register_cfg = self.bms_config.get_config()
 
-            print("entered write_bms_config:", register_cfg)       
+            print("entered write_bms_config:\n", register_cfg)       
 
             self.write_voltage_registers()
             self.write_time_registers()
 
-            print("exit write_bms_config:", register_cfg)
+            print("exit write_bms_config:\n", register_cfg)
 
             self.send_serial_command(CMD_WRITE_EEPROM, register_cfg)
         else: 
             logging.error("Serial port is not open")
-            self.ui.statusBar.showMessage("Error: Serial port is not open.")
+            self.ui.statusBar.showMessage("Error: Serial port is not open.") 
 
+    def read_bms_config(self):
+        """Read the BMS configuration from the device."""
+        serial_setup = self.ui.serial_setup        
+        register_cfg_int = []
+        try:
+            if serial_setup and serial_setup.is_open():
+                # Send the configuration data over serial
+                serial_protocol = SerialProtocol(serial_setup)
+                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
+                packet = serial_protocol.read_packet()
+                _ , register_cfg_int = packet
+                configuration =  register_cfg_int
 
- 
+                self.bms_config.update_registers(list(configuration))
+                self.update_ui_fields()
+
+                logging.info(f"read_bms_config: {list(configuration)}")
+                self.ui.statusBar.showMessage("Configuration read successfully.")
+            else:
+                ERROR_MESSAGE = "Serial port is not open"
+                logging.error(ERROR_MESSAGE)
+                self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+        except Exception as e:
+            logging.error(f"Failed to read BMS configuration: {e}")
+            self.ui.statusBar.showMessage(f"Error: {e}")

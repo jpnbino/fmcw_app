@@ -49,6 +49,8 @@ class SimulatedDevice:
             0x68, 0x03, 0x09, 0x0B, 0x2A, 0x00
         ]
 
+        self.config = self.configuration_default
+
     def calculate_checksum(self, data):
         checksum = 0
         for byte in data:
@@ -89,6 +91,8 @@ class SimulatedDevice:
         return (cmd, data)
 
     def send_response(self, cmd, data):
+        if isinstance(data, bytes):
+            data = list(data)
         packet = [START_BYTE, cmd, len(data)] + data
         checksum = self.calculate_checksum(packet[1:])
         packet.append(checksum)
@@ -99,7 +103,7 @@ class SimulatedDevice:
             packet = self.read_packet()
             if packet:
                 cmd, data = packet
-                if (len(data) > 0):
+                if len(data) > 0:
                     data_str = ' '.join(format(byte, '02X') for byte in data)  # Convert data to a string of hex values
                 else:
                     data_str = "No data"
@@ -109,13 +113,18 @@ class SimulatedDevice:
                 response_data = []
 
                 if cmd == CMD_READ_ALL_MEMORY:
-                    response_data = self.configuration_default  # Example data
+                    response_data = self.config  # Example data
                     self.send_response(cmd, response_data)
                 elif cmd == CMD_READ_EEPROM:
                     response_data = [0x50, 0x60, 0x70, 0x80]  # Example data
                     self.send_response(cmd, response_data)
                 elif cmd == CMD_WRITE_EEPROM:
+                    print(f"self.config: {self.config}")
+                    self.config = list(data)
+                    print(f"self.config: {self.config}")
+                    print(f"EEPROM data written: {data}")
                     # Acknowledge the write command
+                    #response_data = [0x11, 0x22, 0x33, 0x44]
                     self.send_response(cmd, [])
                 elif cmd == CMD_READ_RAM:
                     response_data = [0x90, 0xA0, 0xB0, 0xC0]  # Example data
