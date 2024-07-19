@@ -11,18 +11,22 @@ class BMSGUI:
 
         # Connect button click to custom functions
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
-        self.ui.writeEepromButton.clicked.connect(self.write_bms_config)
+        self.ui.writeEepromButton.clicked.connect(self.write_bms_config)  
 
-    def get_unit_from_combo(self, combo):
-        """Read the combobox and return the unit chosen by user."""
-        selected_text = combo.currentText()
-        unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
-        return unit       
+    def ui_update_fields(self):
+        """Update the UI fields with the BMS configuration values."""
+        self.ui_update_voltage_limits()
+        self.ui_update_voltage_limits_timing()
+        self.ui_update_timer_fields()
+        self.ui_update_cell_balance_limits()
+        self.ui_update_temperature_limits()
+        self.ui_update_current_limits()
+        self.ui_update_pack_option()
+        self.ui_update_ram_values()
+        self.ui_update_status_bits()
 
-    def update_ui_fields(self):
-
-        """Updates the UI fields with the current BMS configuration."""
-        #Voltage Limits
+    def ui_update_voltage_limits(self):
+        """Update voltage limits fields."""
         voltage_fields = [
             (self.ui.ovLockoutLineEdit, self.bms_config.ov_lockout),
             (self.ui.ovLineEdit, self.bms_config.ov),
@@ -34,27 +38,21 @@ class BMSGUI:
             (self.ui.LowVoltageChargeLineEdit, self.bms_config.low_voltage_charge),
             (self.ui.uvLockoutLineEdit, self.bms_config.uv_lockout)
         ]
-        
         for line_edit, value in voltage_fields:
             line_edit.setText(f"{value:.2f}")
 
-        self.ui.ovDelayTimeoutLineEdit.setText(f"{int(self.bms_config.ov_delay_timeout)}")
-        self.ui.uvDelayTimeoutLineEdit.setText(f"{int(self.bms_config.uv_delay_timeout)}")
-        self.ui.sleepDelayLineEdit.setText(f"{int(self.bms_config.sleep_delay)}")
-        self.ui.openWireTimingLineEdit.setText(f"{int(self.bms_config.open_wire_timing)}")
+    def ui_update_voltage_limits_timing(self):
+        """Update voltage limits timing fields and 
+        Update the combo boxes with the selected values."""
+        voltage_timing_fields = [
+            (self.ui.ovDelayTimeoutLineEdit, self.bms_config.ov_delay_timeout),
+            (self.ui.uvDelayTimeoutLineEdit, self.bms_config.uv_delay_timeout),
+            (self.ui.sleepDelayLineEdit, self.bms_config.sleep_delay),
+            (self.ui.openWireTimingLineEdit, self.bms_config.open_wire_timing)
+        ]
+        for line_edit, value in voltage_timing_fields:
+            line_edit.setText(f"{int(value)}")
 
-        self.update_combo_boxes()
-        self.update_timer_fields()
-        self.update_cell_balance_limits()
-        self.update_temperature_limits()
-        self.update_current_limits()
-        self.update_pack_option()
-        self.update_ram_values()
-        self.update_status_bits()
-
-    
-    def update_combo_boxes(self):
-        """Update the combo boxes with the selected values."""
         combo_boxes = [
             (self.ui.ovDelayTimeoutCombo, self.bms_config.ov_delay_timeout_unit),
             (self.ui.uvDelayTimeoutCombo, self.bms_config.uv_delay_timeout_unit),
@@ -64,7 +62,7 @@ class BMSGUI:
         for combo, value in combo_boxes:
             combo.setCurrentText(self.bms_config.unit_mapping.get(int(value), 'Unknown'))
 
-    def update_timer_fields(self):
+    def ui_update_timer_fields(self):
         """Update timer-related fields."""
         timer_fields = {
             self.ui.timerIdleDozeLineEdit: self.bms_config.timer_idle_doze,
@@ -74,7 +72,7 @@ class BMSGUI:
         for line_edit, value in timer_fields.items():
             line_edit.setText(f"{int(value)}")
 
-    def update_cell_balance_limits(self):
+    def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
         self.ui.CellConfigurationLineEdit.setText(f"{int(self.bms_config.cell_config_code[self.bms_config.cell_config])}")
         
@@ -96,7 +94,7 @@ class BMSGUI:
         self.ui.CBOnTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
         self.ui.CBOffTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
 
-    def update_temperature_limits(self):
+    def ui_update_temperature_limits(self):
         """Update temperature limits fields."""
         temp_limits = {
             self.ui.TLChargeOverTempLineEdit: self.bms_config.tl_charge_over_temp,
@@ -113,7 +111,7 @@ class BMSGUI:
         for line_edit, value in temp_limits.items():
             line_edit.setText(f"{value:.2f}") 
 
-    def update_current_limits(self):
+    def ui_update_current_limits(self):
         """Update current limits fields."""
         current_limits = {
             self.ui.CLDischargeOCVoltageCombo: (self.bms_config.disch_oc_voltage, self.bms_config.doc_mapping),
@@ -134,7 +132,7 @@ class BMSGUI:
         for line_edit, value in current_fields.items():
             line_edit.setText(f"{int(value)}")
 
-    def update_pack_option(self):
+    def ui_update_pack_option(self):
         """Update pack option fields."""
         options = {
             self.ui.poT2MonitorsFETTempCheckBox: self.bms_config.bit_t2_monitors_fet,
@@ -151,7 +149,7 @@ class BMSGUI:
         for checkbox, value in options.items():
             checkbox.setChecked(value)
 
-    def update_ram_values(self):
+    def ui_update_ram_values(self):
         #RAM
         #Voltage values: Cells, Min, Max, Batt, Vrgo
         voltage_fields = [
@@ -197,47 +195,46 @@ class BMSGUI:
         self.ui.packCurrentVLineEdit.setText(f"{voltage*1000:.4f}") #in millivolts
         self.ui.packCurrentALineEdit.setText(f"{int(current*1000)}") # in milliamperes
         
-    def update_status_bits(self):
-        #Status Bits from addresses 0x80, 0x81, 0x82, 0x83
-        #address 0x80
-        self.show_status_bit(self.ui.bitOVlabel,    self.bms_config.bit_ov)
-        self.show_status_bit(self.ui.bitOVLOlabel,  self.bms_config.bit_ovlo)
-        self.show_status_bit(self.ui.bitUVlabel, self.bms_config.bit_uv)
-        self.show_status_bit(self.ui.bitUVLOlabel,    self.bms_config.bit_uvlo)
-        self.show_status_bit(self.ui.bitDOTlabel,  self.bms_config.bit_dot)
-        self.show_status_bit(self.ui.bitDUTlabel, self.bms_config.bit_dut)        
-        self.show_status_bit(self.ui.bitCOTlabel,    self.bms_config.bit_cot)
-        self.show_status_bit(self.ui.bitCUTlabel,    self.bms_config.bit_cut)
-        
-        #address 0x81
-        self.show_status_bit(self.ui.bitIOTlabel,   self.bms_config.bit_iot)
-        self.show_status_bit(self.ui.bitCOClabel,   self.bms_config.bit_coc)
-        self.show_status_bit(self.ui.bitDOClabel,   self.bms_config.bit_doc)
-        self.show_status_bit(self.ui.bitDSClabel,   self.bms_config.bit_dsc)
-        self.show_status_bit(self.ui.bitCELLFlabel, self.bms_config.bit_cellf)
-        self.show_status_bit(self.ui.bitOPENlabel,  self.bms_config.bit_open)
-        self.show_status_bit(self.ui.bitEOCHGlabel, self.bms_config.bit_eochg)
-     
-        #address 0x82
-        self.show_status_bit(self.ui.bitLDPRSNTlabel, self.bms_config.bit_ld_prsnt)
-        self.show_status_bit(self.ui.bitCHPRSNTlabel, self.bms_config.bit_ch_prsnt)
-        self.show_status_bit(self.ui.bitCHINGlabel,   self.bms_config.bit_ching)
-        self.show_status_bit(self.ui.bitDCHINGlabel,  self.bms_config.bit_dching)
-        #bit 4 not implemented
-        #bit 5 not implemented
-        #bit 6 not implemented
-        self.show_status_bit(self.ui.bitLVCHRGlabel,    self.bms_config.bit_lvchg)        
-        
-        #address 0x83
-        self.show_status_bit(self.ui.bitCBOTlabel,  self.bms_config.bit_cbot)
-        self.show_status_bit(self.ui.bitCBUTlabel,  self.bms_config.bit_cbut)
-        self.show_status_bit(self.ui.bitCBOVlabel,  self.bms_config.bit_cbov)
-        self.show_status_bit(self.ui.bitCBUVlabel,  self.bms_config.bit_cbuv)
-        self.show_status_bit(self.ui.bitIDLElabel,  self.bms_config.bit_in_idle)
-        self.show_status_bit(self.ui.bitDOZElabel,  self.bms_config.bit_in_doze)
-        self.show_status_bit(self.ui.bitSLEEPlabel, self.bms_config.bit_in_sleep)
+    def ui_update_status_bits(self):
+        status_mapping = {
+            # address 0x80
+            self.ui.bitOVlabel: self.bms_config.bit_ov,
+            self.ui.bitOVLOlabel: self.bms_config.bit_ovlo,
+            self.ui.bitUVlabel: self.bms_config.bit_uv,
+            self.ui.bitUVLOlabel: self.bms_config.bit_uvlo,
+            self.ui.bitDOTlabel: self.bms_config.bit_dot,
+            self.ui.bitDUTlabel: self.bms_config.bit_dut,
+            self.ui.bitCOTlabel: self.bms_config.bit_cot,
+            self.ui.bitCUTlabel: self.bms_config.bit_cut,
+            # address 0x81
+            self.ui.bitIOTlabel: self.bms_config.bit_iot,
+            self.ui.bitCOClabel: self.bms_config.bit_coc,
+            self.ui.bitDOClabel: self.bms_config.bit_doc,
+            self.ui.bitDSClabel: self.bms_config.bit_dsc,
+            self.ui.bitCELLFlabel: self.bms_config.bit_cellf,
+            self.ui.bitOPENlabel: self.bms_config.bit_open,
+            self.ui.bitEOCHGlabel: self.bms_config.bit_eochg,
+            # address 0x82
+            self.ui.bitLDPRSNTlabel: self.bms_config.bit_ld_prsnt,
+            self.ui.bitCHPRSNTlabel: self.bms_config.bit_ch_prsnt,
+            self.ui.bitCHINGlabel: self.bms_config.bit_ching,
+            self.ui.bitDCHINGlabel: self.bms_config.bit_dching,
+            self.ui.bitLVCHRGlabel: self.bms_config.bit_lvchg,
+            # address 0x83
+            self.ui.bitCBOTlabel: self.bms_config.bit_cbot,
+            self.ui.bitCBUTlabel: self.bms_config.bit_cbut,
+            self.ui.bitCBOVlabel: self.bms_config.bit_cbov,
+            self.ui.bitCBUVlabel: self.bms_config.bit_cbuv,
+            self.ui.bitIDLElabel: self.bms_config.bit_in_idle,
+            self.ui.bitDOZElabel: self.bms_config.bit_in_doze,
+            self.ui.bitSLEEPlabel: self.bms_config.bit_in_sleep
+        }
 
-    def show_status_bit(self, label, bit_config ):
+        for label, bit in status_mapping.items():
+            self.ui_show_status_bit(label, bit)
+
+
+    def ui_show_status_bit(self, label, bit_config ):
         if ( bit_config):
             self.set_label_background_color ( label, QColor(0, 255, 0))
         else:
@@ -257,6 +254,12 @@ class BMSGUI:
             print(f"Error converting {value} to hex.")
             return 0
     
+    def get_unit_from_combo(self, combo):
+        """Read the combobox and return the unit chosen by user."""
+        selected_text = combo.currentText()
+        unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
+        return unit
+         
     def write_voltage_registers(self):
         voltage_values = [
             (self.ui.ovLineEdit.text(),     0x00),
@@ -329,18 +332,17 @@ class BMSGUI:
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
         serial_setup = self.ui.serial_setup        
-        register_cfg_int = []
+        configuration = []
         try:
             if serial_setup and serial_setup.is_open():
                 # Send the configuration data over serial
                 serial_protocol = SerialProtocol(serial_setup)
                 serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
                 packet = serial_protocol.read_packet()
-                _ , register_cfg_int = packet
-                configuration =  register_cfg_int
+                _ , configuration = packet
 
                 self.bms_config.update_registers(list(configuration))
-                self.update_ui_fields()
+                self.ui_update_fields()
 
                 logging.info(f"read_bms_config: {list(configuration)}")
                 self.ui.statusBar.showMessage("Configuration read successfully.")
