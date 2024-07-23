@@ -11,7 +11,7 @@ class BMSConfiguration:
         self.dsc_mapping = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
 
         # Split the input line by commas and remove spaces
-        self.config_values_int = []
+        self.configValues = []
         self.ov = 0.0
         self.ov_lockout = 0.0
         self.ov_recover = 0.0
@@ -182,10 +182,10 @@ class BMSConfiguration:
         return DEFAULT_CONFIG
 
     def get_config(self):
-        return self.config_values_int
+        return self.configValues
 
     def update_registers(self,values):
-        self.config_values_int = values
+        self.configValues = values
         logging.info(f"Updating registers with values: {values}")
 
         try:
@@ -527,16 +527,16 @@ class BMSConfiguration:
         Returns:
         - int: The new value of the register.
         """
-        byte0 = int(self.config_values_int[address])
-        byte1 = int(self.config_values_int[address+1] ) 
+        byte0 = int(self.configValues[address])
+        byte1 = int(self.configValues[address+1] ) 
         
         tmp = (byte1 << 8)|  byte0
 
         tmp = (tmp << shift) & ~mask
         tmp = tmp | (value << shift)
 
-        self.config_values_int[address] = tmp & 0xff
-        self.config_values_int[address + 1] = (tmp>> 8 ) & 0xff
+        self.configValues[address] = tmp & 0xff
+        self.configValues[address + 1] = (tmp>> 8 ) & 0xff
 
     def calculate_voltage(self, values, address):
         """
