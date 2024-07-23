@@ -9,7 +9,7 @@ class BMSGUI:
         self.ui = ui
         self.bms_config = bms_config
 
-        # Connect button click to custom functions
+        # Connect button click to Send Serial Command
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
         self.ui.writeEepromButton.clicked.connect(self.write_bms_config)  
 
@@ -247,9 +247,22 @@ class BMSGUI:
         label.setStyleSheet(f"{current_style} background-color: {color.name()};")
 
 
-    def convert_to_hex(self, value):
+    def convert_to_hex(self, value, config_type):
+        """
+        Converts a given value to hexadecimal representation.
+
+        Args:
+            value (float or str): The value to be converted.
+
+        Returns:
+            int: The hexadecimal representation of the value.
+
+        Raises:
+            None
+
+        """
         try:
-            return int(float(value) / VOLTAGE_CELL_MULTIPLIER)
+            return int(float(value) / config_type)
         except ValueError:
             print(f"Error converting {value} to hex.")
             return 0
@@ -260,7 +273,7 @@ class BMSGUI:
         unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
         return unit
          
-    def write_voltage_registers(self):
+    def write_voltage_limits(self):
         voltage_values = [
             (self.ui.ovLineEdit.text(),     0x00),
             (self.ui.ovRecoverLineEdit.text(), 0x02),
@@ -273,10 +286,10 @@ class BMSGUI:
             (self.ui.sleepVoltageLineEdit.text(), 0x44)
         ]
         for value, address in voltage_values:
-            hex_value = self.convert_to_hex(value)
+            hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
             self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
 
-    def write_time_registers(self):
+    def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
         ov_delay_timeout = int(self.ui.ovDelayTimeoutLineEdit.text())
         uv_delay_timeout = int(self.ui.uvDelayTimeoutLineEdit.text())
@@ -294,6 +307,95 @@ class BMSGUI:
         self.bms_config.reg_write(0x12, uv_delay_timeout_unit | uv_delay_timeout, MASK_12BIT, 0)
         self.bms_config.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, MASK_10BIT, 0)
         self.bms_config.reg_write(0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)
+
+
+    def convert_time_to_hex(self, time):
+        """Convert time to hex value."""
+        return int(time)
+    
+    def write_timers(self):
+        timer_values = [
+            (self.ui.timerIdleDozeLineEdit.text(), 0x48, 0 , MASK_4BIT),
+            (self.ui.timerSleepLineEdit.text(), 0x48, 4, MASK_8BIT),
+            (self.ui.timerWDTLineEdit.text(), 0x48, 8, MASK_8BIT)
+        ]
+        for value, address, shift, mask in timer_values:
+            hex_value = self.convert_time_to_hex(value)
+            self.bms_config.reg_write(address, hex_value, mask, shift )
+
+    def write_cell_balance_registers(self):
+        cell_balance_values = [
+            (self.ui.CBUpperLimLineEdit.text(), 0x16),
+            (self.ui.CBLowerLimLineEdit.text(), 0x18),
+            (self.ui.CBMaxDeltaLineEdit.text(), 0x1a),
+            (self.ui.CBMinDeltaLineEdit.text(), 0x1c),
+            (self.ui.CBOverTempLineEdit.text(), 0x1e),
+            (self.ui.CBOTRecoverLineEdit.text(), 0x20),
+            (self.ui.CBUTRecoverLineEdit.text(), 0x22),
+            (self.ui.CBUnderTempLineEdit.text(), 0x24),
+            (self.ui.CBOnTimeLineEdit.text(), 0x26),
+            (self.ui.CBOffTimeLineEdit.text(), 0x28)
+        ]
+        for value, address in cell_balance_values:
+            hex_value = self.convert_to_hex(value)
+            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+
+        # Extract and shift units
+        cb_on_time_unit = self.get_unit_from_combo(self.ui.CBOnTimeUnitLineEdit) << 10
+        cb_off_time_unit = self.get_unit_from_combo(self.ui.CBOffTimeUnitLineEdit) << 10
+
+        # Combine values and units, then write to registers
+        self.bms_config.reg_write(0x2a, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), MASK_12BIT, 0)
+        self.bms_config.reg_write(0x2c, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), MASK_12BIT, 0)
+
+
+    def write_temperature_registers(self):
+        temp_values = [
+            (self.ui.TLChargeOverTempLineEdit.text(), 0x30),
+            (self.ui.TLChargeOTRecoverLineEdit.text(), 0x32),
+            (self.ui.TLChargeUnderTempLineEdit.text(), 0x34),
+            (self.ui.TLChargeUTRecoverLineEdit.text(), 0x36),
+            (self.ui.TLDiscOverTempLineEdit.text(), 0x38),
+            (self.ui.TLDischOTRecoverLineEdit.text(), 0x3a),
+            (self.ui.TLDischUnderTempLineEdit.text(), 0x3C),
+            (self.ui.TLDischUTRecoverLineEdit.text(), 0x3E),
+            (self.ui.TLInternalOverTempLineEdit.text(), 0x40),
+            (self.ui.TLInternalOTRecoverLineEdit.text(), 0x42)
+        ]
+        for value, address in temp_values:
+            hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+
+    def write_current_registers(self):
+        current_values = [
+            (self.ui.CLDischargeOCVoltageCombo.currentText(), 0x42),
+            (self.ui.CLChargeOCVoltageCombo.currentText(), 0x44),
+            (self.ui.CLDischargeSCVoltageCombo.currentText(), 0x46),
+            (self.ui.CLDischargeOCTimeoutLineEdit.text(), 0x48),
+            (self.ui.CLChargeOCTimeoutLineEdit.text(), 0x4a),
+            (self.ui.CLDischargeSCTimeoutLineEdit.text(), 0x4c)
+        ]
+        for value, address in current_values:
+            hex_value = self.convert_to_hex(value)
+            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+
+    def write_pack_option_registers(self):
+        pack_options = [
+            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4e),
+            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4e),
+            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4e),
+            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4e),
+            (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4e),
+            (self.ui.poCascadeCheckBox.isChecked(), 0x4e),
+            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4e),
+            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4e),
+            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4e),
+            (self.ui.tGainCheckBox.isChecked(), 0x4e)
+        ]
+        for value, address in pack_options:
+            hex_value = self.convert_to_hex(value)
+            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+
 
     def send_serial_command(self, command, data):
         # Access the shared serial_setup
@@ -319,8 +421,14 @@ class BMSGUI:
 
             print("entered write_bms_config:\n", register_cfg)       
 
-            self.write_voltage_registers()
-            self.write_time_registers()
+            self.write_voltage_limits()
+            self.write_voltage_limits_timing()
+            #self.write_timers()
+            #self.write_cell_balance_registers()
+            self.write_temperature_registers()
+            #self.write_current_registers()
+            #self.write_pack_option_registers()
+
 
             print("exit write_bms_config:\n", register_cfg)
 
