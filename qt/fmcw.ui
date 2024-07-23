@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1080</width>
-    <height>900</height>
+    <width>1126</width>
+    <height>885</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,8 +16,38 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <family>Niagara Solid</family>
+    <italic>true</italic>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTabWidget::pane { /* The tab widget frame */
+    border-top: 2px solid #C2C7CB;
+}
+
+QMenuBar {
+	background-color: rgb(250, 250, 250);
+    spacing: 3px; /* spacing between menu bar items */
+}
+
+QMenuBar::item {
+    padding: 1px 4px;
+    background: transparent;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #a8a8a8;
+}
+
+QMenuBar::item:pressed {
+    background: #888888;
+}</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
@@ -116,13 +146,22 @@
      <property name="title">
       <string>Voltage Limits</string>
      </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="gridLayoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
         <width>451</width>
-        <height>248</height>
+        <height>266</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -531,7 +570,7 @@
         <x>10</x>
         <y>20</y>
         <width>231</width>
-        <height>164</height>
+        <height>176</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -801,7 +840,7 @@
         <x>10</x>
         <y>200</y>
         <width>231</width>
-        <height>52</height>
+        <height>56</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_16">
@@ -1666,7 +1705,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="vcellMaxLineEdit"/>
+         <widget class="QLineEdit" name="vcellMaxLineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_126">
@@ -1683,7 +1726,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="vcellMinLineEdit"/>
+         <widget class="QLineEdit" name="vcellMinLineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_129">
@@ -1707,7 +1754,11 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="vcell2LineEdit"/>
+         <widget class="QLineEdit" name="vcell2LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_101">
@@ -1717,7 +1768,11 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="vcell5LineEdit"/>
+         <widget class="QLineEdit" name="vcell5LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_102">
@@ -1741,10 +1796,18 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="vcell6LineEdit"/>
+         <widget class="QLineEdit" name="vcell6LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="vcell3LineEdit"/>
+         <widget class="QLineEdit" name="vcell3LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_105">
@@ -1761,7 +1824,14 @@
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLineEdit" name="vcell1LineEdit"/>
+         <widget class="QLineEdit" name="vcell1LineEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_107">
@@ -1813,7 +1883,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="vcell8LineEdit"/>
+         <widget class="QLineEdit" name="vcell8LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="6" column="2">
          <widget class="QLabel" name="label_124">
@@ -1823,7 +1897,11 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="vcell4LineEdit"/>
+         <widget class="QLineEdit" name="vcell4LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="7" column="2">
          <widget class="QLabel" name="label_125">
@@ -1833,7 +1911,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="vcell7LineEdit"/>
+         <widget class="QLineEdit" name="vcell7LineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1857,7 +1939,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="vcellBattLineEdit"/>
+         <widget class="QLineEdit" name="vcellBattLineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_132">
@@ -1874,7 +1960,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="vcellVrgoLineEdit"/>
+         <widget class="QLineEdit" name="vcellVrgoLineEdit">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -3309,8 +3399,8 @@ border-radius: 10px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1080</width>
-     <height>22</height>
+     <width>1126</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuabout">
