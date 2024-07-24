@@ -18,7 +18,7 @@
   </property>
   <property name="font">
    <font>
-    <family>Niagara Solid</family>
+    <family>Roboto</family>
     <italic>true</italic>
    </font>
   </property>
@@ -68,8 +68,13 @@ QMenuBar::item:pressed {
      <height>500</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+    </font>
+   </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_main">
     <property name="sizePolicy">
@@ -77,6 +82,11 @@ QMenuBar::item:pressed {
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
     </property>
     <attribute name="title">
      <string>Main</string>
@@ -89,6 +99,11 @@ QMenuBar::item:pressed {
        <width>75</width>
        <height>24</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
      </property>
      <property name="text">
       <string>Open</string>
@@ -109,6 +124,11 @@ QMenuBar::item:pressed {
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
     </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -118,6 +138,11 @@ QMenuBar::item:pressed {
        <width>28</width>
        <height>16</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
      </property>
      <property name="text">
       <string>Port :</string>
@@ -131,6 +156,11 @@ QMenuBar::item:pressed {
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
+    </property>
     <attribute name="title">
      <string>BMS</string>
     </attribute>
@@ -142,6 +172,11 @@ QMenuBar::item:pressed {
        <width>481</width>
        <height>281</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
      </property>
      <property name="title">
       <string>Voltage Limits</string>
@@ -164,15 +199,31 @@ QMenuBar::item:pressed {
         <height>266</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout">
        <property name="horizontalSpacing">
         <number>10</number>
        </property>
        <item row="7" column="1">
-        <widget class="QLineEdit" name="LowVoltageChargeLineEdit"/>
+        <widget class="QLineEdit" name="LowVoltageChargeLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="2" column="4">
         <widget class="QLabel" name="label_37">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Sleep Volt Delay Time</string>
          </property>
@@ -180,16 +231,32 @@ QMenuBar::item:pressed {
        </item>
        <item row="6" column="2">
         <widget class="QLabel" name="label_34">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
         </widget>
        </item>
        <item row="3" column="5">
-        <widget class="QLineEdit" name="openWireTimingLineEdit"/>
+        <widget class="QLineEdit" name="openWireTimingLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2">
         <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
@@ -197,6 +264,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="3" column="4">
         <widget class="QLabel" name="label_38">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Open Wire Sample Time</string>
          </property>
@@ -204,6 +276,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="2" column="6">
         <widget class="QComboBox" name="sleepDelayUnitCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -228,6 +305,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_13">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>UV Recover</string>
          </property>
@@ -235,6 +317,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_1">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OV Lockout</string>
          </property>
@@ -242,16 +329,32 @@ QMenuBar::item:pressed {
        </item>
        <item row="4" column="2">
         <widget class="QLabel" name="label_18">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="ovRecoverLineEdit"/>
+        <widget class="QLineEdit" name="ovRecoverLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="2" column="2">
         <widget class="QLabel" name="label_7">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
@@ -259,29 +362,62 @@ QMenuBar::item:pressed {
        </item>
        <item row="0" column="4">
         <widget class="QLabel" name="label_11">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OV Delay Time</string>
          </property>
         </widget>
        </item>
        <item row="0" column="5">
-        <widget class="QLineEdit" name="ovDelayTimeoutLineEdit"/>
+        <widget class="QLineEdit" name="ovDelayTimeoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="8" column="2">
         <widget class="QLabel" name="label_33">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="ovLockoutLineEdit"/>
+        <widget class="QLineEdit" name="ovLockoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QLineEdit" name="uvLockoutLineEdit"/>
+        <widget class="QLineEdit" name="uvLockoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_15">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Under Voltage</string>
          </property>
@@ -289,6 +425,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="label_17">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>UV Lockout</string>
          </property>
@@ -296,6 +437,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="5" column="2">
         <widget class="QLabel" name="label_12">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
@@ -303,6 +449,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="label_14">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Sleep Voltage</string>
          </property>
@@ -310,6 +461,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="0" column="3">
         <spacer name="horizontalSpacer">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -322,10 +478,21 @@ QMenuBar::item:pressed {
         </spacer>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="eocVoltageLineEdit"/>
+        <widget class="QLineEdit" name="eocVoltageLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_6">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Over Voltage</string>
          </property>
@@ -333,19 +500,41 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="2">
         <widget class="QLabel" name="label_5">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
         </widget>
        </item>
        <item row="2" column="5">
-        <widget class="QLineEdit" name="sleepDelayLineEdit"/>
+        <widget class="QLineEdit" name="sleepDelayLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QLineEdit" name="sleepVoltageLineEdit"/>
+        <widget class="QLineEdit" name="sleepVoltageLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="0" column="6">
         <widget class="QComboBox" name="ovDelayTimeoutCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -370,6 +559,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_10">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>End of Charge</string>
          </property>
@@ -377,6 +571,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="6">
         <widget class="QComboBox" name="uvDelayTimeoutCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -401,19 +600,41 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="4">
         <widget class="QLabel" name="label_36">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>UV Delay Time</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="ovLineEdit"/>
+        <widget class="QLineEdit" name="ovLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QLineEdit" name="uvDelayTimeoutLineEdit"/>
+        <widget class="QLineEdit" name="uvDelayTimeoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="label_16">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Low V Charge</string>
          </property>
@@ -421,6 +642,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="7" column="2">
         <widget class="QLabel" name="label_35">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
@@ -428,19 +654,41 @@ QMenuBar::item:pressed {
        </item>
        <item row="3" column="2">
         <widget class="QLabel" name="label_9">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>V</string>
          </property>
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="underVoltageLineEdit"/>
+        <widget class="QLineEdit" name="underVoltageLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="uvRecoverLineEdit"/>
+        <widget class="QLineEdit" name="uvRecoverLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_8">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OV Recover</string>
          </property>
@@ -448,6 +696,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="3" column="6">
         <widget class="QComboBox" name="openWireTimingCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -472,6 +725,11 @@ QMenuBar::item:pressed {
        <height>51</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
       <property name="spacing">
        <number>0</number>
@@ -492,6 +750,11 @@ QMenuBar::item:pressed {
           <horstretch>9</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Roboto</family>
+         </font>
         </property>
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
@@ -515,6 +778,7 @@ QMenuBar::item:pressed {
         </property>
         <property name="font">
          <font>
+          <family>Roboto</family>
           <kerning>true</kerning>
          </font>
         </property>
@@ -537,6 +801,11 @@ QMenuBar::item:pressed {
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Roboto</family>
+         </font>
         </property>
         <property name="text">
          <string>Write 
@@ -561,6 +830,11 @@ QMenuBar::item:pressed {
        <height>281</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Current Limits</string>
      </property>
@@ -573,12 +847,22 @@ QMenuBar::item:pressed {
         <height>176</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <property name="horizontalSpacing">
         <number>10</number>
        </property>
        <item row="0" column="1">
         <widget class="QComboBox" name="CLDischargeOCVoltageCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>4mV</string>
@@ -623,6 +907,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_28">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Discharge OC</string>
          </property>
@@ -630,6 +919,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_42">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DOC Delay</string>
          </property>
@@ -637,16 +931,32 @@ QMenuBar::item:pressed {
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_45">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Discharge SC</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="CLDischargeOCTimeoutLineEdit"/>
+        <widget class="QLineEdit" name="CLDischargeOCTimeoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_46">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DSC Delay</string>
          </property>
@@ -654,6 +964,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="5" column="2">
         <widget class="QComboBox" name="CLDischargeSCTimeoutCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -677,10 +992,21 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="CLChargeOCTimeoutLineEdit"/>
+        <widget class="QLineEdit" name="CLChargeOCTimeoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="4" column="1">
         <widget class="QComboBox" name="CLDischargeSCVoltageCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>16mV</string>
@@ -725,6 +1051,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="2">
         <widget class="QComboBox" name="CLDischargeOCTimeoutCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -749,6 +1080,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_41">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>COC Delay</string>
          </property>
@@ -756,6 +1092,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="2" column="1">
         <widget class="QComboBox" name="CLChargeOCVoltageCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>1mV</string>
@@ -799,10 +1140,21 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="CLDischargeSCTimeoutLineEdit"/>
+        <widget class="QLineEdit" name="CLDischargeSCTimeoutLineEdit">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
+        </widget>
        </item>
        <item row="3" column="2">
         <widget class="QComboBox" name="CLChargeOCTimeoutCombo">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>μs</string>
@@ -827,6 +1179,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_44">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Charge OC</string>
          </property>
@@ -843,12 +1200,22 @@ QMenuBar::item:pressed {
         <height>56</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout_16">
        <property name="horizontalSpacing">
         <number>10</number>
        </property>
        <item row="0" column="1">
         <widget class="QComboBox" name="openWireTimingCombo_11">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>0ms</string>
@@ -933,6 +1300,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="1">
         <widget class="QComboBox" name="openWireTimingCombo_12">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <item>
           <property name="text">
            <string>0ms</string>
@@ -1017,6 +1389,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_92">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Load Detect Pulse Width</string>
          </property>
@@ -1024,6 +1401,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_98">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>Charge Detect Pulse Width</string>
          </property>
@@ -1041,6 +1423,11 @@ QMenuBar::item:pressed {
        <height>411</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Cell Balance Limits</string>
      </property>
@@ -1052,19 +1439,41 @@ QMenuBar::item:pressed {
         </property>
         <item row="7" column="0">
          <widget class="QLabel" name="label_25">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Under Temp</string>
           </property>
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLineEdit" name="CBUnderTempLineEdit"/>
+         <widget class="QLineEdit" name="CBUnderTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="CBOverTempLineEdit"/>
+         <widget class="QLineEdit" name="CBOverTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_47">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB UT Recover</string>
           </property>
@@ -1072,16 +1481,32 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_26">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="CBMaxDeltaLineEdit"/>
+         <widget class="QLineEdit" name="CBMaxDeltaLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_48">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Upper Lim</string>
           </property>
@@ -1089,6 +1514,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_79">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Min Delta</string>
           </property>
@@ -1096,6 +1526,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_91">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Max Delta</string>
           </property>
@@ -1103,22 +1538,50 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_93">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Over Temp</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="CBMinDeltaLineEdit"/>
+         <widget class="QLineEdit" name="CBMinDeltaLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="CBOTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="CBOTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="CBUpperLimLineEdit"/>
+         <widget class="QLineEdit" name="CBUpperLimLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="5" column="2">
          <widget class="QLabel" name="label_94">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1126,6 +1589,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_95">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB OT Recover</string>
           </property>
@@ -1133,6 +1601,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_97">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1140,6 +1613,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_99">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1147,6 +1625,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="6" column="2">
          <widget class="QLabel" name="label_108">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1154,6 +1637,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="7" column="2">
          <widget class="QLabel" name="label_109">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1161,6 +1649,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_110">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Lower Lim</string>
           </property>
@@ -1168,23 +1661,45 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_112">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="CBLowerLimLineEdit"/>
+         <widget class="QLineEdit" name="CBLowerLimLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="4" column="2">
          <widget class="QLabel" name="label_113">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="CBUTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="CBUTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1195,6 +1710,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_96">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB On Time</string>
           </property>
@@ -1202,6 +1722,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_116">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB Off Time</string>
           </property>
@@ -1209,6 +1734,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QComboBox" name="CBOffTimeUnitLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>μs</string>
@@ -1232,13 +1762,30 @@ QMenuBar::item:pressed {
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="CBOffTimeLineEdit"/>
+         <widget class="QLineEdit" name="CBOffTimeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="CBOnTimeLineEdit"/>
+         <widget class="QLineEdit" name="CBOnTimeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QComboBox" name="CBOnTimeUnitLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>μs</string>
@@ -1270,6 +1817,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="2" column="0">
          <widget class="QCheckBox" name="CBDuringEOCCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB During EOC</string>
           </property>
@@ -1277,6 +1829,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QCheckBox" name="CBDuringChargeCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB During Charge</string>
           </property>
@@ -1284,6 +1841,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="CBDuringDischargeCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CB During Discharge</string>
           </property>
@@ -1302,6 +1864,11 @@ QMenuBar::item:pressed {
        <height>151</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Timers</string>
      </property>
@@ -1312,13 +1879,19 @@ QMenuBar::item:pressed {
          <number>10</number>
         </property>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="timerWDTLineEdit"/>
+         <widget class="QLineEdit" name="timerWDTLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_70">
           <property name="font">
            <font>
-            <family>Segoe UI</family>
+            <family>Roboto</family>
            </font>
           </property>
           <property name="text">
@@ -1331,6 +1904,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_82">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>min</string>
           </property>
@@ -1338,6 +1916,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_69">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>sec</string>
           </property>
@@ -1345,6 +1928,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_81">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>SLEEP Mode Timer</string>
           </property>
@@ -1355,6 +1943,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_72">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>WD Timer</string>
           </property>
@@ -1362,16 +1955,33 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_77">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>min</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="timerSleepLineEdit"/>
+         <widget class="QLineEdit" name="timerSleepLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="timerIdleDozeLineEdit"/>
+         <widget class="QLineEdit" name="timerIdleDozeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1386,6 +1996,11 @@ QMenuBar::item:pressed {
        <height>71</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Cell Configuration</string>
      </property>
@@ -1397,6 +2012,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_71">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string># of Cells</string>
           </property>
@@ -1409,6 +2029,11 @@ QMenuBar::item:pressed {
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
           </property>
          </widget>
         </item>
@@ -1425,6 +2050,11 @@ QMenuBar::item:pressed {
        <height>311</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Temperature Limits</string>
      </property>
@@ -1436,26 +2066,53 @@ QMenuBar::item:pressed {
         </property>
         <item row="3" column="0">
          <widget class="QLabel" name="label_75">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Charge Under Temp</string>
           </property>
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="TLDischUTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="TLDischUTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_76">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Charge UT Recover</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="TLChargeUnderTempLineEdit"/>
+         <widget class="QLineEdit" name="TLChargeUnderTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_84">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1463,6 +2120,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="7" column="0">
          <widget class="QLabel" name="label_67">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Discharge Under Temp</string>
           </property>
@@ -1470,19 +2132,41 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_78">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Discharge Over Temp</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="TLChargeUTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="TLChargeUTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="TLDischOTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="TLDischOTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_74">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Charge Over Temp</string>
           </property>
@@ -1490,16 +2174,32 @@ QMenuBar::item:pressed {
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_68">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Discharge UT Recover</string>
           </property>
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLineEdit" name="TLDischUnderTempLineEdit"/>
+         <widget class="QLineEdit" name="TLDischUnderTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_89">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1507,6 +2207,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="2">
          <widget class="QLabel" name="label_90">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1514,6 +2219,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_85">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1521,6 +2231,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_73">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1528,6 +2243,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="2">
          <widget class="QLabel" name="label_80">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1535,6 +2255,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_88">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Charge OT Recover</string>
           </property>
@@ -1542,33 +2267,66 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_83">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Discharge OT Recover</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="TLChargeOverTempLineEdit"/>
+         <widget class="QLineEdit" name="TLChargeOverTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="6" column="2">
          <widget class="QLabel" name="label_86">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="TLDiscOverTempLineEdit"/>
+         <widget class="QLineEdit" name="TLDiscOverTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="7" column="2">
          <widget class="QLabel" name="label_87">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="TLChargeOTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="TLChargeOTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1579,6 +2337,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="1" column="2">
          <widget class="QLabel" name="label_123">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1586,16 +2349,32 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_111">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Internal Over Temp       </string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="TLInternalOverTempLineEdit"/>
+         <widget class="QLineEdit" name="TLInternalOverTempLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_122">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1603,13 +2382,24 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_121">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Internal OT Recover</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="TLInternalOTRecoverLineEdit"/>
+         <widget class="QLineEdit" name="TLInternalOTRecoverLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1624,6 +2414,11 @@ QMenuBar::item:pressed {
        <height>151</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Pack Options</string>
      </property>
@@ -1635,6 +2430,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="5" column="0">
          <widget class="QCheckBox" name="poCascadeCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cascade two ISL94203</string>
           </property>
@@ -1642,6 +2442,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QCheckBox" name="poT2MonitorsFETTempCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>xT2 Monitors FET Temp</string>
           </property>
@@ -1649,6 +2454,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="0">
          <widget class="QCheckBox" name="poEnableUVLOCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Enable UVLO Power Down</string>
           </property>
@@ -1656,6 +2466,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="poEnableCELLFpsdCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Enable CELLF PSD Action</string>
           </property>
@@ -1663,6 +2478,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="0">
          <widget class="QCheckBox" name="poEnableOpenWireScanCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Enable Open Wire Scan</string>
           </property>
@@ -1670,6 +2490,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="0">
          <widget class="QCheckBox" name="poEnableOpenWirePSDCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Enable Open Wire PSD</string>
           </property>
@@ -1688,6 +2513,11 @@ QMenuBar::item:pressed {
        <height>381</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Voltage</string>
      </property>
@@ -1699,6 +2529,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_127">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell Max</string>
           </property>
@@ -1706,6 +2541,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="vcellMaxLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1713,6 +2553,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_126">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1720,6 +2565,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_128">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1727,6 +2577,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="vcellMinLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1734,6 +2589,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_129">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell Min</string>
           </property>
@@ -1748,6 +2608,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="3" column="0">
          <widget class="QLabel" name="label_100">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 5</string>
           </property>
@@ -1755,6 +2620,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="6" column="1">
          <widget class="QLineEdit" name="vcell2LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1762,6 +2632,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_101">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 6</string>
           </property>
@@ -1769,6 +2644,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="1">
          <widget class="QLineEdit" name="vcell5LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1776,6 +2656,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_102">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1783,6 +2668,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="7" column="0">
          <widget class="QLabel" name="label_103">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 1</string>
           </property>
@@ -1790,6 +2680,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_104">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 4</string>
           </property>
@@ -1797,6 +2692,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="1">
          <widget class="QLineEdit" name="vcell6LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1804,6 +2704,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="1">
          <widget class="QLineEdit" name="vcell3LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1811,6 +2716,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_105">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 8      </string>
           </property>
@@ -1818,6 +2728,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_106">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 2</string>
           </property>
@@ -1828,6 +2743,11 @@ QMenuBar::item:pressed {
           <property name="enabled">
            <bool>true</bool>
           </property>
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1835,6 +2755,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_107">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1842,6 +2767,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="2">
          <widget class="QLabel" name="label_114">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1849,6 +2779,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_115">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1856,6 +2791,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_117">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1863,6 +2803,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="2">
          <widget class="QLabel" name="label_118">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1870,6 +2815,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_119">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 7</string>
           </property>
@@ -1877,6 +2827,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_120">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Cell 3</string>
           </property>
@@ -1884,6 +2839,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="vcell8LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1891,6 +2851,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="6" column="2">
          <widget class="QLabel" name="label_124">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1898,6 +2863,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="1">
          <widget class="QLineEdit" name="vcell4LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1905,6 +2875,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="7" column="2">
          <widget class="QLabel" name="label_125">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1912,6 +2887,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="vcell7LineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1926,6 +2906,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="1" column="2">
          <widget class="QLabel" name="label_130">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1933,6 +2918,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_131">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>VBATT    </string>
           </property>
@@ -1940,6 +2930,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="vcellBattLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1947,6 +2942,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_132">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -1954,6 +2954,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_133">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>VRGO</string>
           </property>
@@ -1961,6 +2966,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="vcellVrgoLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -1979,6 +2989,11 @@ QMenuBar::item:pressed {
        <height>161</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Current</string>
      </property>
@@ -1990,6 +3005,11 @@ QMenuBar::item:pressed {
         </property>
         <item row="2" column="1">
          <widget class="QLineEdit" name="ResistorLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="styleSheet">
            <string notr="true">background-color: rgba(255, 255, 127, 200);</string>
           </property>
@@ -2003,6 +3023,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="packCurrentVLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -2010,6 +3035,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_139">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>ISense(R)</string>
           </property>
@@ -2017,6 +3047,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_143">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>ISense(V)</string>
           </property>
@@ -2024,6 +3059,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="packCurrentALineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -2031,6 +3071,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="1">
          <widget class="QLineEdit" name="CSGainLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
@@ -2038,6 +3083,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_148">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>mOhm</string>
           </property>
@@ -2045,6 +3095,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_150">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>ISense(A)</string>
           </property>
@@ -2052,6 +3107,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_138">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>CS Gain</string>
           </property>
@@ -2059,6 +3119,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="2">
          <widget class="QLabel" name="label_140">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>mA</string>
           </property>
@@ -2066,6 +3131,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="2">
          <widget class="QLabel" name="label_145">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>mV</string>
           </property>
@@ -2084,6 +3154,11 @@ QMenuBar::item:pressed {
        <height>161</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Temperature</string>
      </property>
@@ -2094,26 +3169,60 @@ QMenuBar::item:pressed {
          <number>10</number>
         </property>
         <item row="1" column="2">
-         <widget class="QLineEdit" name="tempITDegLineEdit"/>
+         <widget class="QLineEdit" name="tempITDegLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="tempITVoltaqeLineEdit"/>
+         <widget class="QLineEdit" name="tempITVoltaqeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_144">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>iT</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="tempXT1VoltaqeLineEdit"/>
+         <widget class="QLineEdit" name="tempXT1VoltaqeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="tempXT2VoltaqeLineEdit"/>
+         <widget class="QLineEdit" name="tempXT2VoltaqeLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="3" column="3">
          <widget class="QLabel" name="label_149">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>degC</string>
           </property>
@@ -2121,6 +3230,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="1">
          <widget class="QLabel" name="label_151">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Vadc</string>
           </property>
@@ -2128,6 +3242,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_141">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>xT1</string>
           </property>
@@ -2135,6 +3254,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_142">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>xT2</string>
           </property>
@@ -2142,6 +3266,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="1" column="3">
          <widget class="QLabel" name="label_147">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>degC</string>
           </property>
@@ -2149,6 +3278,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label_152">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -2156,6 +3290,11 @@ QMenuBar::item:pressed {
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_153">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>Input</string>
           </property>
@@ -2163,16 +3302,33 @@ QMenuBar::item:pressed {
         </item>
         <item row="4" column="3">
          <widget class="QLabel" name="label_146">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>degC</string>
           </property>
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="QLineEdit" name="tempXT1DegLineEdit"/>
+         <widget class="QLineEdit" name="tempXT1DegLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QLineEdit" name="tempXT2DegLineEdit"/>
+         <widget class="QLineEdit" name="tempXT2DegLineEdit">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -2193,6 +3349,11 @@ QMenuBar::item:pressed {
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Status Bits</string>
      </property>
@@ -2205,6 +3366,11 @@ QMenuBar::item:pressed {
         <height>191</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout_28">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
@@ -2214,6 +3380,11 @@ QMenuBar::item:pressed {
        </property>
        <item row="0" column="1">
         <widget class="QLabel" name="label_158">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CHING</string>
          </property>
@@ -2221,6 +3392,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="5" column="1">
         <widget class="QLabel" name="label_160">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DSC</string>
          </property>
@@ -2228,6 +3404,11 @@ QMenuBar::item:pressed {
        </item>
        <item row="1" column="1">
         <widget class="QLabel" name="label_157">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DCHING</string>
          </property>
@@ -2247,6 +3428,11 @@ QMenuBar::item:pressed {
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2264,6 +3450,11 @@ border-radius: 10px;
        </item>
        <item row="7" column="1">
         <widget class="QLabel" name="label_161">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>LD_PRSNT</string>
          </property>
@@ -2283,6 +3474,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2300,6 +3496,11 @@ border-radius: 10px;
        </item>
        <item row="4" column="1">
         <widget class="QLabel" name="label_159">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DOC</string>
          </property>
@@ -2307,6 +3508,11 @@ border-radius: 10px;
        </item>
        <item row="3" column="1">
         <widget class="QLabel" name="label_154">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>COC</string>
          </property>
@@ -2325,6 +3531,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2355,6 +3566,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2383,6 +3599,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2413,6 +3634,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2430,6 +3656,11 @@ border-radius: 10px;
        </item>
        <item row="6" column="0">
         <spacer name="verticalSpacer_2">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -2443,6 +3674,11 @@ border-radius: 10px;
        </item>
        <item row="2" column="0">
         <spacer name="verticalSpacer">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -2468,6 +3704,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2485,6 +3726,11 @@ border-radius: 10px;
        </item>
        <item row="8" column="1">
         <widget class="QLabel" name="label_162">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CH_PRSNT</string>
          </property>
@@ -2501,6 +3747,11 @@ border-radius: 10px;
         <height>271</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
       <layout class="QGridLayout" name="gridLayout_29">
        <property name="sizeConstraint">
         <enum>QLayout::SetNoConstraint</enum>
@@ -2510,6 +3761,11 @@ border-radius: 10px;
        </property>
        <item row="10" column="1">
         <widget class="QLabel" name="label_182">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CELLF</string>
          </property>
@@ -2517,6 +3773,11 @@ border-radius: 10px;
        </item>
        <item row="1" column="1">
         <widget class="QLabel" name="label_165">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OV</string>
          </property>
@@ -2536,6 +3797,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2553,6 +3819,11 @@ border-radius: 10px;
        </item>
        <item row="5" column="1">
         <widget class="QLabel" name="label_167">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>UVLO</string>
          </property>
@@ -2572,6 +3843,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2589,6 +3865,11 @@ border-radius: 10px;
        </item>
        <item row="7" column="1">
         <widget class="QLabel" name="label_180">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CBOV</string>
          </property>
@@ -2607,6 +3888,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2637,6 +3923,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2654,6 +3945,11 @@ border-radius: 10px;
        </item>
        <item row="3" column="1">
         <widget class="QLabel" name="label_166">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>UV</string>
          </property>
@@ -2661,6 +3957,11 @@ border-radius: 10px;
        </item>
        <item row="9" column="0">
         <spacer name="verticalSpacer_3">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -2686,6 +3987,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2703,6 +4009,11 @@ border-radius: 10px;
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_163">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OVLO</string>
          </property>
@@ -2721,6 +4032,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2751,6 +4067,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2768,6 +4089,11 @@ border-radius: 10px;
        </item>
        <item row="2" column="1">
         <widget class="QLabel" name="label_155">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>EOCHG</string>
          </property>
@@ -2787,6 +4113,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2804,6 +4135,11 @@ border-radius: 10px;
        </item>
        <item row="4" column="1">
         <widget class="QLabel" name="label_164">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>LVCHRG</string>
          </property>
@@ -2811,6 +4147,11 @@ border-radius: 10px;
        </item>
        <item row="8" column="1">
         <widget class="QLabel" name="label_181">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CBUV</string>
          </property>
@@ -2818,6 +4159,11 @@ border-radius: 10px;
        </item>
        <item row="6" column="0">
         <spacer name="verticalSpacer_4">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -2842,6 +4188,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2872,6 +4223,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2889,6 +4245,11 @@ border-radius: 10px;
        </item>
        <item row="11" column="1">
         <widget class="QLabel" name="label_183">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>OPEN</string>
          </property>
@@ -2904,6 +4265,11 @@ border-radius: 10px;
         <width>91</width>
         <height>271</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
       </property>
       <layout class="QGridLayout" name="gridLayout_32">
        <property name="sizeConstraint">
@@ -2926,6 +4292,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -2943,6 +4314,11 @@ border-radius: 10px;
        </item>
        <item row="1" column="1">
         <widget class="QLabel" name="label_184">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DUT</string>
          </property>
@@ -2961,6 +4337,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -2991,6 +4372,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3008,6 +4394,11 @@ border-radius: 10px;
        </item>
        <item row="10" column="1">
         <widget class="QLabel" name="label_188">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DOZE</string>
          </property>
@@ -3015,6 +4406,11 @@ border-radius: 10px;
        </item>
        <item row="8" column="0">
         <spacer name="verticalSpacer_10">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -3039,6 +4435,11 @@ border-radius: 10px;
            <width>20</width>
            <height>20</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
@@ -3069,6 +4470,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3098,6 +4504,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3115,6 +4526,11 @@ border-radius: 10px;
        </item>
        <item row="9" column="1">
         <widget class="QLabel" name="label_191">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>IDLE</string>
          </property>
@@ -3122,6 +4538,11 @@ border-radius: 10px;
        </item>
        <item row="5" column="0">
         <spacer name="verticalSpacer_9">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -3135,6 +4556,11 @@ border-radius: 10px;
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_187">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>DOT</string>
          </property>
@@ -3142,6 +4568,11 @@ border-radius: 10px;
        </item>
        <item row="7" column="1">
         <widget class="QLabel" name="label_186">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CBUT</string>
          </property>
@@ -3161,6 +4592,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3178,6 +4614,11 @@ border-radius: 10px;
        </item>
        <item row="6" column="1">
         <widget class="QLabel" name="label_192">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CBOT</string>
          </property>
@@ -3185,6 +4626,11 @@ border-radius: 10px;
        </item>
        <item row="3" column="1">
         <widget class="QLabel" name="label_185">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>CUT</string>
          </property>
@@ -3204,6 +4650,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3221,6 +4672,11 @@ border-radius: 10px;
        </item>
        <item row="4" column="1">
         <widget class="QLabel" name="label_194">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>IOT</string>
          </property>
@@ -3240,6 +4696,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3257,6 +4718,11 @@ border-radius: 10px;
        </item>
        <item row="2" column="1">
         <widget class="QLabel" name="label_189">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>COT</string>
          </property>
@@ -3276,6 +4742,11 @@ border-radius: 10px;
            <height>20</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true">border-width: 1px;
 border-style: solid;
@@ -3293,6 +4764,11 @@ border-radius: 10px;
        </item>
        <item row="11" column="1">
         <widget class="QLabel" name="label_196">
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+          </font>
+         </property>
          <property name="text">
           <string>SLEEP</string>
          </property>
@@ -3317,6 +4793,7 @@ border-radius: 10px;
       </property>
       <property name="font">
        <font>
+        <family>Roboto</family>
         <kerning>true</kerning>
        </font>
       </property>
@@ -3341,6 +4818,11 @@ border-radius: 10px;
        <height>81</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+      </font>
+     </property>
      <property name="title">
       <string>Temp reading</string>
      </property>
@@ -3352,6 +4834,11 @@ border-radius: 10px;
         </property>
         <item row="0" column="0">
          <widget class="QRadioButton" name="radioButton">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>V</string>
           </property>
@@ -3362,6 +4849,11 @@ border-radius: 10px;
         </item>
         <item row="1" column="0">
          <widget class="QRadioButton" name="radioButton_2">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>degC</string>
           </property>
@@ -3376,6 +4868,11 @@ border-radius: 10px;
         </property>
         <item row="0" column="0">
          <widget class="QCheckBox" name="tGainCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>TGain</string>
           </property>
@@ -3383,6 +4880,11 @@ border-radius: 10px;
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="TemperatureGainLabel">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
           <property name="text">
            <string>(Gain is now 2x)</string>
           </property>
@@ -3400,10 +4902,20 @@ border-radius: 10px;
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>19</height>
+     <height>17</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+    </font>
+   </property>
    <widget class="QMenu" name="menuabout">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
+    </property>
     <property name="title">
      <string>About</string>
     </property>
@@ -3413,7 +4925,13 @@ border-radius: 10px;
    </widget>
    <addaction name="menuabout"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+    </font>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
