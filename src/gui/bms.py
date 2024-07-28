@@ -325,28 +325,34 @@ class BMSGUI:
 
     def write_cell_balance_registers(self):
         cell_balance_values = [
-            (self.ui.CBUpperLimLineEdit.text(), 0x16),
-            (self.ui.CBLowerLimLineEdit.text(), 0x18),
-            (self.ui.CBMaxDeltaLineEdit.text(), 0x1a),
-            (self.ui.CBMinDeltaLineEdit.text(), 0x1c),
-            (self.ui.CBOverTempLineEdit.text(), 0x1e),
-            (self.ui.CBOTRecoverLineEdit.text(), 0x20),
-            (self.ui.CBUTRecoverLineEdit.text(), 0x22),
-            (self.ui.CBUnderTempLineEdit.text(), 0x24),
-            (self.ui.CBOnTimeLineEdit.text(), 0x26),
-            (self.ui.CBOffTimeLineEdit.text(), 0x28)
+            (self.ui.CBLowerLimLineEdit.text(), 0x1c),
+            (self.ui.CBUpperLimLineEdit.text(), 0x1e),
+            (self.ui.CBMinDeltaLineEdit.text(), 0x20),
+            (self.ui.CBMaxDeltaLineEdit.text(), 0x22),
+            (self.ui.CBOnTimeLineEdit.text(), 0x24),
+            (self.ui.CBOffTimeLineEdit.text(), 0x26)
         ]
         for value, address in cell_balance_values:
-            hex_value = self.convert_to_hex(value)
+            hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
             self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
 
+        cell_balance_temp_values = [
+                        (self.ui.CBUnderTempLineEdit.text(), 0x28),
+            (self.ui.CBUTRecoverLineEdit.text(), 0x2a),
+            (self.ui.CBOverTempLineEdit.text(), 0x2c),
+            (self.ui.CBOTRecoverLineEdit.text(), 0x2e)
+        ]
+        for value, address in cell_balance_temp_values:
+            hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+            
         # Extract and shift units
         cb_on_time_unit = self.get_unit_from_combo(self.ui.CBOnTimeUnitLineEdit) << 10
         cb_off_time_unit = self.get_unit_from_combo(self.ui.CBOffTimeUnitLineEdit) << 10
 
         # Combine values and units, then write to registers
-        self.bms_config.reg_write(0x2a, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), MASK_12BIT, 0)
-        self.bms_config.reg_write(0x2c, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), MASK_12BIT, 0)
+        self.bms_config.reg_write(0x24, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), MASK_12BIT, 0)
+        self.bms_config.reg_write(0x26, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), MASK_12BIT, 0)
 
 
     def write_temperature_registers(self):
@@ -376,7 +382,7 @@ class BMSGUI:
             (self.ui.CLDischargeSCTimeoutLineEdit.text(), 0x4c)
         ]
         for value, address in current_values:
-            hex_value = self.convert_to_hex(value)
+            hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
             self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
 
     def write_pack_option_registers(self):
@@ -424,7 +430,7 @@ class BMSGUI:
             self.write_voltage_limits()
             self.write_voltage_limits_timing()
             #self.write_timers()
-            #self.write_cell_balance_registers()
+            self.write_cell_balance_registers()
             self.write_temperature_registers()
             #self.write_current_registers()
             #self.write_pack_option_registers()
