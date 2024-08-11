@@ -4,14 +4,14 @@ import logging
 class BMSConfiguration:
     
     def __init__(self):
-        # Mapping of codes to text values
+        # Mapping of codes for current limit
         self.unit_mapping = {0: "μs", 1: "ms", 2: "s", 3: "min"}
         self.doc_mapping = {0: "4mV", 1: "8mV", 2: "16mV", 3: "24mV", 4: "32mV", 5: "48mV", 6: "64mV", 7: "96mV"}
         self.coc_mapping = {0: "1mV", 1: "2mV", 2: "4mV", 3: "6mV", 4: "8mV", 5: "12mV", 6: "16mV", 7: "24mV"}
         self.dsc_mapping = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
 
         # Split the input line by commas and remove spaces
-        self.configValues = []
+        self.config_values = []
         self.ov = 0.0
         self.ov_lockout = 0.0
         self.ov_recover = 0.0
@@ -182,10 +182,10 @@ class BMSConfiguration:
         return DEFAULT_CONFIG
 
     def get_config(self):
-        return self.configValues
+        return self.config_values
 
     def update_registers(self,values):
-        self.configValues = values
+        self.config_values = values
         logging.info(f"Updating registers with values: {values}")
 
         try:
@@ -527,16 +527,16 @@ class BMSConfiguration:
         Returns:
         - int: The new value of the register.
         """
-        byte0 = int(self.configValues[address])
-        byte1 = int(self.configValues[address+1] ) 
+        byte0 = int(self.config_values[address])
+        byte1 = int(self.config_values[address+1] ) 
         
         tmp = (byte1 << 8)|  byte0
 
         tmp = (tmp << shift) & ~mask
         tmp = tmp | (value << shift)
 
-        self.configValues[address] = tmp & 0xff
-        self.configValues[address + 1] = (tmp>> 8 ) & 0xff
+        self.config_values[address] = tmp & 0xff
+        self.config_values[address + 1] = (tmp>> 8 ) & 0xff
 
     def calculate_voltage(self, values, address):
         """
