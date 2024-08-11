@@ -373,17 +373,55 @@ class BMSGUI:
             self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
 
     def write_current_registers(self):
-        current_values = [
-            (self.ui.CLDischargeOCVoltageCombo.currentText(), 0x42),
-            (self.ui.CLChargeOCVoltageCombo.currentText(), 0x44),
-            (self.ui.CLDischargeSCVoltageCombo.currentText(), 0x46),
-            (self.ui.CLDischargeOCTimeoutLineEdit.text(), 0x48),
-            (self.ui.CLChargeOCTimeoutLineEdit.text(), 0x4a),
-            (self.ui.CLDischargeSCTimeoutLineEdit.text(), 0x4c)
+        # Helper function to pack values into the register
+        def pack_register_value(timeout, unit, voltage):
+            # timeout is 10 bits (0-9), unit is 2 bits (10-11), voltage is 3 bits (12-14)
+            return (timeout & 0x3FF) | ((unit & 0x3) << 10) | ((voltage & 0x7) << 12)
+
+        # Define the mappings for the different selections
+        register_mappings = [
+            {
+                'timeout_edit': self.ui.CLDischargeOCTimeoutLineEdit,
+                'unit_combo': self.ui.CLDischargeOCTimeoutCombo,
+                'voltage_combo': self.ui.CLDischargeOCVoltageCombo,
+                'address': 0x16,
+                'voltage_mapping': self.bms_config.doc_mapping
+            },
+            {
+                'timeout_edit': self.ui.CLChargeOCTimeoutLineEdit,
+                'unit_combo': self.ui.CLChargeOCTimeoutCombo,
+                'voltage_combo': self.ui.CLChargeOCVoltageCombo,
+                'address': 0x18,
+                'voltage_mapping': self.bms_config.coc_mapping
+            },
+            {
+                'timeout_edit': self.ui.CLDischargeSCTimeoutLineEdit,
+                'unit_combo': self.ui.CLDischargeSCTimeoutCombo,
+                'voltage_combo': self.ui.CLDischargeSCVoltageCombo,
+                'address': 0x1A,
+                'voltage_mapping': self.bms_config.dsc_mapping
+            }
         ]
-        for value, address in current_values:
-            hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+
+        # Iterate over each mapping and write the corresponding register value
+        for reg in register_mappings:
+            # Extract the timeout value
+            timeout_value = int(reg['timeout_edit'].text())
+
+            # Find the corresponding unit key from the unit mapping
+            selected_unit = reg['unit_combo'].currentText()
+            unit_key = next(key for key, value in self.bms_config.unit_mapping.items() if value == selected_unit)
+
+            # Find the corresponding voltage key from the voltage mapping
+            selected_voltage = reg['voltage_combo'].currentText()
+            voltage_key = next(key for key, value in reg['voltage_mapping'].items() if value == selected_voltage)
+            print( f"timeout_value: {timeout_value}, unit_key: {unit_key}, voltage_key: {voltage_key}")
+            # Pack the timeout, unit, and voltage into the register value
+            packed_value = pack_register_value(timeout_value, unit_key, voltage_key)
+
+            # Write the packed value to the register
+            self.bms_config.reg_write(reg['address'], packed_value, MASK_15BIT, 0x00)
+
 
     def write_pack_option_registers(self):
         pack_options = [
@@ -432,7 +470,7 @@ class BMSGUI:
             #self.write_timers()
             self.write_cell_balance_registers()
             self.write_temperature_registers()
-            #self.write_current_registers()
+            self.write_current_registers()
             #self.write_pack_option_registers()
 
 
