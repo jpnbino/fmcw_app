@@ -238,13 +238,14 @@ class BMSConfiguration:
             (0x46,9, MASK_2BIT): 'sleep_delay_unit',
             (0x46,11, MASK_5BIT): 'timer_wdt',
             (0x48,0, MASK_4BIT): 'timer_idle_doze',
-            (0x48,4, MASK_8BIT): 'timer_sleep',
-            (0x48,8, MASK_8BIT): 'cell_config'
+            (0x48,4, MASK_4BIT): 'timer_sleep',
          }
         for (addr, bit_shift, bit_mask),attr in timing_mapping.items():
             try:
                 value = self.read_reg_val(values, addr, bit_shift, bit_mask)
-                setattr(self,attr, value)
+                if attr == 'timer_sleep':
+                    value *= 16
+                setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating timing: {e}")
 
@@ -514,7 +515,7 @@ class BMSConfiguration:
     # Assuming the values get 16bits, therefore, operations are over two consecutives addresses 
     # example:
 
-    def reg_write( self, address, value , mask, shift):
+    def reg_write(self, address, value, mask=0xFFFF, shift=0):
         """
         Write a value to a register based on the specified address, mask, and shift.
 
@@ -528,15 +529,52 @@ class BMSConfiguration:
         - int: The new value of the register.
         """
         byte0 = int(self.config_values[address])
-        byte1 = int(self.config_values[address+1] ) 
+        byte1 = int(self.config_values[address + 1])
         
-        tmp = (byte1 << 8)|  byte0
+        # Combine the two bytes into a 16-bit value
+        tmp = (byte1 << 8) | byte0
 
-        tmp = (tmp << shift) & ~mask
-        tmp = tmp | (value << shift)
+        # Clear the bits in the register that correspond to the mask
+        tmp &= ~(mask << shift)
 
+        # Apply the mask and shift to the new value and combine with the cleared register value
+        tmp |= (value & mask) << shift
+
+        # Write the result back to the register
         self.config_values[address] = tmp & 0xff
-        self.config_values[address + 1] = (tmp>> 8 ) & 0xff
+        self.config_values[address + 1] = (tmp >> 8) & 0xff
+
+        return tmp
+
+    def reg_read(self, address, mask=None, shift=0):
+        """
+        Read a value from a register based on the specified address. 
+        If a mask and shift are provided, return the masked and shifted value.
+        Otherwise, return the entire register value.
+
+        Parameters:
+        - address (int): The address of the register.
+        - mask (int, optional): The mask to apply to extract a specific value. Defaults to None.
+        - shift (int, optional): The shift to apply after masking. Defaults to 0.
+
+        Returns:
+        - int: The entire register value or the extracted value if mask and shift are provided.
+        """
+        # Read the two bytes from the register
+        byte0 = int(self.config_values[address])
+        byte1 = int(self.config_values[address + 1])
+
+        # Combine the two bytes into a 16-bit value
+        register_value = (byte1 << 8) | byte0
+
+        # If no mask is provided, return the entire register value
+        if mask is None:
+            return register_value
+
+        # If a mask is provided, apply the mask and shift to extract the desired value
+        value = (register_value & mask) >> shift
+
+        return value
 
     def calculate_voltage(self, values, address):
         """

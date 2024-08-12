@@ -67,7 +67,7 @@ class BMSGUI:
         timer_fields = {
             self.ui.timerIdleDozeLineEdit: self.bms_config.timer_idle_doze,
             self.ui.timerSleepLineEdit: self.bms_config.timer_sleep,
-            self.ui.timerWDTLineEdit: self.bms_config.timer_idle_doze
+            self.ui.timerWDTLineEdit: self.bms_config.timer_wdt
         }
         for line_edit, value in timer_fields.items():
             line_edit.setText(f"{int(value)}")
@@ -309,19 +309,23 @@ class BMSGUI:
         self.bms_config.reg_write(0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)
 
 
-    def convert_time_to_hex(self, time):
+    def convert_time_to_hex(self, time, escaling):
         """Convert time to hex value."""
-        return int(time)
+        return int(time)>> escaling
     
     def write_timers(self):
+
         timer_values = [
-            (self.ui.timerIdleDozeLineEdit.text(), 0x48, 0 , MASK_4BIT),
-            (self.ui.timerSleepLineEdit.text(), 0x48, 4, MASK_8BIT),
-            (self.ui.timerWDTLineEdit.text(), 0x48, 8, MASK_8BIT)
+            (self.ui.timerWDTLineEdit.text(), 0x46, MASK_5BIT, 11, 0),
+            (self.ui.timerIdleDozeLineEdit.text(), 0x48, MASK_4BIT, 0, 0),
+            (self.ui.timerSleepLineEdit.text(), 0x48, MASK_4BIT, 4, 4)
         ]
-        for value, address, shift, mask in timer_values:
-            hex_value = self.convert_time_to_hex(value)
-            self.bms_config.reg_write(address, hex_value, mask, shift )
+        for value, address, mask, shift, scaling in timer_values:
+            hex_value = self.convert_time_to_hex(value, scaling)
+            print(f"Value: {value}, Hex Value: {hex_value}")
+            self.bms_config.reg_write(address, hex_value, mask, shift)
+
+
 
     def write_cell_balance_registers(self):
         cell_balance_values = [
@@ -467,7 +471,7 @@ class BMSGUI:
 
             self.write_voltage_limits()
             self.write_voltage_limits_timing()
-            #self.write_timers()
+            self.write_timers()
             self.write_cell_balance_registers()
             self.write_temperature_registers()
             self.write_current_registers()
