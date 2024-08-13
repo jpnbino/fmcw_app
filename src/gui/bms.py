@@ -1,7 +1,7 @@
 from PySide6.QtGui import QColor
 from bms.constants import *
 from serialbsp.protocol import *
-
+from bms.configuration import BMSConfiguration
 import logging
 
 class BMSGUI:
@@ -429,20 +429,20 @@ class BMSGUI:
 
     def write_pack_option_registers(self):
         pack_options = [
-            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4e),
-            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4e),
-            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4e),
-            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4e),
-            (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4e),
-            (self.ui.poCascadeCheckBox.isChecked(), 0x4e),
-            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4e),
-            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4e),
-            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4e),
-            (self.ui.tGainCheckBox.isChecked(), 0x4e)
+            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, MASK_1BIT, 5), 
+            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, MASK_1BIT, 7),    
+            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, MASK_1BIT, 0), 
+            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4B, MASK_1BIT, 3),        
+            (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4A, MASK_1BIT, 1),
+            #(self.ui.poCascadeCheckBox.isChecked(), 0x4B, MASK_1BIT, 3),          
+            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 6),      
+            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 7),   
+            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4B, MASK_1BIT, 0),         
+            (self.ui.tGainCheckBox.isChecked(), 0x4A, MASK_1BIT, 4)               
         ]
-        for value, address in pack_options:
-            hex_value = self.convert_to_hex(value)
-            self.bms_config.reg_write(address, hex_value, MASK_12BIT, 0x00)
+        for value, address, mask, shift in pack_options:
+            self.bms_config.reg_write(address, int(value), mask, shift)
+
 
 
     def send_serial_command(self, command, data):
@@ -475,7 +475,7 @@ class BMSGUI:
             self.write_cell_balance_registers()
             self.write_temperature_registers()
             self.write_current_registers()
-            #self.write_pack_option_registers()
+            self.write_pack_option_registers()
 
 
             print("exit write_bms_config:\n", register_cfg)

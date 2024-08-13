@@ -528,6 +528,10 @@ class BMSConfiguration:
         Returns:
         - int: The new value of the register.
         """
+
+        if address >= ADDR_RAM_BEGIN:
+            address = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
+
         byte0 = int(self.config_values[address])
         byte1 = int(self.config_values[address + 1])
         
