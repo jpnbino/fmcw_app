@@ -1,3 +1,5 @@
+import serial
+
 START_BYTE = 0xAA
 
 CMD_READ_ALL_MEMORY = 0x01
@@ -8,6 +10,7 @@ CMD_READ_RAM = 0x04
 class SerialProtocol:
     def __init__(self, serial_setup):
         self.serial_setup = serial_setup
+        self.serial_setup.ser.timeout = 1  # Set a timeout of 1 second
 
     def calculate_checksum(self, data):
         checksum = 0
@@ -25,25 +28,32 @@ class SerialProtocol:
         ser = self.serial_setup.ser
         while True:
             byte = ser.read(1)
-            if byte and byte[0] == START_BYTE:
+            if not byte:
+                print("Timeout waiting for start byte")
+                return None
+            if byte[0] == START_BYTE:
                 break
 
         cmd = ser.read(1)
         if not cmd:
+            print("Timeout waiting for command byte")
             return None
         cmd = cmd[0]
 
         data_length = ser.read(1)
         if not data_length:
+            print("Timeout waiting for data length byte")
             return None
         data_length = data_length[0]
 
         data = ser.read(data_length)
         if len(data) != data_length:
+            print("Timeout or incomplete data received")
             return None
 
         checksum = ser.read(1)
         if not checksum:
+            print("Timeout waiting for checksum byte")
             return None
         checksum = checksum[0]
 
