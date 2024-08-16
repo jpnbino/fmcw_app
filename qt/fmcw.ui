@@ -74,7 +74,7 @@ QMenuBar::item:pressed {
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_main">
     <property name="sizePolicy">
@@ -730,7 +730,7 @@ QMenuBar::item:pressed {
        <family>Roboto</family>
       </font>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -746,8 +746,8 @@ QMenuBar::item:pressed {
          <bool>true</bool>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>9</horstretch>
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
@@ -769,9 +769,9 @@ QMenuBar::item:pressed {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="writePackButton">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -791,31 +791,6 @@ QMenuBar::item:pressed {
         </property>
         <property name="checkable">
          <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="writeEepromButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <family>Roboto</family>
-         </font>
-        </property>
-        <property name="text">
-         <string>Write 
- EEPROM</string>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
         </property>
        </widget>
       </item>
@@ -2428,54 +2403,6 @@ QMenuBar::item:pressed {
         <property name="horizontalSpacing">
          <number>10</number>
         </property>
-        <item row="5" column="0">
-         <widget class="QCheckBox" name="poCascadeCheckBox">
-          <property name="font">
-           <font>
-            <family>Roboto</family>
-           </font>
-          </property>
-          <property name="text">
-           <string>Cascade two ISL94203</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="poT2MonitorsFETTempCheckBox">
-          <property name="font">
-           <font>
-            <family>Roboto</family>
-           </font>
-          </property>
-          <property name="text">
-           <string>xT2 Monitors FET Temp</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QCheckBox" name="poEnableUVLOCheckBox">
-          <property name="font">
-           <font>
-            <family>Roboto</family>
-           </font>
-          </property>
-          <property name="text">
-           <string>Enable UVLO Power Down</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="poEnableCELLFpsdCheckBox">
-          <property name="font">
-           <font>
-            <family>Roboto</family>
-           </font>
-          </property>
-          <property name="text">
-           <string>Enable CELLF PSD Action</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="0">
          <widget class="QCheckBox" name="poEnableOpenWireScanCheckBox">
           <property name="font">
@@ -2497,6 +2424,42 @@ QMenuBar::item:pressed {
           </property>
           <property name="text">
            <string>Enable Open Wire PSD</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="poT2MonitorsFETTempCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>xT2 Monitors FET Temp</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="poEnableCELLFpsdCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Enable CELLF PSD Action</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="poEnableUVLOCheckBox">
+          <property name="font">
+           <font>
+            <family>Roboto</family>
+           </font>
+          </property>
+          <property name="text">
+           <string>Enable UVLO Power Down</string>
           </property>
          </widget>
         </item>
@@ -4814,7 +4777,7 @@ border-radius: 10px;
       <rect>
        <x>10</x>
        <y>720</y>
-       <width>251</width>
+       <width>231</width>
        <height>81</height>
       </rect>
      </property>
@@ -4902,7 +4865,7 @@ border-radius: 10px;
      <x>0</x>
      <y>0</y>
      <width>1126</width>
-     <height>17</height>
+     <height>18</height>
     </rect>
    </property>
    <property name="font">

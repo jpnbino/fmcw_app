@@ -11,7 +11,7 @@ class BMSGUI:
 
         # Connect button click to Send Serial Command
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
-        self.ui.writeEepromButton.clicked.connect(self.write_bms_config)  
+        self.ui.writePackButton.clicked.connect(self.write_bms_config)  
 
     def ui_update_fields(self):
         """Update the UI fields with the BMS configuration values."""
