@@ -66,3 +66,26 @@ DEFAULT_CONFIG = [
     0x8F, 0x0A, 0x92, 0x0A, 0x7B, 0x02, 0xD2, 0x04, 0xD2, 0x04,
     0x68, 0x03, 0x09, 0x0B, 0x2A, 0x00
 ]
+
+UNIT_MAPPING = {0: "μs", 1: "ms", 2: "s", 3: "min"}
+DOC_MAPPING = {0: "4mV", 1: "8mV", 2: "16mV", 3: "24mV", 4: "32mV", 5: "48mV", 6: "64mV", 7: "96mV"}
+COC_MAPPING = {0: "1mV", 1: "2mV", 2: "4mV", 3: "6mV", 4: "8mV", 5: "12mV", 6: "16mV", 7: "24mV"}
+DSC_MAPPING = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
+
+# Create a dictionary mapping binary patterns to connected cell counts
+CELL_CONFIG_MAPPING = {
+    0b10000011: 3, #3 cells
+    0b11000011: 4, #4 cells
+    0b11000111: 5, #5 cells
+    0b11100111: 6, #6 cells
+    0b11110111: 7, #7 cells
+    0b11111111: 8  #8 cells
+    }
+
+#Create a dictionary mapping binary patterns current gains
+CURRENT_GAIN_MAPPING = {
+    0b00: 50,
+    0b01: 5,
+    0b10: 500,
+    0b11: 500
+    }

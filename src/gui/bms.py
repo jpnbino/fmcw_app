@@ -1,7 +1,6 @@
 from PySide6.QtGui import QColor
 from bms.constants import *
 from serialbsp.protocol import *
-from bms.configuration import BMSConfiguration
 import logging
 
 class BMSGUI:
@@ -60,7 +59,7 @@ class BMSGUI:
             (self.ui.openWireTimingCombo, self.bms_config.open_wire_timing_unit)
         ]
         for combo, value in combo_boxes:
-            combo.setCurrentText(self.bms_config.unit_mapping.get(int(value), 'Unknown'))
+            combo.setCurrentText(UNIT_MAPPING.get(int(value), 'Unknown'))
 
     def ui_update_timer_fields(self):
         """Update timer-related fields."""
@@ -74,7 +73,7 @@ class BMSGUI:
 
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
-        self.ui.CellConfigurationLineEdit.setText(f"{int(self.bms_config.cell_config_code[self.bms_config.cell_config])}")
+        self.ui.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.bms_config.cell_config])}")
         
         cell_balance_limits = {
             self.ui.CBUpperLimLineEdit: self.bms_config.cb_upper_lim,
@@ -91,8 +90,8 @@ class BMSGUI:
 
         self.ui.CBOnTimeLineEdit.setText(f"{int(self.bms_config.cb_on_time)}")
         self.ui.CBOffTimeLineEdit.setText(f"{int(self.bms_config.cb_off_time)}")
-        self.ui.CBOnTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
-        self.ui.CBOffTimeUnitLineEdit.setCurrentText(self.bms_config.unit_mapping.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
+        self.ui.CBOnTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
+        self.ui.CBOffTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
 
     def ui_update_temperature_limits(self):
         """Update temperature limits fields."""
@@ -114,12 +113,12 @@ class BMSGUI:
     def ui_update_current_limits(self):
         """Update current limits fields."""
         current_limits = {
-            self.ui.CLDischargeOCVoltageCombo: (self.bms_config.disch_oc_voltage, self.bms_config.doc_mapping),
-            self.ui.CLChargeOCVoltageCombo: (self.bms_config.charge_oc_voltage, self.bms_config.coc_mapping),
-            self.ui.CLDischargeSCVoltageCombo: (self.bms_config.disch_sc_voltage, self.bms_config.dsc_mapping),
-            self.ui.CLDischargeOCTimeoutCombo: (self.bms_config.disch_oc_timeout_unit, self.bms_config.unit_mapping),
-            self.ui.CLChargeOCTimeoutCombo: (self.bms_config.charge_oc_timeout_unit, self.bms_config.unit_mapping),
-            self.ui.CLDischargeSCTimeoutCombo: (self.bms_config.disch_sc_timeout_unit, self.bms_config.unit_mapping)
+            self.ui.CLDischargeOCVoltageCombo: (self.bms_config.disch_oc_voltage, DOC_MAPPING),
+            self.ui.CLChargeOCVoltageCombo: (self.bms_config.charge_oc_voltage, COC_MAPPING),
+            self.ui.CLDischargeSCVoltageCombo: (self.bms_config.disch_sc_voltage, DSC_MAPPING),
+            self.ui.CLDischargeOCTimeoutCombo: (self.bms_config.disch_oc_timeout_unit, UNIT_MAPPING),
+            self.ui.CLChargeOCTimeoutCombo: (self.bms_config.charge_oc_timeout_unit, UNIT_MAPPING),
+            self.ui.CLDischargeSCTimeoutCombo: (self.bms_config.disch_sc_timeout_unit, UNIT_MAPPING)
         }
         for combo, (value, mapping) in current_limits.items():
             combo.setCurrentText(mapping.get(int(value), 'Unknown'))
@@ -270,7 +269,7 @@ class BMSGUI:
     def get_unit_from_combo(self, combo):
         """Read the combobox and return the unit chosen by user."""
         selected_text = combo.currentText()
-        unit = next((code for code, text in self.bms_config.unit_mapping.items() if text == selected_text), None)
+        unit = next((code for code, text in UNIT_MAPPING.items() if text == selected_text), None)
         return unit
          
     def write_voltage_limits(self):
@@ -389,21 +388,21 @@ class BMSGUI:
                 'unit_combo': self.ui.CLDischargeOCTimeoutCombo,
                 'voltage_combo': self.ui.CLDischargeOCVoltageCombo,
                 'address': 0x16,
-                'voltage_mapping': self.bms_config.doc_mapping
+                'voltage_mapping': DOC_MAPPING
             },
             {
                 'timeout_edit': self.ui.CLChargeOCTimeoutLineEdit,
                 'unit_combo': self.ui.CLChargeOCTimeoutCombo,
                 'voltage_combo': self.ui.CLChargeOCVoltageCombo,
                 'address': 0x18,
-                'voltage_mapping': self.bms_config.coc_mapping
+                'voltage_mapping': COC_MAPPING
             },
             {
                 'timeout_edit': self.ui.CLDischargeSCTimeoutLineEdit,
                 'unit_combo': self.ui.CLDischargeSCTimeoutCombo,
                 'voltage_combo': self.ui.CLDischargeSCVoltageCombo,
                 'address': 0x1A,
-                'voltage_mapping': self.bms_config.dsc_mapping
+                'voltage_mapping': DSC_MAPPING
             }
         ]
 
@@ -414,7 +413,7 @@ class BMSGUI:
 
             # Find the corresponding unit key from the unit mapping
             selected_unit = reg['unit_combo'].currentText()
-            unit_key = next(key for key, value in self.bms_config.unit_mapping.items() if value == selected_unit)
+            unit_key = next(key for key, value in UNIT_MAPPING.items() if value == selected_unit)
 
             # Find the corresponding voltage key from the voltage mapping
             selected_voltage = reg['voltage_combo'].currentText()

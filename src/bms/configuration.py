@@ -4,11 +4,6 @@ import logging
 class BMSConfiguration:
     
     def __init__(self):
-        # Mapping of codes for current limit
-        self.unit_mapping = {0: "μs", 1: "ms", 2: "s", 3: "min"}
-        self.doc_mapping = {0: "4mV", 1: "8mV", 2: "16mV", 3: "24mV", 4: "32mV", 5: "48mV", 6: "64mV", 7: "96mV"}
-        self.coc_mapping = {0: "1mV", 1: "2mV", 2: "4mV", 3: "6mV", 4: "8mV", 5: "12mV", 6: "16mV", 7: "24mV"}
-        self.dsc_mapping = {0: "16mV", 1: "24mV", 2: "32mV", 3: "48mV", 4: "64mV", 5: "96mV", 6: "128mV", 7: "256mV"}
 
         # Split the input line by commas and remove spaces
         self.config_values = []
@@ -42,15 +37,6 @@ class BMSConfiguration:
         self.timer_wdt = 0
         
         #Cell Configuration
-        # Create a dictionary mapping binary patterns to connected cell counts
-        self.cell_config_code = {
-            0b10000011: 3,
-            0b11000011: 4,
-            0b11000111: 5,
-            0b11100111: 6,
-            0b11110111: 7,
-            0b11111111: 8
-            }
         self.cell_config = 0
 
         #Cell Balance Limits
@@ -146,15 +132,7 @@ class BMSConfiguration:
         self.bit_in_doze = False
         self.bit_in_sleep = False
 
-        #Current calculation
-        #Create a dictionary mapping binary patterns current gains
-        self.current_gain_code = {
-            0b00: 50,
-            0b01: 5,
-            0b10: 500,
-            0b11: 500
-            }
-        
+        #Current calculation      
         self.v_sense = 0.0 #voltage over Sense Resistor
         self.i_pack = 0.0 #current over Sense Resistor (Pack current)
         self.i_gain = 0
@@ -375,7 +353,7 @@ class BMSConfiguration:
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = self.current_gain_code[self.read_reg_val(values, 0x85, 4, MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.read_reg_val(values, 0x85, 4, MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
