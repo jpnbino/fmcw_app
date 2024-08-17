@@ -66,12 +66,14 @@ class BMSGUI:
     def ui_update_timer_fields(self):
         """Update timer-related fields."""
         timer_fields = {
-            self.ui.timerIdleDozeLineEdit: self.bms_config.timer_idle_doze,
-            self.ui.timerSleepLineEdit: self.bms_config.timer_sleep,
-            self.ui.timerWDTLineEdit: self.bms_config.timer_wdt
+            self.ui.timerIdleDozeCombo: self.bms_config.timer_idle_doze,
+            self.ui.timerSleepCombo: self.bms_config.timer_sleep,
         }
         for line_edit, value in timer_fields.items():
-            line_edit.setText(f"{int(value)}")
+            line_edit.setCurrentText(f"{int(value)}")
+
+        wdt_line_edit = self.ui.timerWDTLineEdit
+        wdt_line_edit.setText(f"{int(self.bms_config.timer_wdt)}")
 
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
@@ -317,8 +319,8 @@ class BMSGUI:
 
         timer_values = [
             (self.ui.timerWDTLineEdit.text(), 0x46, MASK_5BIT, 11, 0),
-            (self.ui.timerIdleDozeLineEdit.text(), 0x48, MASK_4BIT, 0, 0),
-            (self.ui.timerSleepLineEdit.text(), 0x48, MASK_4BIT, 4, 4)
+            (self.ui.timerIdleDozeCombo.currentText(), 0x48, MASK_4BIT, 0, 0),
+            (self.ui.timerSleepCombo.currentText(), 0x48, MASK_4BIT, 4, 4)
         ]
         for value, address, mask, shift, scaling in timer_values:
             hex_value = self.convert_time_to_hex(value, scaling)
