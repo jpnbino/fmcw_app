@@ -43,6 +43,7 @@ def main():
         print(f"Font file not found at: {font_path}")
 
     try:
+        app.setStyle("Fusion")
         fmcw_app = FMCWApplication(UI_FILE_PATH)
         fmcw_app.show()
         sys.exit(app.exec())
