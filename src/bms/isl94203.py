@@ -3,7 +3,7 @@ from bms.constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
 
 class ISL94203:
     
-    config_values = [0] * len(DEFAULT_CONFIG)
+    registers = [0] * len(DEFAULT_CONFIG)
 
     def __init__(self):
         pass
@@ -28,8 +28,8 @@ class ISL94203:
         if address >= ADDR_RAM_BEGIN:
             address = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
-        byte0 = int(self.config_values[address])
-        byte1 = int(self.config_values[address + 1])
+        byte0 = int(self.registers[address])
+        byte1 = int(self.registers[address + 1])
         
         # Combine the two bytes into a 16-bit value
         tmp = (byte1 << 8) | byte0
@@ -41,8 +41,8 @@ class ISL94203:
         tmp |= (value & mask) << shift
 
         # Write the result back to the register
-        self.config_values[address] = tmp & 0xff
-        self.config_values[address + 1] = (tmp >> 8) & 0xff
+        self.registers[address] = tmp & 0xff
+        self.registers[address + 1] = (tmp >> 8) & 0xff
 
         return tmp
 
@@ -61,8 +61,8 @@ class ISL94203:
         - int: The entire register value or the extracted value if mask and shift are provided.
         """
         # Read the two bytes from the register
-        byte0 = int(self.config_values[address])
-        byte1 = int(self.config_values[address + 1])
+        byte0 = int(self.registers[address])
+        byte1 = int(self.registers[address + 1])
 
         # Combine the two bytes into a 16-bit value
         register_value = (byte1 << 8) | byte0
@@ -80,4 +80,4 @@ class ISL94203:
         return DEFAULT_CONFIG
 
     def get_config(self):
-        return self.config_values
+        return self.registers

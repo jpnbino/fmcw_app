@@ -463,7 +463,7 @@ class BMSGUI:
     def write_bms_config(self):
 
         if self.ui.serial_setup and self.ui.serial_setup.is_open():
-            register_cfg = ISL94203.config_values
+            register_cfg = ISL94203.registers
   
             self.write_voltage_limits()
             self.write_voltage_limits_timing()

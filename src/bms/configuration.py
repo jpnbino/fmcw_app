@@ -157,7 +157,7 @@ class BMSConfiguration:
         self.vrgo = 0        
 
     def update_registers(self,values):
-        ISL94203.config_values = values
+        ISL94203.registers = values
         logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in values)}")
 
         try:
