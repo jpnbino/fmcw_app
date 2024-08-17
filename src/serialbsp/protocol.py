@@ -65,16 +65,17 @@ class SerialProtocol:
         return (cmd, data)
 
     def process_received_data(self, cmd, data):
+        hex_data = ' '.join(f'{value:02X}' for value in data)
         if cmd == CMD_READ_ALL_MEMORY:
-            print(f"Memory Data: {data}")
+            print(f"Memory Data:\n {hex_data}")
         elif cmd == CMD_READ_EEPROM:
-            print(f"EEPROM Data: {data}")
+            print(f"EEPROM Data:\n {hex_data}")
         elif cmd == CMD_WRITE_EEPROM:
-            print(f"Write EEPROM Acknowledgment: {data}")
+            print(f"Write EEPROM Acknowledgment:\n {hex_data}")
         elif cmd == CMD_READ_RAM:
-            print(f"RAM Data: {data}")
+            print(f"RAM Data:\n {hex_data}")
         else:
-            print(f"Unknown Command {cmd} with Data: {data}")
+            print(f"Unknown Command {cmd} with Data:\n {hex_data}")
 
     def run(self):
         self.send_command(CMD_READ_ALL_MEMORY, [])
