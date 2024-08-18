@@ -135,6 +135,13 @@ class BMSGUI:
         for line_edit, value in current_fields.items():
             line_edit.setText(f"{int(value)}")
 
+        current_detect_fields = {
+            self.ui.chargeDetectPulseCombo: self.bms_config.charge_detect_pulse_width,	
+            self.ui.loadDetectPulseCombo: self.bms_config.load_detect_pulse_width
+        }
+        for combo, value in current_detect_fields.items():
+            combo.setCurrentText(f"{int(value)}")
+            
     def ui_update_pack_option(self):
         """Update pack option fields."""
         options = {
@@ -426,6 +433,14 @@ class BMSGUI:
 
             # Write the packed value to the register
             self.isl94203.reg_write(reg['address'], packed_value, MASK_15BIT, 0x00)
+
+        # Extract the charge and load detect pulse widths
+        charge_detect_pulse = int(self.ui.chargeDetectPulseCombo.currentText())
+        load_detect_pulse = int(self.ui.loadDetectPulseCombo.currentText())
+
+        # Write the charge and load detect pulse widths to the registers
+        self.isl94203.reg_write(0x00, charge_detect_pulse, MASK_4BIT, 12)
+        self.isl94203.reg_write(0x04, load_detect_pulse, MASK_4BIT, 12)
 
 
     def write_pack_option_registers(self):

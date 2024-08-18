@@ -308,7 +308,9 @@ class BMSConfiguration:
             (0x18, 10, MASK_2BIT): 'charge_oc_timeout_unit',
             (0x1A, 12, MASK_3BIT): 'disch_sc_voltage',
             (0x1A, 0, MASK_10BIT): 'disch_sc_timeout',
-            (0x1A, 10, MASK_2BIT): 'disch_sc_timeout_unit'
+            (0x1A, 10, MASK_2BIT): 'disch_sc_timeout_unit',
+            (0x00, 12, MASK_4BIT): 'charge_detect_pulse_width',
+            (0x04, 12, MASK_4BIT): 'load_detect_pulse_width'
         }
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
