@@ -2,7 +2,6 @@ from bms.constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
 
 
 class ISL94203:
-    
     registers = [0] * len(DEFAULT_CONFIG)
 
     def __init__(self):
@@ -30,7 +29,7 @@ class ISL94203:
 
         byte0 = int(self.registers[address])
         byte1 = int(self.registers[address + 1])
-        
+
         # Combine the two bytes into a 16-bit value
         tmp = (byte1 << 8) | byte0
 

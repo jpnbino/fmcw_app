@@ -4,6 +4,7 @@ from bms.isl94203 import ISL94203
 from serialbsp.protocol import *
 import logging
 
+
 class BMSGUI:
     def __init__(self, ui, bms_config):
         self.ui = ui
@@ -12,7 +13,7 @@ class BMSGUI:
 
         # Connect button click to Send Serial Command
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
-        self.ui.writePackButton.clicked.connect(self.write_bms_config)  
+        self.ui.writePackButton.clicked.connect(self.write_bms_config)
 
     def ui_update_fields(self):
         """Update the UI fields with the BMS configuration values."""
@@ -78,7 +79,7 @@ class BMSGUI:
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
         self.ui.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.bms_config.cell_config])}")
-        
+
         cell_balance_limits = {
             self.ui.CBUpperLimLineEdit: self.bms_config.cb_upper_lim,
             self.ui.CBLowerLimLineEdit: self.bms_config.cb_lower_lim,
@@ -90,7 +91,7 @@ class BMSGUI:
             self.ui.CBUnderTempLineEdit: self.bms_config.cb_under_temp,
         }
         for line_edit, value in cell_balance_limits.items():
-            line_edit.setText(f"{value:.2f}")    
+            line_edit.setText(f"{value:.2f}")
 
         self.ui.CBOnTimeLineEdit.setText(f"{int(self.bms_config.cb_on_time)}")
         self.ui.CBOffTimeLineEdit.setText(f"{int(self.bms_config.cb_off_time)}")
@@ -112,7 +113,7 @@ class BMSGUI:
             self.ui.TLInternalOTRecoverLineEdit: self.bms_config.tl_internal_ot_recover
         }
         for line_edit, value in temp_limits.items():
-            line_edit.setText(f"{value:.2f}") 
+            line_edit.setText(f"{value:.2f}")
 
     def ui_update_current_limits(self):
         """Update current limits fields."""
@@ -136,12 +137,12 @@ class BMSGUI:
             line_edit.setText(f"{int(value)}")
 
         current_detect_fields = {
-            self.ui.chargeDetectPulseCombo: self.bms_config.charge_detect_pulse_width,	
+            self.ui.chargeDetectPulseCombo: self.bms_config.charge_detect_pulse_width,
             self.ui.loadDetectPulseCombo: self.bms_config.load_detect_pulse_width
         }
         for combo, value in current_detect_fields.items():
             combo.setCurrentText(f"{int(value)}")
-            
+
     def ui_update_pack_option(self):
         """Update pack option fields."""
         options = {
@@ -154,13 +155,13 @@ class BMSGUI:
             self.ui.CBDuringDischargeCheckBox: self.bms_config.bit_cb_during_discharge,
             self.ui.CBDuringEOCCheckBox: self.bms_config.bit_cb_during_eoc,
             self.ui.tGainCheckBox: self.bms_config.bit_tgain
-            }
+        }
         for checkbox, value in options.items():
             checkbox.setChecked(value)
 
     def ui_update_ram_values(self):
-        #RAM
-        #Voltage values: Cells, Min, Max, Batt, Vrgo
+        # RAM
+        # Voltage values: Cells, Min, Max, Batt, Vrgo
         voltage_fields = [
             (self.ui.vcell1LineEdit, self.bms_config.vcell1),
             (self.ui.vcell2LineEdit, self.bms_config.vcell2),
@@ -178,32 +179,31 @@ class BMSGUI:
         for line_edit, value in voltage_fields:
             line_edit.setText(f"{value:.2f}")
 
-
-        #Temperature      
+        # Temperature
         gain = 0
-        if(self.bms_config.bit_tgain):
+        if (self.bms_config.bit_tgain):
             gain = 1
             self.ui.TemperatureGainLabel.setText("Now the gain is 1x")
         else:
             gain = 2
             self.ui.TemperatureGainLabel.setText("Now the gain is 2x")
-            
+
         self.ui.tempITVoltaqeLineEdit.setText(f"{self.bms_config.temp_internal:.2f}")
-        internal_temp_celsius = ((self.bms_config.temp_internal *1000)/(gain*0.92635)) - 273.15
+        internal_temp_celsius = ((self.bms_config.temp_internal * 1000) / (gain * 0.92635)) - 273.15
         self.ui.tempITDegLineEdit.setText(f"{internal_temp_celsius:.2f}")
 
         self.ui.tempXT1VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt1:.2f}")
         self.ui.tempXT2VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt2:.2f}")
 
-        #Current
-        resistor = float(self.ui.ResistorLineEdit.text())/1000
-        current = float(self.bms_config.v_sense/resistor)
+        # Current
+        resistor = float(self.ui.ResistorLineEdit.text()) / 1000
+        current = float(self.bms_config.v_sense / resistor)
         voltage = self.bms_config.v_sense
 
         self.ui.CSGainLineEdit.setText(f"{int(self.bms_config.i_gain)}")
-        self.ui.packCurrentVLineEdit.setText(f"{voltage*1000:.4f}") #in millivolts
-        self.ui.packCurrentALineEdit.setText(f"{int(current*1000)}") # in milliamperes
-        
+        self.ui.packCurrentVLineEdit.setText(f"{voltage * 1000:.4f}")  # in millivolts
+        self.ui.packCurrentALineEdit.setText(f"{int(current * 1000)}")  # in milliamperes
+
     def ui_update_status_bits(self):
         status_mapping = {
             # address 0x80
@@ -242,19 +242,16 @@ class BMSGUI:
         for label, bit in status_mapping.items():
             self.ui_show_status_bit(label, bit)
 
-
-    def ui_show_status_bit(self, label, bit_config ):
-        if ( bit_config):
-            self.set_label_background_color ( label, QColor(0, 255, 0))
+    def ui_show_status_bit(self, label, bit_config):
+        if (bit_config):
+            self.set_label_background_color(label, QColor(0, 255, 0))
         else:
-            self.set_label_background_color ( label, QColor(255, 255, 255))
-
+            self.set_label_background_color(label, QColor(255, 255, 255))
 
     def set_label_background_color(self, label, color):
         # Set the background color using style sheet
         current_style = label.styleSheet()
         label.setStyleSheet(f"{current_style} background-color: {color.name()};")
-
 
     def convert_to_hex(self, value, config_type):
         """
@@ -275,16 +272,16 @@ class BMSGUI:
         except ValueError:
             print(f"Error converting {value} to hex.")
             return 0
-    
+
     def get_unit_from_combo(self, combo):
         """Read the combobox and return the unit chosen by user."""
         selected_text = combo.currentText()
         unit = next((code for code, text in UNIT_MAPPING.items() if text == selected_text), None)
         return unit
-         
+
     def write_voltage_limits(self):
         voltage_values = [
-            (self.ui.ovLineEdit.text(),     0x00),
+            (self.ui.ovLineEdit.text(), 0x00),
             (self.ui.ovRecoverLineEdit.text(), 0x02),
             (self.ui.underVoltageLineEdit.text(), 0x04),
             (self.ui.uvRecoverLineEdit.text(), 0x06),
@@ -304,24 +301,23 @@ class BMSGUI:
         uv_delay_timeout = int(self.ui.uvDelayTimeoutLineEdit.text())
         open_wire_sample_time = int(self.ui.openWireTimingLineEdit.text())
         sleep_delay = int(self.ui.sleepDelayLineEdit.text())
-    
+
         # Extract and shift units
         ov_delay_timeout_unit = self.get_unit_from_combo(self.ui.ovDelayTimeoutCombo) << 10
         uv_delay_timeout_unit = self.get_unit_from_combo(self.ui.uvDelayTimeoutCombo) << 10
         sleep_delay_unit = self.get_unit_from_combo(self.ui.sleepDelayUnitCombo) << 9
         open_wire_sample_time_unit = self.get_unit_from_combo(self.ui.openWireTimingCombo) << 9
-    
+
         # Combine values and units, then write to registers
         self.isl94203.reg_write(0x10, ov_delay_timeout_unit | ov_delay_timeout, MASK_12BIT, 0)
         self.isl94203.reg_write(0x12, uv_delay_timeout_unit | uv_delay_timeout, MASK_12BIT, 0)
         self.isl94203.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, MASK_10BIT, 0)
         self.isl94203.reg_write(0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)
 
-
     def convert_time_to_hex(self, time, escaling):
         """Convert time to hex value."""
-        return int(time)>> escaling
-    
+        return int(time) >> escaling
+
     def write_timers(self):
 
         timer_values = [
@@ -332,8 +328,6 @@ class BMSGUI:
         for value, address, mask, shift, scaling in timer_values:
             hex_value = self.convert_time_to_hex(value, scaling)
             self.isl94203.reg_write(address, hex_value, mask, shift)
-
-
 
     def write_cell_balance_registers(self):
         cell_balance_values = [
@@ -349,7 +343,7 @@ class BMSGUI:
             self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
 
         cell_balance_temp_values = [
-                        (self.ui.CBUnderTempLineEdit.text(), 0x28),
+            (self.ui.CBUnderTempLineEdit.text(), 0x28),
             (self.ui.CBUTRecoverLineEdit.text(), 0x2a),
             (self.ui.CBOverTempLineEdit.text(), 0x2c),
             (self.ui.CBOTRecoverLineEdit.text(), 0x2e)
@@ -357,7 +351,7 @@ class BMSGUI:
         for value, address in cell_balance_temp_values:
             hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
             self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
-            
+
         # Extract and shift units
         cb_on_time_unit = self.get_unit_from_combo(self.ui.CBOnTimeUnitLineEdit) << 10
         cb_off_time_unit = self.get_unit_from_combo(self.ui.CBOffTimeUnitLineEdit) << 10
@@ -365,7 +359,6 @@ class BMSGUI:
         # Combine values and units, then write to registers
         self.isl94203.reg_write(0x24, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), MASK_12BIT, 0)
         self.isl94203.reg_write(0x26, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), MASK_12BIT, 0)
-
 
     def write_temperature_registers(self):
         temp_values = [
@@ -442,23 +435,20 @@ class BMSGUI:
         self.isl94203.reg_write(0x00, charge_detect_pulse, MASK_4BIT, 12)
         self.isl94203.reg_write(0x04, load_detect_pulse, MASK_4BIT, 12)
 
-
     def write_pack_option_registers(self):
         pack_options = [
-            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, MASK_1BIT, 5), 
-            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, MASK_1BIT, 7),    
-            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, MASK_1BIT, 0), 
-            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4B, MASK_1BIT, 3),        
+            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, MASK_1BIT, 5),
+            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, MASK_1BIT, 7),
+            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, MASK_1BIT, 0),
+            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4B, MASK_1BIT, 3),
             (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4A, MASK_1BIT, 1),
-            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 6),      
-            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 7),   
-            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4B, MASK_1BIT, 0),         
-            (self.ui.tGainCheckBox.isChecked(), 0x4A, MASK_1BIT, 4)               
+            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 6),
+            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 7),
+            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4B, MASK_1BIT, 0),
+            (self.ui.tGainCheckBox.isChecked(), 0x4A, MASK_1BIT, 4)
         ]
         for value, address, mask, shift in pack_options:
             self.isl94203.reg_write(address, int(value), mask, shift)
-
-
 
     def send_serial_command(self, command, data):
         # Access the shared serial_setup
@@ -470,7 +460,7 @@ class BMSGUI:
                 serial_protocol = SerialProtocol(serial_setup)
                 serial_protocol.send_command(command, data)
                 packet = serial_protocol.read_packet()
-                _ , response = packet
+                _, response = packet
                 print(f"response: {response}")
             else:
                 logging.warning("Serial port is not open")
@@ -481,7 +471,7 @@ class BMSGUI:
 
         if self.ui.serial_setup and self.ui.serial_setup.is_open():
             register_cfg = ISL94203.registers
-  
+
             self.write_voltage_limits()
             self.write_voltage_limits_timing()
             self.write_timers()
@@ -491,23 +481,23 @@ class BMSGUI:
             self.write_pack_option_registers()
 
             logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-            
+
             self.send_serial_command(CMD_WRITE_EEPROM, register_cfg)
-        else: 
+        else:
             logging.error("Serial port is not open")
-            self.ui.statusBar.showMessage("Error: Serial port is not open.") 
+            self.ui.statusBar.showMessage("Error: Serial port is not open.")
 
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
-        serial_setup = self.ui.serial_setup        
+        serial_setup = self.ui.serial_setup
         configuration = []
         try:
             if serial_setup and serial_setup.is_open():
                 # Send the configuration data over serial
                 serial_protocol = SerialProtocol(serial_setup)
-                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])   
+                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])
                 packet = serial_protocol.read_packet()
-                _ , configuration = packet
+                _, configuration = packet
 
                 self.bms_config.update_registers(list(configuration))
                 self.ui_update_fields()

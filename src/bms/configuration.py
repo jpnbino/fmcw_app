@@ -1,12 +1,14 @@
 from bms.constants import *
 import logging
 from bms.isl94203 import ISL94203
+
+
 class BMSConfiguration:
-    
+
     def __init__(self):
         self.isl94203 = ISL94203()
 
-        #Voltage Limits
+        # Voltage Limits
         self.ov = 0.0
         self.ov_lockout = 0.0
         self.ov_recover = 0.0
@@ -17,48 +19,48 @@ class BMSConfiguration:
         self.low_voltage_charge = 0.0
         self.uv_lockout = 0.0
 
-        #in milliseconds
+        # in milliseconds
         self.charge_detect_pulse_width = 0
         self.load_detect_pulse_width = 0
 
-        self.ov_delay_timeout = 0          
-        self.uv_delay_timeout = 0      
+        self.ov_delay_timeout = 0
+        self.uv_delay_timeout = 0
         self.open_wire_timing = 0
         self.sleep_delay = 0
-        
+
         self.ov_delay_timeout_unit = 0
         self.uv_delay_timeout_unit = 0
         self.open_wire_timing_unit = 0
         self.sleep_delay_unit = 0
 
-        #Timers 
+        # Timers
         self.timer_idle_doze = 0
         self.timer_sleep = 0
         self.timer_wdt = 0
-        
-        #Cell Configuration
+
+        # Cell Configuration
         self.cell_config = 0
 
-        #Cell Balance Limits
-        self.cb_upper_lim = 0 
-        self.cb_lower_lim = 0 
-        self.cb_max_delta = 0 
-        self.cb_min_delta = 0 
-        self.cb_over_temp = 0 
-        self.cb_ot_recover = 0 
-        self.cb_ut_recover = 0 
-        self.cb_under_temp = 0 
-        self.cb_on_time = 0 
-        self.cb_off_time = 0 
-        
-        self.cb_on_time_unit = 0 
-        self.cb_off_time_unit = 0 
+        # Cell Balance Limits
+        self.cb_upper_lim = 0
+        self.cb_lower_lim = 0
+        self.cb_max_delta = 0
+        self.cb_min_delta = 0
+        self.cb_over_temp = 0
+        self.cb_ot_recover = 0
+        self.cb_ut_recover = 0
+        self.cb_under_temp = 0
+        self.cb_on_time = 0
+        self.cb_off_time = 0
+
+        self.cb_on_time_unit = 0
+        self.cb_off_time_unit = 0
 
         self.bit_cb_during_charge = False
         self.bit_cb_during_discharge = False
         self.bit_cb_during_eoc = False
 
-        #Temperature Limits
+        # Temperature Limits
         self.tl_charge_over_temp = 0
         self.tl_charge_ot_recover = 0
         self.tl_charge_ut_recover = 0
@@ -72,17 +74,17 @@ class BMSConfiguration:
         self.tl_internal_over_temp = 0
         self.tl_internal_ot_recover = 0
 
-        #Pack Options
+        # Pack Options
         self.bit_t2_monitors_fet = False
         self.bit_enable_cellf_psd = False
         self.bit_enable_openwire_psd = False
         self.bit_enable_uvlo_pd = False
         self.bit_enable_openwire_scan = False
 
-        #Temperature gain
+        # Temperature gain
         self.bit_tgain = False
-        
-        #Current Limits
+
+        # Current Limits
         self.disch_oc_voltage = 0
         self.disch_oc_timeout = 0
         self.disch_oc_timeout_unit = 0
@@ -93,8 +95,8 @@ class BMSConfiguration:
         self.disch_sc_timeout = 0
         self.disch_sc_timeout_unit = 0
 
-        #Ram
-        #adress 0x80
+        # Ram
+        # adress 0x80
         self.bit_ov = False
         self.bit_ovlo = False
         self.bit_uv = False
@@ -104,7 +106,7 @@ class BMSConfiguration:
         self.bit_cot = False
         self.bit_cut = False
 
-        #adress 0x81
+        # adress 0x81
         self.bit_iot = False
         self.bit_coc = False
         self.bit_doc = False
@@ -113,7 +115,7 @@ class BMSConfiguration:
         self.bit_open = False
         self.bit_eochg = False
 
-        #adress 0x82
+        # adress 0x82
         self.bit_ld_prsnt = False
         self.bit_ch_prsnt = False
         self.bit_ching = False
@@ -122,8 +124,8 @@ class BMSConfiguration:
         self.bit_ecc_fail = False
         self.bit_int_scan = False
         self.bit_lvchg = False
-        
-        #adress 0x83
+
+        # adress 0x83
         self.bit_cbot = False
         self.bit_cbut = False
         self.bit_cbov = False
@@ -132,17 +134,17 @@ class BMSConfiguration:
         self.bit_in_doze = False
         self.bit_in_sleep = False
 
-        #Current calculation      
-        self.v_sense = 0.0 #voltage over Sense Resistor
-        self.i_pack = 0.0 #current over Sense Resistor (Pack current)
+        # Current calculation
+        self.v_sense = 0.0  # voltage over Sense Resistor
+        self.i_pack = 0.0  # current over Sense Resistor (Pack current)
         self.i_gain = 0
 
-        #Temperature
+        # Temperature
         self.temp_internal = 0.0
         self.temp_xt1 = 0.0
         self.temp_xt2 = 0.0
 
-        #Cell voltages
+        # Cell voltages
         self.vcell1 = 0
         self.vcell2 = 0
         self.vcell3 = 0
@@ -154,9 +156,9 @@ class BMSConfiguration:
         self.vcell_min = 0
         self.vcell_max = 0
         self.vbatt = 0
-        self.vrgo = 0        
+        self.vrgo = 0
 
-    def update_registers(self,values):
+    def update_registers(self, values):
         ISL94203.registers = values
         logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in values)}")
 
@@ -173,9 +175,8 @@ class BMSConfiguration:
         except Exception as e:
             print(f"Error updating configuration: {e}")
 
-        
     def update_voltage_limits(self, values):
-        #Voltage Limits
+        # Voltage Limits
         voltage_mappping = {
             0x00: 'ov',
             0x02: 'ov_recover',
@@ -193,26 +194,26 @@ class BMSConfiguration:
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating voltage limits: {e}")
-            
+
     def update_timing(self, values):
-        '''Update the timing attributes based on the given values.
+        """Update the timing attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the timing attributes.
-        '''
+        """
         timing_mapping = {
-            (0x10,0, MASK_10BIT): 'ov_delay_timeout',
-            (0x10,10,MASK_2BIT): 'ov_delay_timeout_unit',
-            (0x12,0, MASK_10BIT): 'uv_delay_timeout',
-            (0x12,10,MASK_2BIT): 'uv_delay_timeout_unit',
-            (0x14,0, MASK_9BIT): 'open_wire_timing',
-            (0x14,9, MASK_1BIT): 'open_wire_timing_unit',
-            (0x46,0, MASK_9BIT): 'sleep_delay',
-            (0x46,9, MASK_2BIT): 'sleep_delay_unit',
-            (0x46,11, MASK_5BIT): 'timer_wdt',
-            (0x48,0, MASK_4BIT): 'timer_idle_doze',
-            (0x48,4, MASK_4BIT): 'timer_sleep',
-         }
-        for (addr, bit_shift, bit_mask),attr in timing_mapping.items():
+            (0x10, 0, MASK_10BIT): 'ov_delay_timeout',
+            (0x10, 10, MASK_2BIT): 'ov_delay_timeout_unit',
+            (0x12, 0, MASK_10BIT): 'uv_delay_timeout',
+            (0x12, 10, MASK_2BIT): 'uv_delay_timeout_unit',
+            (0x14, 0, MASK_9BIT): 'open_wire_timing',
+            (0x14, 9, MASK_1BIT): 'open_wire_timing_unit',
+            (0x46, 0, MASK_9BIT): 'sleep_delay',
+            (0x46, 9, MASK_2BIT): 'sleep_delay_unit',
+            (0x46, 11, MASK_5BIT): 'timer_wdt',
+            (0x48, 0, MASK_4BIT): 'timer_idle_doze',
+            (0x48, 4, MASK_4BIT): 'timer_sleep',
+        }
+        for (addr, bit_shift, bit_mask), attr in timing_mapping.items():
             try:
                 value = self.read_reg_val(values, addr, bit_shift, bit_mask)
                 if attr == 'timer_sleep':
@@ -221,15 +222,15 @@ class BMSConfiguration:
             except Exception as e:
                 print(f"Error updating timing: {e}")
 
-    def cell_configuration(self, values):    
-        #Cell Configuration
+    def cell_configuration(self, values):
+        # Cell Configuration
         self.cell_config = self.read_reg_val(values, 0x48, 8, MASK_8BIT)
 
     def update_pack_options(self, values):
-        '''Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
+        """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the pack options attributes.
-        '''
+        """
         pack_options_mapping = {
             (0x4A, 0): 'bit_enable_openwire_psd',
             (0x4A, 1): 'bit_enable_openwire_scan',
@@ -247,12 +248,12 @@ class BMSConfiguration:
                 setattr(self, attr, self.read_bit(values, addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
-        
+
     def update_cell_balance(self, values):
-        '''Update the cell balance attributes based on the given values.
+        """Update the cell balance attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the cell balance attributes.
-        '''    
+        """
         cell_balance_mapping = {
             0x1C: 'cb_lower_lim',
             0x1E: 'cb_upper_lim',
@@ -288,17 +289,17 @@ class BMSConfiguration:
         }
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
-            try: 
-                value = self.calculate_temperature_from_raw_value((values[high_byte] << 8) | values[low_byte])               
+            try:
+                value = self.calculate_temperature_from_raw_value((values[high_byte] << 8) | values[low_byte])
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance temperature: {e}")
-    
+
     def update_current_limits(self, values):
-        '''Update the current limit attributes based on the given values.
+        """Update the current limit attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the current limit attributes.
-        '''     
+        """
         current_limits_mapping = {
             (0x16, 12, MASK_3BIT): 'disch_oc_voltage',
             (0x16, 0, MASK_10BIT): 'disch_oc_timeout',
@@ -378,14 +379,13 @@ class BMSConfiguration:
                 elif attr == 'v_sense':
                     value = self.apply_mask_and_multiplier_pack_current(self.read_reg_val(values, addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value =  self.apply_mask_and_multiplier_pack(self.read_reg_val(values, addr))
+                    value = self.apply_mask_and_multiplier_pack(self.read_reg_val(values, addr))
                 elif attr == 'vrgo':
-                    value= self.calculate_vrgo_from_raw_value(self.read_reg_val(values, addr))
+                    value = self.calculate_vrgo_from_raw_value(self.read_reg_val(values, addr))
 
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating RAM values: {e}")
-
 
     def update_feature_controls(self, values):
         """ Update the feature control attributes based on the given values.    
@@ -434,7 +434,6 @@ class BMSConfiguration:
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
 
-
     def apply_mask_and_multiplier(self, value):
         # Apply masking
         masked_value = value & MASK_12BIT
@@ -446,7 +445,7 @@ class BMSConfiguration:
         # Apply masking
         masked_value = value & MASK_12BIT
         # Apply multiplier
-        result = masked_value * CURRENT_CELL_MULTIPLIER / (gain)
+        result = masked_value * CURRENT_CELL_MULTIPLIER / gain
         return result
 
     def apply_mask_and_multiplier_pack(self, value):
@@ -469,7 +468,7 @@ class BMSConfiguration:
         masked_value = value & MASK_12BIT
         result = masked_value * VOLTAGE_VRGO_MULTIPLIER
         return result
-    
+
     def calculate_temperature_from_raw_value(self, value):
         """
         Calculates the temperature from the raw value.
@@ -485,7 +484,6 @@ class BMSConfiguration:
 
         result = masked_value * TEMPERATURE_MULTIPLIER
         return result
-
 
     def calculate_voltage(self, values, address):
         """
@@ -533,7 +531,8 @@ class BMSConfiguration:
 
         Parameters:
         - values (list): The list of values from which to extract the value.
-        - start_address (int): The starting address of the ISL94203. If the address is in RAM, it is converted to the actual index in 'values'.
+        - start_address (int): The starting address of the ISL94203. If the address is in RAM,
+        it is converted to the actual index in 'values'.
         - bit_shift (int): The bit shift for the value.
         - bit_mask (int): The bitmask for the value.
 
@@ -547,7 +546,6 @@ class BMSConfiguration:
         raw_value = (values[start_address + 1] << 8) | values[start_address]
         value = (raw_value >> bit_shift) & bit_mask
         return value
-    
 
     def read_bit(self, values, byte_address, bit_position):
         """
@@ -563,6 +561,6 @@ class BMSConfiguration:
         """
         # Extract the byte value from values using get_reg_val
         byte_value = self.read_reg_val(values, byte_address, 0, 0xff)
-        
+
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)

@@ -14,6 +14,7 @@ CMD_READ_EEPROM = 0x02
 CMD_WRITE_EEPROM = 0x03
 CMD_READ_RAM = 0x04
 
+
 class SimulatedDevice:
     def __init__(self, port, baudrate):
         self.ser = serial.Serial(port, baudrate, timeout=1)
@@ -81,9 +82,9 @@ class SimulatedDevice:
                     data_str = ' '.join(format(byte, '02X') for byte in data)  # Convert data to a string of hex values
                 else:
                     data_str = "No data"
-                    
+
                 print(f"Received command: {cmd}, data: {data_str}")
-                
+
                 response_data = []
 
                 if cmd == CMD_READ_ALL_MEMORY:
@@ -98,7 +99,7 @@ class SimulatedDevice:
                     print(f"self.config: \n{' '.join(f'{value:02X}' for value in self.config)}")
                     print(f"EEPROM data written: {data}")
                     # Acknowledge the write command
-                    #response_data = [0x11, 0x22, 0x33, 0x44]
+                    # response_data = [0x11, 0x22, 0x33, 0x44]
                     self.send_response(cmd, [])
                 elif cmd == CMD_READ_RAM:
                     response_data = [0x90, 0xA0, 0xB0, 0xC0]  # Example data
@@ -107,6 +108,7 @@ class SimulatedDevice:
                     print(f"Unknown Command {cmd}")
 
                 print(f"Device response: {response_data}")
+
 
 if __name__ == '__main__':
     simulated_device = SimulatedDevice(port='COM22', baudrate=9600)

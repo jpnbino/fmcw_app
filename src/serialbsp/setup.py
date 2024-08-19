@@ -1,6 +1,7 @@
 import serial
 from serial.tools import list_ports
 
+
 class SerialSetup:
     def __init__(self):
         self.ser = serial.Serial()

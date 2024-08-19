@@ -1,11 +1,10 @@
-import serial
-
 START_BYTE = 0xAA
 
 CMD_READ_ALL_MEMORY = 0x01
 CMD_READ_EEPROM = 0x02
 CMD_WRITE_EEPROM = 0x03
 CMD_READ_RAM = 0x04
+
 
 class SerialProtocol:
     def __init__(self, serial_setup):

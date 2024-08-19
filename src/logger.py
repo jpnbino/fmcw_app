@@ -1,6 +1,7 @@
 import serial
 import time
 
+
 def receive_and_log_data(serial_port, log_file_path="app/src/log_2023_12_13.txt"):
     # Open the serial port
     with serial.Serial(serial_port, 115200, timeout=1) as ser:
@@ -28,6 +29,7 @@ def receive_and_log_data(serial_port, log_file_path="app/src/log_2023_12_13.txt"
                 # Wait for 10 seconds before the next iteration
                 time.sleep(10)
 
+
 def parse_data(data):
     # Split the data into individual values
     values = data.split(",")
@@ -41,6 +43,7 @@ def parse_data(data):
     }
 
     return parsed_data
+
 
 if __name__ == "__main__":
     serial_port = "COM25"  # Change this to the correct serial port on your system

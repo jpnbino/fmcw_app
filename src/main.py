@@ -11,13 +11,12 @@ from bms.configuration import BMSConfiguration
 from gui.bms import BMSGUI
 from gui.serial import SerialWidget
 
-WINDOW_WIDTH = 1126
-WINDOW_HEIGHT = 885
-
 Ui_MainWindow, _ = loadUiType(UI_FILE_PATH)
+
 
 def configure_logging():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 
 def main():
     configure_logging()
@@ -51,19 +50,20 @@ def main():
         logging.error(f"Failed to start the application: {e}")
         sys.exit(1)
 
+
 class FMCWApplication(QMainWindow, Ui_MainWindow):
     def __init__(self, ui_file_name):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle(WINDOW_TITLE)
         self.setWindowIcon(QIcon(ICON_PATH))
-        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
-        
+
         self.bms_config = BMSConfiguration()
         self.gui = BMSGUI(self, self.bms_config)
         self.serial_widget = SerialWidget(self)
 
         self.serial_setup = None
+
 
 if __name__ == '__main__':
     main()
