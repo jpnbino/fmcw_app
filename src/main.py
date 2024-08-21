@@ -3,8 +3,9 @@ import sys
 import logging
 
 from PySide6.QtUiTools import loadUiType
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel
 from PySide6.QtGui import QIcon, QFont, QFontDatabase
+from PySide6.QtCore import Qt
 
 from config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
 from bms.configuration import BMSConfiguration
@@ -63,6 +64,17 @@ class FMCWApplication(QMainWindow, Ui_MainWindow):
         self.serial_widget = SerialWidget(self)
 
         self.serial_setup = None
+
+        self.logRateSpinBox.setMinimum(1)
+        self.logRateSpinBox.setMaximum(3600)
+
+        # Create a QLabel for logging status
+        self.logging_status_label = QLabel("Logging: Not started")
+        self.logging_status_label.setStyleSheet("padding-right: 10px;") 
+        self.statusBar.addPermanentWidget(self.logging_status_label)
+
+    def update_logging_status(self, message):
+        self.logging_status_label.setText(message)
 
 
 if __name__ == '__main__':

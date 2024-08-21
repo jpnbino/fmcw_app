@@ -1,4 +1,5 @@
 from PySide6.QtGui import QColor
+from PySide6.QtCore import QTimer
 from bms.constants import *
 from bms.isl94203 import ISL94203
 from serialbsp.protocol import *
@@ -15,6 +16,7 @@ class BMSGUI:
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
         self.ui.writePackButton.clicked.connect(self.write_bms_config)
         self.ui.readRamButton.clicked.connect(self.read_bms_ram_config)
+        self.ui.startStopLogButton.clicked.connect(self.log_bms_ram_config)
 
     def ui_update_ram_fields(self):
         self.ui_update_ram_values()
@@ -542,3 +544,14 @@ class BMSGUI:
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
             self.ui.statusBar.showMessage(f"Error: {e}")
+
+    def log_bms_ram_config(self):
+        if self.ui.startStopLogButton.isChecked():
+            self.ui.startStopLogButton.setText("Stop Log")
+            self.ui.update_logging_status("Logging: In Progress")
+            delay = self.ui.logRateSpinBox.value()
+            self.read_bms_ram_config()
+            QTimer.singleShot(delay * 1000, self.log_bms_ram_config)
+        else:
+            self.ui.startStopLogButton.setText("Start Log")
+            self.ui.update_logging_status("Logging: Not started")
