@@ -14,6 +14,11 @@ class BMSGUI:
         # Connect button click to Send Serial Command
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
         self.ui.writePackButton.clicked.connect(self.write_bms_config)
+        self.ui.readRamButton.clicked.connect(self.read_bms_ram_config)
+
+    def ui_update_ram_fields(self):
+        self.ui_update_ram_values()
+        self.ui_update_status_bits()
 
     def ui_update_fields(self):
         """Update the UI fields with the BMS configuration values."""
@@ -510,4 +515,30 @@ class BMSGUI:
                 self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
         except Exception as e:
             logging.error(f"Failed to read BMS configuration: {e}")
+            self.ui.statusBar.showMessage(f"Error: {e}")
+
+    def read_bms_ram_config(self):
+        """Read RAM memory configuration from the device via serial"""
+        serial_setup = self.ui.serial_setup
+        configuration = []
+        try:
+            if serial_setup and serial_setup.is_open():
+                # Send the configuration data over serial
+                serial_protocol = SerialProtocol(serial_setup)
+                serial_protocol.send_command(CMD_READ_RAM, [])
+                packet = serial_protocol.read_packet()
+                _, configuration = packet
+
+                # Update the BMS RAM configuration
+                self.bms_config.update_registers(list(configuration))
+                self.ui_update_fields()
+
+                logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
+                self.ui.statusBar.showMessage("RAM configuration read successfully.")
+            else:
+                ERROR_MESSAGE = "Serial port is not open"
+                logging.error(ERROR_MESSAGE)
+                self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+        except Exception as e:
+            logging.error(f"Failed to read BMS RAM configuration: {e}")
             self.ui.statusBar.showMessage(f"Error: {e}")

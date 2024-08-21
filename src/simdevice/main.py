@@ -102,7 +102,7 @@ class SimulatedDevice:
                     # response_data = [0x11, 0x22, 0x33, 0x44]
                     self.send_response(cmd, [])
                 elif cmd == CMD_READ_RAM:
-                    response_data = [0x90, 0xA0, 0xB0, 0xC0]  # Example data
+                    response_data = self.config
                     self.send_response(cmd, response_data)
                 else:
                     print(f"Unknown Command {cmd}")
