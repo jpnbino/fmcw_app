@@ -1,5 +1,5 @@
 from bms.constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
-
+import logging
 
 class ISL94203:
     registers = [0] * len(DEFAULT_CONFIG)
@@ -9,6 +9,8 @@ class ISL94203:
 
     # Assuming the values get 16bits, therefore, operations are over two consecutives addresses 
     # example:
+    def reg_set_all_values(self, values):
+        ISL94203.registers = values
 
     def reg_write(self, address, value, mask=0xFFFF, shift=0):
         """

@@ -2,6 +2,7 @@ from bms.constants import *
 import logging
 from bms.isl94203 import ISL94203
 
+logging.basicConfig(level=logging.DEBUG)
 
 class BMSConfiguration:
 
@@ -158,24 +159,24 @@ class BMSConfiguration:
         self.vbatt = 0
         self.vrgo = 0
 
-    def update_registers(self, values):
-        ISL94203.registers = values
-        logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in values)}")
+    def update_registers(self):
+        """ update the parameters values after reading from registers """
+        logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in ISL94203.registers)}")
 
         try:
-            self.update_voltage_limits(values)
-            self.update_timing(values)
-            self.cell_configuration(values)
-            self.update_pack_options(values)
-            self.update_cell_balance(values)
-            self.update_current_limits(values)
-            self.update_temperature_limits(values)
-            self.update_ram_values(values)
-            self.update_feature_controls(values)
+            self.update_voltage_limits()
+            self.update_timing()
+            self.cell_configuration()
+            self.update_pack_options()
+            self.update_cell_balance()
+            self.update_current_limits()
+            self.update_temperature_limits()
+            self.update_ram_values()
+            self.update_feature_controls()
         except Exception as e:
             print(f"Error updating configuration: {e}")
 
-    def update_voltage_limits(self, values):
+    def update_voltage_limits(self):
         # Voltage Limits
         voltage_mappping = {
             0x00: 'ov',
@@ -190,12 +191,12 @@ class BMSConfiguration:
         }
         for addr, attr in voltage_mappping.items():
             try:
-                value = self.calculate_voltage(values, addr)
+                value = self.calculate_voltage( addr)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating voltage limits: {e}")
 
-    def update_timing(self, values):
+    def update_timing(self):
         """Update the timing attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the timing attributes.
@@ -215,18 +216,18 @@ class BMSConfiguration:
         }
         for (addr, bit_shift, bit_mask), attr in timing_mapping.items():
             try:
-                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val( addr, bit_shift, bit_mask)
                 if attr == 'timer_sleep':
                     value *= 16
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating timing: {e}")
 
-    def cell_configuration(self, values):
+    def cell_configuration(self):
         # Cell Configuration
-        self.cell_config = self.read_reg_val(values, 0x48, 8, MASK_8BIT)
+        self.cell_config = self.read_reg_val( 0x48, 8, MASK_8BIT)
 
-    def update_pack_options(self, values):
+    def update_pack_options(self):
         """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the pack options attributes.
@@ -245,11 +246,11 @@ class BMSConfiguration:
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
             try:
-                setattr(self, attr, self.read_bit(values, addr, bit_pos))
+                setattr(self, attr, self.read_bit( addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
 
-    def update_cell_balance(self, values):
+    def update_cell_balance(self):
         """Update the cell balance attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the cell balance attributes.
@@ -263,7 +264,7 @@ class BMSConfiguration:
 
         for addr, attr in cell_balance_mapping.items():
             try:
-                setattr(self, attr, self.calculate_voltage(values, addr))
+                setattr(self, attr, self.calculate_voltage( addr))
             except Exception as e:
                 print(f"Error updating cell balance: {e}")
 
@@ -276,7 +277,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
             try:
-                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val( addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance timing: {e}")
@@ -290,12 +291,12 @@ class BMSConfiguration:
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
             try:
-                value = self.calculate_temperature_from_raw_value((values[high_byte] << 8) | values[low_byte])
+                value = self.calculate_temperature_from_raw_value((ISL94203.registers[high_byte] << 8) | ISL94203.registers[low_byte])
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance temperature: {e}")
 
-    def update_current_limits(self, values):
+    def update_current_limits(self):
         """Update the current limit attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the current limit attributes.
@@ -316,12 +317,12 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
             try:
-                value = self.read_reg_val(values, addr, bit_shift, bit_mask)
+                value = self.read_reg_val( addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating current limits: {e}")
 
-    def update_temperature_limits(self, values):
+    def update_temperature_limits(self):
         """ Update the temperature limit attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the temperature limit attributes.
@@ -341,16 +342,16 @@ class BMSConfiguration:
 
         for addr, attr in temperature_limits_mapping.items():
             try:
-                setattr(self, attr, self.calculate_temp_voltage(values, addr))
+                setattr(self, attr, self.calculate_temp_voltage(addr))
             except Exception as e:
                 print(f"Error updating temperature limits: {e}")
 
-    def update_ram_values(self, values):
+    def update_ram_values(self):
         """ Update the RAM attributes based on the given values.
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.read_reg_val(values, 0x85, 4, MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.read_reg_val( 0x85, 4, MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -373,21 +374,21 @@ class BMSConfiguration:
         for addr, attr in ram_addresses.items():
             try:
                 if 'temp' in attr:
-                    value = self.calculate_temperature_from_raw_value(self.read_reg_val(values, addr))
+                    value = self.calculate_temperature_from_raw_value(self.read_reg_val( addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.read_reg_val(values, addr))
+                    value = self.apply_mask_and_multiplier(self.read_reg_val( addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.read_reg_val(values, addr), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.read_reg_val( addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value = self.apply_mask_and_multiplier_pack(self.read_reg_val(values, addr))
+                    value = self.apply_mask_and_multiplier_pack(self.read_reg_val( addr))
                 elif attr == 'vrgo':
-                    value = self.calculate_vrgo_from_raw_value(self.read_reg_val(values, addr))
+                    value = self.calculate_vrgo_from_raw_value(self.read_reg_val( addr))
 
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating RAM values: {e}")
 
-    def update_feature_controls(self, values):
+    def update_feature_controls(self):
         """ Update the feature control attributes based on the given values.    
         Parameters:
         - values (list): The list of values from which to extract the feature control attributes.
@@ -429,35 +430,40 @@ class BMSConfiguration:
         # Iterate through the mapping and set the attributes
         for (address, bit_position), attr_name in bit_mapping.items():
             try:
-                value = self.read_bit(values, address, bit_position)
+                value = self.read_bit(address, bit_position)
                 setattr(self, attr_name, value)
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
 
-    def apply_mask_and_multiplier(self, value):
-        # Apply masking
+    
+    def apply_mask_and_multiplier_generic(self, value, multiplier, gain=1):
+        """
+        Apply a mask and a multiplier to the given value.
+
+        Parameters:
+        - value (int): The raw value to be processed.
+        - multiplier (float): The multiplier to be applied.
+        - gain (float): The gain to be applied (default is 1).
+
+        Returns:
+        - float: The processed value.
+        """
         masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * VOLTAGE_CELL_MULTIPLIER
+        result = masked_value * multiplier / gain
         return result
+
+    def apply_mask_and_multiplier(self, value):
+        return self.apply_mask_and_multiplier_generic(value, VOLTAGE_CELL_MULTIPLIER)
 
     def apply_mask_and_multiplier_pack_current(self, value, gain):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * CURRENT_CELL_MULTIPLIER / gain
-        return result
+        return self.apply_mask_and_multiplier_generic(value, CURRENT_CELL_MULTIPLIER, gain)
 
     def apply_mask_and_multiplier_pack(self, value):
-        # Apply masking
-        masked_value = value & MASK_12BIT
-        # Apply multiplier
-        result = masked_value * VOLTAGE_PACK_MULTIPLIER
-        return result
+        return self.apply_mask_and_multiplier_generic(value, VOLTAGE_PACK_MULTIPLIER)
 
     def calculate_vrgo_from_raw_value(self, value):
         """
-        Calculates the VRGO ( Voltage regulator output) based on the raw value. should be around 2.5V.
+        Calculates the VRGO (Voltage regulator output) based on the raw value. Should be around 2.5V.
 
         Args:
             value (int): Voltage raw value as stored in the register.
@@ -465,9 +471,7 @@ class BMSConfiguration:
         Returns:
             float: Real voltage calculated from the raw value. (e.g. 2.5 V)
         """
-        masked_value = value & MASK_12BIT
-        result = masked_value * VOLTAGE_VRGO_MULTIPLIER
-        return result
+        return self.apply_mask_and_multiplier_generic(value, VOLTAGE_VRGO_MULTIPLIER)
 
     def calculate_temperature_from_raw_value(self, value):
         """
@@ -478,14 +482,10 @@ class BMSConfiguration:
 
         Returns:
             float: The calculated temperature in volts. For Celsius, use thermistor datasheet.
-
         """
-        masked_value = value & MASK_12BIT
+        return self.apply_mask_and_multiplier_generic(value, TEMPERATURE_MULTIPLIER)
 
-        result = masked_value * TEMPERATURE_MULTIPLIER
-        return result
-
-    def calculate_voltage(self, values, address):
+    def calculate_voltage(self, address):
         """
         Calculate voltage based on values and address.
 
@@ -497,8 +497,8 @@ class BMSConfiguration:
         - float: The calculated voltage.
         """
         # Extract the two bytes from values starting from the given address
-        byte0 = values[address]
-        byte1 = values[address + 1]
+        byte0 = ISL94203.registers[address]
+        byte1 = ISL94203.registers[address + 1]
 
         # Combine bytes into a single 16-bit value (little-endian format)
         combined_value = (byte1 << 8) | byte0
@@ -506,7 +506,7 @@ class BMSConfiguration:
         # Apply mask and multiplier and return the calculated voltage
         return self.apply_mask_and_multiplier(combined_value)
 
-    def calculate_temp_voltage(self, values, address):
+    def calculate_temp_voltage(self, address):
         """
         Calculate voltage based on values and address.
 
@@ -518,21 +518,20 @@ class BMSConfiguration:
         - float: The calculated voltage.
         """
         # Extract the 16-bit value from 'values' starting at 'address'
-        raw_value = (values[address + 1] << 8) | values[address]
+        raw_value = (ISL94203.registers[address + 1] << 8) | ISL94203.registers[address]
 
         # Apply mask and multiplier to calculate the voltage
         return self.calculate_temperature_from_raw_value(raw_value)
 
-    def read_reg_val(self, values, start_address, bit_shift=0, bit_mask=0xffff):
+    def read_reg_val(self, start_address, bit_shift=0, bit_mask=0xffff):
         """
-        Extracts a value from the 'values' list based on the specified parameters.
+        Extracts a value from the ISL94203.registers list based on the specified parameters.
 
-        This function considers the offset between the RAM addresses and the actual index in the 'values' list.
+        This function considers the offset between the RAM addresses and the actual index in the 'registers' list.
 
         Parameters:
-        - values (list): The list of values from which to extract the value.
         - start_address (int): The starting address of the ISL94203. If the address is in RAM,
-        it is converted to the actual index in 'values'.
+        it is converted to the actual index in 'registers'.
         - bit_shift (int): The bit shift for the value.
         - bit_mask (int): The bitmask for the value.
 
@@ -542,25 +541,24 @@ class BMSConfiguration:
         if start_address >= ADDR_RAM_BEGIN:
             start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
-        # Assuming start_address points to the index in values directly
-        raw_value = (values[start_address + 1] << 8) | values[start_address]
+        # Assuming start_address points to the index in registers directly
+        raw_value = (ISL94203.registers[start_address + 1] << 8) | ISL94203.registers[start_address]
         value = (raw_value >> bit_shift) & bit_mask
         return value
 
-    def read_bit(self, values, byte_address, bit_position):
+    def read_bit(self, address, bit_position):
         """
-        Extracts a boolean value from 'values' based on the specified byte address and bit position.
+        Extracts a boolean value from ISL94203.registers based on the specified byte address and bit position.
 
         Parameters:
-        - values (list): The list of values from which to extract the boolean value.
         - byte_address (int): The byte address.
         - bit_position (int): The bit position within the byte.
 
         Returns:
         - bool: The boolean value.
         """
-        # Extract the byte value from values using get_reg_val
-        byte_value = self.read_reg_val(values, byte_address, 0, 0xff)
+        # Extract the byte value from registers using read_reg_val
+        byte_value = self.read_reg_val(address, 0, 0xff)
 
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)

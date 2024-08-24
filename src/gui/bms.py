@@ -85,7 +85,10 @@ class BMSGUI:
 
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
-        self.ui.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.bms_config.cell_config])}")
+        if self.bms_config.cell_config == 0:
+            self.ui.CellConfigurationLineEdit.setText("0")
+        else:
+            self.ui.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.bms_config.cell_config])}")
 
         cell_balance_limits = {
             self.ui.CBUpperLimLineEdit: self.bms_config.cb_upper_lim,
@@ -506,10 +509,11 @@ class BMSGUI:
                 packet = serial_protocol.read_packet()
                 _, configuration = packet
 
-                self.bms_config.update_registers(list(configuration))
+                self.isl94203.reg_set_all_values(list(configuration))
+                self.bms_config.update_registers()
                 self.ui_update_fields()
 
-                logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
+                logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in ISL94203.registers)}")
                 self.ui.statusBar.showMessage("Configuration read successfully.")
             else:
                 ERROR_MESSAGE = "Serial port is not open"
@@ -532,7 +536,8 @@ class BMSGUI:
                 _, configuration = packet
 
                 # Update the BMS RAM configuration
-                self.bms_config.update_registers(list(configuration))
+                self.isl94203.reg_set_all_values(list(configuration))
+                self.bms_config.update_registers()
                 self.ui_update_fields()
 
                 logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
