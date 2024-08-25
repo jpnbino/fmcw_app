@@ -216,7 +216,7 @@ class BMSConfiguration:
         }
         for (addr, bit_shift, bit_mask), attr in timing_mapping.items():
             try:
-                value = self.read_reg_val( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
                 if attr == 'timer_sleep':
                     value *= 16
                 setattr(self, attr, value)
@@ -225,7 +225,7 @@ class BMSConfiguration:
 
     def cell_configuration(self):
         # Cell Configuration
-        self.cell_config = self.read_reg_val( 0x48, 8, MASK_8BIT)
+        self.cell_config = self.isl94203.reg_read( 0x48, 8, MASK_8BIT)
 
     def update_pack_options(self):
         """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
@@ -246,7 +246,7 @@ class BMSConfiguration:
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
             try:
-                setattr(self, attr, self.read_bit( addr, bit_pos))
+                setattr(self, attr, self.isl94203.read_bit( addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
 
@@ -277,7 +277,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
             try:
-                value = self.read_reg_val( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance timing: {e}")
@@ -317,7 +317,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
             try:
-                value = self.read_reg_val( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating current limits: {e}")
@@ -351,7 +351,7 @@ class BMSConfiguration:
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.read_reg_val( 0x85, 4, MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read( 0x85, 4, MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -374,15 +374,15 @@ class BMSConfiguration:
         for addr, attr in ram_addresses.items():
             try:
                 if 'temp' in attr:
-                    value = self.calculate_temperature_from_raw_value(self.read_reg_val( addr))
+                    value = self.calculate_temperature_from_raw_value(self.isl94203.reg_read( addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.read_reg_val( addr))
+                    value = self.apply_mask_and_multiplier(self.isl94203.reg_read( addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.read_reg_val( addr), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.isl94203.reg_read( addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value = self.apply_mask_and_multiplier_pack(self.read_reg_val( addr))
+                    value = self.apply_mask_and_multiplier_pack(self.isl94203.reg_read( addr))
                 elif attr == 'vrgo':
-                    value = self.calculate_vrgo_from_raw_value(self.read_reg_val( addr))
+                    value = self.calculate_vrgo_from_raw_value(self.isl94203.reg_read( addr))
 
                 setattr(self, attr, value)
             except Exception as e:
@@ -430,7 +430,7 @@ class BMSConfiguration:
         # Iterate through the mapping and set the attributes
         for (address, bit_position), attr_name in bit_mapping.items():
             try:
-                value = self.read_bit(address, bit_position)
+                value = self.isl94203.read_bit(address, bit_position)
                 setattr(self, attr_name, value)
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
@@ -522,43 +522,3 @@ class BMSConfiguration:
 
         # Apply mask and multiplier to calculate the voltage
         return self.calculate_temperature_from_raw_value(raw_value)
-
-    def read_reg_val(self, start_address, bit_shift=0, bit_mask=0xffff):
-        """
-        Extracts a value from the ISL94203.registers list based on the specified parameters.
-
-        This function considers the offset between the RAM addresses and the actual index in the 'registers' list.
-
-        Parameters:
-        - start_address (int): The starting address of the ISL94203. If the address is in RAM,
-        it is converted to the actual index in 'registers'.
-        - bit_shift (int): The bit shift for the value.
-        - bit_mask (int): The bitmask for the value.
-
-        Returns:
-        - int: The extracted value.
-        """
-        if start_address >= ADDR_RAM_BEGIN:
-            start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
-
-        # Assuming start_address points to the index in registers directly
-        raw_value = (ISL94203.registers[start_address + 1] << 8) | ISL94203.registers[start_address]
-        value = (raw_value >> bit_shift) & bit_mask
-        return value
-
-    def read_bit(self, address, bit_position):
-        """
-        Extracts a boolean value from ISL94203.registers based on the specified byte address and bit position.
-
-        Parameters:
-        - byte_address (int): The byte address.
-        - bit_position (int): The bit position within the byte.
-
-        Returns:
-        - bool: The boolean value.
-        """
-        # Extract the byte value from registers using read_reg_val
-        byte_value = self.read_reg_val(address, 0, 0xff)
-
-        # Calculate the boolean value based on the bit position
-        return bool((byte_value >> bit_position) & 0x01)

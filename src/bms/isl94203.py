@@ -12,6 +12,12 @@ class ISL94203:
     def reg_set_all_values(self, values):
         ISL94203.registers = values
 
+    def get_default_config(self):
+        return DEFAULT_CONFIG
+
+    def get_config(self):
+        return self.registers
+    
     def reg_write(self, address, value, mask=0xFFFF, shift=0):
         """
         Write a value to a register based on the specified address, mask, and shift.
@@ -47,38 +53,42 @@ class ISL94203:
 
         return tmp
 
-    def reg_read(self, address, mask=None, shift=0):
+    def reg_read(self, start_address, bit_shift=0, bit_mask=0xffff):
         """
-        Read a value from a register based on the specified address. 
-        If a mask and shift are provided, return the masked and shifted value.
-        Otherwise, return the entire register value.
+        Extracts a value from the ISL94203.registers list based on the specified parameters.
+
+        This function considers the offset between the RAM addresses and the actual index in the 'registers' list.
 
         Parameters:
-        - address (int): The address of the register.
-        - mask (int, optional): The mask to apply to extract a specific value. Defaults to None.
-        - shift (int, optional): The shift to apply after masking. Defaults to 0.
+        - start_address (int): The starting address of the ISL94203. If the address is in RAM,
+        it is converted to the actual index in 'registers'.
+        - bit_shift (int): The bit shift for the value.
+        - bit_mask (int): The bitmask for the value.
 
         Returns:
-        - int: The entire register value or the extracted value if mask and shift are provided.
+        - int: The extracted value.
         """
-        # Read the two bytes from the register
-        byte0 = int(self.registers[address])
-        byte1 = int(self.registers[address + 1])
+        if start_address >= ADDR_RAM_BEGIN:
+            start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
-        # Combine the two bytes into a 16-bit value
-        register_value = (byte1 << 8) | byte0
-
-        # If no mask is provided, return the entire register value
-        if mask is None:
-            return register_value
-
-        # If a mask is provided, apply the mask and shift to extract the desired value
-        value = (register_value & mask) >> shift
-
+        # Assuming start_address points to the index in registers directly
+        raw_value = (ISL94203.registers[start_address + 1] << 8) | ISL94203.registers[start_address]
+        value = (raw_value >> bit_shift) & bit_mask
         return value
 
-    def get_default_config(self):
-        return DEFAULT_CONFIG
+    def read_bit(self, address, bit_position):
+        """
+        Extracts a boolean value from ISL94203.registers based on the specified byte address and bit position.
 
-    def get_config(self):
-        return self.registers
+        Parameters:
+        - byte_address (int): The byte address.
+        - bit_position (int): The bit position within the byte.
+
+        Returns:
+        - bool: The boolean value.
+        """
+        # Extract the byte value from registers using read_reg_val
+        byte_value = self.reg_read(address, 0, 0xff)
+
+        # Calculate the boolean value based on the bit position
+        return bool((byte_value >> bit_position) & 0x01)
