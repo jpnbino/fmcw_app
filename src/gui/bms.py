@@ -492,7 +492,8 @@ class BMSGUI:
 
             logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
-            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg)
+            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
+            self.ui.statusBar.showMessage("Configuration written successfully.")
         else:
             logging.error("Serial port is not open")
             self.ui.statusBar.showMessage("Error: Serial port is not open.")
