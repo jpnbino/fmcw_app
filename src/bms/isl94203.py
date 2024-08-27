@@ -92,3 +92,13 @@ class ISL94203:
 
         # Calculate the boolean value based on the bit position
         return bool((byte_value >> bit_position) & 0x01)
+
+    def reg_set_ram_values(self, values):
+        """
+        Set the RAM values of the ISL94203.
+
+        Parameters:
+        - values (list): The list of values to set in the RAM.
+        """
+        for i, value in enumerate(values):
+            self.registers[ADDR_RAM_OFFSET + i] = value

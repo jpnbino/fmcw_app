@@ -5,7 +5,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from bms.constants import DEFAULT_CONFIG
+from bms.constants import DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END
 
 START_BYTE = 0xAA
 
@@ -102,7 +102,9 @@ class SimulatedDevice:
                     # response_data = [0x11, 0x22, 0x33, 0x44]
                     self.send_response(cmd, [])
                 elif cmd == CMD_READ_RAM:
-                    response_data = self.config
+                    # Read RAM values from the ISL94203 instance
+                    ram_values = self.config[ADDR_RAM_OFFSET:ADDR_RAM_OFFSET + (ADDR_RAM_END - ADDR_RAM_BEGIN + 1)]
+                    response_data = ram_values
                     self.send_response(cmd, response_data)
                 else:
                     print(f"Unknown Command {cmd}")

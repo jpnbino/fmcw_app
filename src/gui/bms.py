@@ -536,7 +536,7 @@ class BMSGUI:
                 _, configuration = packet
 
                 # Update the BMS RAM configuration
-                self.isl94203.reg_set_all_values(list(configuration))
+                self.isl94203.reg_set_ram_values(list(configuration))
                 self.bms_config.update_registers()
                 self.ui_update_fields()
 

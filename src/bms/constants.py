@@ -10,12 +10,13 @@ MASK_11BIT = 0x07FF
 MASK_12BIT = 0x0FFF
 MASK_15BIT = 0x7FFF
 
-VOLTAGE_CELL_MULTIPLIER = (1.8 * 8.0) / (4095.0 * 3.0)  # 0,0011721611721612
+VOLTAGE_CELL_MULTIPLIER = (1.8 * 8.0) / (4095.0 * 3.0)
 VOLTAGE_PACK_MULTIPLIER = (1.8 * 32.0) / (4095.0)
 VOLTAGE_VRGO_MULTIPLIER = (1.8 * 2.0) / (4095.0)
 CURRENT_CELL_MULTIPLIER = (1.8) / (4095.0)
 TEMPERATURE_MULTIPLIER = (1.8) / (4095.0)
 
+# Definition of memory regions
 ADDR_EEPROM_BEGIN = 0x00
 ADDR_EEPROM_END = 0x4B
 
@@ -28,9 +29,8 @@ ADDR_USER_EEPROM_END = 0x57
 ADDR_RAM_BEGIN = 0x80
 ADDR_RAM_END = 0xAB
 
-# This constants allow api user to get_ram_16bits(0x80) as the array is in different index
-# 0x80 starts the RAM address of the ISL94203
-# 0x57 is the last address of reserved area
+
+# this finds the position of the array index of the RAM address
 ADDR_RAM_OFFSET = ADDR_EEPROM_END + (ADDR_USER_EEPROM_END - ADDR_USER_EEPROM_BEGIN)
 
 # Default from datasheet:
