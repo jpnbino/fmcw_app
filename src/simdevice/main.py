@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from bms.constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, EEPROM_SIZE
+from serialbsp.protocol import SerialProtocol
 
 START_BYTE = 0xAA
 
@@ -36,6 +37,7 @@ class SimulatedDevice:
             print(f"Serial port {port} is already open")
 
         self.config = DEFAULT_CONFIG
+        self.protocol = SerialProtocol(self)
 
     def calculate_checksum(self, data):
         checksum = 0
@@ -43,38 +45,6 @@ class SimulatedDevice:
             checksum ^= byte
         return checksum
 
-    def read_packet(self):
-        ser = self.ser
-        while True:
-            byte = ser.read(1)
-            if byte and byte[0] == START_BYTE:
-                break
-
-        cmd = ser.read(1)
-        if not cmd:
-            return None
-        cmd = cmd[0]
-
-        data_length = ser.read(1)
-        if not data_length:
-            return None
-        data_length = data_length[0]
-
-        data = ser.read(data_length)
-        if len(data) != data_length:
-            return None
-
-        checksum = ser.read(1)
-        if not checksum:
-            return None
-        checksum = checksum[0]
-
-        packet = [cmd, data_length] + list(data)
-        if self.calculate_checksum(packet) != checksum:
-            print("Checksum mismatch")
-            return None
-
-        return (cmd, data)
 
     def send_response(self, cmd, data):
         if isinstance(data, bytes):
@@ -119,7 +89,7 @@ class SimulatedDevice:
 
     def run(self):
         while True:
-            packet = self.read_packet()
+            packet = self.protocol.read_packet()
             if packet:
                 cmd, data = packet
                 if len(data) > 0:

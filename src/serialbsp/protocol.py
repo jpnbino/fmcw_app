@@ -30,7 +30,6 @@ class SerialProtocol:
         while True:
             byte = ser.read(1)
             if not byte:
-                print("Timeout waiting for start byte")
                 return None
             if byte[0] == START_BYTE:
                 break
