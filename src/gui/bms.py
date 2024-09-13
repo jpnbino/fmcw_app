@@ -1,3 +1,5 @@
+import csv
+from datetime import datetime
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from bms.constants import *
@@ -11,6 +13,7 @@ class BMSGUI:
         self.ui = ui
         self.bms_config = bms_config
         self.isl94203 = ISL94203()
+        self.log_file_path = None
 
         # Connect button click to Send Serial Command
         self.ui.readPackButton.clicked.connect(self.read_bms_config)
@@ -510,7 +513,7 @@ class BMSGUI:
                 packet = serial_protocol.read_packet()
                 _, configuration = packet
 
-                self.isl94203.reg_set_all_values(list(configuration))
+                self.isl94203.set_all_values(list(configuration))
                 self.bms_config.update_registers()
                 self.ui_update_fields()
 
@@ -537,27 +540,54 @@ class BMSGUI:
                 _, configuration = packet
 
                 # Update the BMS RAM configuration
-                self.isl94203.reg_set_ram_values(list(configuration))
+                self.isl94203.set_ram_values(list(configuration))
                 self.bms_config.update_registers()
                 self.ui_update_fields()
 
                 logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
                 self.ui.statusBar.showMessage("RAM configuration read successfully.")
+
+                # Return the configuration for logging
+                return list(configuration)
             else:
                 ERROR_MESSAGE = "Serial port is not open"
                 logging.error(ERROR_MESSAGE)
                 self.ui.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+                return None
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
             self.ui.statusBar.showMessage(f"Error: {e}")
+            return None
 
     def log_bms_ram_config(self):
         if self.ui.startStopLogButton.isChecked():
             self.ui.startStopLogButton.setText("Stop Log")
             self.ui.update_logging_status("Logging: In Progress")
             delay = self.ui.logRateSpinBox.value()
-            self.read_bms_ram_config()
+            
+            # Create a new log file if it doesn't exist
+            if self.log_file_path is None:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                self.log_file_path = f'bms_ram_log_{timestamp}.csv'
+            
+            # Read the RAM configuration
+            ram_values = self.read_bms_ram_config()
+            
+            if ram_values:
+                # Convert each value to a two-digit hexadecimal string
+                formatted_values = [f'{value:02X}' for value in ram_values]
+
+                # Append the values to the CSV file
+                with open(self.log_file_path, mode='a', newline='') as file:
+                    writer = csv.writer(file)
+                    # Write the header if the file is empty
+                    if file.tell() == 0:
+                        writer.writerow(['timestamp'] + [f'{0x80 + i:02X}h' for i in range(len(ram_values))])
+                    # Write the RAM values
+                    writer.writerow([datetime.now().isoformat()] + formatted_values)
+            
             QTimer.singleShot(delay * 1000, self.log_bms_ram_config)
         else:
             self.ui.startStopLogButton.setText("Start Log")
             self.ui.update_logging_status("Logging: Not started")
+            self.log_file_path = None  # Reset the log file path when logging stops
