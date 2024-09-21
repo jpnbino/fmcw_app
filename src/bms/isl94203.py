@@ -2,16 +2,17 @@ from bms.constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
 import logging
 
 class ISL94203:
-    registers = [0] * len(DEFAULT_CONFIG)
 
     def __init__(self):
-        pass
+        self.registers = [0] * len(DEFAULT_CONFIG)
+    
+ 
+    def set_registers(self, values: list[int]):
+        self.registers = values
 
-    # Assuming the values get 16bits, therefore, operations are over two consecutive addresses 
-    # example:
-    def set_all_values(self, values):
-        ISL94203.registers = values
-
+    def get_registers(self):
+        return self.registers
+    
     def set_ram_values(self, values):
         """
         Set the RAM values of the ISL94203.
@@ -82,7 +83,7 @@ class ISL94203:
             start_address = start_address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
         # Assuming start_address points to the index in registers directly
-        raw_value = (ISL94203.registers[start_address + 1] << 8) | ISL94203.registers[start_address]
+        raw_value = (self.registers[start_address + 1] << 8) | self.registers[start_address]
         value = (raw_value >> bit_shift) & bit_mask
         return value
 

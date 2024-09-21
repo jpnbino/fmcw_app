@@ -1,10 +1,12 @@
-import csv
-from datetime import datetime
+
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from bms.constants import *
 from bms.isl94203 import ISL94203
 from serialbsp.protocol import *
+from logger.log_handler import LogHandler
+from bms.isl94203_factory import ISL94203Factory
+
 import logging
 
 
@@ -12,7 +14,7 @@ class BMSGUI:
     def __init__(self, ui, bms_config):
         self.ui = ui
         self.bms_config = bms_config
-        self.isl94203 = ISL94203()
+        self.isl94203 = ISL94203Factory.create_instance()
         self.log_file_path = None
 
         # Connect button click to Send Serial Command
@@ -483,7 +485,7 @@ class BMSGUI:
     def write_bms_config(self):
 
         if self.ui.serial_setup and self.ui.serial_setup.is_open():
-            register_cfg = ISL94203.registers
+            register_cfg = self.isl94203.get_registers()
 
             self.write_voltage_limits()
             self.write_voltage_limits_timing()
@@ -513,11 +515,11 @@ class BMSGUI:
                 packet = serial_protocol.read_packet()
                 _, configuration = packet
 
-                self.isl94203.set_all_values(list(configuration))
+                self.isl94203.set_registers(list(configuration))
                 self.bms_config.update_registers()
                 self.ui_update_fields()
-
-                logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in ISL94203.registers)}")
+                register_cfg = self.isl94203.get_registers()
+                logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
                 self.ui.statusBar.showMessage("Configuration read successfully.")
             else:
                 ERROR_MESSAGE = "Serial port is not open"
@@ -565,29 +567,43 @@ class BMSGUI:
             self.ui.update_logging_status("Logging: In Progress")
             delay = self.ui.logRateSpinBox.value()
             
-            # Create a new log file if it doesn't exist
-            if self.log_file_path is None:
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                self.log_file_path = f'bms_ram_log_{timestamp}.csv'
-            
+            # Initialize the RAM log handler if not already initialized
+            if not hasattr(self, 'ram_log_handler'):
+                self.ram_log_handler = LogHandler(log_type='ram')
+
+            self.ram_log_handler.start_log()  # Ensure log file is created
+
             # Read the RAM configuration
             ram_values = self.read_bms_ram_config()
-            
-            if ram_values:
-                # Convert each value to a two-digit hexadecimal string
-                formatted_values = [f'{value:02X}' for value in ram_values]
 
-                # Append the values to the CSV file
-                with open(self.log_file_path, mode='a', newline='') as file:
-                    writer = csv.writer(file)
-                    # Write the header if the file is empty
-                    if file.tell() == 0:
-                        writer.writerow(['timestamp'] + [f'{0x80 + i:02X}h' for i in range(len(ram_values))])
-                    # Write the RAM values
-                    writer.writerow([datetime.now().isoformat()] + formatted_values)
-            
+            if ram_values:
+                # Write to the RAM log file
+                self.ram_log_handler.write_ram_log(ram_values)
+
+                # Optionally: Parse values and log to the parsed log file
+                parsed_values = self.parse_bms_values(ram_values)
+                if not hasattr(self, 'parsed_log_handler'):
+                    self.parsed_log_handler = LogHandler(log_type='parsed')
+                self.parsed_log_handler.start_log()
+                self.parsed_log_handler.write_parsed_log(parsed_values)
+
             QTimer.singleShot(delay * 1000, self.log_bms_ram_config)
         else:
             self.ui.startStopLogButton.setText("Start Log")
             self.ui.update_logging_status("Logging: Not started")
-            self.log_file_path = None  # Reset the log file path when logging stops
+            self.ram_log_handler.stop_log()
+            if hasattr(self, 'parsed_log_handler'):
+                self.parsed_log_handler.stop_log()
+
+    def parse_bms_values(self, ram_values):
+        # Example logic for parsing raw RAM values into meaningful values
+        # This depends on your specific data format
+        cell_values = ram_values[:3]  # Assume first 3 values are Cell1, Cell2, Cell3
+        cell_min = min(cell_values)
+        cell_max = max(cell_values)
+        icurrent = ram_values[3]  # Assume 4th value is Icurrent
+        status_bit0 = (ram_values[4] & 0x01)  # Assume 5th value is a status byte, bit 0
+        status_bit1 = (ram_values[4] & 0x02) >> 1  # Assume 5th value, bit 1
+        
+        # Return a list of parsed values in the expected format
+        return [cell_values[0], cell_values[1], cell_values[2], cell_min, cell_max, icurrent, status_bit0, status_bit1]

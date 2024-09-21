@@ -1,13 +1,14 @@
 from bms.constants import *
 import logging
 from bms.isl94203 import ISL94203
+from bms.isl94203_factory import ISL94203Factory
 
 logging.basicConfig(level=logging.DEBUG)
 
 class BMSConfiguration:
 
     def __init__(self):
-        self.isl94203 = ISL94203()
+        self.isl94203 = ISL94203Factory.create_instance()
 
         # Voltage Limits
         self.ov = 0.0
@@ -161,7 +162,8 @@ class BMSConfiguration:
 
     def update_registers(self):
         """ update the parameters values after reading from registers """
-        logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in ISL94203.registers)}")
+        registers = self.isl94203.get_registers()
+        logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in registers)}")
 
         try:
             self.update_voltage_limits()
@@ -291,7 +293,8 @@ class BMSConfiguration:
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
             try:
-                value = self.calculate_temperature_from_raw_value((ISL94203.registers[high_byte] << 8) | ISL94203.registers[low_byte])
+                registers = self.isl94203.get_registers()
+                value = self.calculate_temperature_from_raw_value((registers[high_byte] << 8) | registers[low_byte])
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance temperature: {e}")
@@ -497,8 +500,9 @@ class BMSConfiguration:
         - float: The calculated voltage.
         """
         # Extract the two bytes from values starting from the given address
-        byte0 = ISL94203.registers[address]
-        byte1 = ISL94203.registers[address + 1]
+        registers = self.isl94203.get_registers()
+        byte0 = registers[address]
+        byte1 = registers[address + 1]
 
         # Combine bytes into a single 16-bit value (little-endian format)
         combined_value = (byte1 << 8) | byte0
@@ -517,8 +521,9 @@ class BMSConfiguration:
         Returns:
         - float: The calculated voltage.
         """
+        registers = self.isl94203.get_registers()
         # Extract the 16-bit value from 'values' starting at 'address'
-        raw_value = (ISL94203.registers[address + 1] << 8) | ISL94203.registers[address]
+        raw_value = (registers[address + 1] << 8) | registers[address]
 
         # Apply mask and multiplier to calculate the voltage
         return self.calculate_temperature_from_raw_value(raw_value)
