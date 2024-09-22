@@ -204,21 +204,21 @@ class BMSConfiguration:
         - values (list): The list of values from which to extract the timing attributes.
         """
         timing_mapping = {
-            (0x10, 0, MASK_10BIT): 'ov_delay_timeout',
-            (0x10, 10, MASK_2BIT): 'ov_delay_timeout_unit',
-            (0x12, 0, MASK_10BIT): 'uv_delay_timeout',
-            (0x12, 10, MASK_2BIT): 'uv_delay_timeout_unit',
-            (0x14, 0, MASK_9BIT): 'open_wire_timing',
-            (0x14, 9, MASK_1BIT): 'open_wire_timing_unit',
-            (0x46, 0, MASK_9BIT): 'sleep_delay',
-            (0x46, 9, MASK_2BIT): 'sleep_delay_unit',
-            (0x46, 11, MASK_5BIT): 'timer_wdt',
-            (0x48, 0, MASK_4BIT): 'timer_idle_doze',
-            (0x48, 4, MASK_4BIT): 'timer_sleep',
+            (0x10, 0, Mask.MASK_10BIT): 'ov_delay_timeout',
+            (0x10, 10, Mask.MASK_2BIT): 'ov_delay_timeout_unit',
+            (0x12, 0, Mask.MASK_10BIT): 'uv_delay_timeout',
+            (0x12, 10, Mask.MASK_2BIT): 'uv_delay_timeout_unit',
+            (0x14, 0, Mask.MASK_9BIT): 'open_wire_timing',
+            (0x14, 9, Mask.MASK_1BIT): 'open_wire_timing_unit',
+            (0x46, 0, Mask.MASK_9BIT): 'sleep_delay',
+            (0x46, 9, Mask.MASK_2BIT): 'sleep_delay_unit',
+            (0x46, 11, Mask.MASK_5BIT): 'timer_wdt',
+            (0x48, 0, Mask.MASK_4BIT): 'timer_idle_doze',
+            (0x48, 4, Mask.MASK_4BIT): 'timer_sleep',
         }
-        for (addr, bit_shift, bit_mask), attr in timing_mapping.items():
+        for (addr, bit_shift, mask), attr in timing_mapping.items():
             try:
-                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read( addr, bit_shift, mask)
                 if attr == 'timer_sleep':
                     value *= 16
                 setattr(self, attr, value)
@@ -227,7 +227,7 @@ class BMSConfiguration:
 
     def cell_configuration(self):
         # Cell Configuration
-        self.cell_config = self.isl94203.reg_read( 0x48, 8, MASK_8BIT)
+        self.cell_config = self.isl94203.reg_read( 0x48, 8, Mask.MASK_8BIT)
 
     def update_pack_options(self):
         """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
@@ -271,10 +271,10 @@ class BMSConfiguration:
                 print(f"Error updating cell balance: {e}")
 
         cell_balance_timing_mapping = {
-            (0x24, 0, MASK_10BIT): 'cb_on_time',
-            (0x24, 10, MASK_2BIT): 'cb_on_time_unit',
-            (0x26, 0, MASK_10BIT): 'cb_off_time',
-            (0x26, 10, MASK_2BIT): 'cb_off_time_unit'
+            (0x24, 0, Mask.MASK_10BIT): 'cb_on_time',
+            (0x24, 10, Mask.MASK_2BIT): 'cb_on_time_unit',
+            (0x26, 0, Mask.MASK_10BIT): 'cb_off_time',
+            (0x26, 10, Mask.MASK_2BIT): 'cb_off_time_unit'
         }
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
@@ -305,17 +305,17 @@ class BMSConfiguration:
         - values (list): The list of values from which to extract the current limit attributes.
         """
         current_limits_mapping = {
-            (0x16, 12, MASK_3BIT): 'disch_oc_voltage',
-            (0x16, 0, MASK_10BIT): 'disch_oc_timeout',
-            (0x16, 10, MASK_2BIT): 'disch_oc_timeout_unit',
-            (0x18, 12, MASK_3BIT): 'charge_oc_voltage',
-            (0x18, 0, MASK_10BIT): 'charge_oc_timeout',
-            (0x18, 10, MASK_2BIT): 'charge_oc_timeout_unit',
-            (0x1A, 12, MASK_3BIT): 'disch_sc_voltage',
-            (0x1A, 0, MASK_10BIT): 'disch_sc_timeout',
-            (0x1A, 10, MASK_2BIT): 'disch_sc_timeout_unit',
-            (0x00, 12, MASK_4BIT): 'charge_detect_pulse_width',
-            (0x04, 12, MASK_4BIT): 'load_detect_pulse_width'
+            (0x16, 12, Mask.MASK_3BIT): 'disch_oc_voltage',
+            (0x16, 0, Mask.MASK_10BIT): 'disch_oc_timeout',
+            (0x16, 10, Mask.MASK_2BIT): 'disch_oc_timeout_unit',
+            (0x18, 12, Mask.MASK_3BIT): 'charge_oc_voltage',
+            (0x18, 0, Mask.MASK_10BIT): 'charge_oc_timeout',
+            (0x18, 10, Mask.MASK_2BIT): 'charge_oc_timeout_unit',
+            (0x1A, 12, Mask.MASK_3BIT): 'disch_sc_voltage',
+            (0x1A, 0, Mask.MASK_10BIT): 'disch_sc_timeout',
+            (0x1A, 10, Mask.MASK_2BIT): 'disch_sc_timeout_unit',
+            (0x00, 12, Mask.MASK_4BIT): 'charge_detect_pulse_width',
+            (0x04, 12, Mask.MASK_4BIT): 'load_detect_pulse_width'
         }
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
@@ -354,7 +354,7 @@ class BMSConfiguration:
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read( 0x85, 4, MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read( 0x85, 4, Mask.MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -451,7 +451,7 @@ class BMSConfiguration:
         Returns:
         - float: The processed value.
         """
-        masked_value = value & MASK_12BIT
+        masked_value = value & Mask.MASK_12BIT.value
         result = masked_value * multiplier / gain
         return result
 

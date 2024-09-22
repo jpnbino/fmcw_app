@@ -2,7 +2,6 @@
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from bms.constants import *
-from bms.isl94203 import ISL94203
 from serialbsp.protocol import *
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
@@ -280,6 +279,7 @@ class BMSGUI:
 
         Raises:
             None
+        config_type:
 
         """
         try:
@@ -308,7 +308,7 @@ class BMSGUI:
         ]
         for value, address in voltage_values:
             hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
+            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
     def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
@@ -324,10 +324,10 @@ class BMSGUI:
         open_wire_sample_time_unit = self.get_unit_from_combo(self.ui.openWireTimingCombo) << 9
 
         # Combine values and units, then write to registers
-        self.isl94203.reg_write(0x10, ov_delay_timeout_unit | ov_delay_timeout, MASK_12BIT, 0)
-        self.isl94203.reg_write(0x12, uv_delay_timeout_unit | uv_delay_timeout, MASK_12BIT, 0)
-        self.isl94203.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, MASK_10BIT, 0)
-        self.isl94203.reg_write(0x46, sleep_delay_unit | sleep_delay, MASK_11BIT, 0)
+        self.isl94203.reg_write(0x10, ov_delay_timeout_unit | ov_delay_timeout, Mask.MASK_12BIT, 0)
+        self.isl94203.reg_write(0x12, uv_delay_timeout_unit | uv_delay_timeout, Mask.MASK_12BIT, 0)
+        self.isl94203.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, Mask.MASK_10BIT, 0)
+        self.isl94203.reg_write(0x46, sleep_delay_unit | sleep_delay, Mask.MASK_11BIT, 0)
 
     def convert_time_to_hex(self, time, escaling):
         """Convert time to hex value."""
@@ -336,9 +336,9 @@ class BMSGUI:
     def write_timers(self):
 
         timer_values = [
-            (self.ui.timerWDTLineEdit.text(), 0x46, MASK_5BIT, 11, 0),
-            (self.ui.timerIdleDozeCombo.currentText(), 0x48, MASK_4BIT, 0, 0),
-            (self.ui.timerSleepCombo.currentText(), 0x48, MASK_4BIT, 4, 4)
+            (self.ui.timerWDTLineEdit.text(), 0x46, Mask.MASK_5BIT, 11, 0),
+            (self.ui.timerIdleDozeCombo.currentText(), 0x48, Mask.MASK_4BIT, 0, 0),
+            (self.ui.timerSleepCombo.currentText(), 0x48, Mask.MASK_4BIT, 4, 4)
         ]
         for value, address, mask, shift, scaling in timer_values:
             hex_value = self.convert_time_to_hex(value, scaling)
@@ -355,7 +355,7 @@ class BMSGUI:
         ]
         for value, address in cell_balance_values:
             hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
+            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
         cell_balance_temp_values = [
             (self.ui.CBUnderTempLineEdit.text(), 0x28),
@@ -365,15 +365,15 @@ class BMSGUI:
         ]
         for value, address in cell_balance_temp_values:
             hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
+            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
         # Extract and shift units
         cb_on_time_unit = self.get_unit_from_combo(self.ui.CBOnTimeUnitLineEdit) << 10
         cb_off_time_unit = self.get_unit_from_combo(self.ui.CBOffTimeUnitLineEdit) << 10
 
         # Combine values and units, then write to registers
-        self.isl94203.reg_write(0x24, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), MASK_12BIT, 0)
-        self.isl94203.reg_write(0x26, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), MASK_12BIT, 0)
+        self.isl94203.reg_write(0x24, cb_on_time_unit | int(self.ui.CBOnTimeLineEdit.text()), Mask.MASK_12BIT, 0)
+        self.isl94203.reg_write(0x26, cb_off_time_unit | int(self.ui.CBOffTimeLineEdit.text()), Mask.MASK_12BIT, 0)
 
     def write_temperature_registers(self):
         temp_values = [
@@ -390,7 +390,7 @@ class BMSGUI:
         ]
         for value, address in temp_values:
             hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, MASK_12BIT, 0x00)
+            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
     def write_current_registers(self):
         # Helper function to pack values into the register
@@ -440,27 +440,27 @@ class BMSGUI:
             packed_value = pack_register_value(timeout_value, unit_key, voltage_key)
 
             # Write the packed value to the register
-            self.isl94203.reg_write(reg['address'], packed_value, MASK_15BIT, 0x00)
+            self.isl94203.reg_write(reg['address'], packed_value, Mask.MASK_15BIT, 0x00)
 
         # Extract the charge and load detect pulse widths
         charge_detect_pulse = int(self.ui.chargeDetectPulseCombo.currentText())
         load_detect_pulse = int(self.ui.loadDetectPulseCombo.currentText())
 
         # Write the charge and load detect pulse widths to the registers
-        self.isl94203.reg_write(0x00, charge_detect_pulse, MASK_4BIT, 12)
-        self.isl94203.reg_write(0x04, load_detect_pulse, MASK_4BIT, 12)
+        self.isl94203.reg_write(0x00, charge_detect_pulse, Mask.MASK_4BIT, 12)
+        self.isl94203.reg_write(0x04, load_detect_pulse, Mask.MASK_4BIT, 12)
 
     def write_pack_option_registers(self):
         pack_options = [
-            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, MASK_1BIT, 5),
-            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, MASK_1BIT, 7),
-            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, MASK_1BIT, 0),
-            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4B, MASK_1BIT, 3),
-            (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4A, MASK_1BIT, 1),
-            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 6),
-            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4B, MASK_1BIT, 7),
-            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4B, MASK_1BIT, 0),
-            (self.ui.tGainCheckBox.isChecked(), 0x4A, MASK_1BIT, 4)
+            (self.ui.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 5),
+            (self.ui.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 7),
+            (self.ui.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 0),
+            (self.ui.poEnableUVLOCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 3),
+            (self.ui.poEnableOpenWireScanCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 1),
+            (self.ui.CBDuringChargeCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 6),
+            (self.ui.CBDuringDischargeCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 7),
+            (self.ui.CBDuringEOCCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 0),
+            (self.ui.tGainCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 4)
         ]
         for value, address, mask, shift in pack_options:
             self.isl94203.reg_write(address, int(value), mask, shift)
