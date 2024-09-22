@@ -1,35 +1,61 @@
 from bms.constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
-import logging
+
 
 class ISL94203:
+    """
+    Class representing the ISL94203 battery management system IC.
+    """
 
     def __init__(self):
         self.registers = [0] * len(DEFAULT_CONFIG)
-    
- 
+
     def set_registers(self, values: list[int]):
+        """
+        Set the register values.
+
+        Parameters:
+        - values (list[int]): List of values to set in the registers.
+        """
         self.registers = values
 
-    def get_registers(self):
+    def get_registers(self) -> list[int]:
+        """
+        Get the current register values.
+
+        Returns:
+        - list[int]: List of current register values.
+        """
         return self.registers
-    
-    def set_ram_values(self, values):
+
+    def set_ram_values(self, values: list[int]):
         """
         Set the RAM values of the ISL94203.
 
         Parameters:
-        - values (list): The list of values to set in the RAM.
+        - values (list[int]): List of values to set in the RAM.
         """
         for i, value in enumerate(values):
             self.registers[ADDR_RAM_OFFSET + i] = value
 
-    def get_default_config(self):
+    def get_default_config(self) -> list[int]:
+        """
+        Get the default configuration values.
+
+        Returns:
+        - list[int]: List of default configuration values.
+        """
         return DEFAULT_CONFIG
 
-    def get_config(self):
+    def get_config(self) -> list[int]:
+        """
+        Get the current configuration values.
+
+        Returns:
+        - list[int]: List of current configuration values.
+        """
         return self.registers
-    
-    def reg_write(self, address, value, mask=0xFFFF, shift=0):
+
+    def reg_write(self, address: int, value: int, mask: int = 0xFFFF, shift: int = 0) -> int:
         """
         Write a value to a register based on the specified address, mask, and shift.
 
@@ -42,7 +68,6 @@ class ISL94203:
         Returns:
         - int: The new value of the register.
         """
-
         if address >= ADDR_RAM_BEGIN:
             address = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
@@ -64,15 +89,12 @@ class ISL94203:
 
         return tmp
 
-    def reg_read(self, start_address, bit_shift=0, bit_mask=0xffff):
+    def reg_read(self, start_address: int, bit_shift: int = 0, bit_mask: int = 0xffff) -> int:
         """
-        Extracts a value from the ISL94203.registers list based on the specified parameters.
-
-        This function considers the offset between the RAM addresses and the actual index in the 'registers' list.
+        Extract a value from the ISL94203.registers list based on the specified parameters.
 
         Parameters:
-        - start_address (int): The starting address of the ISL94203. If the address is in RAM,
-        it is converted to the actual index in 'registers'.
+        - start_address (int): The starting address of the ISL94203.
         - bit_shift (int): The bit shift for the value.
         - bit_mask (int): The bitmask for the value.
 
@@ -87,12 +109,12 @@ class ISL94203:
         value = (raw_value >> bit_shift) & bit_mask
         return value
 
-    def read_bit(self, address, bit_position):
+    def read_bit(self, address: int, bit_position: int) -> bool:
         """
-        Extracts a boolean value from ISL94203.registers based on the specified byte address and bit position.
+        Extract a boolean value from ISL94203.registers based on the specified byte address and bit position.
 
         Parameters:
-        - byte_address (int): The byte address.
+        - address (int): The byte address.
         - bit_position (int): The bit position within the byte.
 
         Returns:
