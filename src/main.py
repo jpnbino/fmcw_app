@@ -13,6 +13,7 @@ from bms.configuration import BMSConfiguration
 from gui.bms import BMSGUI
 from gui.serial import SerialWidget
 
+
 def main():
     configure_logging()
     logging.info("Application started")
@@ -63,6 +64,7 @@ def main():
         logging.error(f"Failed to start the application: {e}")
         sys.exit(1)
 
+
 class FMCWApplication(QMainWindow):
     def __init__(self, window):
         super().__init__()
@@ -80,7 +82,6 @@ class FMCWApplication(QMainWindow):
         self.logRateSpinBox.setMinimum(1)
         self.logRateSpinBox.setMaximum(3600)
 
-
         # Create a QLabel for logging status
         self.logging_status_label = QLabel("Logging: Not started")
         self.logging_status_label.setStyleSheet("padding-right: 10px;")
@@ -91,6 +92,7 @@ class FMCWApplication(QMainWindow):
 
     def update_logging_status(self, message):
         self.logging_status_label.setText(message)
+
 
 if __name__ == '__main__':
     main()

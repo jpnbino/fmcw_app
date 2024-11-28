@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 
+
 class LogHandler:
     def __init__(self, log_type):
         self.log_file_path = None
@@ -31,7 +32,8 @@ class LogHandler:
             writer = csv.writer(file)
             # Write the header if the file is empty
             if file.tell() == 0:
-                headers = ['timestamp', 'Cell1', 'Cell2', 'Cell3', 'CellMin', 'CellMax', 'Icurrent', 'status bit0', 'status bit1', '...']
+                headers = ['timestamp', 'Cell1', 'Cell2', 'Cell3', 'CellMin', 'CellMax', 'Icurrent', 'status bit0',
+                           'status bit1', '...']
                 writer.writerow(headers)
             writer.writerow([datetime.now().isoformat()] + parsed_values)
 

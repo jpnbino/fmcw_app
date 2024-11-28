@@ -1,5 +1,3 @@
-import os
-
 # Basic configurations
 APP_NAME = "FMCW Application"
 WINDOW_TITLE = "FMCW Radar Control"

@@ -1,11 +1,13 @@
-import serial
-import time
 import os
 import sys
 
+import serial
+import random
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from bms.constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, EEPROM_SIZE
+from bms.constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, \
+    DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, EEPROM_SIZE
 from serialbsp.protocol import SerialProtocol
 
 START_BYTE = 0xAA
@@ -45,7 +47,6 @@ class SimulatedDevice:
             checksum ^= byte
         return checksum
 
-
     def send_response(self, cmd, data):
         if isinstance(data, bytes):
             data = list(data)
@@ -70,14 +71,17 @@ class SimulatedDevice:
                 self.config[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1] = data
                 response_data = [0x00]  # Acknowledge write operation
         elif cmd == CMD_READ_RAM:
-            ram_values = self.config[ADDR_RAM_OFFSET:ADDR_RAM_OFFSET + (ADDR_RAM_END - ADDR_RAM_BEGIN + 1)]
-            response_data = ram_values
+            ram_size = ADDR_RAM_END - ADDR_RAM_BEGIN + 1
+            response_data = [random.randint(0, 255) for _ in range(ram_size)]
+            # ram_values = self.config[ADDR_RAM_OFFSET:ADDR_RAM_OFFSET + (ADDR_RAM_END - ADDR_RAM_BEGIN + 1)]
+            # response_data = ram_values
         elif cmd == CMD_READ_USER_EEPROM:
             user_eeprom_values = self.config[ADDR_USER_EEPROM_BEGIN:(ADDR_USER_EEPROM_END + 1)]
             response_data = user_eeprom_values
         elif cmd == CMD_WRITE_USER_EEPROM:
             if len(data) > (ADDR_USER_EEPROM_END - ADDR_USER_EEPROM_BEGIN + 1):
-                print(f"Error: Data length {len(data)} bytes exceeds User EEPROM size {(ADDR_USER_EEPROM_END - ADDR_USER_EEPROM_BEGIN + 1)} bytes")
+                print(
+                    f"Error: Data length {len(data)} bytes exceeds User EEPROM size {(ADDR_USER_EEPROM_END - ADDR_USER_EEPROM_BEGIN + 1)} bytes")
                 response_data = [0xFF]  # Error response
             else:
                 self.config[ADDR_USER_EEPROM_BEGIN:ADDR_USER_EEPROM_BEGIN + len(data)] = data
@@ -108,6 +112,6 @@ class SimulatedDevice:
 
 
 if __name__ == '__main__':
-    simulated_device = SimulatedDevice(port='COM22', baudrate=9600)
+    simulated_device = SimulatedDevice(port='COM8', baudrate=9600)
     print("Simulated device running...")
     simulated_device.run()

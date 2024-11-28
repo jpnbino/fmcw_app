@@ -1,9 +1,9 @@
 from bms.constants import *
 import logging
-from bms.isl94203 import ISL94203
 from bms.isl94203_factory import ISL94203Factory
 
 logging.basicConfig(level=logging.DEBUG)
+
 
 class BMSConfiguration:
 
@@ -193,7 +193,7 @@ class BMSConfiguration:
         }
         for addr, attr in voltage_mappping.items():
             try:
-                value = self.calculate_voltage( addr)
+                value = self.calculate_voltage(addr)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating voltage limits: {e}")
@@ -218,7 +218,7 @@ class BMSConfiguration:
         }
         for (addr, bit_shift, mask), attr in timing_mapping.items():
             try:
-                value = self.isl94203.reg_read( addr, bit_shift, mask)
+                value = self.isl94203.reg_read(addr, bit_shift, mask)
                 if attr == 'timer_sleep':
                     value *= 16
                 setattr(self, attr, value)
@@ -227,7 +227,7 @@ class BMSConfiguration:
 
     def cell_configuration(self):
         # Cell Configuration
-        self.cell_config = self.isl94203.reg_read( 0x48, 8, Mask.MASK_8BIT)
+        self.cell_config = self.isl94203.reg_read(0x48, 8, Mask.MASK_8BIT)
 
     def update_pack_options(self):
         """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
@@ -248,7 +248,7 @@ class BMSConfiguration:
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
             try:
-                setattr(self, attr, self.isl94203.read_bit( addr, bit_pos))
+                setattr(self, attr, self.isl94203.read_bit(addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
 
@@ -266,7 +266,7 @@ class BMSConfiguration:
 
         for addr, attr in cell_balance_mapping.items():
             try:
-                setattr(self, attr, self.calculate_voltage( addr))
+                setattr(self, attr, self.calculate_voltage(addr))
             except Exception as e:
                 print(f"Error updating cell balance: {e}")
 
@@ -279,7 +279,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
             try:
-                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read(addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance timing: {e}")
@@ -320,7 +320,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
             try:
-                value = self.isl94203.reg_read( addr, bit_shift, bit_mask)
+                value = self.isl94203.reg_read(addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating current limits: {e}")
@@ -354,7 +354,7 @@ class BMSConfiguration:
         Parameters:
         - values (list): The list of values from which to extract the RAM attributes.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read( 0x85, 4, Mask.MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read(0x85, 4, Mask.MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -376,16 +376,17 @@ class BMSConfiguration:
 
         for addr, attr in ram_addresses.items():
             try:
+                value = 0
                 if 'temp' in attr:
-                    value = self.calculate_temperature_from_raw_value(self.isl94203.reg_read( addr))
+                    value = self.calculate_temperature_from_raw_value(self.isl94203.reg_read(addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.isl94203.reg_read( addr))
+                    value = self.apply_mask_and_multiplier(self.isl94203.reg_read(addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.isl94203.reg_read( addr), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.isl94203.reg_read(addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value = self.apply_mask_and_multiplier_pack(self.isl94203.reg_read( addr))
+                    value = self.apply_mask_and_multiplier_pack(self.isl94203.reg_read(addr))
                 elif attr == 'vrgo':
-                    value = self.calculate_vrgo_from_raw_value(self.isl94203.reg_read( addr))
+                    value = self.calculate_vrgo_from_raw_value(self.isl94203.reg_read(addr))
 
                 setattr(self, attr, value)
             except Exception as e:
@@ -438,7 +439,6 @@ class BMSConfiguration:
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
 
-    
     def apply_mask_and_multiplier_generic(self, value, multiplier, gain=1):
         """
         Apply a mask and a multiplier to the given value.

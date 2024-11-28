@@ -25,7 +25,7 @@ class BMSGUI:
 
         self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
         self.startStopLogButton = self.ui.findChild(QPushButton, "startStopLogButton")
- 
+
         # Access QLineEdit elements using findChild
         self.ovLockoutLineEdit = self.ui.findChild(QLineEdit, "ovLockoutLineEdit")
         self.ovLineEdit = self.ui.findChild(QLineEdit, "ovLineEdit")
@@ -100,7 +100,7 @@ class BMSGUI:
         self.TLDischUnderTempLineEdit = self.ui.findChild(QLineEdit, "TLDischUnderTempLineEdit")
         self.TLInternalOverTempLineEdit = self.ui.findChild(QLineEdit, "TLInternalOverTempLineEdit")
         self.TLInternalOTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLInternalOTRecoverLineEdit")
-        
+
         self.tGainCheckBox = self.ui.findChild(QCheckBox, "tGainCheckBox")
         self.TemperatureGainLabel = self.ui.findChild(QLabel, "TemperatureGainLabel")
 
@@ -154,9 +154,8 @@ class BMSGUI:
         self.bitIDLElabel = self.ui.findChild(QLabel, "bitIDLElabel")
         self.bitDOZElabel = self.ui.findChild(QLabel, "bitDOZElabel")
         self.bitSLEEPlabel = self.ui.findChild(QLabel, "bitSLEEPlabel")
-        
-        self.logRateSpinBox = self.ui.findChild(QSpinBox, "logRateSpinBox")
 
+        self.logRateSpinBox = self.ui.findChild(QSpinBox, "logRateSpinBox")
 
     def ui_update_ram_fields(self):
         self.ui_update_ram_values()
