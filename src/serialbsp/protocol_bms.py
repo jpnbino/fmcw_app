@@ -8,7 +8,7 @@ CMD_WRITE_USER_EEPROM = 0x05
 CMD_READ_USER_EEPROM = 0x06
 
 
-class SerialProtocol:
+class SerialProtocolBms:
     def __init__(self, serial_setup):
         self.serial_setup = serial_setup
         self.serial_setup.ser.timeout = 1  # Set a timeout of 1 second

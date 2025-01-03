@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1125</width>
-    <height>885</height>
+    <height>884</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -74,7 +74,7 @@ QMenuBar::item:pressed {
     </font>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_main">
     <property name="sizePolicy">
@@ -154,19 +154,19 @@ QMenuBar::item:pressed {
        <x>40</x>
        <y>110</y>
        <width>281</width>
-       <height>251</height>
+       <height>271</height>
       </rect>
      </property>
      <property name="title">
       <string> RTC</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
         <width>263</width>
-        <height>221</height>
+        <height>236</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
@@ -308,6 +308,19 @@ QMenuBar::item:pressed {
        </item>
       </layout>
      </widget>
+    </widget>
+    <widget class="QTextEdit" name="serialLogTextEdit">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>440</y>
+       <width>491</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="tabletTracking">
+      <bool>false</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_bms">
@@ -5588,7 +5601,7 @@ VREF off.</string>
      <x>0</x>
      <y>0</y>
      <width>1125</width>
-     <height>17</height>
+     <height>18</height>
     </rect>
    </property>
    <property name="font">
@@ -5610,22 +5623,6 @@ VREF off.</string>
     </property>
    </widget>
    <addaction name="menuabout"/>
-  </widget>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="font">
-    <font>
-     <family>Roboto</family>
-    </font>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::FocusPolicy::NoFocus</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="sizeGripEnabled">
-    <bool>false</bool>
-   </property>
   </widget>
  </widget>
  <resources/>

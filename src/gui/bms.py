@@ -3,7 +3,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
 
 from bms.constants import *
-from serialbsp.protocol import *
+from serialbsp.protocol_bms import *
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
 
@@ -420,7 +420,7 @@ class BMSGUI:
         try:
             return int(float(value) / config_type)
         except ValueError:
-            print(f"Error converting {value} to hex.")
+            logging.error(f"Error converting {value} to hex.")
             return 0
 
     def get_unit_from_combo(self, combo):
@@ -601,65 +601,77 @@ class BMSGUI:
             self.isl94203.reg_write(address, int(value), mask, shift)
 
     def send_serial_command(self, command, data):
+        """
+        Send a command with data over the serial connection.
+
+        Args:
+            command (str): The command to send.
+            data (list): The data to send with the command.
+        """
         # Access the shared serial_setup
         serial_setup = self.ui.serial_setup
 
+        if serial_setup is None:
+            logging.error("Serial setup is None")
+            return
+
+        if not serial_setup.is_open():
+            logging.warning("Serial port is not open")
+            return
+
         try:
-            if serial_setup and serial_setup.is_open():
-                # Send the configuration data over serial
-                serial_protocol = SerialProtocol(serial_setup)
-                serial_protocol.send_command(command, data)
-                packet = serial_protocol.read_packet()
-                _, response = packet
-                print(f"response: {response}")
-            else:
-                logging.warning("Serial port is not open")
+            serial_protocol = SerialProtocolBms(serial_setup)
+            serial_protocol.send_command(command, data)
+            packet = serial_protocol.read_packet()
+            _, response = packet
+            print(f"response: {response}")
         except Exception as e:
             logging.error(f"Failed to send serial command: {e}")
 
     def write_bms_config(self):
-
-        if self.ui.serial_setup and self.ui.serial_setup.is_open():
-            register_cfg = self.isl94203.get_registers()
-
-            self.write_voltage_limits()
-            self.write_voltage_limits_timing()
-            self.write_timers()
-            self.write_cell_balance_registers()
-            self.write_temperature_registers()
-            self.write_current_registers()
-            self.write_pack_option_registers()
-
-            logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-
-            self.send_serial_command(CMD_WRITE_EEPROM, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
-            self.statusBar.showMessage("Configuration written successfully.")
-        else:
+        if not self.ui.serial_setup or not self.ui.serial_setup.is_open():
             logging.error("Serial port is not open")
             self.statusBar.showMessage("Error: Serial port is not open.")
+            return
+
+        register_cfg = self.isl94203.get_registers()
+
+        self.write_voltage_limits()
+        self.write_voltage_limits_timing()
+        self.write_timers()
+        self.write_cell_balance_registers()
+        self.write_temperature_registers()
+        self.write_current_registers()
+        self.write_pack_option_registers()
+
+        logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
+
+        self.send_serial_command(CMD_WRITE_EEPROM, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
+        self.statusBar.showMessage("Configuration written successfully.")
 
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
         serial_setup = self.ui.serial_setup
         configuration = []
-        try:
-            if serial_setup and serial_setup.is_open():
-                # Send the configuration data over serial
-                serial_protocol = SerialProtocol(serial_setup)
-                serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])
-                packet = serial_protocol.read_packet()
-                _, configuration = packet
 
-                self.isl94203.set_registers(list(configuration))
-                self.bms_config.update_registers()
-                self.ui_update_fields()
-                register_cfg = self.isl94203.get_registers()
-                logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-                self.statusBar.showMessage("Configuration read successfully.")
-            else:
-                error_message = "Serial port is not open"
-                logging.error(error_message)
-                self.statusBar.showMessage(f"Error: {error_message}.")
+        if not serial_setup or not serial_setup.is_open():
+            error_message = "Serial port is not open"
+            logging.error(error_message)
+            self.statusBar.showMessage(f"Error: {error_message}.")
+            return
+
+        try:
+            serial_protocol = SerialProtocolBms(serial_setup)
+            serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])
+            packet = serial_protocol.read_packet()
+            _, configuration = packet
+
+            self.isl94203.set_registers(list(configuration))
+            self.bms_config.update_registers()
+            self.ui_update_fields()
+            register_cfg = self.isl94203.get_registers()
+            logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
+            self.statusBar.showMessage("Configuration read successfully.")
         except Exception as e:
             logging.error(f"Failed to read BMS configuration: {e}")
             self.statusBar.showMessage(f"Error: {e}")
@@ -668,29 +680,27 @@ class BMSGUI:
         """Read RAM memory configuration from the device via serial"""
         serial_setup = self.ui.serial_setup
         configuration = []
+
+        if not serial_setup or not serial_setup.is_open():
+            ERROR_MESSAGE = "Serial port is not open"
+            logging.error(ERROR_MESSAGE)
+            self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+            return None
         try:
-            if serial_setup and serial_setup.is_open():
-                # Send the configuration data over serial
-                serial_protocol = SerialProtocol(serial_setup)
-                serial_protocol.send_command(CMD_READ_RAM, [])
-                packet = serial_protocol.read_packet()
-                _, configuration = packet
+            serial_protocol = SerialProtocolBms(serial_setup)
+            serial_protocol.send_command(CMD_READ_RAM, [])
+            packet = serial_protocol.read_packet()
+            _, configuration = packet
 
-                # Update the BMS RAM configuration
-                self.isl94203.set_ram_values(list(configuration))
-                self.bms_config.update_registers()
-                self.ui_update_fields()
+            self.isl94203.set_ram_values(list(configuration))
+            self.bms_config.update_registers()
+            self.ui_update_fields()
 
-                logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
-                self.statusBar.showMessage("RAM configuration read successfully.")
+            logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
+            self.statusBar.showMessage("RAM configuration read successfully.")
 
-                # Return the configuration for logging
-                return list(configuration)
-            else:
-                ERROR_MESSAGE = "Serial port is not open"
-                logging.error(ERROR_MESSAGE)
-                self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
-                return None
+            return list(configuration)
+
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
             self.statusBar.showMessage(f"Error: {e}")
@@ -702,13 +712,11 @@ class BMSGUI:
             self.ui.update_logging_status("Logging: In Progress")
             delay = self.logRateSpinBox.value()
 
-            # Initialize the RAM log handler if not already initialized
             if not hasattr(self, 'ram_log_handler'):
                 self.ram_log_handler = LogHandler(log_type='ram')
 
-            self.ram_log_handler.start_log()  # Ensure log file is created
+            self.ram_log_handler.start_log()
 
-            # Read the RAM configuration
             ram_values = self.read_bms_ram_config()
 
             if ram_values:
@@ -731,8 +739,7 @@ class BMSGUI:
                 self.parsed_log_handler.stop_log()
 
     def parse_bms_values(self, ram_values):
-        # Example logic for parsing raw RAM values into meaningful values
-        # This depends on your specific data format
+        """Parse raw RAM values into meaningful values."""
         cell_values = ram_values[:3]  # Assume first 3 values are Cell1, Cell2, Cell3
         cell_min = min(cell_values)
         cell_max = max(cell_values)
