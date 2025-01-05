@@ -6,7 +6,7 @@ from logging_config import configure_logging
 
 from PySide6.QtGui import QIcon, QFont, QFontDatabase
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QPushButton, QStatusBar
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar
 from PySide6.QtCore import QFile, QIODevice, Qt
 
 from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
