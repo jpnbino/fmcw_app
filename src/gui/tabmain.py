@@ -2,7 +2,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit
 from PySide6.QtGui import QTextCursor
 from serialbsp.protocol_fmcw import (
-    CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_START_CALIBRATION, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
+    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
     CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, SerialProtocolFmcw
 )
 
@@ -20,6 +20,9 @@ class MainTab:
         self.setup_status_bar()
         self.setup_serial_controls()
         self.setup_rtc_controls()
+        self.setup_status_controls()
+        self.setup_potis_controls()
+        self.setup_measurement_controls()
         self.setup_serial_log()
         self.setup_timers()
 
@@ -116,45 +119,192 @@ class MainTab:
         self.statusBootloaderPushButton.clicked.connect(self.read_bootloader_status)
 
     def setup_status_sdcard_controls(self):
-        self.statusSdcardPushButton = self.ui.findChild(QPushButton, "readSdcardStatusPushButton")
+        self.statusSdcardPushButton = self.ui.findChild(QPushButton, "readSDCardStatusPushButton")
         self.statusSdcardPushButton.clicked.connect(self.read_sdcard_status)
 
     def setup_status_remote_controls(self):
         self.statusRemotePushButton = self.ui.findChild(QPushButton, "readRemoteStatusPushButton")
         self.statusRemotePushButton.clicked.connect(self.read_remote_status)
 
+    def setup_potis_controls(self):
+        self.poti1PushButton = self.ui.findChild(QPushButton, "poti1PushButton")
+        self.poti2PushButton = self.ui.findChild(QPushButton, "poti2PushButton")
+        self.poti3PushButton = self.ui.findChild(QPushButton, "poti3PushButton")
+        self.poti4PushButton = self.ui.findChild(QPushButton, "poti4PushButton")
+        self.readFilterConfigPushButton = self.ui.findChild(QPushButton, "readFilterConfigPushButton")
+
+
+        self.poti1ComboBox = self.ui.findChild(QComboBox, "poti1ComboBox")
+        self.poti2ComboBox = self.ui.findChild(QComboBox, "poti2ComboBox")
+        self.poti3ComboBox = self.ui.findChild(QComboBox, "poti3ComboBox")
+        self.poti4ComboBox = self.ui.findChild(QComboBox, "poti4ComboBox")
+
+        self.poti1ComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
+        self.poti2ComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
+        self.poti3ComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
+        self.poti4ComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
+
+        self.poti1ComboBox.addItems([str(val) for val in range(0, 256)])
+        self.poti2ComboBox.addItems([str(val) for val in range(0, 256)])
+        self.poti3ComboBox.addItems([str(val) for val in range(0, 256)])
+        self.poti4ComboBox.addItems([str(val) for val in range(0, 256)])
+
+        self.poti1PushButton.clicked.connect(self.send_poti1)
+        self.poti2PushButton.clicked.connect(self.send_poti2)
+        self.poti3PushButton.clicked.connect(self.send_poti3)
+        self.poti4PushButton.clicked.connect(self.send_poti4)
+        self.readFilterConfigPushButton.clicked.connect(self.read_filter_config)
+
+    def send_poti1(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            value = int(self.poti1ComboBox.currentText())
+            self.serial_protocol.send_command(CMD_DIGITAL_POTI_1, [value])
+            self.append_serial_log(f"Sent POTI1 cmd with value: {value}\n")
+        else:
+            self.append_serial_log("Serial port not open") 
+
+    def send_poti2(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            value = int(self.poti2ComboBox.currentText())
+            self.serial_protocol.send_command(CMD_DIGITAL_POTI_2, [value])
+            self.append_serial_log(f"Sent POTI2 cmd with value: {value}\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_poti3(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            value = int(self.poti3ComboBox.currentText())
+            self.serial_protocol.send_command(CMD_DIGITAL_POTI_3, [value])
+            self.append_serial_log(f"Sent POTI3 cmd with value: {value}\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_poti4(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            value = int(self.poti4ComboBox.currentText())
+            self.serial_protocol.send_command(CMD_DIGITAL_POTI_4, [value])
+            self.append_serial_log(f"Sent POTI4 cmd with value: {value}\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def read_filter_config(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_FILTER_REQUEST, [0])
+            self.append_serial_log("Sent read filter config command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+    
+
+    def setup_measurement_controls(self):
+        self.measurement1ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna1ADCPushButton")
+        self.measurement2ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna2ADCPushButton")
+        self.measurement3ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna3ADCPushButton")
+        self.measurement4ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna4ADCPushButton")
+        self.measurement1FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna1FFTPushButton")
+        self.measurement2FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna2FFTPushButton")
+        self.measurement3FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna3FFTPushButton")
+        self.measurement4FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna4FFTPushButton")
+
+        self.measurement1ADCPushButton.clicked.connect(self.send_measurement1_adc)
+        self.measurement2ADCPushButton.clicked.connect(self.send_measurement2_adc)
+        self.measurement3ADCPushButton.clicked.connect(self.send_measurement3_adc)
+        self.measurement4ADCPushButton.clicked.connect(self.send_measurement4_adc)
+        self.measurement1FFTPushButton.clicked.connect(self.send_measurement1_fft)
+        self.measurement2FFTPushButton.clicked.connect(self.send_measurement2_fft)
+        self.measurement3FFTPushButton.clicked.connect(self.send_measurement3_fft)
+        self.measurement4FFTPushButton.clicked.connect(self.send_measurement4_fft)
+
+    def send_measurement1_adc(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_1, [0])
+            self.append_serial_log("Sent measurement 1 ADC command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement2_adc(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_2, [0])
+            self.append_serial_log("Sent measurement 2 ADC command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement3_adc(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_3, [0])
+            self.append_serial_log("Sent measurement 3 ADC command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement4_adc(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_4, [0])
+            self.append_serial_log("Sent measurement 4 ADC command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement1_fft(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_1, [0])
+            self.append_serial_log("Sent measurement 1 FFT command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement2_fft(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_2, [0])
+            self.append_serial_log("Sent measurement 2 FFT command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement3_fft(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_3, [0])
+            self.append_serial_log("Sent measurement 3 FFT command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_measurement4_fft(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_4, [0])
+            self.append_serial_log("Sent measurement 4 FFT command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+            
+
     def read_device_status(self):
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_DEVICE_STATUS, [])
+            self.serial_protocol.send_command(CMD_GET_DEVICE_STATUS, [0])
             self.append_serial_log("Sent read device status command\n")
         else:
             self.append_serial_log("Serial port not open")
 
     def read_calibration_status(self):
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_CALIBRATION, [])
+            self.serial_protocol.send_command(CMD_START_CALIBRATION, [0])
             self.append_serial_log("Sent read calibration status command\n")
         else:
             self.append_serial_log("Serial port not open")
 
     def read_bootloader_status(self):
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_BOOTLOADER_STATUS, [])
+            self.serial_protocol.send_command(CMD_GET_BOOTLOADER_STATUS, [0])
             self.append_serial_log("Sent read bootloader status command\n")
 
     def read_sdcard_status(self):
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_SDCARD_STATUS, [])
+            self.serial_protocol.send_command(CMD_GET_SDCARD_STATUS, [0])
             self.append_serial_log("Sent read SD card status command\n")
 
     def read_remote_status(self):
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_REMOTE_STATUS, [])
+            self.serial_protocol.send_command(CMD_GET_REMOTE_STATUS, [0])
             self.append_serial_log("Sent read remote status command\n")
         
 
     def setup_serial_log(self):
         self.serial_log_text_edit = self.ui.findChild(QTextEdit, "serialLogTextEdit")
+        self.serial_log_clear_button = self.ui.findChild(QPushButton, "serialLogClearPushButton")
+        self.serial_log_clear_button.clicked.connect(self.serial_log_text_edit.clear)
 
     def setup_timers(self):
         self.timer = QTimer(self.ui)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1125</width>
-    <height>884</height>
+    <width>1219</width>
+    <height>892</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -151,10 +151,10 @@ QMenuBar::item:pressed {
     <widget class="QGroupBox" name="groupBox_15">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>100</y>
-       <width>301</width>
-       <height>281</height>
+       <x>30</x>
+       <y>320</y>
+       <width>261</width>
+       <height>271</height>
       </rect>
      </property>
      <property name="title">
@@ -165,7 +165,7 @@ QMenuBar::item:pressed {
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>276</width>
+        <width>241</width>
         <height>236</height>
        </rect>
       </property>
@@ -309,19 +309,6 @@ QMenuBar::item:pressed {
       </layout>
      </widget>
     </widget>
-    <widget class="QTextEdit" name="serialLogTextEdit">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>440</y>
-       <width>581</width>
-       <height>231</height>
-      </rect>
-     </property>
-     <property name="tabletTracking">
-      <bool>false</bool>
-     </property>
-    </widget>
     <widget class="QPushButton" name="sendTestCmdPushButton">
      <property name="geometry">
       <rect>
@@ -338,10 +325,10 @@ QMenuBar::item:pressed {
     <widget class="QGroupBox" name="groupBox_16">
      <property name="geometry">
       <rect>
-       <x>360</x>
-       <y>100</y>
+       <x>30</x>
+       <y>90</y>
        <width>261</width>
-       <height>281</height>
+       <height>211</height>
       </rect>
      </property>
      <property name="title">
@@ -433,10 +420,10 @@ QMenuBar::item:pressed {
     <widget class="QGroupBox" name="groupBox_17">
      <property name="geometry">
       <rect>
-       <x>660</x>
-       <y>100</y>
-       <width>281</width>
-       <height>281</height>
+       <x>320</x>
+       <y>90</y>
+       <width>261</width>
+       <height>221</height>
       </rect>
      </property>
      <property name="title">
@@ -445,29 +432,29 @@ QMenuBar::item:pressed {
      <widget class="QWidget" name="layoutWidget_6">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>20</x>
         <y>40</y>
-        <width>251</width>
-        <height>211</height>
+        <width>231</width>
+        <height>151</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_22">
        <item row="0" column="2">
-        <widget class="QPushButton" name="sendRTCYearPushButton_2">
+        <widget class="QPushButton" name="sendAntenna1ADCPushButton">
          <property name="text">
           <string>ADC</string>
          </property>
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="QPushButton" name="sendRTCDowPushButton_2">
+        <widget class="QPushButton" name="sendAntenna4ADCPushButton">
          <property name="text">
           <string>ADC</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="sendRTCDayPushButton_2">
+        <widget class="QPushButton" name="sendAntenna3ADCPushButton">
          <property name="text">
           <string>ADC</string>
          </property>
@@ -481,7 +468,7 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="sendRTCMonthPushButton_2">
+        <widget class="QPushButton" name="sendAntenna2ADCPushButton">
          <property name="text">
           <string>ADC</string>
          </property>
@@ -509,28 +496,28 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="sendRTCYearPushButton_3">
+        <widget class="QPushButton" name="sendAntenna1FFTPushButton">
          <property name="text">
           <string>FFT</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="sendRTCYearPushButton_4">
+        <widget class="QPushButton" name="sendAntenna2FFTPushButton">
          <property name="text">
           <string>FFT</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="sendRTCYearPushButton_5">
+        <widget class="QPushButton" name="sendAntenna3FFTPushButton">
          <property name="text">
           <string>FFT</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QPushButton" name="sendRTCYearPushButton_6">
+        <widget class="QPushButton" name="sendAntenna4FFTPushButton">
          <property name="text">
           <string>FFT</string>
          </property>
@@ -542,10 +529,10 @@ QMenuBar::item:pressed {
     <widget class="QGroupBox" name="groupBox_18">
      <property name="geometry">
       <rect>
-       <x>660</x>
-       <y>410</y>
-       <width>281</width>
-       <height>281</height>
+       <x>320</x>
+       <y>320</y>
+       <width>271</width>
+       <height>201</height>
       </rect>
      </property>
      <property name="title">
@@ -556,13 +543,13 @@ QMenuBar::item:pressed {
        <rect>
         <x>20</x>
         <y>40</y>
-        <width>251</width>
-        <height>201</height>
+        <width>241</width>
+        <height>146</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_23">
        <item row="1" column="1">
-        <widget class="QComboBox" name="rtcMonthComboBox_2"/>
+        <widget class="QComboBox" name="poti2ComboBox"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_56">
@@ -572,17 +559,17 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QComboBox" name="rtcDayComboBox_2"/>
+        <widget class="QComboBox" name="poti3ComboBox"/>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="sendRTCYearPushButton_7">
+        <widget class="QPushButton" name="poti1PushButton">
          <property name="text">
           <string>Send</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QPushButton" name="sendRTCDayPushButton_3">
+        <widget class="QPushButton" name="poti3PushButton">
          <property name="text">
           <string>Send</string>
          </property>
@@ -603,17 +590,17 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QPushButton" name="sendRTCMonthPushButton_3">
+        <widget class="QPushButton" name="poti2PushButton">
          <property name="text">
           <string>Send</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QComboBox" name="rtcDowComboBox_2"/>
+        <widget class="QComboBox" name="poti4ComboBox"/>
        </item>
        <item row="3" column="2">
-        <widget class="QPushButton" name="sendRTCDowPushButton_3">
+        <widget class="QPushButton" name="poti4PushButton">
          <property name="text">
           <string>Send</string>
          </property>
@@ -627,21 +614,54 @@ QMenuBar::item:pressed {
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QComboBox" name="rtcYearComboBox_2"/>
+        <widget class="QComboBox" name="poti1ComboBox"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="readFilterConfigPushButton">
+         <property name="text">
+          <string>Read Filter Config</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QPushButton" name="sendRTCDowPushButton_4">
+    </widget>
+    <widget class="QGroupBox" name="groupBox_19">
+     <property name="geometry">
+      <rect>
+       <x>780</x>
+       <y>100</y>
+       <width>451</width>
+       <height>591</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Log</string>
+     </property>
+     <widget class="QTextEdit" name="serialLogTextEdit">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>250</y>
-        <width>121</width>
+        <x>20</x>
+        <y>40</y>
+        <width>411</width>
+        <height>421</height>
+       </rect>
+      </property>
+      <property name="tabletTracking">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="serialLogClearPushButton">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>540</y>
+        <width>75</width>
         <height>24</height>
        </rect>
       </property>
       <property name="text">
-       <string>Read Filter Config</string>
+       <string>Clear</string>
       </property>
      </widget>
     </widget>
@@ -5923,7 +5943,7 @@ VREF off.</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1125</width>
+     <width>1219</width>
      <height>18</height>
     </rect>
    </property>
