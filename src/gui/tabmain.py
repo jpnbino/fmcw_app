@@ -2,7 +2,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit
 from PySide6.QtGui import QTextCursor
 from serialbsp.protocol_fmcw import (
-    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
+    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
     CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, SerialProtocolFmcw
 )
 
@@ -23,6 +23,7 @@ class MainTab:
         self.setup_status_controls()
         self.setup_potis_controls()
         self.setup_measurement_controls()
+        self.setup_modem_controls()
         self.setup_serial_log()
         self.setup_timers()
 
@@ -204,6 +205,7 @@ class MainTab:
         self.measurement2FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna2FFTPushButton")
         self.measurement3FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna3FFTPushButton")
         self.measurement4FFTPushButton = self.ui.findChild(QPushButton, "sendAntenna4FFTPushButton")
+        self.measurementFFTSamplesComboBox = self.ui.findChild(QComboBox, "measurementFFTSamplesComboBox")
 
         self.measurement1ADCPushButton.clicked.connect(self.send_measurement1_adc)
         self.measurement2ADCPushButton.clicked.connect(self.send_measurement2_adc)
@@ -213,6 +215,10 @@ class MainTab:
         self.measurement2FFTPushButton.clicked.connect(self.send_measurement2_fft)
         self.measurement3FFTPushButton.clicked.connect(self.send_measurement3_fft)
         self.measurement4FFTPushButton.clicked.connect(self.send_measurement4_fft)
+
+        self.measurementFFTSamplesComboBox.addItems([str(samples) for samples in range(1, 256)])
+        self.measurementFFTSamplesComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
+        self.measurementFFTSamplesComboBox.setCurrentIndex(0)
 
     def send_measurement1_adc(self):
         if self.serial_manager and self.serial_manager.is_open():
@@ -236,6 +242,7 @@ class MainTab:
             self.append_serial_log("Serial port not open")
 
     def send_measurement4_adc(self):
+        
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_4, [0])
             self.append_serial_log("Sent measurement 4 ADC command\n")
@@ -243,33 +250,106 @@ class MainTab:
             self.append_serial_log("Serial port not open")
 
     def send_measurement1_fft(self):
+        fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_1, [0])
-            self.append_serial_log("Sent measurement 1 FFT command\n")
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_1, [fft_samples])
+            self.append_serial_log(f"Sent measurement 1 FFT command with {fft_samples} samples\n")
         else:
             self.append_serial_log("Serial port not open")
 
     def send_measurement2_fft(self):
+        fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_2, [0])
-            self.append_serial_log("Sent measurement 2 FFT command\n")
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_2, [fft_samples])
+            self.append_serial_log(f"Sent measurement 2 FFT command with {fft_samples} samples\n")
         else:
             self.append_serial_log("Serial port not open")
 
     def send_measurement3_fft(self):
+        fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_3, [0])
-            self.append_serial_log("Sent measurement 3 FFT command\n")
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_3, [fft_samples])
+            self.append_serial_log(f"Sent measurement 3 FFT command with {fft_samples} samples\n")
         else:
             self.append_serial_log("Serial port not open")
 
     def send_measurement4_fft(self):
+        fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_4, [0])
-            self.append_serial_log("Sent measurement 4 FFT command\n")
+            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_4, [fft_samples])
+            self.append_serial_log(f"Sent measurement 4 FFT command with {fft_samples} samples\n")
         else:
             self.append_serial_log("Serial port not open")
-            
+
+    def get_fft_samples(self):
+        return int(self.measurementFFTSamplesComboBox.currentText())
+    
+    def setup_modem_controls(self):
+        self.modemRSSIPushButton = self.ui.findChild(QPushButton, "modemRSSIPushButton")
+        self.modemTempPushButton = self.ui.findChild(QPushButton, "modemTempPushButton")
+        self.modemSupplyPushButton = self.ui.findChild(QPushButton, "modemSupplyPushButton")
+        self.modemATMONPPushButton = self.ui.findChild(QPushButton, "modemATMONPPushButton")
+        self.modemdATSMONCPushButton = self.ui.findChild(QPushButton, "modemATSMONCPushButton")
+        self.modemATI1PushButton = self.ui.findChild(QPushButton, "modemATI1PushButton")
+        self.modemATCOPSPushButton = self.ui.findChild(QPushButton, "modemATCOPSPushButton")
+
+        self.modemRSSIPushButton.clicked.connect(self.send_modem_rssi)
+        self.modemTempPushButton.clicked.connect(self.send_modem_temp)
+        self.modemSupplyPushButton.clicked.connect(self.send_modem_supply)
+        self.modemATMONPPushButton.clicked.connect(self.send_modem_atmonp)
+        self.modemdATSMONCPushButton.clicked.connect(self.send_modem_atsmonc)
+        self.modemATI1PushButton.clicked.connect(self.send_modem_ati1)
+        self.modemATCOPSPushButton.clicked.connect(self.send_modem_atcops)
+
+    def send_modem_rssi(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_RSSI, [0])
+            self.append_serial_log("Sent modem RSSI command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_modem_temp(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_TEMPERATURE, [0])
+            self.append_serial_log("Sent modem temperature command\n")
+        else:
+            self.append_serial_log("Serial port not open")  
+
+    def send_modem_supply(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_BATTERY, [0])
+            self.append_serial_log("Sent modem supply command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_modem_atmonp(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_AT_MONP, [0])
+            self.append_serial_log("Sent modem ATMONP command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_modem_atsmonc(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_AT_SMONC, [0])
+            self.append_serial_log("Sent modem ATSMONC command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_modem_ati1(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_TYPE, [0])
+            self.append_serial_log("Sent modem ATI1 command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_modem_atcops(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_MODEM_OPERATOR, [0])
+            self.append_serial_log("Sent modem ATCOPS command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
 
     def read_device_status(self):
         if self.serial_manager and self.serial_manager.is_open():

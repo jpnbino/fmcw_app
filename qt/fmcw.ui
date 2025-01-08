@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1219</width>
-    <height>892</height>
+    <width>1900</width>
+    <height>1100</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -423,7 +423,7 @@ QMenuBar::item:pressed {
        <x>320</x>
        <y>90</y>
        <width>261</width>
-       <height>221</height>
+       <height>261</height>
       </rect>
      </property>
      <property name="title">
@@ -433,7 +433,7 @@ QMenuBar::item:pressed {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>40</y>
+        <y>90</y>
         <width>231</width>
         <height>151</height>
        </rect>
@@ -525,13 +525,58 @@ QMenuBar::item:pressed {
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="gridLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>231</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_36">
+       <item row="0" column="2">
+        <widget class="QComboBox" name="measurementFFTSamplesComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_173">
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>FFT Num Measurements:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QGroupBox" name="groupBox_18">
      <property name="geometry">
       <rect>
        <x>320</x>
-       <y>320</y>
-       <width>271</width>
+       <y>360</y>
+       <width>261</width>
        <height>201</height>
       </rect>
      </property>
@@ -541,7 +586,7 @@ QMenuBar::item:pressed {
      <widget class="QWidget" name="layoutWidget_8">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>40</y>
         <width>241</width>
         <height>146</height>
@@ -629,8 +674,8 @@ QMenuBar::item:pressed {
     <widget class="QGroupBox" name="groupBox_19">
      <property name="geometry">
       <rect>
-       <x>780</x>
-       <y>100</y>
+       <x>1030</x>
+       <y>70</y>
        <width>451</width>
        <height>591</height>
       </rect>
@@ -663,6 +708,290 @@ QMenuBar::item:pressed {
       <property name="text">
        <string>Clear</string>
       </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_20">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>90</y>
+       <width>261</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Modem</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>241</width>
+        <height>206</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_34">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_64">
+         <property name="text">
+          <string>Modem ID (ATI1)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_62">
+         <property name="text">
+          <string>Cell Monitor (AT^MONP)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_63">
+         <property name="text">
+          <string>Temperature (AT^SCTM?)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_60">
+         <property name="text">
+          <string>RSSI (AT+CSQ)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_61">
+         <property name="text">
+          <string>Supply ( AT^SBV)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="modemATMONPPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="modemTempPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="modemATSMONCPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_59">
+         <property name="text">
+          <string>Cell Monitor (AT^SMONC)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="modemRSSIPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="modemSupplyPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_65">
+         <property name="text">
+          <string>Operator (AT+COPS?)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="modemATI1PushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="modemATCOPSPushButton">
+         <property name="text">
+          <string>Read</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_21">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>360</y>
+       <width>271</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Remote</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>254</width>
+        <height>236</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_35">
+       <item row="7" column="2">
+        <widget class="QPushButton" name="remoteFTPStartPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QPushButton" name="remoteSDCardReadPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QPushButton" name="remoteDataPackPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="remoteFwUpgradePushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_137">
+         <property name="text">
+          <string>SD Card Write</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_172">
+         <property name="text">
+          <string>Start FTP OR DEL</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="remoteLogOutPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="remoteLogInPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_168">
+         <property name="text">
+          <string>Log Out</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_170">
+         <property name="text">
+          <string>SD Card Read</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_171">
+         <property name="text">
+          <string>Data Pack</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QPushButton" name="remoteSDCardDelPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_156">
+         <property name="text">
+          <string>Log In</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_66">
+         <property name="text">
+          <string>SD Card Delete</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_169">
+         <property name="text">
+          <string>Firmware Upgrade</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="remoteSDCardWritePushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_2"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_3"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_4"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_5"/>
+       </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_6"/>
+       </item>
+       <item row="6" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_7"/>
+       </item>
+       <item row="7" column="1">
+        <widget class="QComboBox" name="logOutIDComboBox_8"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -5943,7 +6272,7 @@ VREF off.</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1219</width>
+     <width>1900</width>
      <height>18</height>
     </rect>
    </property>
