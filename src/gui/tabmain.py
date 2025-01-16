@@ -1,9 +1,9 @@
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit
+from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit, QLineEdit
 from PySide6.QtGui import QTextCursor
 from serialbsp.protocol_fmcw import (
-    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
-    CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, SerialProtocolFmcw
+    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_LOG_IN, CMD_LOG_OUT, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
+    CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, CMD_VAR1_UINT32_1, SerialProtocolFmcw
 )
 
 REFRESH_RATE = 5000
@@ -24,6 +24,9 @@ class MainTab:
         self.setup_potis_controls()
         self.setup_measurement_controls()
         self.setup_modem_controls()
+        self.setup_var32bits_controls()
+        self.setup_remote_controls()
+        self.setup_test_command()
         self.setup_serial_log()
         self.setup_timers()
 
@@ -349,6 +352,48 @@ class MainTab:
             self.append_serial_log("Sent modem ATCOPS command\n")
         else:
             self.append_serial_log("Serial port not open")
+
+    def setup_var32bits_controls(self):
+        self.var8PushButton = self.ui.findChild(QPushButton, "sendVarPushButton")
+        self.var8LineEdit = self.ui.findChild(QLineEdit, "var8LineEdit")
+        self.var8PushButton.clicked.connect(self.send_var8bits)
+
+    def send_var8bits(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            value = int(self.var8LineEdit.text())
+            if 0 <= value <= 255:
+                self.serial_protocol.send_command(CMD_VAR1_UINT32_1, [value])
+                self.append_serial_log(f"Sent 8-bit value: {value}\n")
+            else:
+                self.append_serial_log("Value out of range (0-255)")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def setup_remote_controls(self):
+        self.remoteLogInPushButton = self.ui.findChild(QPushButton, "remoteLogInPushButton")
+        self.remoteLogOutPushButton = self.ui.findChild(QPushButton, "remoteLogOutPushButton")
+
+        self.remoteLogInPushButton.clicked.connect(self.send_remote_log_in)
+        self.remoteLogOutPushButton.clicked.connect(self.send_remote_log_out)
+
+
+    def send_remote_log_in(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_LOG_IN, [0xff])
+            self.append_serial_log("Sent remote log in command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def send_remote_log_out(self):
+        if self.serial_manager and self.serial_manager.is_open():
+            self.serial_protocol.send_command(CMD_LOG_OUT, [0xff])
+            self.append_serial_log("Sent remote log out command\n")
+        else:
+            self.append_serial_log("Serial port not open")
+
+    def setup_test_command(self):
+        self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")
+        self.testPushButton.clicked.connect(self.send_test_command)
 
 
     def read_device_status(self):

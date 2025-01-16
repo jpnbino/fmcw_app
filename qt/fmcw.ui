@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1900</width>
-    <height>1100</height>
+    <width>1898</width>
+    <height>1092</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -677,7 +677,7 @@ QMenuBar::item:pressed {
        <x>1030</x>
        <y>70</y>
        <width>451</width>
-       <height>591</height>
+       <height>721</height>
       </rect>
      </property>
      <property name="title">
@@ -687,9 +687,9 @@ QMenuBar::item:pressed {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>40</y>
+        <y>30</y>
         <width>411</width>
-        <height>421</height>
+        <height>651</height>
        </rect>
       </property>
       <property name="tabletTracking">
@@ -699,8 +699,8 @@ QMenuBar::item:pressed {
      <widget class="QPushButton" name="serialLogClearPushButton">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>540</y>
+        <x>350</x>
+        <y>680</y>
         <width>75</width>
         <height>24</height>
        </rect>
@@ -990,6 +990,48 @@ QMenuBar::item:pressed {
        </item>
        <item row="7" column="1">
         <widget class="QComboBox" name="logOutIDComboBox_8"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_22">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>570</y>
+       <width>261</width>
+       <height>201</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>32bits Variables</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget_13">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>241</width>
+        <height>146</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_38">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_178">
+         <property name="text">
+          <string>Var</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="sendVarPushButton">
+         <property name="text">
+          <string>Send</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="var8LineEdit"/>
        </item>
       </layout>
      </widget>
@@ -6272,7 +6314,7 @@ VREF off.</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1900</width>
+     <width>1898</width>
      <height>18</height>
     </rect>
    </property>
