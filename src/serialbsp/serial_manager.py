@@ -37,3 +37,10 @@ class SerialManager:
 
     def is_open(self):
         return self.ser.is_open
+    
+    def reset_input_buffer(self):
+        self.ser.reset_input_buffer()
+
+    def reset_output_buffer(self):
+        self.ser.reset_output_buffer()
+        

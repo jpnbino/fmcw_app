@@ -3,19 +3,27 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
 
 from bms.constants import *
-from serialbsp.protocol_bms import *
+
+from gui.utility import convert_time_to_hex, convert_to_hex
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
 
 import logging
 
+from serialbsp.commands import CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_WRITE_EEPROM
+from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
-class BMSGUI:
-    def __init__(self, ui, bms_config):
+
+class BmsTab:
+    def __init__(self, ui, bms_config, log_callback):
         self.ui = ui
         self.bms_config = bms_config
         self.isl94203 = ISL94203Factory.create_instance()
         self.log_file_path = None
+        self.log_callback = log_callback
+        self.serial_setup = self.ui.fmcw_serial_manager
+        self.serial_protocol = None
+
 
         # Connect button click to Send Serial Command
         self.ui.findChild(QPushButton, "readPackButton").clicked.connect(self.read_bms_config)
@@ -402,27 +410,6 @@ class BMSGUI:
         current_style = label.styleSheet()
         label.setStyleSheet(f"{current_style} background-color: {color.name()};")
 
-    def convert_to_hex(self, value, config_type):
-        """
-        Converts a given value to hexadecimal representation.
-
-        Args:
-            value (float or str): The value to be converted.
-
-        Returns:
-            int: The hexadecimal representation of the value.
-
-        Raises:
-            None
-        config_type:
-
-        """
-        try:
-            return int(float(value) / config_type)
-        except ValueError:
-            logging.error(f"Error converting {value} to hex.")
-            return 0
-
     def get_unit_from_combo(self, combo):
         """Read the combobox and return the unit chosen by user."""
         selected_text = combo.currentText()
@@ -442,7 +429,7 @@ class BMSGUI:
             (self.sleepVoltageLineEdit.text(), 0x44)
         ]
         for value, address in voltage_values:
-            hex_value: int = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
+            hex_value: int = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
             self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
     def write_voltage_limits_timing(self):
@@ -464,10 +451,6 @@ class BMSGUI:
         self.isl94203.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, Mask.MASK_10BIT, 0)
         self.isl94203.reg_write(0x46, sleep_delay_unit | sleep_delay, Mask.MASK_11BIT, 0)
 
-    def convert_time_to_hex(self, time, escaling):
-        """Convert time to hex value."""
-        return int(time) >> escaling
-
     def write_timers(self):
 
         timer_values = [
@@ -476,7 +459,7 @@ class BMSGUI:
             (self.timerSleepCombo.currentText(), 0x48, Mask.MASK_4BIT, 4, 4)
         ]
         for value, address, mask, shift, scaling in timer_values:
-            hex_value = self.convert_time_to_hex(value, scaling)
+            hex_value = convert_time_to_hex(value, scaling)
             self.isl94203.reg_write(address, hex_value, mask, shift)
 
     def write_cell_balance_registers(self):
@@ -489,7 +472,7 @@ class BMSGUI:
             (self.CBOffTimeLineEdit.text(), 0x26)
         ]
         for value, address in cell_balance_values:
-            hex_value = self.convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
+            hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
             self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
         cell_balance_temp_values = [
@@ -499,7 +482,7 @@ class BMSGUI:
             (self.CBOTRecoverLineEdit.text(), 0x2e)
         ]
         for value, address in cell_balance_temp_values:
-            hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+            hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
             self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
         # Extract and shift units
@@ -524,7 +507,7 @@ class BMSGUI:
             (self.TLInternalOTRecoverLineEdit.text(), 0x42)
         ]
         for value, address in temp_values:
-            hex_value = self.convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+            hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
             self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
 
     def write_current_registers(self):
@@ -600,6 +583,10 @@ class BMSGUI:
         for value, address, mask, shift in pack_options:
             self.isl94203.reg_write(address, int(value), mask, shift)
 
+    def set_serial_protocol(self, serial_protocol):
+        """Set or update the serial_protocol instance."""
+        self.serial_protocol = serial_protocol
+
     def send_serial_command(self, command, data):
         """
         Send a command with data over the serial connection.
@@ -608,28 +595,24 @@ class BMSGUI:
             command (str): The command to send.
             data (list): The data to send with the command.
         """
-        # Access the shared serial_setup
-        serial_setup = self.ui.serial_setup
-
-        if serial_setup is None:
+        if self.serial_setup is None:
             logging.error("Serial setup is None")
             return
 
-        if not serial_setup.is_open():
+        if not self.serial_setup.is_open():
             logging.warning("Serial port is not open")
             return
 
         try:
-            serial_protocol = SerialProtocolBms(serial_setup)
-            serial_protocol.send_command(command, data)
-            packet = serial_protocol.read_packet()
+            self.serial_protocol.send_command(command, data)
+            packet = self.serial_protocol.read_packet(MEMORY_SIZE)
             _, response = packet
             print(f"response: {response}")
         except Exception as e:
             logging.error(f"Failed to send serial command: {e}")
 
     def write_bms_config(self):
-        if not self.ui.serial_setup or not self.ui.serial_setup.is_open():
+        if not self.serial_setup or not self.serial_setup.is_open():
             logging.error("Serial port is not open")
             self.statusBar.showMessage("Error: Serial port is not open.")
             return
@@ -651,19 +634,23 @@ class BMSGUI:
 
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
-        serial_setup = self.ui.serial_setup
+
         configuration = []
 
-        if not serial_setup or not serial_setup.is_open():
+        if not self.serial_setup or not self.serial_setup.is_open():
             error_message = "Serial port is not open"
             logging.error(error_message)
             self.statusBar.showMessage(f"Error: {error_message}.")
             return
 
         try:
-            serial_protocol = SerialProtocolBms(serial_setup)
-            serial_protocol.send_command(CMD_READ_ALL_MEMORY, [])
-            packet = serial_protocol.read_packet()
+            self.serial_protocol.pause()
+
+            self.serial_setup.reset_input_buffer()
+            self.serial_setup.reset_output_buffer()
+
+            self.serial_protocol.send_command(CMD_READ_ALL_MEMORY, [0])
+            packet = self.serial_protocol.read_packet(MEMORY_SIZE)
             _, configuration = packet
 
             self.isl94203.set_registers(list(configuration))
@@ -671,25 +658,24 @@ class BMSGUI:
             self.ui_update_fields()
             register_cfg = self.isl94203.get_registers()
             logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-            self.statusBar.showMessage("Configuration read successfully.")
+            #self.statusBar.showMessage("Configuration read successfully.")
         except Exception as e:
             logging.error(f"Failed to read BMS configuration: {e}")
-            self.statusBar.showMessage(f"Error: {e}")
+            #self.statusBar.showMessage(f"Error: {e}")
 
     def read_bms_ram_config(self):
         """Read RAM memory configuration from the device via serial"""
-        serial_setup = self.ui.serial_setup
         configuration = []
 
-        if not serial_setup or not serial_setup.is_open():
+        if not self.serial_setup or not self.serial_setup.is_open():
             ERROR_MESSAGE = "Serial port is not open"
             logging.error(ERROR_MESSAGE)
             self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
             return None
         try:
-            serial_protocol = SerialProtocolBms(serial_setup)
-            serial_protocol.send_command(CMD_READ_RAM, [])
-            packet = serial_protocol.read_packet()
+            serial_protocol = SerialProtocolFmcw(self.serial_setup, self.log_callback)
+            serial_protocol.send_command(CMD_READ_RAM, [0])
+            packet = serial_protocol.read_packet(RAM_SIZE)
             _, configuration = packet
 
             self.isl94203.set_ram_values(list(configuration))

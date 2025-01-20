@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from bms.constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, \
     DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, EEPROM_SIZE
-from serialbsp.protocol_bms import SerialProtocolBms
+from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 START_BYTE = 0xAA
 
@@ -39,7 +39,7 @@ class SimulatedDevice:
             print(f"Serial port {port} is already open")
 
         self.config = DEFAULT_CONFIG
-        self.protocol = SerialProtocolBms(self)
+        self.protocol = SerialProtocolFmcw(self)
 
     def calculate_checksum(self, data):
         checksum = 0

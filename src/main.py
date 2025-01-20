@@ -11,7 +11,7 @@ from PySide6.QtCore import QFile, QIODevice, Qt
 
 from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
 from bms.configuration import BMSConfiguration
-from gui.bms import BMSGUI
+from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
 
 from serialbsp.serial_manager import SerialManager
@@ -80,9 +80,7 @@ class FMCWApplication(QMainWindow):
         self.fmcw_serial_manager = SerialManager()
         self.bms_config = BMSConfiguration()
 
-        self.bms_tab = BMSGUI(self, self.bms_config)
-        self.main_tab = MainTab(self)
-
+        self.main_tab = MainTab(self, self.bms_config)
 
         self.logRateSpinBox = window.findChild(QSpinBox, "logRateSpinBox")
         self.logRateSpinBox.setMinimum(1)

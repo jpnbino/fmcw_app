@@ -1,20 +1,22 @@
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit, QLineEdit
 from PySide6.QtGui import QTextCursor
+from gui.tabbms import BmsTab
 from serialbsp.protocol_fmcw import (
-    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_LOG_IN, CMD_LOG_OUT, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
-    CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, CMD_VAR1_UINT32_1, SerialProtocolFmcw
+    CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_LOG_IN, CMD_LOG_OUT, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_READ_USER_EEPROM, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
+    CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, CMD_VAR1_UINT32_1, CMD_WRITE_EEPROM, CMD_WRITE_USER_EEPROM, SerialProtocolFmcw
 )
 
 REFRESH_RATE = 5000
 MESSAGE_DURATION = 5000
 
 class MainTab:
-    def __init__(self, ui):
+    def __init__(self, ui, bms_config):
         self.ui = ui
         self.serial_manager = self.ui.fmcw_serial_manager
         self.serial_protocol = None
         self.init_ui()
+        self.bms_tab = BmsTab(ui, bms_config, self.append_serial_log)
 
     def init_ui(self):
         self.setup_status_bar()
@@ -198,7 +200,6 @@ class MainTab:
         else:
             self.append_serial_log("Serial port not open")
     
-
     def setup_measurement_controls(self):
         self.measurement1ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna1ADCPushButton")
         self.measurement2ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna2ADCPushButton")
@@ -376,7 +377,6 @@ class MainTab:
         self.remoteLogInPushButton.clicked.connect(self.send_remote_log_in)
         self.remoteLogOutPushButton.clicked.connect(self.send_remote_log_out)
 
-
     def send_remote_log_in(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_LOG_IN, [0xff])
@@ -394,7 +394,6 @@ class MainTab:
     def setup_test_command(self):
         self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")
         self.testPushButton.clicked.connect(self.send_test_command)
-
 
     def read_device_status(self):
         if self.serial_manager and self.serial_manager.is_open():
@@ -425,7 +424,6 @@ class MainTab:
             self.serial_protocol.send_command(CMD_GET_REMOTE_STATUS, [0])
             self.append_serial_log("Sent read remote status command\n")
         
-
     def setup_serial_log(self):
         self.serial_log_text_edit = self.ui.findChild(QTextEdit, "serialLogTextEdit")
         self.serial_log_clear_button = self.ui.findChild(QPushButton, "serialLogClearPushButton")
@@ -464,9 +462,13 @@ class MainTab:
                 self.serialOpenCloseButton.setText("Close")
                 self.serial_protocol = SerialProtocolFmcw(self.serial_manager, self.append_serial_log)
                 self.serial_protocol.start()
+                self.bms_tab.set_serial_protocol(self.serial_protocol)
         else:
             if self.serial_protocol:
                 self.serial_protocol.stop()
+                self.serial_protocol = None
+                self.bms_tab.set_serial_protocol(None)
+
             self.serial_manager.close_serial_port()
             self.serialOpenCloseButton.setText("Open")
 
@@ -559,7 +561,6 @@ class MainTab:
             self.append_serial_log(f"Sent RTC calibrate cmd with value: {selected_cal}\n")
         else:
             self.append_serial_log("Serial port not open")
-
 
     def append_serial_log(self, message, newline=True):
         if isinstance(message, bytes):
