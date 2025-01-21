@@ -57,8 +57,6 @@ class SerialProtocolFmcw:
         if not cmd:
             return None
         cmd = cmd[0]
-        
-        data_length = data_length - 2
 
         data = ser.read(data_length)
         if len(data) != data_length:
