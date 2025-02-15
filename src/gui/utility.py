@@ -3,7 +3,7 @@
 import logging
 
 
-def convert_to_hex(self, value, multiplier):
+def convert_to_hex(value, multiplier):
     """
     Converts a given value to hexadecimal representation.
 
@@ -24,7 +24,7 @@ def convert_to_hex(self, value, multiplier):
         logging.error(f"Error converting {value} to hex.")
         raise
 
-def convert_time_to_hex(self, time, scaling_factor):
+def convert_time_to_hex(time, scaling_factor):
     """
     Convert a given time value to a hexadecimal value by right-shifting it by a scaling factor.
 

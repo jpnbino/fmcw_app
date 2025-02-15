@@ -94,6 +94,7 @@ CELL_CONFIG_MAPPING = {
     0b11111111: 8  # 8 cells
 }
 
+CELL_CONFIG_INT2CODE_MAPPING = {v: k for k, v in CELL_CONFIG_MAPPING.items()}
 # Create a dictionary mapping binary patterns current gains
 CURRENT_GAIN_MAPPING = {
     0b00: 50,

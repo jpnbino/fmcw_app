@@ -583,6 +583,10 @@ class BmsTab:
         for value, address, mask, shift in pack_options:
             self.isl94203.reg_write(address, int(value), mask, shift)
 
+    def write_cell_config(self):
+        cell_config = int(self.CellConfigurationLineEdit.text())
+        self.isl94203.reg_write(0x48, int(CELL_CONFIG_INT2CODE_MAPPING[cell_config]), Mask.MASK_8BIT, 8)
+
     def set_serial_protocol(self, serial_protocol):
         """Set or update the serial_protocol instance."""
         self.serial_protocol = serial_protocol
@@ -605,16 +609,16 @@ class BmsTab:
 
         try:
             self.serial_protocol.send_command(command, data)
-            packet = self.serial_protocol.read_packet(MEMORY_SIZE)
-            _, response = packet
-            print(f"response: {response}")
+            #packet = self.serial_protocol.read_packet(MEMORY_SIZE)
+            #_, response = packet
+            #print(f"response: {response}")
         except Exception as e:
             logging.error(f"Failed to send serial command: {e}")
 
     def write_bms_config(self):
         if not self.serial_setup or not self.serial_setup.is_open():
             logging.error("Serial port is not open")
-            self.statusBar.showMessage("Error: Serial port is not open.")
+            #self.statusBar.showMessage("Error: Serial port is not open.")
             return
 
         register_cfg = self.isl94203.get_registers()
@@ -626,11 +630,12 @@ class BmsTab:
         self.write_temperature_registers()
         self.write_current_registers()
         self.write_pack_option_registers()
+        self.write_cell_config()
 
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
         self.send_serial_command(CMD_WRITE_EEPROM, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
-        self.statusBar.showMessage("Configuration written successfully.")
+        #self.statusBar.showMessage("Configuration written successfully.")
 
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
@@ -640,7 +645,7 @@ class BmsTab:
         if not self.serial_setup or not self.serial_setup.is_open():
             error_message = "Serial port is not open"
             logging.error(error_message)
-            self.statusBar.showMessage(f"Error: {error_message}.")
+            #self.statusBar.showMessage(f"Error: {error_message}.")
             return
 
         try:
@@ -670,12 +675,16 @@ class BmsTab:
         if not self.serial_setup or not self.serial_setup.is_open():
             ERROR_MESSAGE = "Serial port is not open"
             logging.error(ERROR_MESSAGE)
-            self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
-            return None
+            #self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+            return
         try:
-            serial_protocol = SerialProtocolFmcw(self.serial_setup, self.log_callback)
-            serial_protocol.send_command(CMD_READ_RAM, [0])
-            packet = serial_protocol.read_packet(RAM_SIZE)
+            self.serial_protocol.pause()
+
+            self.serial_setup.reset_input_buffer()
+            self.serial_setup.reset_output_buffer()
+
+            self.serial_protocol.send_command(CMD_READ_RAM, [0])
+            packet = self.serial_protocol.read_packet(RAM_SIZE)
             _, configuration = packet
 
             self.isl94203.set_ram_values(list(configuration))
@@ -683,14 +692,14 @@ class BmsTab:
             self.ui_update_fields()
 
             logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
-            self.statusBar.showMessage("RAM configuration read successfully.")
+            #self.statusBar.showMessage("RAM configuration read successfully.")
 
             return list(configuration)
 
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
-            self.statusBar.showMessage(f"Error: {e}")
-            return None
+            #self.statusBar.showMessage(f"Error: {e}")
+
 
     def log_bms_ram_config(self):
         if self.startStopLogButton.isChecked():
