@@ -2,6 +2,9 @@ from bms.isl94203 import ISL94203
 
 
 class ISL94203Factory:
+    """
+    Factory class for ISL94203
+    """
     _instance = None
 
     @classmethod

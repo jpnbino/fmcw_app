@@ -6,8 +6,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class BMSConfiguration:
-
+    """This class provides operations to read and update the configuration values of the ISL94203 battery management system IC. It can translate back and fourth the raw values from the registers to the actual configuration values based on the datasheet.
+    """     
     def __init__(self):
+        """Initialize the BMSConfiguration instance with an ISL94203 instance."""
         self.isl94203 = ISL94203Factory.create_instance()
 
         # Voltage Limits
@@ -161,7 +163,16 @@ class BMSConfiguration:
         self.vrgo = 0
 
     def update_registers(self):
-        """ update the parameters values after reading from registers """
+        """
+        Update the parameters values after reading from registers.
+        This method retrieves the current register values from the ISL94203 device
+        and logs them. It then updates various configuration parameters such as
+        voltage limits, timing, cell configuration, pack options, cell balance,
+        current limits, temperature limits, RAM values, and feature controls.
+        
+        Raises:
+            Exception: If any error occurs during the update of configuration parameters.
+        """
         registers = self.isl94203.get_registers()
         logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in registers)}")
 
@@ -179,6 +190,25 @@ class BMSConfiguration:
             print(f"Error updating configuration: {e}")
 
     def update_voltage_limits(self):
+        """Reads voltage values from specific registers and updates the corresponding attributes of the object.
+        This method reads voltage values from specific registers using the `isl94203.reg_read` method and updates
+        the corresponding attributes of the object. The voltage values are mapped to attributes using a predefined
+        dictionary.
+        
+        Attributes Updated:
+            - ov (float): Over-voltage limit.
+            - ov_recover (float): Over-voltage recovery limit.
+            - under_voltage (float): Under-voltage limit.
+            - uv_recover (float): Under-voltage recovery limit.
+            - ov_lockout (float): Over-voltage lockout limit.
+            - uv_lockout (float): Under-voltage lockout limit.
+            - eoc_voltage (float): End-of-charge voltage.
+            - low_voltage_charge (float): Low voltage charge limit.
+            - sleep_voltage (float): Sleep voltage limit.
+            
+        Raises:
+            Exception: If there is an error updating the voltage limits.
+        """
         # Voltage Limits
         voltage_mappping = {
             0x00: 'ov',
@@ -199,9 +229,27 @@ class BMSConfiguration:
                 print(f"Error updating voltage limits: {e}")
 
     def update_timing(self):
-        """Update the timing attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the timing attributes.
+        """
+        This method reads timing values from specific registers and updates the 
+        corresponding attributes of the object. The timing values are read using 
+        the `isl94203.reg_read` method and are mapped to attributes based on a 
+        predefined mapping.
+
+        Attributes Updated:
+            - ov_delay_timeout (int): Overvoltage delay timeout.
+            - ov_delay_timeout_unit (int): Unit for overvoltage delay timeout.
+            - uv_delay_timeout (int): Undervoltage delay timeout.
+            - uv_delay_timeout_unit (int): Unit for undervoltage delay timeout.
+            - open_wire_timing (int): Open wire timing.
+            - open_wire_timing_unit (int): Unit for open wire timing.
+            - sleep_delay (int): Sleep delay.
+            - sleep_delay_unit (int): Unit for sleep delay.
+            - timer_wdt (int): Timer watchdog timeout.
+            - timer_idle_doze (int): Timer idle doze.
+            - timer_sleep (int): Timer sleep, multiplied by 16.
+
+        Raises:
+            Exception: If there is an error reading from the registers.
         """
         timing_mapping = {
             (0x10, 0, Mask.MASK_10BIT): 'ov_delay_timeout',
@@ -230,9 +278,24 @@ class BMSConfiguration:
         self.cell_config = self.isl94203.reg_read(0x48, 8, Mask.MASK_8BIT)
 
     def update_pack_options(self):
-        """Update the pack options( Addresses 0x4A and 0x4B) attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the pack options attributes.
+        """
+        Update the pack options (Addresses 0x4A and 0x4B) attributes based on the given values.
+        This method reads specific bits from the ISL94203 device and updates the corresponding
+        attributes of the class instance.
+        
+        **Attributes Updated**:
+            - bit_enable_openwire_psd (bool): Enable open wire PSD.
+            - bit_enable_openwire_scan (bool): Enable open wire scan.
+            - bit_tgain (bool): TGAIN bit.
+            - bit_t2_monitors_fet (bool): T2 monitors FET bit.
+            - bit_enable_cellf_psd (bool): Enable cell F PSD.
+            - bit_cb_during_eoc (bool): CB during EOC bit.
+            - bit_enable_uvlo_pd (bool): Enable UVLO PD bit.
+            - bit_cb_during_charge (bool): CB during charge bit.
+            - bit_cb_during_discharge (bool): CB during discharge bit.
+
+        Raises:
+            Exception: If there is an error reading a bit from the ISL94203 device.
         """
         pack_options_mapping = {
             (0x4A, 0): 'bit_enable_openwire_psd',
@@ -253,9 +316,42 @@ class BMSConfiguration:
                 print(f"Error updating pack options: {e}")
 
     def update_cell_balance(self):
-        """Update the cell balance attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the cell balance attributes.
+        """
+        Update various cell balance attributes by reading values from specific addresses
+        and applying necessary calculations.
+
+        This method handles three main categories of attributes:
+            - cell balance limits
+            - cell balance timing
+            - cell balance temperature.
+
+        Cell balance limits are updated using a predefined mapping of addresses to attribute
+        names. The values are calculated using the `calculate_voltage` method.
+
+        Cell balance timing attributes are updated using a predefined mapping of address,
+        bit shift, and bit mask to attribute names. The values are read using the `isl94203.reg_read` method.
+
+        Cell balance temperature attributes are updated using a predefined mapping of low and high byte
+        addresses to attribute names. The values are calculated using the `calculate_temperature_from_raw_value` method.
+
+        Attributes Updated:
+            - cb_lower_lim (float): Cell balance lower limit.
+            - cb_upper_lim (float): Cell balance upper limit.
+            - cb_min_delta (float): Cell balance minimum delta.
+            - cb_max_delta (float): Cell balance maximum delta.
+            - cb_on_time (int): Cell balance on time.
+            - cb_on_time_unit (int): Cell balance on time unit.
+            - cb_off_time (int): Cell balance off time.
+            - cb_off_time_unit (int): Cell balance off time unit.
+            - cb_under_temp (float): Cell balance under temperature.
+            - cb_ut_recover (float): Cell balance under temperature recover.
+            - cb_over_temp (float): Cell balance over temperature.
+
+        Exceptions are caught and printed for each update operation to ensure that errors do not interrupt
+        the entire update process.
+
+        Raises:
+            Exception: If there is an error updating any of the cell balance attributes.
         """
         cell_balance_mapping = {
             0x1C: 'cb_lower_lim',
@@ -300,9 +396,29 @@ class BMSConfiguration:
                 print(f"Error updating cell balance temperature: {e}")
 
     def update_current_limits(self):
-        """Update the current limit attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the current limit attributes.
+        """
+        Update the current limit attributes based on the given values.
+        This method reads specific registers from the ISL94203 device and updates
+        the corresponding attributes of the instance with the read values. The
+        mapping of registers to attributes is defined in the `current_limits_mapping`
+        dictionary.
+
+        Raises:
+            Exception: If there is an error reading from the ISL94203 device.
+        
+        Attributes Updated:
+            - disch_oc_voltage (int): Discharge overcurrent voltage.
+            - disch_oc_timeout (int): Discharge overcurrent timeout.
+            - disch_oc_timeout_unit (int): Discharge overcurrent timeout unit.
+            - charge_oc_voltage (int): Charge overcurrent voltage.
+            - charge_oc_timeout (int): Charge overcurrent timeout.
+            - charge_oc_timeout_unit (int): Charge overcurrent timeout unit.
+            - disch_sc_voltage (int): Discharge short-circuit voltage.
+            - disch_sc_timeout (int): Discharge short-circuit timeout.
+            - disch_sc_timeout_unit (int): Discharge short-circuit timeout unit.
+            - charge_detect_pulse_width (int): Charge detect pulse width.
+            - load_detect_pulse_width (int): Load detect pulse width.
+
         """
         current_limits_mapping = {
             (0x16, 12, Mask.MASK_3BIT): 'disch_oc_voltage',
@@ -326,9 +442,12 @@ class BMSConfiguration:
                 print(f"Error updating current limits: {e}")
 
     def update_temperature_limits(self):
-        """ Update the temperature limit attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the temperature limit attributes.
+        """Update the temperature limit attributes based on the given values.
+        This method maps specific addresses to temperature limit attributes and updates
+        these attributes by calculating the temperature voltage for each address.
+        
+        Raises:
+            Exception: If there is an error updating any of the temperature limits.
         """
         temperature_limits_mapping = {
             0x30: 'tl_charge_over_temp',
@@ -350,9 +469,25 @@ class BMSConfiguration:
                 print(f"Error updating temperature limits: {e}")
 
     def update_ram_values(self):
-        """ Update the RAM attributes based on the given values.
-        Parameters:
-        - values (list): The list of values from which to extract the RAM attributes.
+        """
+        Update the RAM attributes based on the given values.
+        This method reads various RAM addresses and updates the corresponding 
+        attributes of the object with the processed values. The values are 
+        processed based on the type of attribute being updated.
+
+        Attributes Updated:
+            - v_sense: Pack current sense voltage
+            - vcell1 to vcell8: Cell voltages
+            - vcell_min: Minimum cell voltage
+            - vcell_max: Maximum cell voltage
+            - temp_internal: Internal temperature
+            - temp_xt1: External temperature sensor 1
+            - temp_xt2: External temperature sensor 2
+            - vbatt: Battery voltage
+            - vrgo: Regulator output voltage
+
+        Raises:
+            Exception: If there is an error reading or processing the RAM values.
         """
         self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read(0x85, 4, Mask.MASK_2BIT)]
         ram_addresses = {
@@ -393,9 +528,14 @@ class BMSConfiguration:
                 print(f"Error updating RAM values: {e}")
 
     def update_feature_controls(self):
-        """ Update the feature control attributes based on the given values.    
-        Parameters:
-        - values (list): The list of values from which to extract the feature control attributes.
+        """
+        Update the feature control attributes based on the given values.
+        This method reads specific bits from the ISL94203 device and updates the corresponding
+        attributes of the class instance. The mapping of (address, bit position) to attribute
+        names is predefined in the `bit_mapping` dictionary.
+        
+        Raises:
+            Exception: If there is an error reading a bit from the ISL94203 device, an exception is caught and an error message is printed.
         """
         # Define the mapping of (address, bit position) to attribute names
         bit_mapping = {
@@ -443,25 +583,53 @@ class BMSConfiguration:
         """
         Apply a mask and a multiplier to the given value.
 
-        Parameters:
-        - value (int): The raw value to be processed.
-        - multiplier (float): The multiplier to be applied.
-        - gain (float): The gain to be applied (default is 1).
+        Args:
+            value (int): The raw value to be processed.
+            multiplier (float): The multiplier to be applied.
+            gain (float): The gain to be applied (default is 1).
 
         Returns:
-        - float: The processed value.
+            float: The processed value.
         """
         masked_value = value & Mask.MASK_12BIT.value
         result = masked_value * multiplier / gain
         return result
 
     def apply_mask_and_multiplier(self, value):
+        """
+        Apply a mask and a multiplier to the given value for cell voltage.
+
+        Args:
+            value (int): The raw value to be processed.
+
+        Returns:
+            float: The processed value.
+        """
         return self.apply_mask_and_multiplier_generic(value, VOLTAGE_CELL_MULTIPLIER)
 
     def apply_mask_and_multiplier_pack_current(self, value, gain):
+        """
+        Apply a mask and a multiplier to the given value for pack current.
+
+        Args:
+            value (int): The raw value to be processed.
+            gain (float): The gain to be applied.
+
+        Returns:
+            float: The processed value.
+        """
         return self.apply_mask_and_multiplier_generic(value, CURRENT_CELL_MULTIPLIER, gain)
 
     def apply_mask_and_multiplier_pack(self, value):
+        """
+        Apply a mask and a multiplier to the given value for pack voltage.
+
+        Args:
+            value (int): The raw value to be processed.
+
+        Returns:
+            float: The processed value.
+        """
         return self.apply_mask_and_multiplier_generic(value, VOLTAGE_PACK_MULTIPLIER)
 
     def calculate_vrgo_from_raw_value(self, value):
@@ -492,12 +660,11 @@ class BMSConfiguration:
         """
         Calculate voltage based on values and address.
 
-        Parameters:
-        - values (list): The list of values from which to extract the voltage.
-        - address (int): The starting address.
+        Args:
+            address (int): The starting address.
 
         Returns:
-        - float: The calculated voltage.
+            float: The calculated voltage.
         """
         # Extract the two bytes from values starting from the given address
         registers = self.isl94203.get_registers()
@@ -514,12 +681,11 @@ class BMSConfiguration:
         """
         Calculate voltage based on values and address.
 
-        Parameters:
-        - values (list): The list of values from which to extract the voltage.
-        - address (int): The starting address.
+        Args:
+            address (int): The starting address.
 
         Returns:
-        - float: The calculated voltage.
+            float: The calculated voltage.
         """
         registers = self.isl94203.get_registers()
         # Extract the 16-bit value from 'values' starting at 'address'
