@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStat
 from PySide6.QtCore import QFile, QIODevice, Qt
 
 from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
-from bms.configuration import BMSConfiguration
+from bms.isl94203_driver import BMSConfiguration
 from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
 

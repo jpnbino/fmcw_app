@@ -6,8 +6,8 @@ import random
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from bms.constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, \
-    DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, EEPROM_SIZE
+from bms.isl94203_constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, \
+    DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, ISL94203_EEPROM_SIZE
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 START_BYTE = 0xAA
@@ -64,8 +64,8 @@ class SimulatedDevice:
             eeprom_values = self.config[ADDR_EEPROM_BEGIN:(ADDR_EEPROM_END + 1)]
             response_data = eeprom_values
         elif cmd == CMD_WRITE_EEPROM:
-            if len(data) != EEPROM_SIZE:
-                print(f"Error: Data length {len(data)} bytes does not match EEPROM size {EEPROM_SIZE} bytes")
+            if len(data) != ISL94203_EEPROM_SIZE:
+                print(f"Error: Data length {len(data)} bytes does not match EEPROM size {ISL94203_EEPROM_SIZE} bytes")
                 response_data = [0xFF]  # Error response
             else:
                 self.config[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1] = data

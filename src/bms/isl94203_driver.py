@@ -1,6 +1,7 @@
-from bms.constants import *
 import logging
+from bms.isl94203_constants import *
 from bms.isl94203_factory import ISL94203Factory
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -10,7 +11,7 @@ class BMSConfiguration:
     """     
     def __init__(self):
         """Initialize the BMSConfiguration instance with an ISL94203 instance."""
-        self.isl94203 = ISL94203Factory.create_instance()
+        self.isl94203_hal = ISL94203Factory.create_instance()
 
         # Voltage Limits
         self.ov = 0.0
@@ -173,7 +174,7 @@ class BMSConfiguration:
         Raises:
             Exception: If any error occurs during the update of configuration parameters.
         """
-        registers = self.isl94203.get_registers()
+        registers = self.isl94203_hal.get_registers()
         logging.info(f"update_registers()\n{' '.join(f'{value:02X}' for value in registers)}")
 
         try:
@@ -266,7 +267,7 @@ class BMSConfiguration:
         }
         for (addr, bit_shift, mask), attr in timing_mapping.items():
             try:
-                value = self.isl94203.reg_read(addr, bit_shift, mask)
+                value = self.isl94203_hal.reg_read(addr, bit_shift, mask)
                 if attr == 'timer_sleep':
                     value *= 16
                 setattr(self, attr, value)
@@ -275,7 +276,7 @@ class BMSConfiguration:
 
     def cell_configuration(self):
         # Cell Configuration
-        self.cell_config = self.isl94203.reg_read(0x48, 8, Mask.MASK_8BIT)
+        self.cell_config = self.isl94203_hal.reg_read(0x48, 8, Mask.MASK_8BIT)
 
     def update_pack_options(self):
         """
@@ -311,7 +312,7 @@ class BMSConfiguration:
 
         for (addr, bit_pos), attr in pack_options_mapping.items():
             try:
-                setattr(self, attr, self.isl94203.read_bit(addr, bit_pos))
+                setattr(self, attr, self.isl94203_hal.read_bit(addr, bit_pos))
             except Exception as e:
                 print(f"Error updating pack options: {e}")
 
@@ -375,7 +376,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in cell_balance_timing_mapping.items():
             try:
-                value = self.isl94203.reg_read(addr, bit_shift, bit_mask)
+                value = self.isl94203_hal.reg_read(addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating cell balance timing: {e}")
@@ -389,7 +390,7 @@ class BMSConfiguration:
 
         for (low_byte, high_byte), attr in temperature_mapping.items():
             try:
-                registers = self.isl94203.get_registers()
+                registers = self.isl94203_hal.get_registers()
                 value = self.calculate_temperature_from_raw_value((registers[high_byte] << 8) | registers[low_byte])
                 setattr(self, attr, value)
             except Exception as e:
@@ -436,7 +437,7 @@ class BMSConfiguration:
 
         for (addr, bit_shift, bit_mask), attr in current_limits_mapping.items():
             try:
-                value = self.isl94203.reg_read(addr, bit_shift, bit_mask)
+                value = self.isl94203_hal.reg_read(addr, bit_shift, bit_mask)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating current limits: {e}")
@@ -489,7 +490,7 @@ class BMSConfiguration:
         Raises:
             Exception: If there is an error reading or processing the RAM values.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203.reg_read(0x85, 4, Mask.MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203_hal.reg_read(0x85, 4, Mask.MASK_2BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -513,15 +514,15 @@ class BMSConfiguration:
             try:
                 value = 0
                 if 'temp' in attr:
-                    value = self.calculate_temperature_from_raw_value(self.isl94203.reg_read(addr))
+                    value = self.calculate_temperature_from_raw_value(self.isl94203_hal.reg_read(addr))
                 elif 'vcell' in attr:
-                    value = self.apply_mask_and_multiplier(self.isl94203.reg_read(addr))
+                    value = self.apply_mask_and_multiplier(self.isl94203_hal.reg_read(addr))
                 elif attr == 'v_sense':
-                    value = self.apply_mask_and_multiplier_pack_current(self.isl94203.reg_read(addr), self.i_gain)
+                    value = self.apply_mask_and_multiplier_pack_current(self.isl94203_hal.reg_read(addr), self.i_gain)
                 elif attr == 'vbatt':
-                    value = self.apply_mask_and_multiplier_pack(self.isl94203.reg_read(addr))
+                    value = self.apply_mask_and_multiplier_pack(self.isl94203_hal.reg_read(addr))
                 elif attr == 'vrgo':
-                    value = self.calculate_vrgo_from_raw_value(self.isl94203.reg_read(addr))
+                    value = self.calculate_vrgo_from_raw_value(self.isl94203_hal.reg_read(addr))
 
                 setattr(self, attr, value)
             except Exception as e:
@@ -574,7 +575,7 @@ class BMSConfiguration:
         # Iterate through the mapping and set the attributes
         for (address, bit_position), attr_name in bit_mapping.items():
             try:
-                value = self.isl94203.read_bit(address, bit_position)
+                value = self.isl94203_hal.read_bit(address, bit_position)
                 setattr(self, attr_name, value)
             except Exception as e:
                 print(f"Error updating feature controls: {e}")
@@ -667,7 +668,7 @@ class BMSConfiguration:
             float: The calculated voltage.
         """
         # Extract the two bytes from values starting from the given address
-        registers = self.isl94203.get_registers()
+        registers = self.isl94203_hal.get_registers()
         byte0 = registers[address]
         byte1 = registers[address + 1]
 
@@ -687,7 +688,7 @@ class BMSConfiguration:
         Returns:
             float: The calculated voltage.
         """
-        registers = self.isl94203.get_registers()
+        registers = self.isl94203_hal.get_registers()
         # Extract the 16-bit value from 'values' starting at 'address'
         raw_value = (registers[address + 1] << 8) | registers[address]
 

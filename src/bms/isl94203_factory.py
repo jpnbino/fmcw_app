@@ -1,4 +1,4 @@
-from bms.isl94203 import ISL94203
+from bms.isl94203_hal import ISL94203_HAL
 
 
 class ISL94203Factory:
@@ -10,5 +10,5 @@ class ISL94203Factory:
     @classmethod
     def create_instance(cls):
         if not cls._instance:
-            cls._instance = ISL94203()
+            cls._instance = ISL94203_HAL()
         return cls._instance

@@ -19,7 +19,7 @@
             "name": "Python Debugger: Test Bms Module",
             "type": "debugpy",
             "request": "launch",
-            "module": "bms.isl94203",
+            "module": "bms.isl94203_hal",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/src",
         }

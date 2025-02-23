@@ -2,7 +2,7 @@ from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
 
-from bms.constants import *
+from bms.isl94203_constants import *
 
 from gui.utility import convert_time_to_hex, convert_to_hex
 from logger.log_handler import LogHandler
@@ -29,6 +29,7 @@ class BmsTab:
         self.ui.findChild(QPushButton, "readPackButton").clicked.connect(self.read_bms_config)
         self.ui.findChild(QPushButton, "writePackButton").clicked.connect(self.write_bms_config)
         self.ui.findChild(QPushButton, "readRamButton").clicked.connect(self.read_bms_ram_config)
+        self.ui.findChild(QPushButton, "loadDefaultButton").clicked.connect(self.load_default_config)
         self.ui.findChild(QPushButton, "startStopLogButton").clicked.connect(self.log_bms_ram_config)
 
         self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
@@ -655,7 +656,7 @@ class BmsTab:
             self.serial_setup.reset_output_buffer()
 
             self.serial_protocol.send_command(CMD_READ_ALL_MEMORY, [0])
-            packet = self.serial_protocol.read_packet(MEMORY_SIZE)
+            packet = self.serial_protocol.read_packet(ISL94203_MEMORY_SIZE)
             _, configuration = packet
 
             self.isl94203.set_registers(list(configuration))
@@ -684,10 +685,10 @@ class BmsTab:
             self.serial_setup.reset_output_buffer()
 
             self.serial_protocol.send_command(CMD_READ_RAM, [0])
-            packet = self.serial_protocol.read_packet(RAM_SIZE)
+            packet = self.serial_protocol.read_packet(ISL94203_RAM_SIZE)
             _, configuration = packet
 
-            self.isl94203.set_ram_values(list(configuration))
+            self.isl94203.set_ram_registers(list(configuration))
             self.bms_config.update_registers()
             self.ui_update_fields()
 
@@ -732,6 +733,12 @@ class BmsTab:
             self.ram_log_handler.stop_log()
             if hasattr(self, 'parsed_log_handler'):
                 self.parsed_log_handler.stop_log()
+
+    def load_default_config(self):
+        configuration = []
+        self.isl94203.set_ram_registers(list(configuration))
+        self.bms_config.update_registers()
+        self.ui_update_fields()
 
     def parse_bms_values(self, ram_values):
         """Parse raw RAM values into meaningful values."""

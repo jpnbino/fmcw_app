@@ -1,8 +1,8 @@
-from .constants import MEMORY_SIZE, Mask, MAX_ADDRESS
-from .constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
+from .isl94203_constants import ADDR_USER_EEPROM_OFFSET, ISL94203_EEPROM_SIZE, ISL94203_MEMORY_SIZE, ISL94203_RAM_SIZE, ISL_94203_USER_EEPROM_SIZE, Mask, MAX_ADDRESS
+from .isl94203_constants import ADDR_RAM_BEGIN, ADDR_RAM_OFFSET, DEFAULT_CONFIG
 
 
-class ISL94203:
+class ISL94203_HAL:
     """
     Class representing the ISL94203 battery management system IC. It provides low-level hardware operations to the registers in the ISL94203 following the datasheet. It includes the following operations:
     
@@ -29,7 +29,7 @@ class ISL94203:
         """
         Initialize array to represent ISL94203 registers.
         """
-        self.registers = [0] * MEMORY_SIZE
+        self.all_registers = [0] * ISL94203_MEMORY_SIZE
 
     def set_registers(self, values: list[int]):
         """
@@ -41,9 +41,9 @@ class ISL94203:
         Raises:
             ValueError: If the number of values does not match the number of registers.
         """
-        if len(values) != len(self.registers):
-            raise ValueError(f"Invalid number of values: expected {len(self.registers)}, got {len(values)}")
-        self.registers = values
+        if len(values) != len(self.all_registers):
+            raise ValueError(f"Invalid number of values: expected {len(self.all_registers)}, got {len(values)}")
+        self.all_registers = values
 
     def get_registers(self) -> list[int]:
         """
@@ -52,9 +52,49 @@ class ISL94203:
         Returns:
             list[int]: List of current register values.
         """
-        return self.registers
+        return self.all_registers
 
-    def set_ram_values(self, values: list[int]):
+    @staticmethod
+    def get_default_registers() -> list[int]:
+        """
+        Get the default configuration values as specified in the component's datasheet.
+
+        Returns:
+            list[int]: List of default configuration values.
+        """
+        return DEFAULT_CONFIG
+
+    def set_eeprom_registers(self, values: list[int]):
+        """
+        Set the EEPROM values of the ISL94203.
+
+        Args:
+            values (list[int]): List of values to set in the EEPROM.
+
+        Raises:
+            ValueError: If the provided values list is too long.
+        """
+        if len(values) > ISL94203_EEPROM_SIZE:
+            raise ValueError(f"Invalid number of values: expected {ISL94203_EEPROM_SIZE}, got {len(values)}")
+        for i, value in enumerate(values):
+            self.all_registers[i] = value
+    
+    def set_user_eeprom_registers(self, values: list[int]):
+        """
+        Set the User EEPROM values of the ISL94203.
+
+        Args:
+            values (list[int]): List of values to set in the User EEPROM.
+
+        Raises:
+            ValueError: If the provided values list is too long.
+        """
+        if len(values) > ISL_94203_USER_EEPROM_SIZE:
+            raise ValueError(f"Invalid number of values: expected {ISL_94203_USER_EEPROM_SIZE}, got {len(values)}")
+        for i, value in enumerate(values):
+            self.all_registers[ADDR_USER_EEPROM_OFFSET + i] = value
+            
+    def set_ram_registers(self, values: list[int]):
         """
         Set the RAM values of the ISL94203.
 
@@ -64,29 +104,10 @@ class ISL94203:
         Raises:
             IndexError: If the provided values list is too long.
         """
-        if len(values) > (len(self.registers) - ADDR_RAM_OFFSET):
-            raise IndexError(f"Invalid number of values: expected {len(self.registers) - ADDR_RAM_OFFSET}, got {len(values)}")
+        if len(values) > (len(self.all_registers) - ADDR_RAM_OFFSET):
+            raise IndexError(f"Invalid number of values: expected {len(self.all_registers) - ADDR_RAM_OFFSET}, got {len(values)}")
         for i, value in enumerate(values):
-            self.registers[ADDR_RAM_OFFSET + i] = value
-
-    @staticmethod
-    def get_default_config() -> list[int]:
-        """
-        Get the default configuration values as specified in the component's datasheet.
-
-        Returns:
-            list[int]: List of default configuration values.
-        """
-        return DEFAULT_CONFIG
-
-    def get_config(self) -> list[int]:
-        """
-        Get the current configuration values.
-
-        Returns:
-            list[int]: List of current configuration values.
-        """
-        return self.registers
+            self.all_registers[ADDR_RAM_OFFSET + i] = value
 
     def reg_write(self, address: int, value: int, mask: Mask = Mask.MASK_16BIT, shift: int = 0) -> int:
         """
@@ -114,8 +135,8 @@ class ISL94203:
         if address >= ADDR_RAM_BEGIN:
             address = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
-        byte0 = int(self.registers[address])
-        byte1 = int(self.registers[address + 1])
+        byte0 = int(self.all_registers[address])
+        byte1 = int(self.all_registers[address + 1])
 
         # Combine the two bytes into a 16-bit value
         tmp = (byte1 << 8) | byte0
@@ -127,8 +148,8 @@ class ISL94203:
         tmp |= (value & mask.value) << shift
 
         # Write the result back to the register
-        self.registers[address] = tmp & 0xff
-        self.registers[address + 1] = (tmp >> 8) & 0xff
+        self.all_registers[address] = tmp & 0xff
+        self.all_registers[address + 1] = (tmp >> 8) & 0xff
 
         return tmp
 
@@ -159,7 +180,7 @@ class ISL94203:
             address = address - ADDR_RAM_BEGIN + ADDR_RAM_OFFSET
 
         # Assuming start_address points to the index in registers directly
-        raw_value = (self.registers[address + 1] << 8) | self.registers[address]
+        raw_value = (self.all_registers[address + 1] << 8) | self.all_registers[address]
         value = (raw_value >> shift) & mask.value
         return value
 
@@ -189,53 +210,50 @@ class ISL94203:
     
 if __name__ == "__main__":
     # Example usage of the ISL94203 class
-    isl94203 = ISL94203()
+    isl94203 = ISL94203_HAL()
+    print("ISL94203 HAL initialized.")
+    print(f"Memory size (bytes): {ISL94203_MEMORY_SIZE}")
 
-    # Set some register values
     try:
+        # Get and print the default configuration values as in the datasheet
+        default_config = ISL94203_HAL.get_default_registers()
+        print(f"Default configuration:\n{' '.join(f'{val:02X}' for val in default_config)}")
 
-        print("Registers initialized.")
-        print(f"Memory size: {MEMORY_SIZE}")
-        print (f"DEFAULT_CONFIG: {len(DEFAULT_CONFIG)}")
-    except ValueError as e:
-        print(f"Error: {e}")
+        # Get and print the current register values
+        current_registers = isl94203.get_registers()
+        print(f"Current registers:\n{' '.join(f'{val:02X}' for val in current_registers)}")
 
-    # Get and print the current register values
-    current_registers = isl94203.get_registers()
-    print(f"Current registers: {current_registers}")
+        # Set EEPROM registers
+        eeprom_values = list(range(0, ISL94203_EEPROM_SIZE))
+        isl94203.set_eeprom_registers(eeprom_values)
+        print("Registers set to default configuration.")
 
-    # Set some RAM values
-    try:
-        isl94203.set_ram_values([0x01, 0x02, 0x03])
+        # Set User EEPROM registers
+        user_eeprom_values = list(range(1, ISL_94203_USER_EEPROM_SIZE))
+        isl94203.set_user_eeprom_registers(user_eeprom_values)
+        print("User EEPROM values set.")
+
+        # Set some RAM values
+        ram_values = list(range(1, ISL94203_RAM_SIZE))
+        isl94203.set_ram_registers(ram_values)
         print("RAM values set.")
-    except IndexError as e:
-        print(f"Error: {e}")
 
-    # Get and print the default configuration values
-    default_config = ISL94203.get_default_config()
-    print(f"Default configuration: {default_config}")
+        # Get and print the current configuration values
+        current_config = isl94203.get_registers()
+        print(f"Current configuration:\n{' '.join(f'{val:02X}' for val in current_config)}")
 
-    # Get and print the current configuration values
-    current_config = isl94203.get_config()
-    print(f"Current configuration: {current_config}")
+        # Write a value to a register
+        REGISTER_10H = 0x10
+        new_value = isl94203.reg_write(REGISTER_10H, 0xABCD)
+        print(f"New register value: {new_value:04X}")
 
-    # Write a value to a register
-    try:
-        new_value = isl94203.reg_write(0x10, 0x1234)
-        print(f"New register value: {new_value}")
-    except ValueError as e:
-        print(f"Error: {e}")
+        # Read a value from a register
+        read_value = isl94203.reg_read(REGISTER_10H)
+        print(f"Read register value: {read_value:04X}")
 
-    # Read a value from a register
-    try:
-        read_value = isl94203.reg_read(0x10)
-        print(f"Read register value: {read_value}")
-    except ValueError as e:
-        print(f"Error: {e}")
-
-    # Read a bit from a register
-    try:
-        bit_value = isl94203.read_bit(0x10, 3)
+        # Read a bit from a register
+        bit_value = isl94203.read_bit(REGISTER_10H, 3)
         print(f"Read bit value: {bit_value}")
-    except ValueError as e:
+
+    except (ValueError, IndexError) as e:
         print(f"Error: {e}")
