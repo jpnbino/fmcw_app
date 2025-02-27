@@ -104,8 +104,8 @@ class ISL94203_HAL:
         Raises:
             IndexError: If the provided values list is too long.
         """
-        if len(values) > (len(self.all_registers) - ADDR_RAM_OFFSET):
-            raise IndexError(f"Invalid number of values: expected {len(self.all_registers) - ADDR_RAM_OFFSET}, got {len(values)}")
+        if len(values) > ISL94203_RAM_SIZE:
+            raise IndexError(f"Invalid number of values: expected {ISL94203_RAM_SIZE}, got {len(values)}")
         for i, value in enumerate(values):
             self.all_registers[ADDR_RAM_OFFSET + i] = value
 
@@ -153,6 +153,7 @@ class ISL94203_HAL:
 
         return tmp
 
+
     def reg_read(self, address: int, shift: int = 0, mask: Mask = Mask.MASK_16BIT) -> int:
         """
         Read two consecutive registers and extract a value based on the specified bit shift and bit mask.
@@ -183,6 +184,20 @@ class ISL94203_HAL:
         raw_value = (self.all_registers[address + 1] << 8) | self.all_registers[address]
         value = (raw_value >> shift) & mask.value
         return value
+
+    def reg_write_bit(self, address: int, bit_position: int, value: bool) -> int:
+        """
+        Write a bit value to a register based on the specified address and bit position.
+
+        Args:
+            address (int): The address of the register.
+            bit_position (int): The bit position within the byte (0-7).
+            value (bool): The boolean value to write.
+
+        Raises:
+            ValueError: If the address or bit position is out of valid range.
+        """
+        self.reg_write(address, value, Mask.MASK_1BIT, bit_position)
 
     def read_bit(self, address: int, bit_position: int) -> bool:
         """
