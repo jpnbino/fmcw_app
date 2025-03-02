@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Callable
+from .isl94203_constants import Mask
 
 @dataclass
 class BooleanStatusRegisterField:
@@ -8,6 +9,7 @@ class BooleanStatusRegisterField:
     bit_position: int
     description: str
     from_raw: Callable[[int], bool] = lambda raw: bool(raw)
+    bit_mask: int = Mask.MASK_1BIT
 
 @dataclass
 class CellBalanceControlRegisterField:
@@ -17,6 +19,7 @@ class CellBalanceControlRegisterField:
     description: str
     to_raw: Callable[[bool], int] = lambda value: 1 if value else 0
     from_raw: Callable[[int], bool] = lambda raw: bool(raw)
+    bit_mask: int = Mask.MASK_1BIT
 
 status_bit_map = {
     0x80: [
