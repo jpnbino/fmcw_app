@@ -11,13 +11,12 @@ from bms.isl94203_factory import ISL94203Factory
 import logging
 
 from serialbsp.commands import CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_WRITE_EEPROM
-from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 
 class BmsTab:
-    def __init__(self, ui, bms_config, log_callback):
+    def __init__(self, ui, bms_driver, log_callback):
         self.ui = ui
-        self.bms_config = bms_config
+        self.isl94203_driver = bms_driver
         self.isl94203 = ISL94203Factory.create_instance()
         self.log_file_path = None
         self.log_callback = log_callback
@@ -184,16 +183,17 @@ class BmsTab:
 
     def ui_update_voltage_limits(self):
         """Update voltage limits fields."""
+        voltage_limits = self.isl94203_driver.read_voltage_limits()
         voltage_fields = [
-            (self.ovLockoutLineEdit, self.bms_config.ov_lockout),
-            (self.ovLineEdit, self.bms_config.ov),
-            (self.ovRecoverLineEdit, self.bms_config.ov_recover),
-            (self.eocVoltageLineEdit, self.bms_config.eoc_voltage),
-            (self.uvRecoverLineEdit, self.bms_config.uv_recover),
-            (self.underVoltageLineEdit, self.bms_config.under_voltage),
-            (self.sleepVoltageLineEdit, self.bms_config.sleep_voltage),
-            (self.lowVoltageChargeLineEdit, self.bms_config.low_voltage_charge),
-            (self.uvLockoutLineEdit, self.bms_config.uv_lockout)
+            (self.ovLockoutLineEdit, voltage_limits.get("overvoltage_lockout")),
+            (self.ovLineEdit, voltage_limits.get("overvoltage_threshold")),
+            (self.ovRecoverLineEdit, voltage_limits.get("overvoltage_recovery")),
+            (self.eocVoltageLineEdit, voltage_limits.get("eoc_voltage")),
+            (self.uvRecoverLineEdit, voltage_limits.get("undervoltage_recovery")),
+            (self.underVoltageLineEdit, voltage_limits.get("undervoltage_threshold")),
+            (self.sleepVoltageLineEdit, voltage_limits.get("sleep_voltage")),
+            (self.lowVoltageChargeLineEdit, voltage_limits.get("low_voltage_charge")),
+            (self.uvLockoutLineEdit, voltage_limits.get("undervoltage_lockout"))
         ]
         for line_edit, value in voltage_fields:
             line_edit.setText(f"{value:.2f}")
@@ -202,19 +202,19 @@ class BmsTab:
         """Update voltage limits timing fields and 
         Update the combo boxes with the selected values."""
         voltage_timing_fields = [
-            (self.ovDelayTimeoutLineEdit, self.bms_config.ov_delay_timeout),
-            (self.uvDelayTimeoutLineEdit, self.bms_config.uv_delay_timeout),
-            (self.sleepDelayLineEdit, self.bms_config.sleep_delay),
-            (self.openWireTimingLineEdit, self.bms_config.open_wire_timing)
+            (self.ovDelayTimeoutLineEdit, self.isl94203_driver.ov_delay_timeout),
+            (self.uvDelayTimeoutLineEdit, self.isl94203_driver.uv_delay_timeout),
+            (self.sleepDelayLineEdit, self.isl94203_driver.sleep_delay),
+            (self.openWireTimingLineEdit, self.isl94203_driver.open_wire_timing)
         ]
         for line_edit, value in voltage_timing_fields:
             line_edit.setText(f"{int(value)}")
 
         combo_boxes = [
-            (self.ovDelayTimeoutCombo, self.bms_config.ov_delay_timeout_unit),
-            (self.uvDelayTimeoutCombo, self.bms_config.uv_delay_timeout_unit),
-            (self.sleepDelayUnitCombo, self.bms_config.sleep_delay_unit),
-            (self.openWireTimingCombo, self.bms_config.open_wire_timing_unit)
+            (self.ovDelayTimeoutCombo, self.isl94203_driver.ov_delay_timeout_unit),
+            (self.uvDelayTimeoutCombo, self.isl94203_driver.uv_delay_timeout_unit),
+            (self.sleepDelayUnitCombo, self.isl94203_driver.sleep_delay_unit),
+            (self.openWireTimingCombo, self.isl94203_driver.open_wire_timing_unit)
         ]
         for combo, value in combo_boxes:
             combo.setCurrentText(UNIT_MAPPING.get(int(value), 'Unknown'))
@@ -222,53 +222,53 @@ class BmsTab:
     def ui_update_timer_fields(self):
         """Update timer-related fields."""
         timer_fields = {
-            self.timerIdleDozeCombo: self.bms_config.timer_idle_doze,
-            self.timerSleepCombo: self.bms_config.timer_sleep,
+            self.timerIdleDozeCombo: self.isl94203_driver.timer_idle_doze,
+            self.timerSleepCombo: self.isl94203_driver.timer_sleep,
         }
         for line_edit, value in timer_fields.items():
             line_edit.setCurrentText(f"{int(value)}")
 
         wdt_line_edit = self.timerWDTLineEdit
-        wdt_line_edit.setText(f"{int(self.bms_config.timer_wdt)}")
+        wdt_line_edit.setText(f"{int(self.isl94203_driver.timer_wdt)}")
 
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
-        if self.bms_config.cell_config == 0:
+        if self.isl94203_driver.cell_config == 0:
             self.CellConfigurationLineEdit.setText("0")
         else:
-            self.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.bms_config.cell_config])}")
+            self.CellConfigurationLineEdit.setText(f"{int(CELL_CONFIG_MAPPING[self.isl94203_driver.cell_config])}")
 
         cell_balance_limits = {
-            self.CBUpperLimLineEdit: self.bms_config.cb_upper_lim,
-            self.CBLowerLimLineEdit: self.bms_config.cb_lower_lim,
-            self.CBMaxDeltaLineEdit: self.bms_config.cb_max_delta,
-            self.CBMinDeltaLineEdit: self.bms_config.cb_min_delta,
-            self.CBOverTempLineEdit: self.bms_config.cb_over_temp,
-            self.CBOTRecoverLineEdit: self.bms_config.cb_ot_recover,
-            self.CBUTRecoverLineEdit: self.bms_config.cb_ut_recover,
-            self.CBUnderTempLineEdit: self.bms_config.cb_under_temp,
+            self.CBUpperLimLineEdit: self.isl94203_driver.cb_upper_lim,
+            self.CBLowerLimLineEdit: self.isl94203_driver.cb_lower_lim,
+            self.CBMaxDeltaLineEdit: self.isl94203_driver.cb_max_delta,
+            self.CBMinDeltaLineEdit: self.isl94203_driver.cb_min_delta,
+            self.CBOverTempLineEdit: self.isl94203_driver.cb_over_temp,
+            self.CBOTRecoverLineEdit: self.isl94203_driver.cb_ot_recover,
+            self.CBUTRecoverLineEdit: self.isl94203_driver.cb_ut_recover,
+            self.CBUnderTempLineEdit: self.isl94203_driver.cb_under_temp,
         }
         for line_edit, value in cell_balance_limits.items():
             line_edit.setText(f"{value:.2f}")
 
-        self.CBOnTimeLineEdit.setText(f"{int(self.bms_config.cb_on_time)}")
-        self.CBOffTimeLineEdit.setText(f"{int(self.bms_config.cb_off_time)}")
-        self.CBOnTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.bms_config.cb_on_time_unit), 'Unknown'))
-        self.CBOffTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.bms_config.cb_off_time_unit), 'Unknown'))
+        self.CBOnTimeLineEdit.setText(f"{int(self.isl94203_driver.cb_on_time)}")
+        self.CBOffTimeLineEdit.setText(f"{int(self.isl94203_driver.cb_off_time)}")
+        self.CBOnTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.isl94203_driver.cb_on_time_unit), 'Unknown'))
+        self.CBOffTimeUnitLineEdit.setCurrentText(UNIT_MAPPING.get(int(self.isl94203_driver.cb_off_time_unit), 'Unknown'))
 
     def ui_update_temperature_limits(self):
         """Update temperature limits fields."""
         temp_limits = {
-            self.TLChargeOverTempLineEdit: self.bms_config.tl_charge_over_temp,
-            self.TLChargeOTRecoverLineEdit: self.bms_config.tl_charge_ot_recover,
-            self.TLChargeUTRecoverLineEdit: self.bms_config.tl_charge_ut_recover,
-            self.TLChargeUnderTempLineEdit: self.bms_config.tl_charge_under_temp,
-            self.TLDiscOverTempLineEdit: self.bms_config.tl_disch_over_temp,
-            self.TLDischOTRecoverLineEdit: self.bms_config.tl_disch_ot_recover,
-            self.TLDischUTRecoverLineEdit: self.bms_config.tl_disch_ut_recover,
-            self.TLDischUnderTempLineEdit: self.bms_config.tl_disch_under_temp,
-            self.TLInternalOverTempLineEdit: self.bms_config.tl_internal_over_temp,
-            self.TLInternalOTRecoverLineEdit: self.bms_config.tl_internal_ot_recover
+            self.TLChargeOverTempLineEdit: self.isl94203_driver.tl_charge_over_temp,
+            self.TLChargeOTRecoverLineEdit: self.isl94203_driver.tl_charge_ot_recover,
+            self.TLChargeUTRecoverLineEdit: self.isl94203_driver.tl_charge_ut_recover,
+            self.TLChargeUnderTempLineEdit: self.isl94203_driver.tl_charge_under_temp,
+            self.TLDiscOverTempLineEdit: self.isl94203_driver.tl_disch_over_temp,
+            self.TLDischOTRecoverLineEdit: self.isl94203_driver.tl_disch_ot_recover,
+            self.TLDischUTRecoverLineEdit: self.isl94203_driver.tl_disch_ut_recover,
+            self.TLDischUnderTempLineEdit: self.isl94203_driver.tl_disch_under_temp,
+            self.TLInternalOverTempLineEdit: self.isl94203_driver.tl_internal_over_temp,
+            self.TLInternalOTRecoverLineEdit: self.isl94203_driver.tl_internal_ot_recover
         }
         for line_edit, value in temp_limits.items():
             line_edit.setText(f"{value:.2f}")
@@ -276,27 +276,27 @@ class BmsTab:
     def ui_update_current_limits(self):
         """Update current limits fields."""
         current_limits = {
-            self.CLDischargeOCVoltageCombo: (self.bms_config.disch_oc_voltage, DOC_MAPPING),
-            self.CLChargeOCVoltageCombo: (self.bms_config.charge_oc_voltage, COC_MAPPING),
-            self.CLDischargeSCVoltageCombo: (self.bms_config.disch_sc_voltage, DSC_MAPPING),
-            self.CLDischargeOCTimeoutCombo: (self.bms_config.disch_oc_timeout_unit, UNIT_MAPPING),
-            self.CLChargeOCTimeoutCombo: (self.bms_config.charge_oc_timeout_unit, UNIT_MAPPING),
-            self.CLDischargeSCTimeoutCombo: (self.bms_config.disch_sc_timeout_unit, UNIT_MAPPING)
+            self.CLDischargeOCVoltageCombo: (self.isl94203_driver.disch_oc_voltage, DOC_MAPPING),
+            self.CLChargeOCVoltageCombo: (self.isl94203_driver.charge_oc_voltage, COC_MAPPING),
+            self.CLDischargeSCVoltageCombo: (self.isl94203_driver.disch_sc_voltage, DSC_MAPPING),
+            self.CLDischargeOCTimeoutCombo: (self.isl94203_driver.disch_oc_timeout_unit, UNIT_MAPPING),
+            self.CLChargeOCTimeoutCombo: (self.isl94203_driver.charge_oc_timeout_unit, UNIT_MAPPING),
+            self.CLDischargeSCTimeoutCombo: (self.isl94203_driver.disch_sc_timeout_unit, UNIT_MAPPING)
         }
         for combo, (value, mapping) in current_limits.items():
             combo.setCurrentText(mapping.get(int(value), 'Unknown'))
 
         current_fields = {
-            self.CLDischargeOCTimeoutLineEdit: self.bms_config.disch_oc_timeout,
-            self.CLChargeOCTimeoutLineEdit: self.bms_config.charge_oc_timeout,
-            self.CLDischargeSCTimeoutLineEdit: self.bms_config.disch_sc_timeout
+            self.CLDischargeOCTimeoutLineEdit: self.isl94203_driver.disch_oc_timeout,
+            self.CLChargeOCTimeoutLineEdit: self.isl94203_driver.charge_oc_timeout,
+            self.CLDischargeSCTimeoutLineEdit: self.isl94203_driver.disch_sc_timeout
         }
         for line_edit, value in current_fields.items():
             line_edit.setText(f"{int(value)}")
 
         current_detect_fields = {
-            self.chargeDetectPulseCombo: self.bms_config.charge_detect_pulse_width,
-            self.loadDetectPulseCombo: self.bms_config.load_detect_pulse_width
+            self.chargeDetectPulseCombo: self.isl94203_driver.charge_detect_pulse_width,
+            self.loadDetectPulseCombo: self.isl94203_driver.load_detect_pulse_width
         }
         for combo, value in current_detect_fields.items():
             combo.setCurrentText(f"{int(value)}")
@@ -304,15 +304,15 @@ class BmsTab:
     def ui_update_pack_option(self):
         """Update pack option fields."""
         options = {
-            self.poT2MonitorsFETTempCheckBox: self.bms_config.bit_t2_monitors_fet,
-            self.poEnableCELLFpsdCheckBox: self.bms_config.bit_enable_cellf_psd,
-            self.poEnableOpenWirePSDCheckBox: self.bms_config.bit_enable_openwire_psd,
-            self.poEnableUVLOCheckBox: self.bms_config.bit_enable_uvlo_pd,
-            self.poEnableOpenWireScanCheckBox: self.bms_config.bit_enable_openwire_scan,
-            self.CBDuringChargeCheckBox: self.bms_config.bit_cb_during_charge,
-            self.CBDuringDischargeCheckBox: self.bms_config.bit_cb_during_discharge,
-            self.CBDuringEOCCheckBox: self.bms_config.bit_cb_during_eoc,
-            self.tGainCheckBox: self.bms_config.bit_tgain
+            self.poT2MonitorsFETTempCheckBox: self.isl94203_driver.bit_t2_monitors_fet,
+            self.poEnableCELLFpsdCheckBox: self.isl94203_driver.bit_enable_cellf_psd,
+            self.poEnableOpenWirePSDCheckBox: self.isl94203_driver.bit_enable_openwire_psd,
+            self.poEnableUVLOCheckBox: self.isl94203_driver.bit_enable_uvlo_pd,
+            self.poEnableOpenWireScanCheckBox: self.isl94203_driver.bit_enable_openwire_scan,
+            self.CBDuringChargeCheckBox: self.isl94203_driver.bit_cb_during_charge,
+            self.CBDuringDischargeCheckBox: self.isl94203_driver.bit_cb_during_discharge,
+            self.CBDuringEOCCheckBox: self.isl94203_driver.bit_cb_during_eoc,
+            self.tGainCheckBox: self.isl94203_driver.bit_tgain
         }
         for checkbox, value in options.items():
             checkbox.setChecked(value)
@@ -321,80 +321,80 @@ class BmsTab:
         # RAM
         # Voltage values: Cells, Min, Max, Batt, Vrgo
         voltage_fields = [
-            (self.vcell1LineEdit, self.bms_config.vcell1),
-            (self.vcell2LineEdit, self.bms_config.vcell2),
-            (self.vcell3LineEdit, self.bms_config.vcell3),
-            (self.vcell4LineEdit, self.bms_config.vcell4),
-            (self.vcell5LineEdit, self.bms_config.vcell5),
-            (self.vcell6LineEdit, self.bms_config.vcell6),
-            (self.vcell7LineEdit, self.bms_config.vcell7),
-            (self.vcell8LineEdit, self.bms_config.vcell8),
-            (self.vcellMinLineEdit, self.bms_config.vcell_min),
-            (self.vcellMaxLineEdit, self.bms_config.vcell_max),
-            (self.vcellBattLineEdit, self.bms_config.vbatt),
-            (self.vcellVrgoLineEdit, self.bms_config.vrgo),
+            (self.vcell1LineEdit, self.isl94203_driver.vcell1),
+            (self.vcell2LineEdit, self.isl94203_driver.vcell2),
+            (self.vcell3LineEdit, self.isl94203_driver.vcell3),
+            (self.vcell4LineEdit, self.isl94203_driver.vcell4),
+            (self.vcell5LineEdit, self.isl94203_driver.vcell5),
+            (self.vcell6LineEdit, self.isl94203_driver.vcell6),
+            (self.vcell7LineEdit, self.isl94203_driver.vcell7),
+            (self.vcell8LineEdit, self.isl94203_driver.vcell8),
+            (self.vcellMinLineEdit, self.isl94203_driver.vcell_min),
+            (self.vcellMaxLineEdit, self.isl94203_driver.vcell_max),
+            (self.vcellBattLineEdit, self.isl94203_driver.vbatt),
+            (self.vcellVrgoLineEdit, self.isl94203_driver.vrgo),
         ]
         for line_edit, value in voltage_fields:
             line_edit.setText(f"{value:.2f}")
 
         # Temperature
         gain = 0
-        if self.bms_config.bit_tgain:
+        if self.isl94203_driver.bit_tgain:
             gain = 1
             self.TemperatureGainLabel.setText("Now the gain is 1x")
         else:
             gain = 2
             self.TemperatureGainLabel.setText("Now the gain is 2x")
 
-        self.tempITVoltaqeLineEdit.setText(f"{self.bms_config.temp_internal:.2f}")
-        internal_temp_celsius = ((self.bms_config.temp_internal * 1000) / (gain * 0.92635)) - 273.15
+        self.tempITVoltaqeLineEdit.setText(f"{self.isl94203_driver.temp_internal:.2f}")
+        internal_temp_celsius = ((self.isl94203_driver.temp_internal * 1000) / (gain * 0.92635)) - 273.15
         self.tempITDegLineEdit.setText(f"{internal_temp_celsius:.2f}")
 
-        self.tempXT1VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt1:.2f}")
-        self.tempXT2VoltaqeLineEdit.setText(f"{self.bms_config.temp_xt2:.2f}")
+        self.tempXT1VoltaqeLineEdit.setText(f"{self.isl94203_driver.temp_xt1:.2f}")
+        self.tempXT2VoltaqeLineEdit.setText(f"{self.isl94203_driver.temp_xt2:.2f}")
 
         # Current
         resistor = float(self.ResistorLineEdit.text()) / 1000
-        current = float(self.bms_config.v_sense / resistor)
-        voltage = self.bms_config.v_sense
+        current = float(self.isl94203_driver.v_sense / resistor)
+        voltage = self.isl94203_driver.v_sense
 
-        self.CSGainLineEdit.setText(f"{int(self.bms_config.i_gain)}")
+        self.CSGainLineEdit.setText(f"{int(self.isl94203_driver.i_gain)}")
         self.packCurrentVLineEdit.setText(f"{voltage * 1000:.4f}")  # in millivolts
         self.packCurrentALineEdit.setText(f"{int(current * 1000)}")  # in milliamperes
 
     def ui_update_status_bits(self):
         status_mapping = {
             # address 0x80
-            self.bitOVlabel: self.bms_config.bit_ov,
-            self.bitOVLOlabel: self.bms_config.bit_ovlo,
-            self.bitUVlabel: self.bms_config.bit_uv,
-            self.bitUVLOlabel: self.bms_config.bit_uvlo,
-            self.bitDOTlabel: self.bms_config.bit_dot,
-            self.bitDUTlabel: self.bms_config.bit_dut,
-            self.bitCOTlabel: self.bms_config.bit_cot,
-            self.bitCUTlabel: self.bms_config.bit_cut,
+            self.bitOVlabel: self.isl94203_driver.bit_ov,
+            self.bitOVLOlabel: self.isl94203_driver.bit_ovlo,
+            self.bitUVlabel: self.isl94203_driver.bit_uv,
+            self.bitUVLOlabel: self.isl94203_driver.bit_uvlo,
+            self.bitDOTlabel: self.isl94203_driver.bit_dot,
+            self.bitDUTlabel: self.isl94203_driver.bit_dut,
+            self.bitCOTlabel: self.isl94203_driver.bit_cot,
+            self.bitCUTlabel: self.isl94203_driver.bit_cut,
             # address 0x81
-            self.bitIOTlabel: self.bms_config.bit_iot,
-            self.bitCOClabel: self.bms_config.bit_coc,
-            self.bitDOClabel: self.bms_config.bit_doc,
-            self.bitDSClabel: self.bms_config.bit_dsc,
-            self.bitCELLFlabel: self.bms_config.bit_cellf,
-            self.bitOPENlabel: self.bms_config.bit_open,
-            self.bitEOCHGlabel: self.bms_config.bit_eochg,
+            self.bitIOTlabel: self.isl94203_driver.bit_iot,
+            self.bitCOClabel: self.isl94203_driver.bit_coc,
+            self.bitDOClabel: self.isl94203_driver.bit_doc,
+            self.bitDSClabel: self.isl94203_driver.bit_dsc,
+            self.bitCELLFlabel: self.isl94203_driver.bit_cellf,
+            self.bitOPENlabel: self.isl94203_driver.bit_open,
+            self.bitEOCHGlabel: self.isl94203_driver.bit_eochg,
             # address 0x82
-            self.bitLDPRSNTlabel: self.bms_config.bit_ld_prsnt,
-            self.bitCHPRSNTlabel: self.bms_config.bit_ch_prsnt,
-            self.bitCHINGlabel: self.bms_config.bit_ching,
-            self.bitDCHINGlabel: self.bms_config.bit_dching,
-            self.bitLVCHRGlabel: self.bms_config.bit_lvchg,
+            self.bitLDPRSNTlabel: self.isl94203_driver.bit_ld_prsnt,
+            self.bitCHPRSNTlabel: self.isl94203_driver.bit_ch_prsnt,
+            self.bitCHINGlabel: self.isl94203_driver.bit_ching,
+            self.bitDCHINGlabel: self.isl94203_driver.bit_dching,
+            self.bitLVCHRGlabel: self.isl94203_driver.bit_lvchg,
             # address 0x83
-            self.bitCBOTlabel: self.bms_config.bit_cbot,
-            self.bitCBUTlabel: self.bms_config.bit_cbut,
-            self.bitCBOVlabel: self.bms_config.bit_cbov,
-            self.bitCBUVlabel: self.bms_config.bit_cbuv,
-            self.bitIDLElabel: self.bms_config.bit_in_idle,
-            self.bitDOZElabel: self.bms_config.bit_in_doze,
-            self.bitSLEEPlabel: self.bms_config.bit_in_sleep
+            self.bitCBOTlabel: self.isl94203_driver.bit_cbot,
+            self.bitCBUTlabel: self.isl94203_driver.bit_cbut,
+            self.bitCBOVlabel: self.isl94203_driver.bit_cbov,
+            self.bitCBUVlabel: self.isl94203_driver.bit_cbuv,
+            self.bitIDLElabel: self.isl94203_driver.bit_in_idle,
+            self.bitDOZElabel: self.isl94203_driver.bit_in_doze,
+            self.bitSLEEPlabel: self.isl94203_driver.bit_in_sleep
         }
 
         for label, bit in status_mapping.items():
@@ -418,21 +418,20 @@ class BmsTab:
         return unit
 
     def write_voltage_limits(self):
-        voltage_values = [
-            (self.ovLineEdit.text(), 0x00),
-            (self.ovRecoverLineEdit.text(), 0x02),
-            (self.underVoltageLineEdit.text(), 0x04),
-            (self.uvRecoverLineEdit.text(), 0x06),
-            (self.ovLockoutLineEdit.text(), 0x08),
-            (self.uvLockoutLineEdit.text(), 0x0a),
-            (self.eocVoltageLineEdit.text(), 0x0c),
-            (self.lowVoltageChargeLineEdit.text(), 0x0e),
-            (self.sleepVoltageLineEdit.text(), 0x44)
-        ]
-        for value, address in voltage_values:
-            hex_value: int = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
+        """Write voltage limits from UI to the driver."""
+        voltage_limits = {
+            "overvoltage_lockout": float(self.ovLockoutLineEdit.text()),
+            "overvoltage_threshold": float(self.ovLineEdit.text()),
+            "overvoltage_recovery": float(self.ovRecoverLineEdit.text()),
+            "eoc_voltage": float(self.eocVoltageLineEdit.text()),
+            "undervoltage_recovery": float(self.uvRecoverLineEdit.text()),
+            "undervoltage_threshold": float(self.underVoltageLineEdit.text()),
+            "sleep_voltage": float(self.sleepVoltageLineEdit.text()),
+            "low_voltage_charge": float(self.lowVoltageChargeLineEdit.text()),
+            "undervoltage_lockout": float(self.uvLockoutLineEdit.text())
+        }
+        self.isl94203_driver.write_voltage_limits(voltage_limits)
+        
     def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
         ov_delay_timeout = int(self.ovDelayTimeoutLineEdit.text())
@@ -441,102 +440,92 @@ class BmsTab:
         sleep_delay = int(self.sleepDelayLineEdit.text())
 
         # Extract and shift units
-        ov_delay_timeout_unit = self.get_unit_from_combo(self.ovDelayTimeoutCombo) << 10
-        uv_delay_timeout_unit = self.get_unit_from_combo(self.uvDelayTimeoutCombo) << 10
-        sleep_delay_unit = self.get_unit_from_combo(self.sleepDelayUnitCombo) << 9
-        open_wire_sample_time_unit = self.get_unit_from_combo(self.openWireTimingCombo) << 9
+        ov_delay_timeout_unit = self.get_unit_from_combo(self.ovDelayTimeoutCombo)
+        uv_delay_timeout_unit = self.get_unit_from_combo(self.uvDelayTimeoutCombo)
+        sleep_delay_unit = self.get_unit_from_combo(self.sleepDelayUnitCombo)
+        open_wire_sample_time_unit = self.get_unit_from_combo(self.openWireTimingCombo)
 
-        # Combine values and units, then write to registers
-        self.isl94203.reg_write(0x10, ov_delay_timeout_unit | ov_delay_timeout, Mask.MASK_12BIT, 0)
-        self.isl94203.reg_write(0x12, uv_delay_timeout_unit | uv_delay_timeout, Mask.MASK_12BIT, 0)
-        self.isl94203.reg_write(0x14, open_wire_sample_time_unit | open_wire_sample_time, Mask.MASK_10BIT, 0)
-        self.isl94203.reg_write(0x46, sleep_delay_unit | sleep_delay, Mask.MASK_11BIT, 0)
+        timing_limits = {
+            'ov_delay_timeout': (ov_delay_timeout, ov_delay_timeout_unit),
+            'uv_delay_timeout': (uv_delay_timeout, uv_delay_timeout_unit),
+            'open_wire_sample_time': (open_wire_sample_time, open_wire_sample_time_unit),
+            'sleep_delay': (sleep_delay, sleep_delay_unit)
+        }
+
+        self.isl94203_driver.write_voltage_limits_timing(timing_limits)
 
     def write_timers(self):
-
-        timer_values = [
-            (self.timerWDTLineEdit.text(), 0x46, Mask.MASK_5BIT, 11, 0),
-            (self.timerIdleDozeCombo.currentText(), 0x48, Mask.MASK_4BIT, 0, 0),
-            (self.timerSleepCombo.currentText(), 0x48, Mask.MASK_4BIT, 4, 4)
-        ]
-        for value, address, mask, shift, scaling in timer_values:
-            hex_value = convert_time_to_hex(value, scaling)
-            self.isl94203.reg_write(address, hex_value, mask, shift)
+        timer_values = {
+            'timer_wdt': self.timerWDTLineEdit.text(),
+            'timer_idle_doze': self.timerIdleDozeCombo.currentText(),
+            'timer_sleep': self.timerSleepCombo.currentText()
+        }
+        self.isl94203_driver.write_timers(timer_values)
 
     def write_cell_balance_registers(self):
-        cell_balance_values = [
-            (self.CBLowerLimLineEdit.text(), 0x1c),
-            (self.CBUpperLimLineEdit.text(), 0x1e),
-            (self.CBMinDeltaLineEdit.text(), 0x20),
-            (self.CBMaxDeltaLineEdit.text(), 0x22),
-            (self.CBOnTimeLineEdit.text(), 0x24),
-            (self.CBOffTimeLineEdit.text(), 0x26)
-        ]
-        for value, address in cell_balance_values:
-            hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+        cell_balance_values = {
+            'CBLowerLim': self.CBLowerLimLineEdit.text(),
+            'CBUpperLim': self.CBUpperLimLineEdit.text(),
+            'CBMinDelta': self.CBMinDeltaLineEdit.text(),
+            'CBMaxDelta': self.CBMaxDeltaLineEdit.text(),
+            'CBOnTime': self.CBOnTimeLineEdit.text(),
+            'CBOffTime': self.CBOffTimeLineEdit.text()
+        }
 
-        cell_balance_temp_values = [
-            (self.CBUnderTempLineEdit.text(), 0x28),
-            (self.CBUTRecoverLineEdit.text(), 0x2a),
-            (self.CBOverTempLineEdit.text(), 0x2c),
-            (self.CBOTRecoverLineEdit.text(), 0x2e)
-        ]
-        for value, address in cell_balance_temp_values:
-            hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+        cell_balance_temp_values = {
+            'CBUnderTemp': self.CBUnderTempLineEdit.text(),
+            'CBUTRecover': self.CBUTRecoverLineEdit.text(),
+            'CBOverTemp': self.CBOverTempLineEdit.text(),
+            'CBOTRecover': self.CBOTRecoverLineEdit.text()
+        }
 
         # Extract and shift units
-        cb_on_time_unit = self.get_unit_from_combo(self.CBOnTimeUnitLineEdit) << 10
-        cb_off_time_unit = self.get_unit_from_combo(self.CBOffTimeUnitLineEdit) << 10
+        cb_on_time_unit = self.get_unit_from_combo(self.CBOnTimeUnitLineEdit)
+        cb_off_time_unit = self.get_unit_from_combo(self.CBOffTimeUnitLineEdit)
 
-        # Combine values and units, then write to registers
-        self.isl94203.reg_write(0x24, cb_on_time_unit | int(self.CBOnTimeLineEdit.text()), Mask.MASK_12BIT, 0)
-        self.isl94203.reg_write(0x26, cb_off_time_unit | int(self.CBOffTimeLineEdit.text()), Mask.MASK_12BIT, 0)
+        # Combine values and units
+        cb_on_time = int(self.CBOnTimeLineEdit.text())
+        cb_off_time = int(self.CBOffTimeLineEdit.text())
 
+        self.isl94203_driver.write_cell_balance_registers(cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit)
+        
     def write_temperature_registers(self):
-        temp_values = [
-            (self.TLChargeOverTempLineEdit.text(), 0x30),
-            (self.TLChargeOTRecoverLineEdit.text(), 0x32),
-            (self.TLChargeUnderTempLineEdit.text(), 0x34),
-            (self.TLChargeUTRecoverLineEdit.text(), 0x36),
-            (self.TLDiscOverTempLineEdit.text(), 0x38),
-            (self.TLDischOTRecoverLineEdit.text(), 0x3a),
-            (self.TLDischUnderTempLineEdit.text(), 0x3C),
-            (self.TLDischUTRecoverLineEdit.text(), 0x3E),
-            (self.TLInternalOverTempLineEdit.text(), 0x40),
-            (self.TLInternalOTRecoverLineEdit.text(), 0x42)
-        ]
-        for value, address in temp_values:
-            hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-            self.isl94203.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
+        temp_values = {
+            'TLChargeOverTemp': self.TLChargeOverTempLineEdit.text(),
+            'TLChargeOTRecover': self.TLChargeOTRecoverLineEdit.text(),
+            'TLChargeUnderTemp': self.TLChargeUnderTempLineEdit.text(),
+            'TLChargeUTRecover': self.TLChargeUTRecoverLineEdit.text(),
+            'TLDiscOverTemp': self.TLDiscOverTempLineEdit.text(),
+            'TLDischOTRecover': self.TLDischOTRecoverLineEdit.text(),
+            'TLDischUnderTemp': self.TLDischUnderTempLineEdit.text(),
+            'TLDischUTRecover': self.TLDischUTRecoverLineEdit.text(),
+            'TLInternalOverTemp': self.TLInternalOverTempLineEdit.text(),
+            'TLInternalOTRecover': self.TLInternalOTRecoverLineEdit.text()
+        }
+        self.isl94203_driver.write_temperature_registers(temp_values)
+        
     def write_current_registers(self):
-        # Helper function to pack values into the register
-        def pack_register_value(timeout, unit, voltage):
-            # timeout is 10 bits (0-9), unit is 2 bits (10-11), voltage is 3 bits (12-14)
-            return (timeout & 0x3FF) | ((unit & 0x3) << 10) | ((voltage & 0x7) << 12)
 
         # Define the mappings for the different selections
         register_mappings = [
             {
-                'timeout_edit': self.CLDischargeOCTimeoutLineEdit,
-                'unit_combo': self.CLDischargeOCTimeoutCombo,
-                'voltage_combo': self.CLDischargeOCVoltageCombo,
+                'timeout_edit': self.CLDischargeOCTimeoutLineEdit.text(),
+                'unit_combo': self.CLDischargeOCTimeoutCombo.currentText(),
+                'voltage_combo': self.CLDischargeOCVoltageCombo.currentText(),
                 'address': 0x16,
                 'voltage_mapping': DOC_MAPPING
             },
             {
-                'timeout_edit': self.CLChargeOCTimeoutLineEdit,
-                'unit_combo': self.CLChargeOCTimeoutCombo,
-                'voltage_combo': self.CLChargeOCVoltageCombo,
+                'timeout_edit': self.CLChargeOCTimeoutLineEdit.text(),
+                'unit_combo': self.CLChargeOCTimeoutCombo.currentText(),
+                'voltage_combo': self.CLChargeOCVoltageCombo.currentText(),
                 'address': 0x18,
                 'voltage_mapping': COC_MAPPING
             },
             {
-                'timeout_edit': self.CLDischargeSCTimeoutLineEdit,
-                'unit_combo': self.CLDischargeSCTimeoutCombo,
-                'voltage_combo': self.CLDischargeSCVoltageCombo,
+                'timeout_edit': self.CLDischargeSCTimeoutLineEdit.text(),
+                'unit_combo': self.CLDischargeSCTimeoutCombo.currentText(),
+                'voltage_combo': self.CLDischargeSCVoltageCombo.currentText(),
                 'address': 0x1A,
                 'voltage_mapping': DSC_MAPPING
             }
@@ -545,14 +534,14 @@ class BmsTab:
         # Iterate over each mapping and write the corresponding register value
         for reg in register_mappings:
             # Extract the timeout value
-            timeout_value = int(reg['timeout_edit'].text())
+            timeout_value = int(reg['timeout_edit'])
 
             # Find the corresponding unit key from the unit mapping
-            selected_unit = reg['unit_combo'].currentText()
+            selected_unit = reg['unit_combo']
             unit_key = next(key for key, value in UNIT_MAPPING.items() if value == selected_unit)
 
             # Find the corresponding voltage key from the voltage mapping
-            selected_voltage = reg['voltage_combo'].currentText()
+            selected_voltage = reg['voltage_combo']
             voltage_key = next(key for key, value in reg['voltage_mapping'].items() if value == selected_voltage)
 
             # Pack the timeout, unit, and voltage into the register value
@@ -561,32 +550,50 @@ class BmsTab:
             # Write the packed value to the register
             self.isl94203.reg_write(reg['address'], packed_value, Mask.MASK_15BIT, 0x00)
 
-        # Extract the charge and load detect pulse widths
-        charge_detect_pulse = int(self.chargeDetectPulseCombo.currentText())
-        load_detect_pulse = int(self.loadDetectPulseCombo.currentText())
+        # Helper function to pack values into the register
+        def pack_register_value(timeout, unit, voltage):
+            # timeout is 10 bits (0-9), unit is 2 bits (10-11), voltage is 3 bits (12-14)
+            return (timeout & 0x3FF) | ((unit & 0x3) << 10) | ((voltage & 0x7) << 12)
+        
+        self.write_current_detect_registers(self)
 
-        # Write the charge and load detect pulse widths to the registers
-        self.isl94203.reg_write(0x00, charge_detect_pulse, Mask.MASK_4BIT, 12)
-        self.isl94203.reg_write(0x04, load_detect_pulse, Mask.MASK_4BIT, 12)
+    def write_current_detect_registers(self):
+        """
+        Write the current detect registers to the device.
+
+        This function reads the current values from the charge and load detect pulse
+        combo boxes, converts them to integers, and writes them to the device using
+        the ISL94203 driver.
+        """
+        try:
+            pulse_values = {
+                "charge_detect_pulse": int(self.chargeDetectPulseCombo.currentText()),
+                "load_detect_pulse": int(self.loadDetectPulseCombo.currentText())
+            }
+
+            self.isl94203_driver.write_current_detect_pulse(pulse_values)
+        except ValueError as e:
+            print(f"Error converting pulse values to integers: {e}")
+        except Exception as e:
+            print(f"An error occurred while writing current detect registers: {e}")
 
     def write_pack_option_registers(self):
-        pack_options = [
-            (self.poT2MonitorsFETTempCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 5),
-            (self.poEnableCELLFpsdCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 7),
-            (self.poEnableOpenWirePSDCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 0),
-            (self.poEnableUVLOCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 3),
-            (self.poEnableOpenWireScanCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 1),
-            (self.CBDuringChargeCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 6),
-            (self.CBDuringDischargeCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 7),
-            (self.CBDuringEOCCheckBox.isChecked(), 0x4B, Mask.MASK_1BIT, 0),
-            (self.tGainCheckBox.isChecked(), 0x4A, Mask.MASK_1BIT, 4)
-        ]
-        for value, address, mask, shift in pack_options:
-            self.isl94203.reg_write(address, int(value), mask, shift)
+        options = {
+            'poT2MonitorsFETTemp': self.poT2MonitorsFETTempCheckBox.isChecked(),
+            'poEnableCELLFpsd': self.poEnableCELLFpsdCheckBox.isChecked(),
+            'poEnableOpenWirePSD': self.poEnableOpenWirePSDCheckBox.isChecked(),
+            'poEnableUVLO': self.poEnableUVLOCheckBox.isChecked(),
+            'poEnableOpenWireScan': self.poEnableOpenWireScanCheckBox.isChecked(),
+            'CBDuringCharge': self.CBDuringChargeCheckBox.isChecked(),
+            'CBDuringDischarge': self.CBDuringDischargeCheckBox.isChecked(),
+            'CBDuringEOC': self.CBDuringEOCCheckBox.isChecked(),
+            'tGain': self.tGainCheckBox.isChecked()
+        }
+        self.isl94203_driver.write_pack_option_registers(options)
 
     def write_cell_config(self):
         cell_config = int(self.CellConfigurationLineEdit.text())
-        self.isl94203.reg_write(0x48, int(CELL_CONFIG_INT2CODE_MAPPING[cell_config]), Mask.MASK_8BIT, 8)
+        self.isl94203_driver.write_cell_config(cell_config)
 
     def set_serial_protocol(self, serial_protocol):
         """Set or update the serial_protocol instance."""
@@ -660,7 +667,7 @@ class BmsTab:
             _, configuration = packet
 
             self.isl94203.set_registers(list(configuration))
-            self.bms_config.update_registers()
+            self.isl94203_driver.update_registers()
             self.ui_update_fields()
             register_cfg = self.isl94203.get_registers()
             logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
@@ -689,7 +696,7 @@ class BmsTab:
             _, configuration = packet
 
             self.isl94203.set_ram_registers(list(configuration))
-            self.bms_config.update_registers()
+            self.isl94203_driver.update_registers()
             self.ui_update_fields()
 
             logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
@@ -700,7 +707,6 @@ class BmsTab:
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
             #self.statusBar.showMessage(f"Error: {e}")
-
 
     def log_bms_ram_config(self):
         if self.startStopLogButton.isChecked():
@@ -737,7 +743,7 @@ class BmsTab:
     def load_default_config(self):
         configuration = []
         self.isl94203.set_ram_registers(list(configuration))
-        self.bms_config.update_registers()
+        self.isl94203_driver.update_registers()
         self.ui_update_fields()
 
     def parse_bms_values(self, ram_values):

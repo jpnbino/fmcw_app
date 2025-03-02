@@ -74,7 +74,7 @@ QMenuBar::item:pressed {
     </font>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab_main">
     <property name="sizePolicy">
@@ -850,7 +850,7 @@ QMenuBar::item:pressed {
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>254</width>
+        <width>255</width>
         <height>236</height>
        </rect>
       </property>
@@ -6306,6 +6306,38 @@ VREF off.</string>
        </item>
       </layout>
      </widget>
+    </widget>
+    <widget class="QPushButton" name="loadDefaultButton">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>730</y>
+       <width>104</width>
+       <height>59</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+       <kerning>true</kerning>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Load Default 
+ Settings</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
     </widget>
    </widget>
   </widget>

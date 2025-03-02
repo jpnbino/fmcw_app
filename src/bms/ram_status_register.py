@@ -18,270 +18,73 @@ class CellBalanceControlRegisterField:
     to_raw: Callable[[bool], int] = lambda value: 1 if value else 0
     from_raw: Callable[[int], bool] = lambda raw: bool(raw)
 
-"""0x80: Status Register"""
-CUT_FIELD = BooleanStatusRegisterField(
-    name="CUT",
-    address=0x80,
-    bit_position=7,
-    description="Charge Under-Temp",
-)
+status_bit_map = {
+    0x80: [
+        ("cut", 7, "Charge Under-Temp"),
+        ("cot", 6, "Charge Over-Temp"),
+        ("dut", 5, "Discharge Under-Temp"),
+        ("dot", 4, "Discharge Over-Temp"),
+        ("uvlo", 3, "Undervoltage Lockout"),
+        ("uv", 2, "Undervoltage"),
+        ("ovlo", 1, "Overvoltage Lockout"),
+        ("ov", 0, "Overvoltage"),
+    ],
+    0x81: [
+        ("eochg", 7, "End of Charge"),
+        ("open", 5, "Open Wire"),
+        ("cellf", 4, "Cell Fail"),
+        ("dsc", 3, "Discharge Short-Circuit"),
+        ("doc", 2, "Discharge Overcurrent"),
+        ("coc", 1, "Charge Overcurrent"),
+        ("iot", 0, "Internal Over-Temp"),
+    ],
+    0x82: [
+        ("lvchg", 7, "Low Voltage Charge"),
+        ("int_scan", 6, "Internal Scan In-Progress"),
+        ("ecc_fail", 5, "EEPROM Error Correct Fail"),
+        ("ecc_used", 4, "EEPROM Error Correct"),
+        ("dching", 3, "Discharging"),
+        ("ching", 2, "Charging"),
+        ("ch_prsnt", 1, "Chrgr Present"),
+        ("ld_prsnt", 0, "Load Present"),
+    ],
+    0x83: [
+        ("in_sleep", 6, "In Sleep Mode"),
+        ("in_doze", 5, "In Doze Mode"),
+        ("in_idle", 4, "In Idle Mode"),
+        ("cbuv", 3, "Cell Balance Undervoltage"),
+        ("cbov", 2, "Cell Balance Overvoltage"),
+        ("cbut", 1, "Cell Balance Under-Temp"),
+        ("cbot", 0, "Cell Balance Over-Temp"),
+    ],
+}
 
-COT_FIELD = BooleanStatusRegisterField(
-    name="COT",
-    address=0x80,
-    bit_position=6,
-    description="Charge Over-Temp",
-)
+status_bit_reg = {}
+for address, fields in status_bit_map.items():
+    for name, bit_position, description in fields:
+        status_bit_reg[name] = BooleanStatusRegisterField(
+            name=name,
+            address=address,
+            bit_position=bit_position,
+            description=description,
+        )
 
-DUT_FIELD = BooleanStatusRegisterField(
-    name="DUT",
-    address=0x80,
-    bit_position=5,
-    description="Discharge Under-Temp",
-)
+cb_bit_map = [
+    ("cb8on", 7, "Cell Balance 8 On"),
+    ("cb7on", 6, "Cell Balance 7 On"),
+    ("cb6on", 5, "Cell Balance 6 On"),
+    ("cb5on", 4, "Cell Balance 5 On"),
+    ("cb4on", 3, "Cell Balance 4 On"),
+    ("cb3on", 2, "Cell Balance 3 On"),
+    ("cb2on", 1, "Cell Balance 2 On"),
+    ("cb1on", 0, "Cell Balance 1 On"),
+]
 
-DOT_FIELD = BooleanStatusRegisterField(
-    name="DOT",
-    address=0x80,
-    bit_position=4,
-    description="Discharge Over-Temp",
-)
-
-UVLO_FIELD = BooleanStatusRegisterField(
-    name="UVLO",
-    address=0x80,
-    bit_position=3,
-    description="Undervoltage Lockout",
-)
-
-UV_FIELD = BooleanStatusRegisterField(
-    name="UV",
-    address=0x80,
-    bit_position=2,
-    description="Undervoltage",
-)
-
-OVLO_FIELD = BooleanStatusRegisterField(
-    name="OVLO",
-    address=0x80,
-    bit_position=1,
-    description="Overvoltage Lockout",
-)
-
-OV_FIELD = BooleanStatusRegisterField(
-    name="OV",
-    address=0x80,
-    bit_position=0,
-    description="Overvoltage",
-)
-
-"""0x81: Fault Register"""
-EOCHG_FIELD = BooleanStatusRegisterField(
-    name="EOCHG",
-    address=0x81,
-    bit_position=7,
-    description="End of Charge",
-)
-
-OPEN_FIELD = BooleanStatusRegisterField(
-    name="OPEN",
-    address=0x81,
-    bit_position=5,
-    description="Open Wire",
-)
-
-CELLF_FIELD = BooleanStatusRegisterField(
-    name="CELLF",
-    address=0x81,
-    bit_position=4,
-    description="Cell Fail",
-)
-
-DSC_FIELD = BooleanStatusRegisterField(
-    name="DSC",
-    address=0x81,
-    bit_position=3,
-    description="Discharge Short-Circuit",
-)
-
-DOC_FIELD = BooleanStatusRegisterField(
-    name="DOC",
-    address=0x81,
-    bit_position=2,
-    description="Discharge Overcurrent",
-)
-
-COC_FIELD = BooleanStatusRegisterField(
-    name="COC",
-    address=0x81,
-    bit_position=1,
-    description="Charge Overcurrent",
-)
-
-IOT_FIELD = BooleanStatusRegisterField(
-    name="IOT",
-    address=0x81,
-    bit_position=0,
-    description="Internal Over-Temp",
-)
-
-LVCHG_FIELD = BooleanStatusRegisterField(
-    name="LVCHG",
-    address=0x82,
-    bit_position=7,
-    description="Low Voltage Charge",
-)
-
-INT_SCAN_FIELD = BooleanStatusRegisterField(
-    name="INT_SCAN",
-    address=0x82,
-    bit_position=6,
-    description="Internal Scan In-Progress",
-)
-
-ECC_FAIL_FIELD = BooleanStatusRegisterField(
-    name="ECC_FAIL",
-    address=0x82,
-    bit_position=5,
-    description="EEPROM Error Correct Fail",
-)
-
-ECC_USED_FIELD = BooleanStatusRegisterField(
-    name="ECC_USED",
-    address=0x82,
-    bit_position=4,
-    description="EEPROM Error Correct",
-)
-
-DCHING_FIELD = BooleanStatusRegisterField(
-    name="DCHING",
-    address=0x82,
-    bit_position=3,
-    description="Discharging",
-)
-
-CHING_FIELD = BooleanStatusRegisterField(
-    name="CHING",
-    address=0x82,
-    bit_position=2,
-    description="Charging",
-)
-
-CH_PRSNT_FIELD = BooleanStatusRegisterField(
-    name="CH_PRSNT",
-    address=0x82,
-    bit_position=1,
-    description="Chrgr Present",
-)
-
-LD_PRSNT_FIELD = BooleanStatusRegisterField(
-    name="LD_PRSNT",
-    address=0x82,
-    bit_position=0,
-    description="Load Present",
-)
-
-IN_SLEEP_FIELD = BooleanStatusRegisterField(
-    name="IN_SLEEP",
-    address=0x83,
-    bit_position=6,
-    description="In Sleep Mode",
-)
-
-IN_DOZE_FIELD = BooleanStatusRegisterField(
-    name="IN_DOZE",
-    address=0x83,
-    bit_position=5,
-    description="In Doze Mode",
-)
-
-IN_IDLE_FIELD = BooleanStatusRegisterField(
-    name="IN_IDLE",
-    address=0x83,
-    bit_position=4,
-    description="In Idle Mode",
-)
-
-CBUV_FIELD = BooleanStatusRegisterField(
-    name="CBUV",
-    address=0x83,
-    bit_position=3,
-    description="Cell Balance Undervoltage",
-)
-
-CBOV_FIELD = BooleanStatusRegisterField(
-    name="CBOV",
-    address=0x83,
-    bit_position=2,
-    description="Cell Balance Overvoltage",
-)
-
-CBUT_FIELD = BooleanStatusRegisterField(
-    name="CBUT",
-    address=0x83,
-    bit_position=1,
-    description="Cell Balance Under-Temp",
-)
-
-CBOT_FIELD = BooleanStatusRegisterField(
-    name="CBOT",
-    address=0x83,
-    bit_position=0,
-    description="Cell Balance Over-Temp",
-)
-
-CB8ON_FIELD = CellBalanceControlRegisterField(
-    name="CB8ON",
-    address=0x84,
-    bit_position=7,
-    description="Cell Balance 8 On",
-)
-
-CB7ON_FIELD = CellBalanceControlRegisterField(
-    name="CB7ON",
-    address=0x84,
-    bit_position=6,
-    description="Cell Balance 7 On",
-)
-
-CB6ON_FIELD = CellBalanceControlRegisterField(
-    name="CB6ON",
-    address=0x84,
-    bit_position=5,
-    description="Cell Balance 6 On",
-)
-
-CB5ON_FIELD = CellBalanceControlRegisterField(
-    name="CB5ON",
-    address=0x84,
-    bit_position=4,
-    description="Cell Balance 5 On",
-)
-
-CB4ON_FIELD = CellBalanceControlRegisterField(
-    name="CB4ON",
-    address=0x84,
-    bit_position=3,
-    description="Cell Balance 4 On",
-)
-
-CB3ON_FIELD = CellBalanceControlRegisterField(
-    name="CB3ON",
-    address=0x84,
-    bit_position=2,
-    description="Cell Balance 3 On",
-)
-
-CB2ON_FIELD = CellBalanceControlRegisterField(
-    name="CB2ON",
-    address=0x84,
-    bit_position=1,
-    description="Cell Balance 2 On",
-)
-
-CB1ON_FIELD = CellBalanceControlRegisterField(
-    name="CB1ON",
-    address=0x84,
-    bit_position=0,
-    description="Cell Balance 1 On",
-)
+cb_bit_reg = {}
+for name, bit_position, description in cb_bit_map:
+    cb_bit_reg[name] = CellBalanceControlRegisterField(
+        name=name,
+        address=0x84,
+        bit_position=bit_position,
+        description=description,
+    )

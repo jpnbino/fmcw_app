@@ -1,12 +1,24 @@
 import logging
 from bms.isl94203_constants import *
 from bms.isl94203_factory import ISL94203Factory
+from gui.utility import convert_to_hex
 
+from . import cfg_voltage_registers  as VoltageReg
+from . import cfg_cell_balance_registers  as CellBalReg
+from . import cfg_cell_num_register as CellConfigReg
+from . import cfg_timers_registers as TimerReg
+from . import cfg_timeout_registers  as TimeoutReg
+from . import cfg_bit_registers  as BitReg
+
+from . import ram_current_registers as CurrentReg
+from . import ram_voltage_status_registers as RamVoltageReg
+from . import ram_temperature_status_registers as RamTempReg
+from . import ram_status_register as RamStatusReg
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-class BMSConfiguration:
+class ISL94203Driver:
     """This class provides operations to read and update the configuration values of the ISL94203 battery management system IC. It can translate back and fourth the raw values from the registers to the actual configuration values based on the datasheet.
     """     
     def __init__(self):
@@ -14,155 +26,139 @@ class BMSConfiguration:
         self.isl94203_hal = ISL94203Factory.create_instance()
 
         # Voltage Limits
-        self.ov = 0.0
-        self.ov_lockout = 0.0
-        self.ov_recover = 0.0
-        self.eoc_voltage = 0.0
-        self.uv_recover = 0.0
-        self.under_voltage = 0.0
-        self.sleep_voltage = 0.0
-        self.low_voltage_charge = 0.0
-        self.uv_lockout = 0.0
+        self.config_registers = {
+            "overvoltage_threshold": VoltageReg.reg["overvoltage_threshold"],
+            "overvoltage_recovery": VoltageReg.reg["overvoltage_recovery"],
+            "undervoltage_threshold": VoltageReg.reg["undervoltage_threshold"],
+            "undervoltage_recovery": VoltageReg.reg["undervoltage_recovery"],
+            "overvoltage_lockout": VoltageReg.reg["overvoltage_lockout"],
+            "undervoltage_lockout": VoltageReg.reg["undervoltage_lockout"],
+            "end_of_charge_voltage": VoltageReg.reg["end_of_charge_voltage"],
+            "low_voltage_charge": VoltageReg.reg["low_voltage_charge"],
+            "sleep_voltage": VoltageReg.reg["sleep_voltage"],
+        
+            "cb_min_voltage": CellBalReg.v_reg["cell_balance_min_voltage"],
+            "cb_max_voltage": CellBalReg.v_reg["cell_balance_max_voltage"],
+            "cb_min_delta": CellBalReg.v_reg["cell_balance_min_delta"],
+            "cb_max_delta": CellBalReg.v_reg["cell_balance_max_delta"],
+            "cb_on_time": CellBalReg.t_reg["cell_balance_on_time"],
+            "cb_off_time": CellBalReg.t_reg["cell_balance_off_time"],
+            "cb_under_temp": CellBalReg.v_reg["cell_balance_min_temp"],
+            "cb_ut_recover": CellBalReg.v_reg["cell_balance_min_temp_recovery"],
+            "cb_over_temp": CellBalReg.v_reg["cell_balance_max_temp"],
+            "cb_ot_recover": CellBalReg.v_reg["cell_balance_max_temp_recovery"],
+            
+            "cell_config": CellConfigReg.reg,
 
-        # in milliseconds
-        self.charge_detect_pulse_width = 0
-        self.load_detect_pulse_width = 0
+            "timer_idle_doze": TimerReg.reg["idle_doze_timer"],
+            "timer_sleep": TimerReg.reg["sleep_mode_timer"],
+            "timer_wdt": TimerReg.reg["watchdog_timer"],
 
-        self.ov_delay_timeout = 0
-        self.uv_delay_timeout = 0
-        self.open_wire_timing = 0
-        self.sleep_delay = 0
+            "charge_detect_pulse_width": TimeoutReg.reg["charge_detect_pulse_width"],
+            "load_detect_pulse_width": TimeoutReg.reg["load_detect_pulse_width"],
+            "ov_delay_timeout": TimeoutReg.reg["overvoltage_delay_timeout"],
+            "uv_delay_timeout": TimeoutReg.reg["undervoltage_delay_timeout"],
+            "open_wire_timing": TimeoutReg.reg["open_wire_timeout"],
+            
+            "xt2m": BitReg.reg["xt2m"],
+            "cfpsd": BitReg.reg["cfpsd"],
+            "owpsd": BitReg.reg["owpsd"],
+            "uvlopd": BitReg.reg["uvlopd"],
+            "dowd": BitReg.reg["dowd"],
+            "cbdc": BitReg.reg["cbdc"],
+            "cbdd": BitReg.reg["cbdd"],
+            "cb_eoc": BitReg.reg["cb_eoc"],
+            "tgain": BitReg.reg["tgain"]
+        }
 
-        self.ov_delay_timeout_unit = 0
-        self.uv_delay_timeout_unit = 0
-        self.open_wire_timing_unit = 0
-        self.sleep_delay_unit = 0
+        self.ram_registers = {        
+            "cut": RamStatusReg.status_bit_reg["cut"],
+            "cot": RamStatusReg.status_bit_reg["cot"],
+            "dut": RamStatusReg.status_bit_reg["dut"],
+            "dot": RamStatusReg.status_bit_reg["dot"],
+            "uvlo": RamStatusReg.status_bit_reg["uvlo"],
+            "uv": RamStatusReg.status_bit_reg["uv"],
+            "ovlo": RamStatusReg.status_bit_reg["ovlo"],
+            "ov": RamStatusReg.status_bit_reg["ov"],
+            "eochg": RamStatusReg.status_bit_reg["eochg"],
+            "open": RamStatusReg.status_bit_reg["open"],
+            "cellf": RamStatusReg.status_bit_reg["cellf"],
+            "dsc": RamStatusReg.status_bit_reg["dsc"],
+            "doc": RamStatusReg.status_bit_reg["doc"],
+            "coc": RamStatusReg.status_bit_reg["coc"],
+            "iot": RamStatusReg.status_bit_reg["iot"],
+            "lvchg": RamStatusReg.status_bit_reg["lvchg"],
+            "int_scan": RamStatusReg.status_bit_reg["int_scan"],
+            "ecc_fail": RamStatusReg.status_bit_reg["ecc_fail"],
+            "ecc_used": RamStatusReg.status_bit_reg["ecc_used"],
+            "dching": RamStatusReg.status_bit_reg["dching"],
+            "ching": RamStatusReg.status_bit_reg["ching"],
+            "ch_prsnt": RamStatusReg.status_bit_reg["ch_prsnt"],
+            "ld_prsnt": RamStatusReg.status_bit_reg["ld_prsnt"],
+            "in_sleep": RamStatusReg.status_bit_reg["in_sleep"],
+            "in_doze": RamStatusReg.status_bit_reg["in_doze"],
+            "in_idle": RamStatusReg.status_bit_reg["in_idle"],
+            "cbuv": RamStatusReg.status_bit_reg["cbuv"],
+            "cbov": RamStatusReg.status_bit_reg["cbov"],
+            "cbut": RamStatusReg.status_bit_reg["cbut"],
+            "cbot": RamStatusReg.status_bit_reg["cbot"],
+            "cb1on": RamStatusReg.cb_bit_reg["cb1on"],
+            "cb2on": RamStatusReg.cb_bit_reg["cb2on"],
+            "cb3on": RamStatusReg.cb_bit_reg["cb3on"],
+            "cb4on": RamStatusReg.cb_bit_reg["cb4on"],
+            "cb5on": RamStatusReg.cb_bit_reg["cb5on"],
+            "cb6on": RamStatusReg.cb_bit_reg["cb6on"],
+            "cb7on": RamStatusReg.cb_bit_reg["cb7on"],
+            "cb8on": RamStatusReg.cb_bit_reg["cb8on"],
 
-        # Timers
-        self.timer_idle_doze = 0
-        self.timer_sleep = 0
-        self.timer_wdt = 0
+            "current_gain": CurrentReg.current_gain,
 
-        # Cell Configuration
-        self.cell_config = 0
+            "vcell_min": RamVoltageReg.reg["cell_min_voltage"],
+            "vcell_max": RamVoltageReg.reg["cell_max_voltage"],
+            "vcell1": RamVoltageReg.reg["vcell1"],
+            "vcell2": RamVoltageReg.reg["vcell2"],
+            "vcell3": RamVoltageReg.reg["vcell3"],
+            "vcell4": RamVoltageReg.reg["vcell4"],
+            "vcell5": RamVoltageReg.reg["vcell5"],
+            "vcell6": RamVoltageReg.reg["vcell6"],
+            "vcell7": RamVoltageReg.reg["vcell7"],
+            "vcell8": RamVoltageReg.reg["vcell8"],
+            "vbatt": RamVoltageReg.reg["vbatt_voltage"],
+            "vrgo": RamVoltageReg.reg["vrgon_voltage"],
 
-        # Cell Balance Limits
-        self.cb_upper_lim = 0
-        self.cb_lower_lim = 0
-        self.cb_max_delta = 0
-        self.cb_min_delta = 0
-        self.cb_over_temp = 0
-        self.cb_ot_recover = 0
-        self.cb_ut_recover = 0
-        self.cb_under_temp = 0
-        self.cb_on_time = 0
-        self.cb_off_time = 0
+            "temp_internal": RamTempReg.internal_temperature,
+            "temp_xt1": RamTempReg.external_temperature1,
+            "temp_xt2": RamTempReg.external_temperature2,
+        }
 
-        self.cb_on_time_unit = 0
-        self.cb_off_time_unit = 0
 
-        self.bit_cb_during_charge = False
-        self.bit_cb_during_discharge = False
-        self.bit_cb_during_eoc = False
+    def read_register(self, register_name: str):
+        """Read a register value using the register name."""
+        if register_name in self.config_registers:
+            field = self.config_registers[register_name]
+        elif register_name in self.ram_registers:
+            field = self.ram_registers[register_name]
+        else:
+            raise ValueError(f"Register {register_name} not found.")
+        
+        raw_value = self.isl94203_hal.reg_read(field.address, field.bit_position, field.bit_mask)
+        if hasattr(field, 'from_raw'):
+            return field.from_raw(raw_value)
+        return raw_value
 
-        # Temperature Limits
-        self.tl_charge_over_temp = 0
-        self.tl_charge_ot_recover = 0
-        self.tl_charge_ut_recover = 0
-        self.tl_charge_under_temp = 0
+    def write_register(self, register_name: str, value):
+        """Write a value to a register using the register name."""
+        if register_name in self.config_registers:
+            field = self.config_registers[register_name]
+        elif register_name in self.ram_registers:
+            field = self.ram_registers[register_name]
+        else:
+            raise ValueError(f"Register {register_name} not found.")
+        
+        raw_value = field.to_raw(value)
+        self.isl94203_hal.reg_write(field.address, raw_value, field.bit_mask, field.bit_position)
 
-        self.tl_disch_over_temp = 0
-        self.tl_disch_ot_recover = 0
-        self.tl_disch_ut_recover = 0
-        self.tl_disch_under_temp = 0
-
-        self.tl_internal_over_temp = 0
-        self.tl_internal_ot_recover = 0
-
-        # Pack Options
-        self.bit_t2_monitors_fet = False
-        self.bit_enable_cellf_psd = False
-        self.bit_enable_openwire_psd = False
-        self.bit_enable_uvlo_pd = False
-        self.bit_enable_openwire_scan = False
-
-        # Temperature gain
-        self.bit_tgain = False
-
-        # Current Limits
-        self.disch_oc_voltage = 0
-        self.disch_oc_timeout = 0
-        self.disch_oc_timeout_unit = 0
-        self.charge_oc_voltage = 0
-        self.charge_oc_timeout = 0
-        self.charge_oc_timeout_unit = 0
-        self.disch_sc_voltage = 0
-        self.disch_sc_timeout = 0
-        self.disch_sc_timeout_unit = 0
-
-        # Ram
-        # adress 0x80
-        self.bit_ov = False
-        self.bit_ovlo = False
-        self.bit_uv = False
-        self.bit_uvlo = False
-        self.bit_dot = False
-        self.bit_dut = False
-        self.bit_cot = False
-        self.bit_cut = False
-
-        # adress 0x81
-        self.bit_iot = False
-        self.bit_coc = False
-        self.bit_doc = False
-        self.bit_dsc = False
-        self.bit_cellf = False
-        self.bit_open = False
-        self.bit_eochg = False
-
-        # adress 0x82
-        self.bit_ld_prsnt = False
-        self.bit_ch_prsnt = False
-        self.bit_ching = False
-        self.bit_dching = False
-        self.bit_ecc_used = False
-        self.bit_ecc_fail = False
-        self.bit_int_scan = False
-        self.bit_lvchg = False
-
-        # adress 0x83
-        self.bit_cbot = False
-        self.bit_cbut = False
-        self.bit_cbov = False
-        self.bit_cbuv = False
-        self.bit_in_idle = False
-        self.bit_in_doze = False
-        self.bit_in_sleep = False
-
-        # Current calculation
-        self.v_sense = 0.0  # voltage over Sense Resistor
-        self.i_pack = 0.0  # current over Sense Resistor (Pack current)
-        self.i_gain = 0
-
-        # Temperature
-        self.temp_internal = 0.0
-        self.temp_xt1 = 0.0
-        self.temp_xt2 = 0.0
-
-        # Cell voltages
-        self.vcell1 = 0
-        self.vcell2 = 0
-        self.vcell3 = 0
-        self.vcell4 = 0
-        self.vcell5 = 0
-        self.vcell6 = 0
-        self.vcell7 = 0
-        self.vcell8 = 0
-        self.vcell_min = 0
-        self.vcell_max = 0
-        self.vbatt = 0
-        self.vrgo = 0
-
+    
     def update_registers(self):
         """
         Update the parameters values after reading from registers.
@@ -191,40 +187,21 @@ class BMSConfiguration:
             print(f"Error updating configuration: {e}")
 
     def update_voltage_limits(self):
-        """Reads voltage values from specific registers and updates the corresponding attributes of the object.
-        This method reads voltage values from specific registers using the `isl94203.reg_read` method and updates
-        the corresponding attributes of the object. The voltage values are mapped to attributes using a predefined
-        dictionary.
-        
-        Attributes Updated:
-            - ov (float): Over-voltage limit.
-            - ov_recover (float): Over-voltage recovery limit.
-            - under_voltage (float): Under-voltage limit.
-            - uv_recover (float): Under-voltage recovery limit.
-            - ov_lockout (float): Over-voltage lockout limit.
-            - uv_lockout (float): Under-voltage lockout limit.
-            - eoc_voltage (float): End-of-charge voltage.
-            - low_voltage_charge (float): Low voltage charge limit.
-            - sleep_voltage (float): Sleep voltage limit.
-            
-        Raises:
-            Exception: If there is an error updating the voltage limits.
-        """
-        # Voltage Limits
-        voltage_mappping = {
-            0x00: 'ov',
-            0x02: 'ov_recover',
-            0x04: 'under_voltage',
-            0x06: 'uv_recover',
-            0x08: 'ov_lockout',
-            0x0A: 'uv_lockout',
-            0x0C: 'eoc_voltage',
-            0x0E: 'low_voltage_charge',
-            0x44: 'sleep_voltage'
+        """Reads voltage values from specific registers and updates the corresponding attributes of the object."""
+        voltage_mapping = {
+            "overvoltage_threshold": "ov",
+            "overvoltage_recovery": "ov_recover",
+            "undervoltage_threshold": "under_voltage",
+            "undervoltage_recovery": "uv_recover",
+            "overvoltage_lockout": "ov_lockout",
+            "undervoltage_lockout": "uv_lockout",
+            "end_of_charge_voltage": "eoc_voltage",
+            "low_voltage_charge": "low_voltage_charge",
+            "sleep_voltage": "sleep_voltage"
         }
-        for addr, attr in voltage_mappping.items():
+        for register_name, attr in voltage_mapping.items():
             try:
-                value = self.calculate_voltage(addr)
+                value = self.read_register(register_name)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating voltage limits: {e}")
@@ -238,38 +215,26 @@ class BMSConfiguration:
 
         Attributes Updated:
             - ov_delay_timeout (int): Overvoltage delay timeout.
-            - ov_delay_timeout_unit (int): Unit for overvoltage delay timeout.
             - uv_delay_timeout (int): Undervoltage delay timeout.
-            - uv_delay_timeout_unit (int): Unit for undervoltage delay timeout.
             - open_wire_timing (int): Open wire timing.
-            - open_wire_timing_unit (int): Unit for open wire timing.
-            - sleep_delay (int): Sleep delay.
-            - sleep_delay_unit (int): Unit for sleep delay.
-            - timer_wdt (int): Timer watchdog timeout.
             - timer_idle_doze (int): Timer idle doze.
-            - timer_sleep (int): Timer sleep, multiplied by 16.
+            - timer_sleep (int): Timer sleep.
+            - timer_wdt (int): Timer watchdog timeout.
 
         Raises:
             Exception: If there is an error reading from the registers.
         """
         timing_mapping = {
-            (0x10, 0, Mask.MASK_10BIT): 'ov_delay_timeout',
-            (0x10, 10, Mask.MASK_2BIT): 'ov_delay_timeout_unit',
-            (0x12, 0, Mask.MASK_10BIT): 'uv_delay_timeout',
-            (0x12, 10, Mask.MASK_2BIT): 'uv_delay_timeout_unit',
-            (0x14, 0, Mask.MASK_9BIT): 'open_wire_timing',
-            (0x14, 9, Mask.MASK_1BIT): 'open_wire_timing_unit',
-            (0x46, 0, Mask.MASK_9BIT): 'sleep_delay',
-            (0x46, 9, Mask.MASK_2BIT): 'sleep_delay_unit',
-            (0x46, 11, Mask.MASK_5BIT): 'timer_wdt',
-            (0x48, 0, Mask.MASK_4BIT): 'timer_idle_doze',
-            (0x48, 4, Mask.MASK_4BIT): 'timer_sleep',
+            "ov_delay_timeout": "ov_delay_timeout",
+            "uv_delay_timeout": "uv_delay_timeout",
+            "open_wire_timing": "open_wire_timing",
+            "timer_idle_doze": "timer_idle_doze",
+            "timer_sleep": "timer_sleep",
+            "timer_wdt": "timer_wdt"
         }
-        for (addr, bit_shift, mask), attr in timing_mapping.items():
+        for register_name, attr in timing_mapping.items():
             try:
-                value = self.isl94203_hal.reg_read(addr, bit_shift, mask)
-                if attr == 'timer_sleep':
-                    value *= 16
+                value = self.read_register(register_name)
                 setattr(self, attr, value)
             except Exception as e:
                 print(f"Error updating timing: {e}")
@@ -490,7 +455,7 @@ class BMSConfiguration:
         Raises:
             Exception: If there is an error reading or processing the RAM values.
         """
-        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203_hal.reg_read(0x85, 4, Mask.MASK_2BIT)]
+        self.i_gain = CURRENT_GAIN_MAPPING[self.isl94203_hal.reg_read(0x85, 4, Mask.MASK_12BIT)]
         ram_addresses = {
             0x8E: 'v_sense',
             0x90: 'vcell1',
@@ -694,3 +659,224 @@ class BMSConfiguration:
 
         # Apply mask and multiplier to calculate the voltage
         return self.calculate_temperature_from_raw_value(raw_value)
+
+
+    def write_voltage_limits(self, voltage_limits):
+        """
+        Write the voltage limits to the ISL94203 device.
+
+        Args:
+            voltage_limits (dict): A dictionary containing the voltage limit name and its value.
+        """
+        voltage_addresses = {
+            'ov': 0x00,
+            'ov_recover': 0x02,
+            'under_voltage': 0x04,
+            'uv_recover': 0x06,
+            'ov_lockout': 0x08,
+            'uv_lockout': 0x0A,
+            'eoc_voltage': 0x0C,
+            'low_voltage_charge': 0x0E,
+            'sleep_voltage': 0x44
+        }
+
+        for limit, value in voltage_limits.items():
+            if limit in voltage_addresses:
+                address = voltage_addresses[limit]
+                hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
+                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+
+    def write_voltage_limits_timing(self, timing_limits):
+        """
+        Write the voltage limits timing to the ISL94203 device.
+
+        Args:
+            timing_limits (dict): A dictionary containing the timing limit name and its value.
+        """
+        timing_addresses = {
+            'ov_delay_timeout': (0x10, Mask.MASK_12BIT, 0),
+            'uv_delay_timeout': (0x12, Mask.MASK_12BIT, 0),
+            'open_wire_sample_time': (0x14, Mask.MASK_10BIT, 0),
+            'sleep_delay': (0x46, Mask.MASK_11BIT, 0)
+        }
+
+        for limit, (value, unit) in timing_limits.items():
+            if limit in timing_addresses:
+                address, mask, shift = timing_addresses[limit]
+                combined_value = (unit << 9) | value if 'sample_time' in limit else (unit << 10) | value
+                self.isl94203_hal.reg_write(address, combined_value, mask, shift)
+
+    def write_timers(self, timer_values):
+        """
+        Write the timer values to the ISL94203 device.
+
+        Args:
+            timer_values (dict): A dictionary containing the timer name and its value.
+        """
+        timer_addresses = {
+            'timer_wdt': (0x46, Mask.MASK_5BIT, 11, 0),
+            'timer_idle_doze': (0x48, Mask.MASK_4BIT, 0, 0),
+            'timer_sleep': (0x48, Mask.MASK_4BIT, 4, 4)
+        }
+
+        for timer, value in timer_values.items():
+            if timer in timer_addresses:
+                address, mask, shift, scaling = timer_addresses[timer]
+                hex_value = convert_time_to_hex(value, scaling)
+                self.isl94203_hal.reg_write(address, hex_value, mask, shift)
+
+    def write_cell_balance_registers(self, cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit):
+        """
+        Write the cell balance registers to the ISL94203 device.
+
+        Args:
+            cell_balance_values (list): A list of tuples containing the value and address for cell balance limits.
+            cell_balance_temp_values (list): A list of tuples containing the value and address for cell balance temperature limits.
+            cb_on_time (int): The on time value for cell balancing.
+            cb_off_time (int): The off time value for cell balancing.
+            cb_on_time_unit (int): The unit for the on time value.
+            cb_off_time_unit (int): The unit for the off time value.
+        """
+        cell_balance_addresses = {
+            'CBLowerLim': 0x1c,
+            'CBUpperLim': 0x1e,
+            'CBMinDelta': 0x20,
+            'CBMaxDelta': 0x22,
+            'CBOnTime': 0x24,
+            'CBOffTime': 0x26
+        }
+
+        cell_balance_temp_addresses = {
+            'CBUnderTemp': 0x28,
+            'CBUTRecover': 0x2a,
+            'CBOverTemp': 0x2c,
+            'CBOTRecover': 0x2e
+        }
+
+        for key, value in cell_balance_values.items():
+            if key in cell_balance_addresses:
+                address = cell_balance_addresses[key]
+                hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
+                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+
+        for key, value in cell_balance_temp_values.items():
+            if key in cell_balance_temp_addresses:
+                address = cell_balance_temp_addresses[key]
+                hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+
+        # Combine values and units, then write to registers
+        self.isl94203_hal.reg_write(0x24, (cb_on_time_unit << 10) | cb_on_time, Mask.MASK_12BIT, 0)
+        self.isl94203_hal.reg_write(0x26, (cb_off_time_unit << 10) | cb_off_time, Mask.MASK_12BIT, 0)
+
+    def write_temperature_registers(self, temp_values):
+        """
+        Write the temperature registers to the ISL94203 device.
+
+        Args:
+            temp_values (dict): A dictionary containing the temperature limit name and its value.
+        """
+        temp_addresses = {
+            'TLChargeOverTemp': 0x30,
+            'TLChargeOTRecover': 0x32,
+            'TLChargeUnderTemp': 0x34,
+            'TLChargeUTRecover': 0x36,
+            'TLDiscOverTemp': 0x38,
+            'TLDischOTRecover': 0x3a,
+            'TLDischUnderTemp': 0x3C,
+            'TLDischUTRecover': 0x3E,
+            'TLInternalOverTemp': 0x40,
+            'TLInternalOTRecover': 0x42
+        }
+
+        for limit, value in temp_values.items():
+            if limit in temp_addresses:
+                address = temp_addresses[limit]
+                hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
+                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
+
+    def write_current_detect_pulse(self, pulse_values):
+        """
+        Write the current detect pulse width to the ISL94203 device.
+
+        Args:
+            pulse_values (dict): A dictionary containing the pulse name and its value.
+        """
+        pulse_addresses = {
+            'charge_detect_pulse_width': 0x00,
+            'load_detect_pulse_width': 0x04
+        }
+
+        for pulse, value in pulse_values.items():
+            if pulse in pulse_addresses:
+                address = pulse_addresses[pulse]
+                self.isl94203_hal.reg_write(address, value, Mask.MASK_4BIT, 0x00)
+
+    def write_cell_config(self, cell_config):
+        """
+        Write the cell configuration to the ISL94203 device.
+
+        Args:
+            cell_config (int): The cell configuration value to write.
+        """
+
+        self.isl94203_hal.reg_write(0x48, int(CELL_CONFIG_INT2CODE_MAPPING[cell_config]), Mask.MASK_8BIT, 8)
+
+    def write_pack_option_registers(self, options):
+        """
+        Write the pack option registers to the ISL94203 device.
+
+        Args:
+            options (dict): A dictionary containing the option name and its value.
+        """
+        pack_options = {
+            'poT2MonitorsFETTemp': XT2M_FIELD,
+            'poEnableCELLFpsd': CFPSD_FIELD,
+            'poEnableOpenWirePSD': OWPSD_FIELD,
+            'poEnableUVLO': UVLOPD_FIELD,
+            'poEnableOpenWireScan': DOWD_FIELD,
+            'CBDuringCharge': CBDC_FIELD,
+            'CBDuringDischarge': CBDD_FIELD,
+            'CBDuringEOC': CB_EOC_FIELD,
+            'tGain': TGAIN_FIELD,
+        }
+
+        for option, value in options.items():
+            if option in pack_options:
+                field = pack_options[option]
+                self.isl94203_hal.reg_write_bit(field.address, int(bool(value)), field.bit_position)
+
+    def read_voltage_limits(self):
+        """Reads voltage limits from registers and returns a dictionary."""
+        voltage_limits = {}
+        for field_name, field in self.config_registers.items():
+            voltage_limits[field_name] = self.read_register(field_name)
+        return voltage_limits
+
+    def write_voltage_limits(self, voltage_limits):
+        """Writes voltage limits to registers from a dictionary."""
+        for field_name, value in voltage_limits.items():
+            if field_name in self.config_registers:
+                self.write_config_field(field_name, value)
+    
+    def read_cell_balance_limits(self):
+        """Reads cell balance limits from registers and returns a dictionary."""
+        cell_balance_limits = {}
+        for field_name, field in self.config_registers.items():
+            cell_balance_limits[field_name] = self.read_config_field(field_name)
+        return cell_balance_limits
+    
+if __name__ == "__main__":
+    isl9420x = ISL94203Driver()
+    # Add any test or initialization code here
+    config = isl9420x.isl94203_hal.get_default_registers()
+    isl9420x.isl94203_hal.set_registers(config)
+    isl9420x.update_registers()
+
+    print("Voltage Limits:")
+    voltage_limits = isl9420x.read_voltage_limits()
+    for limit, value in voltage_limits.items():
+        print(f"{limit}: {value}")
+
+    for i in range(1, 9):
+        print(getattr(isl9420x, f'vcell{i}'))

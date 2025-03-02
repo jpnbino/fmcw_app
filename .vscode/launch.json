@@ -23,5 +23,14 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/src",
         }
+        ,
+        {
+            "name": "Python Debugger: Test Driver Module",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "bms.isl94203_driver",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/src",
+        }
     ]
 }

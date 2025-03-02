@@ -7,7 +7,7 @@ import random
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from bms.isl94203_constants import ADDR_EEPROM_BEGIN, ADDR_EEPROM_END, ADDR_USER_EEPROM_BEGIN, ADDR_USER_EEPROM_END, \
-    DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, ISL94203_EEPROM_SIZE
+    DEFAULT_CONFIG, ADDR_RAM_OFFSET, ADDR_RAM_BEGIN, ADDR_RAM_END, ISL94203_EEPROM_SIZE, ISL94203_MEMORY_SIZE
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 START_BYTE = 0xAA
@@ -39,7 +39,13 @@ class SimulatedDevice:
             print(f"Serial port {port} is already open")
 
         self.config = DEFAULT_CONFIG
-        self.protocol = SerialProtocolFmcw(self)
+        self.protocol = SerialProtocolFmcw(self, self.log_callback)
+
+    def log_callback(self, data, newline=True):
+        if newline:
+            print(data)
+        else:
+            print(data, end='')
 
     def calculate_checksum(self, data):
         checksum = 0
@@ -93,7 +99,7 @@ class SimulatedDevice:
 
     def run(self):
         while True:
-            packet = self.protocol.read_packet()
+            packet = self.protocol.read_packet(ISL94203_MEMORY_SIZE)
             if packet:
                 cmd, data = packet
                 if len(data) > 0:

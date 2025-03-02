@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStat
 from PySide6.QtCore import QFile, QIODevice, Qt
 
 from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
-from bms.isl94203_driver import BMSConfiguration
+from bms.isl94203_driver import ISL94203Driver
 from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
 
@@ -78,7 +78,7 @@ class FMCWApplication(QMainWindow):
         self.setWindowIcon(QIcon(ICON_PATH))
 
         self.fmcw_serial_manager = SerialManager()
-        self.bms_config = BMSConfiguration()
+        self.bms_config = ISL94203Driver()
 
         self.main_tab = MainTab(self, self.bms_config)
 

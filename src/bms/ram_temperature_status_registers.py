@@ -11,25 +11,25 @@ def temperature_to_raw(value: float) -> int:
 internal_temperature = TemperatureRegisterField(
     name="internal_temperature",
     address=0xA0,
-    bit_length=8,
+    bit_mask=Mask.MASK_8BIT,
     bit_position=0,
     to_raw= lambda x: x,
     from_raw = lambda x: x,
 )
 
 external_temperature1 = TemperatureRegisterField(
-    name="external_temperature",
+    name="external_temperature1",
     address=0xA2,
-    bit_length=8,
+    bit_mask=Mask.MASK_8BIT,
     bit_position=0,
     to_raw= lambda x: x,
     from_raw = lambda x: x,
 )
 
 external_temperature2 = TemperatureRegisterField(
-    name="external_temperature",
+    name="external_temperature2",
     address=0xA4,
-    bit_length=8,
+    bit_mask=Mask.MASK_8BIT,
     bit_position=0,
     to_raw= lambda x: x,
     from_raw = lambda x: x,
