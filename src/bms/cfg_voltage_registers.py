@@ -17,7 +17,7 @@ map = [
     ("undervoltage_lockout", 0x0A),
     ("end_of_charge_voltage", 0x0C),
     ("low_voltage_charge", 0x0E),
-    ("sleep_voltage", 0x10),
+    ("sleep_voltage", 0x44),
 ]
 
 reg = {}
