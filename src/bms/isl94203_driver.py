@@ -144,6 +144,25 @@ class ISL94203Driver:
         }
 
 
+    def _read_units_from_register(self, register_name: str) -> str:
+        """Read the units from a register using the register name."""
+        if register_name in self.config_registers:
+            field = self.config_registers[register_name]
+        elif register_name in self.ram_registers:
+            field = self.ram_registers[register_name]
+        else:
+            raise ValueError(f"Register {register_name} not found.")
+        
+        if hasattr(field, 'unit_mapping') and field.unit_mapping is not None:
+            unit_raw_value = self.isl94203_hal.reg_read(field.address, field.unit_bit_position, field.unit_bit_mask)
+            unit_str = field.unit_mapping.get(unit_raw_value, "")	
+        elif hasattr(field, 'unit') and field.unit is not None:
+            unit_str = field.unit
+        else:
+            unit_str = None
+        
+        return unit_str
+    
     def read_register(self, register_name: str):
         """Read a register value using the register name."""
         if register_name in self.config_registers:
@@ -154,12 +173,16 @@ class ISL94203Driver:
             raise ValueError(f"Register {register_name} not found.")
         
         raw_value = self.isl94203_hal.reg_read(field.address, field.bit_position, field.bit_mask)
+        unit_str = self._read_units_from_register(register_name)
+        value = None
+
         if hasattr(field, 'mapping') and field.mapping is not None:
             if raw_value in field.mapping:
-                return field.mapping[raw_value]
-        elif hasattr(field, 'from_raw'):
-            return field.from_raw(raw_value)
-        return raw_value
+                value= field.mapping[raw_value]
+        elif hasattr(field, 'from_raw') and field.from_raw is not None:
+            value = field.from_raw(raw_value)
+
+        return value, unit_str
 
     def write_register(self, register_name: str, value):
         """Write a value to a register using the register name."""
@@ -182,189 +205,23 @@ class ISL94203Driver:
         return all_registers
     
     def write_voltage_limits(self, voltage_limits):
-        """
-        Write the voltage limits to the ISL94203 device.
-
-        Args:
-            voltage_limits (dict): A dictionary containing the voltage limit name and its value.
-        """
-        voltage_addresses = {
-            'ov': 0x00,
-            'ov_recover': 0x02,
-            'under_voltage': 0x04,
-            'uv_recover': 0x06,
-            'ov_lockout': 0x08,
-            'uv_lockout': 0x0A,
-            'eoc_voltage': 0x0C,
-            'low_voltage_charge': 0x0E,
-            'sleep_voltage': 0x44
-        }
-
-        for limit, value in voltage_limits.items():
-            if limit in voltage_addresses:
-                address = voltage_addresses[limit]
-                hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
+        pass
     def write_voltage_limits_timing(self, timing_limits):
-        """
-        Write the voltage limits timing to the ISL94203 device.
-
-        Args:
-            timing_limits (dict): A dictionary containing the timing limit name and its value.
-        """
-        timing_addresses = {
-            'ov_delay_timeout': (0x10, Mask.MASK_12BIT, 0),
-            'uv_delay_timeout': (0x12, Mask.MASK_12BIT, 0),
-            'open_wire_sample_time': (0x14, Mask.MASK_10BIT, 0),
-            'sleep_delay': (0x46, Mask.MASK_11BIT, 0)
-        }
-
-        for limit, (value, unit) in timing_limits.items():
-            if limit in timing_addresses:
-                address, mask, shift = timing_addresses[limit]
-                combined_value = (unit << 9) | value if 'sample_time' in limit else (unit << 10) | value
-                self.isl94203_hal.reg_write(address, combined_value, mask, shift)
-
+        pass
     def write_timers(self, timer_values):
-        """
-        Write the timer values to the ISL94203 device.
-
-        Args:
-            timer_values (dict): A dictionary containing the timer name and its value.
-        """
-        timer_addresses = {
-            'timer_wdt': (0x46, Mask.MASK_5BIT, 11, 0),
-            'timer_idle_doze': (0x48, Mask.MASK_4BIT, 0, 0),
-            'timer_sleep': (0x48, Mask.MASK_4BIT, 4, 4)
-        }
-
-        for timer, value in timer_values.items():
-            if timer in timer_addresses:
-                address, mask, shift, scaling = timer_addresses[timer]
-                hex_value = convert_time_to_hex(value, scaling)
-                self.isl94203_hal.reg_write(address, hex_value, mask, shift)
-
+        pass
     def write_cell_balance_registers(self, cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit):
-        """
-        Write the cell balance registers to the ISL94203 device.
-
-        Args:
-            cell_balance_values (list): A list of tuples containing the value and address for cell balance limits.
-            cell_balance_temp_values (list): A list of tuples containing the value and address for cell balance temperature limits.
-            cb_on_time (int): The on time value for cell balancing.
-            cb_off_time (int): The off time value for cell balancing.
-            cb_on_time_unit (int): The unit for the on time value.
-            cb_off_time_unit (int): The unit for the off time value.
-        """
-        cell_balance_addresses = {
-            'CBLowerLim': 0x1c,
-            'CBUpperLim': 0x1e,
-            'CBMinDelta': 0x20,
-            'CBMaxDelta': 0x22,
-            'CBOnTime': 0x24,
-            'CBOffTime': 0x26
-        }
-
-        cell_balance_temp_addresses = {
-            'CBUnderTemp': 0x28,
-            'CBUTRecover': 0x2a,
-            'CBOverTemp': 0x2c,
-            'CBOTRecover': 0x2e
-        }
-
-        for key, value in cell_balance_values.items():
-            if key in cell_balance_addresses:
-                address = cell_balance_addresses[key]
-                hex_value = convert_to_hex(value, VOLTAGE_CELL_MULTIPLIER)
-                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
-        for key, value in cell_balance_temp_values.items():
-            if key in cell_balance_temp_addresses:
-                address = cell_balance_temp_addresses[key]
-                hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
-        # Combine values and units, then write to registers
-        self.isl94203_hal.reg_write(0x24, (cb_on_time_unit << 10) | cb_on_time, Mask.MASK_12BIT, 0)
-        self.isl94203_hal.reg_write(0x26, (cb_off_time_unit << 10) | cb_off_time, Mask.MASK_12BIT, 0)
-
+        pass
     def write_temperature_registers(self, temp_values):
-        """
-        Write the temperature registers to the ISL94203 device.
-
-        Args:
-            temp_values (dict): A dictionary containing the temperature limit name and its value.
-        """
-        temp_addresses = {
-            'TLChargeOverTemp': 0x30,
-            'TLChargeOTRecover': 0x32,
-            'TLChargeUnderTemp': 0x34,
-            'TLChargeUTRecover': 0x36,
-            'TLDiscOverTemp': 0x38,
-            'TLDischOTRecover': 0x3a,
-            'TLDischUnderTemp': 0x3C,
-            'TLDischUTRecover': 0x3E,
-            'TLInternalOverTemp': 0x40,
-            'TLInternalOTRecover': 0x42
-        }
-
-        for limit, value in temp_values.items():
-            if limit in temp_addresses:
-                address = temp_addresses[limit]
-                hex_value = convert_to_hex(value, TEMPERATURE_MULTIPLIER)
-                self.isl94203_hal.reg_write(address, hex_value, Mask.MASK_12BIT, 0x00)
-
+        pass
     def write_current_detect_pulse(self, pulse_values):
-        """
-        Write the current detect pulse width to the ISL94203 device.
-
-        Args:
-            pulse_values (dict): A dictionary containing the pulse name and its value.
-        """
-        pulse_addresses = {
-            'charge_detect_pulse_width': 0x00,
-            'load_detect_pulse_width': 0x04
-        }
-
-        for pulse, value in pulse_values.items():
-            if pulse in pulse_addresses:
-                address = pulse_addresses[pulse]
-                self.isl94203_hal.reg_write(address, value, Mask.MASK_4BIT, 0x00)
+        pass
 
     def write_cell_config(self, cell_config):
-        """
-        Write the cell configuration to the ISL94203 device.
-
-        Args:
-            cell_config (int): The cell configuration value to write.
-        """
-
-        self.isl94203_hal.reg_write(0x48, int(CELL_CONFIG_INT2CODE_MAPPING[cell_config]), Mask.MASK_8BIT, 8)
+        pass
 
     def write_pack_option_registers(self, options):
-        """
-        Write the pack option registers to the ISL94203 device.
-
-        Args:
-            options (dict): A dictionary containing the option name and its value.
-        """
-        pack_options = {
-            'poT2MonitorsFETTemp': XT2M_FIELD,
-            'poEnableCELLFpsd': CFPSD_FIELD,
-            'poEnableOpenWirePSD': OWPSD_FIELD,
-            'poEnableUVLO': UVLOPD_FIELD,
-            'poEnableOpenWireScan': DOWD_FIELD,
-            'CBDuringCharge': CBDC_FIELD,
-            'CBDuringDischarge': CBDD_FIELD,
-            'CBDuringEOC': CB_EOC_FIELD,
-            'tGain': TGAIN_FIELD,
-        }
-
-        for option, value in options.items():
-            if option in pack_options:
-                field = pack_options[option]
-                self.isl94203_hal.reg_write_bit(field.address, int(bool(value)), field.bit_position)
+        pass
 
     def read_voltage_limits(self):
         """Reads voltage limits from registers and returns a dictionary."""
@@ -410,11 +267,11 @@ if __name__ == "__main__":
     print("-----------------------------")
     registers_list = isl9420x.get_register_list()
     max_key_length = max(len(key) for key in registers_list.keys())
-    for limit, value in registers_list.items():
+    for limit, (value, unit) in registers_list.items():
         if isinstance(value, float):
-            print(f"{limit:<{max_key_length}}: {value:.2f}")
+            print(f"{limit:<{max_key_length}}: {value:.2f} {unit if unit else ''}")
         else:
-            print(f"{limit:<{max_key_length}}: {value}")
+            print(f"{limit:<{max_key_length}}: {value} {unit if unit else ''}")
     
 
 
