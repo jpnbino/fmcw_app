@@ -12,6 +12,7 @@ class CurrentGainRegisterField:
     mapping: Dict[int, int]
     to_raw: Callable[[int], int]
     from_raw: Callable[[int], int]
+    unit: str = "x"
 
 current_gain = CurrentGainRegisterField(
     name="current_gain",

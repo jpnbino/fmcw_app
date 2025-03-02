@@ -11,6 +11,7 @@ class VoltageRegisterField:
     bit_position: int # bit position of LSB
     to_raw: Callable[[float],int] # Function to convert GUI value to raw
     from_raw: Callable[[int],float] # Function to convert raw to GUI value
+    unit: str = "V"
 
 @dataclass
 class VoltageMappedRegisterField:

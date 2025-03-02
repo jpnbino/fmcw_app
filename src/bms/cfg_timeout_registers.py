@@ -23,4 +23,5 @@ for name, address, bit_position, bit_mask, unit_bit_position, unit_bit_mask in m
         unit_bit_position=unit_bit_position,
         to_raw= lambda x: x,
         from_raw = lambda x: x,
+        unit_mapping=UNIT_MAPPING
     )

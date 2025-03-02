@@ -12,6 +12,7 @@ class CellConfigRegisterField:
     mapping: Dict[int, int]
     int_to_code_mapping: Dict[int, int]
     to_raw: Callable[[int], int]
+    unit: str = "Cells"
 
 
 reg = CellConfigRegisterField(
