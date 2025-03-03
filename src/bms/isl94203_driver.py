@@ -144,14 +144,16 @@ class ISL94203Driver:
         }
 
 
+    def read_register(self, register_name: str):
+        """Read a register value using the register name."""    
+        unit_str = self._read_units_from_register(register_name)
+        value = self._read_value_from_register(register_name)
+
+        return value, unit_str
+    
     def _read_units_from_register(self, register_name: str) -> str:
         """Read the units from a register using the register name."""
-        if register_name in self.config_registers:
-            field = self.config_registers[register_name]
-        elif register_name in self.ram_registers:
-            field = self.ram_registers[register_name]
-        else:
-            raise ValueError(f"Register {register_name} not found.")
+        field = self._lookup_register_info(register_name)
         
         if hasattr(field, 'unit_mapping') and field.unit_mapping is not None:
             unit_raw_value = self.isl94203_hal.reg_read(field.address, field.unit_bit_position, field.unit_bit_mask)
@@ -163,18 +165,11 @@ class ISL94203Driver:
         
         return unit_str
     
-    def read_register(self, register_name: str):
-        """Read a register value using the register name."""
-        if register_name in self.config_registers:
-            field = self.config_registers[register_name]
-        elif register_name in self.ram_registers:
-            field = self.ram_registers[register_name]
-        else:
-            raise ValueError(f"Register {register_name} not found.")
-        
+    def _read_value_from_register(self, register_name: str):
+        """Read a value from a register using the register name."""       
+        field = self._lookup_register_info(register_name)
+
         raw_value = self.isl94203_hal.reg_read(field.address, field.bit_position, field.bit_mask)
-        unit_str = self._read_units_from_register(register_name)
-        value = None
 
         if hasattr(field, 'mapping') and field.mapping is not None:
             if raw_value in field.mapping:
@@ -182,7 +177,16 @@ class ISL94203Driver:
         elif hasattr(field, 'from_raw') and field.from_raw is not None:
             value = field.from_raw(raw_value)
 
-        return value, unit_str
+        return value
+
+    def _lookup_register_info(self, register_name):
+        if register_name in self.config_registers:
+            field = self.config_registers[register_name]
+        elif register_name in self.ram_registers:
+            field = self.ram_registers[register_name]
+        else:
+            raise ValueError(f"Register {register_name} not found.")
+        return field
 
     def write_register(self, register_name: str, value):
         """Write a value to a register using the register name."""
@@ -216,10 +220,8 @@ class ISL94203Driver:
         pass
     def write_current_detect_pulse(self, pulse_values):
         pass
-
     def write_cell_config(self, cell_config):
         pass
-
     def write_pack_option_registers(self, options):
         pass
 
@@ -261,7 +263,6 @@ if __name__ == "__main__":
     print("RAM Registers ( 0x80 - 0xAB )")
     print("addr " + f"{' '.join(f'{value:02X}' for value in range(0x80, 0xAC))}")
     print("val  " + f"{' '.join(f'{value:02X}' for value in config[ADDR_RAM_OFFSET:])}")
-
 
     print("\nPrint Parsed Registers values")
     print("-----------------------------")

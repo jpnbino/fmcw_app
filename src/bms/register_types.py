@@ -34,6 +34,7 @@ class TimeRegisterField:
     unit_bit_position: Optional[int] = None
     unit_bit_mask: Optional[int] = None
     unit_mapping: Optional[Dict[int, str]] = None
+    unit: Optional[str] = None
 
 @dataclass
 class BooleanRegisterField:
