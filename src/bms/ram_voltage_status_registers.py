@@ -17,8 +17,8 @@ def voltage_vrgo_to_raw(value: float) -> int:
     return int((value / VOLTAGE_VRGO_MULTIPLIER))
 
 map = [
-    ("vcell_min", 0x84, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
-    ("vcell_max", 0x8A, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
+    ("vcell_min", 0x8A, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
+    ("vcell_max", 0x8C, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
     ("vcell1", 0x90, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
     ("vcell2", 0x92, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),
     ("vcell3", 0x94, 0, Mask.MASK_12BIT, voltage_cell_to_raw, voltage_cell_from_raw),

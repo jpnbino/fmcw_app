@@ -6,6 +6,7 @@ map = [
     ("overvoltage_delay_timeout", 0x10, 0, Mask.MASK_10BIT , 10, Mask.MASK_2BIT),
     ("undervoltage_delay_timeout", 0x12,0, Mask.MASK_10BIT, 10, Mask.MASK_2BIT),
     ("open_wire_timeout", 0x14,0, Mask.MASK_9BIT, 9, Mask.MASK_1BIT),
+    ("sleep_delay", 0x46,0, Mask.MASK_9BIT, 9, Mask.MASK_2BIT),
 ]
 
 
@@ -43,3 +44,4 @@ for name, address, bit_position, bit_mask in pulse_width_map:
         from_raw = lambda x: x,
         unit = "ms"
     )
+    
