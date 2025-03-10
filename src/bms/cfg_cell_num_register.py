@@ -9,8 +9,7 @@ class CellConfigRegisterField:
     address: int
     bit_position: int
     bit_mask: int
-    mapping: Dict[int, int]
-    int_to_code_mapping: Dict[int, int]
+    from_raw: Callable[[int], int]
     to_raw: Callable[[int], int]
     unit: str = "Cells"
 
@@ -20,7 +19,6 @@ reg = CellConfigRegisterField(
     address=0x48,
     bit_position=8,
     bit_mask=Mask.MASK_8BIT,
-    mapping= CELL_CONFIG_MAPPING,
-    int_to_code_mapping= CELL_CONFIG_INT2CODE_MAPPING,
-    to_raw= lambda x: x,
+    from_raw= lambda x: CELL_CONFIG_MAPPING.get(x, x),
+    to_raw= lambda x: CELL_CONFIG_INT2CODE_MAPPING.get(x, x),
 )

@@ -233,23 +233,6 @@ class ISL94203Driver:
         for register_name, field in all_registers_dict.items():
             all_registers[register_name] = self.read_register(register_name)
         return all_registers
-    
-    def write_voltage_limits(self, voltage_limits):
-        pass
-    def write_voltage_limits_timing(self, timing_limits):
-        pass
-    def write_timers(self, timer_values):
-        pass
-    def write_cell_balance_registers(self, cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit):
-        pass
-    def write_temperature_registers(self, temp_values):
-        pass
-    def write_current_detect_pulse(self, pulse_values):
-        pass
-    def write_cell_config(self, cell_config):
-        pass
-    def write_pack_option_registers(self, options):
-        pass
 
     def read_all_registers(self):
         """Reads all configuration and RAM registers and returns a dictionary."""
@@ -279,8 +262,34 @@ class ISL94203Driver:
         """Writes voltage limits to registers from a dictionary."""
         for field_name, value in voltage_limits.items():
             if field_name in self.config_registers:
-                self.write_config_field(field_name, value)
-    
+                self.write_register(field_name, value)
+ 
+    def write_voltage_limits_timing(self, timing_limits):
+        pass
+    def write_timers(self, timer_values):
+        pass
+    def write_cell_balance_registers(self, cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit):
+        pass
+    def write_temperature_registers(self, temp_values):
+        pass
+    def write_current_registers(self, current_values):
+        for field_name, value in current_values.items():
+            if isinstance(value, tuple):
+                value, value_unit = value
+            else:
+                value_unit = None
+            if field_name in self.config_registers:
+                self.write_register(field_name, value, value_unit)
+            else:
+                raise ValueError(f"Field {field_name} not found in config registers.")
+
+    def write_cell_config(self, cell_config):
+
+        self.write_register("cell_config", cell_config)
+
+
+    def write_pack_option_registers(self, options):
+        pass   
     def read_cell_balance_limits(self):
         """Reads cell balance limits from registers and returns a dictionary."""
         cell_balance_limits = {}
