@@ -209,17 +209,22 @@ class ISL94203Driver:
 
         return value
 
-    def write_register(self, register_name: str, value):
+    def write_register(self, register_name: str, value, value_unit=None):
         """Write a value to a register using the register name."""
-        if register_name in self.config_registers:
-            field = self.config_registers[register_name]
-        elif register_name in self.ram_registers:
-            field = self.ram_registers[register_name]
-        else:
-            raise ValueError(f"Register {register_name} not found.")
+        field = self._lookup_register_info(register_name)
         
-        raw_value = field.to_raw(value)
+        if hasattr(field, 'to_raw') and field.to_raw is not None:
+            if hasattr(field, 'mapping') and field.mapping is not None:
+                raw_value = field.to_raw(value, field.mapping)
+            else:
+                raw_value = field.to_raw(value)
+        else:
+            raise ValueError(f"Field {register_name} does not have a 'to_raw' method.")
+        
         self.isl94203_hal.reg_write(field.address, raw_value, field.bit_mask, field.bit_position)
+
+        if hasattr(field, 'unit_mapping') and field.unit_mapping is not None:
+            self.isl94203_hal.reg_write(field.address, value_unit, field.unit_bit_mask, field.unit_bit_position)
 
     def get_register_list(self):
         """Return a single dictionary of all registers."""

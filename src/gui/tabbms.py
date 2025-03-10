@@ -392,7 +392,6 @@ class BmsTab:
         self.tempXT1VoltaqeLineEdit.setText(f"{all_registers.get('temp_xt1')[0]:.2f}")
         self.tempXT2VoltaqeLineEdit.setText(f"{all_registers.get('temp_xt2')[0]:.2f}")
 
-
         current = all_registers.get("current_i")[0]
         voltage = current * self.resistor
 
@@ -547,76 +546,18 @@ class BmsTab:
         
     def write_current_registers(self):
 
-        # Define the mappings for the different selections
-        register_mappings = [
-            {
-                'timeout_edit': self.CLDischargeOCTimeoutLineEdit.text(),
-                'unit_combo': self.CLDischargeOCTimeoutCombo.currentText(),
-                'voltage_combo': self.CLDischargeOCVoltageCombo.currentText(),
-                'address': 0x16,
-                'voltage_mapping': DOC_MAPPING
-            },
-            {
-                'timeout_edit': self.CLChargeOCTimeoutLineEdit.text(),
-                'unit_combo': self.CLChargeOCTimeoutCombo.currentText(),
-                'voltage_combo': self.CLChargeOCVoltageCombo.currentText(),
-                'address': 0x18,
-                'voltage_mapping': COC_MAPPING
-            },
-            {
-                'timeout_edit': self.CLDischargeSCTimeoutLineEdit.text(),
-                'unit_combo': self.CLDischargeSCTimeoutCombo.currentText(),
-                'voltage_combo': self.CLDischargeSCVoltageCombo.currentText(),
-                'address': 0x1A,
-                'voltage_mapping': DSC_MAPPING
-            }
-        ]
+        current_limits = {
+            'cl_discharge_oc': self.CLDischargeOCVoltageCombo.currentText(),
+            'cl_charge_oc': self.CLChargeOCVoltageCombo.currentText(),
+            'cl_discharge_sc': self.CLDischargeSCVoltageCombo.currentText(),
+            'cl_discharge_oc_delay': (int(self.CLDischargeOCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLDischargeOCTimeoutCombo)),
+            'cl_charge_oc_delay': (int(self.CLChargeOCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLChargeOCTimeoutCombo)),
+            'cl_discharge_sc_delay': (int(self.CLDischargeSCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLDischargeSCTimeoutCombo)),
+            'cl_pulse_width_charge': self.chargeDetectPulseCombo.currentText(), 
+            'cl_pulse_width_load': self.loadDetectPulseCombo.currentText()
+        }
 
-        # Iterate over each mapping and write the corresponding register value
-        for reg in register_mappings:
-            # Extract the timeout value
-            timeout_value = int(reg['timeout_edit'])
-
-            # Find the corresponding unit key from the unit mapping
-            selected_unit = reg['unit_combo']
-            unit_key = next(key for key, value in UNIT_MAPPING.items() if value == selected_unit)
-
-            # Find the corresponding voltage key from the voltage mapping
-            selected_voltage = reg['voltage_combo']
-            voltage_key = next(key for key, value in reg['voltage_mapping'].items() if value == selected_voltage)
-
-            # Pack the timeout, unit, and voltage into the register value
-            packed_value = pack_register_value(timeout_value, unit_key, voltage_key)
-
-            # Write the packed value to the register
-            self.isl94203.reg_write(reg['address'], packed_value, Mask.MASK_15BIT, 0x00)
-
-        # Helper function to pack values into the register
-        def pack_register_value(timeout, unit, voltage):
-            # timeout is 10 bits (0-9), unit is 2 bits (10-11), voltage is 3 bits (12-14)
-            return (timeout & 0x3FF) | ((unit & 0x3) << 10) | ((voltage & 0x7) << 12)
-        
-        self.write_current_detect_registers(self)
-
-    def write_current_detect_registers(self):
-        """
-        Write the current detect registers to the device.
-
-        This function reads the current values from the charge and load detect pulse
-        combo boxes, converts them to integers, and writes them to the device using
-        the ISL94203 driver.
-        """
-        try:
-            pulse_values = {
-                "charge_detect_pulse": int(self.chargeDetectPulseCombo.currentText()),
-                "load_detect_pulse": int(self.loadDetectPulseCombo.currentText())
-            }
-
-            self.isl94203_driver.write_current_detect_pulse(pulse_values)
-        except ValueError as e:
-            print(f"Error converting pulse values to integers: {e}")
-        except Exception as e:
-            print(f"An error occurred while writing current detect registers: {e}")
+        self.isl94203_driver.write_current_registers(current_limits)
 
     def write_pack_option_registers(self):
         options = {
