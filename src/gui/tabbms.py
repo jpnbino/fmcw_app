@@ -509,19 +509,19 @@ class BmsTab:
         self.isl94203_driver.write_cell_balance_registers(cell_balance_values)
         
     def write_temperature_registers(self):
-        temp_values = {
-            'tl_charge_ot': self.TLChargeOverTempLineEdit.text(),
-            'tl_charge_ot_recover': self.TLChargeOTRecoverLineEdit.text(),
-            'tl_charge_ut': self.TLChargeUnderTempLineEdit.text(),
-            'tl_charge_ut_recover': self.TLChargeUTRecoverLineEdit.text(),
-            'tl_discharge_ot': self.TLDiscOverTempLineEdit.text(),
-            'tl_discharge_ot_recover': self.TLDischOTRecoverLineEdit.text(),
-            'tl_discharge_ut': self.TLDischUnderTempLineEdit.text(),
-            'tl_discharge_ut_recover': self.TLDischUTRecoverLineEdit.text(),
-            'tl_internal_ot': self.TLInternalOverTempLineEdit.text(),
-            'tl_internal_ot_recover': self.TLInternalOTRecoverLineEdit.text()
+        temp_limits = {
+            'tl_charge_ot': float(self.TLChargeOverTempLineEdit.text()),
+            'tl_charge_ot_recover': float(self.TLChargeOTRecoverLineEdit.text()),
+            'tl_charge_ut': float(self.TLChargeUnderTempLineEdit.text()),
+            'tl_charge_ut_recover': float(self.TLChargeUTRecoverLineEdit.text()),
+            'tl_discharge_ot': float(self.TLDiscOverTempLineEdit.text()),
+            'tl_discharge_ot_recover': float(self.TLDischOTRecoverLineEdit.text()),
+            'tl_discharge_ut': float(self.TLDischUnderTempLineEdit.text()),
+            'tl_discharge_ut_recover': float(self.TLDischUTRecoverLineEdit.text()),
+            'tl_internal_ot': float(self.TLInternalOverTempLineEdit.text()),
+            'tl_internal_ot_recover': float(self.TLInternalOTRecoverLineEdit.text())
         }
-        self.isl94203_driver.write_temperature_registers(temp_values)
+        self.isl94203_driver.write_temperature_registers(temp_limits)
         
     def write_current_registers(self):
 

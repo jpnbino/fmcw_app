@@ -4,8 +4,8 @@ from .isl94203_constants import TEMPERATURE_MULTIPLIER, Mask
 def voltage_temp_from_raw(value: int) -> int:
     return value*TEMPERATURE_MULTIPLIER
 
-def voltage_temp_to_raw(value: int) -> int:
-    return value/TEMPERATURE_MULTIPLIER
+def voltage_temp_to_raw(value: float) -> int:
+    return int(value/TEMPERATURE_MULTIPLIER)
 
 @dataclass
 class TemperatureRegisterField:

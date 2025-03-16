@@ -286,7 +286,10 @@ class ISL94203Driver:
             else:
                 raise ValueError(f"Field {field_name} not found in config registers.")
     def write_temperature_registers(self, temp_values):
-        pass
+        for field_name, value in temp_values.items():
+            if field_name in self.config_registers:
+                self.write_register(field_name, value)
+    
     def write_current_registers(self, current_values):
         for field_name, value in current_values.items():
             if isinstance(value, tuple):
