@@ -181,7 +181,7 @@ class ISL94203Driver:
         field = self._lookup_register_info(register_name)
         
         if hasattr(field, 'unit_mapping') and field.unit_mapping is not None:
-            unit_raw_value = self.isl94203_hal.reg_read(field.address, field.unit_bit_position, field.unit_bit_mask)
+            unit_raw_value = self.isl94203_hal.reg_read(field.address, field.bit_position, field.bit_mask)
             unit_str = field.unit_mapping.get(unit_raw_value, "")	
         elif hasattr(field, 'unit') and field.unit is not None:
             unit_str = field.unit
@@ -223,9 +223,6 @@ class ISL94203Driver:
         
         self.isl94203_hal.reg_write(field.address, raw_value, field.bit_mask, field.bit_position)
 
-        if hasattr(field, 'unit_mapping') and field.unit_mapping is not None:
-            self.isl94203_hal.reg_write(field.address, value_unit, field.unit_bit_mask, field.unit_bit_position)
-
     def get_register_list(self):
         """Return a single dictionary of all registers."""
         all_registers_dict = {**self.config_registers, **self.ram_registers}
@@ -265,11 +262,29 @@ class ISL94203Driver:
                 self.write_register(field_name, value)
  
     def write_voltage_limits_timing(self, timing_limits):
-        pass
+        """Writes voltage limits timing to registers from a dictionary."""
+        for field_name, value in timing_limits.items():
+            if isinstance(value, tuple):
+                value, value_unit = value
+            else:
+                value_unit = None
+            if field_name in self.config_registers:
+                self.write_register(field_name, value, value_unit)
+            else:
+                raise ValueError(f"Field {field_name} not found in config registers.")
+                
     def write_timers(self, timer_values):
         pass
-    def write_cell_balance_registers(self, cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit):
-        pass
+    def write_cell_balance_registers(self, cell_balance_values):
+        for field_name, value in cell_balance_values.items():
+            if isinstance(value, tuple):
+                value, value_unit = value
+            else:
+                value_unit = None
+            if field_name in self.config_registers:
+                self.write_register(field_name, value, value_unit)
+            else:
+                raise ValueError(f"Field {field_name} not found in config registers.")
     def write_temperature_registers(self, temp_values):
         pass
     def write_current_registers(self, current_values):

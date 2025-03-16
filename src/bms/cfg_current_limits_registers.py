@@ -1,4 +1,4 @@
-from .register_types import TimeRegisterField
+from .register_types import TimeRegisterField, TimeUnitRegisterField
 from .register_types import VoltageMappedRegisterField
 
 from .isl94203_constants import DOC_MAPPING, COC_MAPPING, DSC_MAPPING, UNIT_MAPPING, Mask
@@ -51,11 +51,19 @@ for name, address in time_map:
         bit_position=0,
         to_raw=lambda x: x,
         from_raw=lambda x: x,
-        unit_bit_position=10,
-        unit_bit_mask=Mask.MASK_2BIT,
-        unit_mapping=UNIT_MAPPING,
     )
 
+for name, address in time_map:
+    reg[name] = TimeUnitRegisterField(
+        name=name,
+        address=address,
+        bit_mask=Mask.MASK_2BIT,
+        bit_position=10,
+        to_raw=lambda x: x,
+        from_raw=lambda x: x,
+        unit_mapping=UNIT_MAPPING,
+        unit="ms",
+    )
 def pulse_width_to_raw(value: int) -> int:
     return int(value)
 

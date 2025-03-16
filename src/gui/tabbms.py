@@ -80,8 +80,8 @@ class BmsTab:
         self.CBUnderTempLineEdit = self.ui.findChild(QLineEdit, "CBUnderTempLineEdit")
         self.CBOnTimeLineEdit = self.ui.findChild(QLineEdit, "CBOnTimeLineEdit")
         self.CBOffTimeLineEdit = self.ui.findChild(QLineEdit, "CBOffTimeLineEdit")
-        self.CBOnTimeUnitLineEdit = self.ui.findChild(QComboBox, "CBOnTimeUnitLineEdit")
-        self.CBOffTimeUnitLineEdit = self.ui.findChild(QComboBox, "CBOffTimeUnitLineEdit")
+        self.CBOnTimeUnitCombo = self.ui.findChild(QComboBox, "CBOnTimeUnitCombo")
+        self.CBOffTimeUnitCombo = self.ui.findChild(QComboBox, "CBOffTimeUnitCombo")
 
         self.CBDuringChargeCheckBox = self.ui.findChild(QCheckBox, "CBDuringChargeCheckBox")
         self.CBDuringDischargeCheckBox = self.ui.findChild(QCheckBox, "CBDuringDischargeCheckBox")
@@ -271,8 +271,8 @@ class BmsTab:
             line_edit.setText(f"{int(value[0])}")  
 
         cell_balance_timing_units = {
-            self.CBOnTimeUnitLineEdit: all_registers.get("cb_on_time"),
-            self.CBOffTimeUnitLineEdit: all_registers.get("cb_off_time")
+            self.CBOnTimeUnitCombo: all_registers.get("cb_on_time"),
+            self.CBOffTimeUnitCombo: all_registers.get("cb_off_time")
         }
         for combo, value in cell_balance_timing_units.items():
             combo.setCurrentText(value[1])
@@ -476,25 +476,13 @@ class BmsTab:
         
     def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
-        ov_delay_timeout = int(self.ovDelayTimeoutLineEdit.text())
-        uv_delay_timeout = int(self.uvDelayTimeoutLineEdit.text())
-        open_wire_sample_time = int(self.openWireTimingLineEdit.text())
-        sleep_delay = int(self.sleepDelayLineEdit.text())
-
-        # Extract and shift units
-        ov_delay_timeout_unit = self.get_unit_from_combo(self.ovDelayTimeoutCombo)
-        uv_delay_timeout_unit = self.get_unit_from_combo(self.uvDelayTimeoutCombo)
-        sleep_delay_unit = self.get_unit_from_combo(self.sleepDelayUnitCombo)
-        open_wire_sample_time_unit = self.get_unit_from_combo(self.openWireTimingCombo)
-
-        timing_limits = {
-            'ov_delay_timeout': (ov_delay_timeout, ov_delay_timeout_unit),
-            'uv_delay_timeout': (uv_delay_timeout, uv_delay_timeout_unit),
-            'open_wire_sample_time': (open_wire_sample_time, open_wire_sample_time_unit),
-            'sleep_delay': (sleep_delay, sleep_delay_unit)
+        voltage_limits_timing = {
+            "ov_delay_timeout": (int(self.ovDelayTimeoutLineEdit.text()), self.ovDelayTimeoutCombo.currentText()),
+            "uv_delay_timeout": (int(self.uvDelayTimeoutLineEdit.text()), self.uvDelayTimeoutCombo.currentText()),
+            "sleep_delay": (int(self.sleepDelayLineEdit.text()), self.sleepDelayUnitCombo.currentText()),
+            "open_wire_timing": (int(self.openWireTimingLineEdit.text()), self.openWireTimingCombo.currentText())
         }
-
-        self.isl94203_driver.write_voltage_limits_timing(timing_limits)
+        self.isl94203_driver.write_voltage_limits_timing(voltage_limits_timing)
 
     def write_timers(self):
         timer_values = {
@@ -506,43 +494,32 @@ class BmsTab:
 
     def write_cell_balance_registers(self):
         cell_balance_values = {
-            'CBLowerLim': self.CBLowerLimLineEdit.text(),
-            'CBUpperLim': self.CBUpperLimLineEdit.text(),
-            'CBMinDelta': self.CBMinDeltaLineEdit.text(),
-            'CBMaxDelta': self.CBMaxDeltaLineEdit.text(),
-            'CBOnTime': self.CBOnTimeLineEdit.text(),
-            'CBOffTime': self.CBOffTimeLineEdit.text()
+            'cb_min_voltage': float(self.CBLowerLimLineEdit.text()),
+            'cb_max_voltage': float(self.CBUpperLimLineEdit.text()),
+            'cb_min_delta': float(self.CBMinDeltaLineEdit.text()),
+            'cb_max_delta': float(self.CBMaxDeltaLineEdit.text()),
+            'cb_under_temp': float(self.CBUnderTempLineEdit.text()),
+            'cb_ut_recover': float(self.CBUTRecoverLineEdit.text()),
+            'cb_over_temp': float(self.CBOverTempLineEdit.text()),
+            'cb_ot_recover': float(self.CBOTRecoverLineEdit.text()),
+            'cb_on_time': (int(self.CBOnTimeLineEdit.text()), self.CBOnTimeUnitCombo.currentText()),
+            'cb_off_time': (int(self.CBOffTimeLineEdit.text()), self.CBOffTimeUnitCombo.currentText())
         }
 
-        cell_balance_temp_values = {
-            'CBUnderTemp': self.CBUnderTempLineEdit.text(),
-            'CBUTRecover': self.CBUTRecoverLineEdit.text(),
-            'CBOverTemp': self.CBOverTempLineEdit.text(),
-            'CBOTRecover': self.CBOTRecoverLineEdit.text()
-        }
-
-        # Extract and shift units
-        cb_on_time_unit = self.get_unit_from_combo(self.CBOnTimeUnitLineEdit)
-        cb_off_time_unit = self.get_unit_from_combo(self.CBOffTimeUnitLineEdit)
-
-        # Combine values and units
-        cb_on_time = int(self.CBOnTimeLineEdit.text())
-        cb_off_time = int(self.CBOffTimeLineEdit.text())
-
-        self.isl94203_driver.write_cell_balance_registers(cell_balance_values, cell_balance_temp_values, cb_on_time, cb_off_time, cb_on_time_unit, cb_off_time_unit)
+        self.isl94203_driver.write_cell_balance_registers(cell_balance_values)
         
     def write_temperature_registers(self):
         temp_values = {
-            'TLChargeOverTemp': self.TLChargeOverTempLineEdit.text(),
-            'TLChargeOTRecover': self.TLChargeOTRecoverLineEdit.text(),
-            'TLChargeUnderTemp': self.TLChargeUnderTempLineEdit.text(),
-            'TLChargeUTRecover': self.TLChargeUTRecoverLineEdit.text(),
-            'TLDiscOverTemp': self.TLDiscOverTempLineEdit.text(),
-            'TLDischOTRecover': self.TLDischOTRecoverLineEdit.text(),
-            'TLDischUnderTemp': self.TLDischUnderTempLineEdit.text(),
-            'TLDischUTRecover': self.TLDischUTRecoverLineEdit.text(),
-            'TLInternalOverTemp': self.TLInternalOverTempLineEdit.text(),
-            'TLInternalOTRecover': self.TLInternalOTRecoverLineEdit.text()
+            'tl_charge_ot': self.TLChargeOverTempLineEdit.text(),
+            'tl_charge_ot_recover': self.TLChargeOTRecoverLineEdit.text(),
+            'tl_charge_ut': self.TLChargeUnderTempLineEdit.text(),
+            'tl_charge_ut_recover': self.TLChargeUTRecoverLineEdit.text(),
+            'tl_discharge_ot': self.TLDiscOverTempLineEdit.text(),
+            'tl_discharge_ot_recover': self.TLDischOTRecoverLineEdit.text(),
+            'tl_discharge_ut': self.TLDischUnderTempLineEdit.text(),
+            'tl_discharge_ut_recover': self.TLDischUTRecoverLineEdit.text(),
+            'tl_internal_ot': self.TLInternalOverTempLineEdit.text(),
+            'tl_internal_ot_recover': self.TLInternalOTRecoverLineEdit.text()
         }
         self.isl94203_driver.write_temperature_registers(temp_values)
         

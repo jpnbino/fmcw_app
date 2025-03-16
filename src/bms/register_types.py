@@ -31,10 +31,18 @@ class TimeRegisterField:
     bit_mask: int
     to_raw: Callable[[int], int]
     from_raw: Callable[[int], int]
-    unit_bit_position: Optional[int] = None
-    unit_bit_mask: Optional[int] = None
-    unit_mapping: Optional[Dict[int, str]] = None
     unit: Optional[str] = None
+
+@dataclass
+class TimeUnitRegisterField:
+    name: str
+    address: int
+    bit_position: int
+    bit_mask: int
+    to_raw: Callable[[int], int]
+    from_raw: Callable[[int], int]
+    unit_mapping: Optional[Dict[int, str]]
+    unit: str
 
 @dataclass
 class BooleanRegisterField:

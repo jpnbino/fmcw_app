@@ -1,5 +1,6 @@
+
 from .cfg_voltage_registers import VoltageRegisterField, voltage_cell_from_raw, voltage_cell_to_raw
-from .cfg_timeout_registers import TimeRegisterField
+from .cfg_timeout_registers import TimeRegisterField, TimeUnitRegisterField
 
 from .isl94203_constants import *
 
@@ -43,9 +44,18 @@ for name, address in t_map:
         address=address,
         bit_mask=Mask.MASK_8BIT,
         bit_position=0,
-        unit_bit_mask=Mask.MASK_2BIT,
-        unit_bit_position=10,
-        unit_mapping= UNIT_MAPPING,
         to_raw= lambda x: x,
         from_raw = lambda x: x,
+    )
+
+for name, address in t_map:
+    t_reg[name] = TimeUnitRegisterField(
+        name=name,
+        address=address,
+        bit_mask=Mask.MASK_2BIT,
+        bit_position=10,
+        to_raw= lambda x: x,
+        from_raw = lambda x: x,
+        unit_mapping= UNIT_MAPPING,
+        unit = "ms"
     )
