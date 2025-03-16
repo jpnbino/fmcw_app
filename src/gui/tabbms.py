@@ -1,3 +1,4 @@
+import os
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
@@ -11,6 +12,7 @@ from bms.isl94203_factory import ISL94203Factory
 import logging
 
 from serialbsp.commands import CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_WRITE_EEPROM
+import yaml
 
 
 class BmsTab:
@@ -722,9 +724,101 @@ class BmsTab:
                 self.parsed_log_handler.stop_log()
 
     def load_default_config(self):
-        configuration = []
-        self.isl94203.set_ram_registers(list(configuration))
-        self.ui_update_fields()
+        config_path = os.path.join(os.path.dirname(__file__), '../..', 'config', 'default_config.yaml')
+        try:
+            with open(config_path, 'r') as file:
+                configuration = yaml.safe_load(file)
+
+            # Update UI fields with the loaded configuration
+            voltage_limits = configuration.get('voltage limits', {})
+            self.ovLockoutLineEdit.setText(str(voltage_limits.get('ov lockout', '')))
+            self.ovLineEdit.setText(str(voltage_limits.get('over voltage', '')))
+            self.ovRecoverLineEdit.setText(str(voltage_limits.get('ov recover', '')))
+            self.eocVoltageLineEdit.setText(str(voltage_limits.get('end of charge', '')))
+            self.uvRecoverLineEdit.setText(str(voltage_limits.get('uv recover', '')))
+            self.underVoltageLineEdit.setText(str(voltage_limits.get('under voltage', '')))
+            self.sleepVoltageLineEdit.setText(str(voltage_limits.get('sleep voltage', '')))
+            self.lowVoltageChargeLineEdit.setText(str(voltage_limits.get('low v charge', '')))
+            self.uvLockoutLineEdit.setText(str(voltage_limits.get('uv lockout', '')))
+
+            voltage_timing = configuration.get('voltage timeouts', {})
+            self.ovDelayTimeoutLineEdit.setText(str(voltage_timing.get('ov delay', '')))
+            self.ovDelayTimeoutCombo.setCurrentText(str(voltage_timing.get('ov delay unit', '')))
+            self.uvDelayTimeoutLineEdit.setText(str(voltage_timing.get('uv delay', '')))
+            self.uvDelayTimeoutCombo.setCurrentText(str(voltage_timing.get('uv delay unit', '')))
+            self.sleepDelayLineEdit.setText(str(voltage_timing.get('sleep delay', '')))
+            self.sleepDelayUnitCombo.setCurrentText(str(voltage_timing.get('sleep delay unit', '')))
+            self.openWireTimingLineEdit.setText(str(voltage_timing.get('open wire', '')))
+            self.openWireTimingCombo.setCurrentText(str(voltage_timing.get('open wire unit', '')))
+
+            current_limits = configuration.get('current limits', {})
+            self.CLDischargeOCVoltageCombo.setCurrentText(str(current_limits.get('discharge oc', '')))
+            self.CLDischargeOCTimeoutLineEdit.setText(str(current_limits.get('doc delay', '')))
+            self.CLDischargeOCTimeoutCombo.setCurrentText(str(current_limits.get('doc delay unit', '')))
+
+            self.CLChargeOCVoltageCombo.setCurrentText(str(current_limits.get('charge oc', '')))
+            self.CLChargeOCTimeoutLineEdit.setText(str(current_limits.get('coc delay', '')))
+            self.CLChargeOCTimeoutCombo.setCurrentText(str(current_limits.get('coc delay unit', '')))
+            
+            self.CLDischargeSCVoltageCombo.setCurrentText(str(current_limits.get('discharge sc', '')))            
+            self.CLDischargeSCTimeoutLineEdit.setText(str(current_limits.get('dsc delay', '')))
+            self.CLDischargeSCTimeoutCombo.setCurrentText(str(current_limits.get('dsc delay unit', '')))
+            
+            self.chargeDetectPulseCombo.setCurrentText(str(current_limits.get('detect pulse width', {}).get('charge', '')))
+            self.loadDetectPulseCombo.setCurrentText(str(current_limits.get('detect pulse width', {}).get('load', '')))
+
+            timers = configuration.get('timers', {})
+            self.timerIdleDozeCombo.setCurrentText(str(timers.get('idle/doze mode timer', '')))
+            self.timerSleepCombo.setCurrentText(str(timers.get('sleep mode timer', '')))
+            self.timerWDTLineEdit.setText(str(timers.get('wd timer', '')))
+
+            cb_limits = configuration.get('cell balance limits', {})
+            self.CBUpperLimLineEdit.setText(str(cb_limits.get('cb upper lim', '')))
+            self.CBLowerLimLineEdit.setText(str(cb_limits.get('cb lower lim', '')))
+            self.CBMaxDeltaLineEdit.setText(str(cb_limits.get('cb max delta', '')))
+            self.CBMinDeltaLineEdit.setText(str(cb_limits.get('cb min delta', '')))
+            self.CBOverTempLineEdit.setText(str(cb_limits.get('cb over temp', '')))
+            self.CBOTRecoverLineEdit.setText(str(cb_limits.get('cb ot recover', '')))
+            self.CBUTRecoverLineEdit.setText(str(cb_limits.get('cb ut recover', '')))
+            self.CBUnderTempLineEdit.setText(str(cb_limits.get('cb under temp', '')))
+            self.CBOnTimeLineEdit.setText(str(cb_limits.get('cb on time', '')))
+            self.CBOffTimeLineEdit.setText(str(cb_limits.get('cb off time', '')))
+            self.CBDuringChargeCheckBox.setChecked(cb_limits.get('cb during charge', False))
+            self.CBDuringDischargeCheckBox.setChecked(cb_limits.get('cb during discharge', False))
+            self.CBDuringEOCCheckBox.setChecked(cb_limits.get('cb during eoc', False))
+
+            temp_limits = configuration.get('temperature limits', {})
+            self.TLChargeOverTempLineEdit.setText(str(temp_limits.get('charge over temp', '')))
+            self.TLChargeOTRecoverLineEdit.setText(str(temp_limits.get('charge ot recover', '')))
+            self.TLChargeUTRecoverLineEdit.setText(str(temp_limits.get('charge ut recover', '')))
+            self.TLChargeUnderTempLineEdit.setText(str(temp_limits.get('charge under temp', '')))
+            self.TLDiscOverTempLineEdit.setText(str(temp_limits.get('discharge over temp', '')))
+            self.TLDischOTRecoverLineEdit.setText(str(temp_limits.get('discharge ot recover', '')))
+            self.TLDischUTRecoverLineEdit.setText(str(temp_limits.get('discharge ut recover', '')))
+            self.TLDischUnderTempLineEdit.setText(str(temp_limits.get('discharge under temp', '')))
+            self.TLInternalOverTempLineEdit.setText(str(temp_limits.get('internal over temp', '')))
+            self.TLInternalOTRecoverLineEdit.setText(str(temp_limits.get('internal ot recover', '')))
+
+            cell_config = configuration.get('cell configuration', {})
+            self.CellConfigurationLineEdit.setText(str(cell_config.get('number of cells', '')))
+
+            pack_option = configuration.get('pack options', {})
+            self.poT2MonitorsFETTempCheckBox.setChecked(pack_option.get('xt2 monitors fet temp', False))
+            self.poEnableCELLFpsdCheckBox.setChecked(pack_option.get('enable cellf psd action', False))
+            self.poEnableOpenWirePSDCheckBox.setChecked(pack_option.get('enable open wire psd', False))
+            self.poEnableUVLOCheckBox.setChecked(pack_option.get('enable uvlo power down', False))
+            self.poEnableOpenWireScanCheckBox.setChecked(pack_option.get('enable open wire scan', False))
+
+            temp_config = configuration.get('temp reading', {})
+            self.tGainCheckBox.setChecked(temp_config.get('tgain', ''))
+
+            logging.info("Default configuration loaded successfully from %s.", config_path)
+        except FileNotFoundError:
+            logging.error("Default configuration file not found: %s", config_path)
+        except yaml.YAMLError as e:
+            logging.error("Error parsing YAML configuration file: %s", e)
+        except Exception as e:
+            logging.error("Failed to load default configuration: %s", e)
 
     def parse_bms_values(self, ram_values):
         """Parse raw RAM values into meaningful values."""
