@@ -1,5 +1,5 @@
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit, QLineEdit
+from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit, QLineEdit, QCheckBox
 from PySide6.QtGui import QTextCursor
 from gui.tabbms import BmsTab
 from serialbsp.protocol_fmcw import (

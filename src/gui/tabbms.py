@@ -62,7 +62,7 @@ class BmsTab:
         self.timerSleepCombo = self.ui.findChild(QComboBox, "timerSleepCombo")
         self.timerWDTLineEdit = self.ui.findChild(QLineEdit, "timerWDTLineEdit")
 
-        self.CellConfigurationLineEdit = self.ui.findChild(QLineEdit, "CellConfigurationLineEdit")
+        self.CellConfigurationCombo = self.ui.findChild(QComboBox, "cellConfigurationCombo")
 
         self.poT2MonitorsFETTempCheckBox = self.ui.findChild(QCheckBox, "poT2MonitorsFETTempCheckBox")
         self.poEnableCELLFpsdCheckBox = self.ui.findChild(QCheckBox, "poEnableCELLFpsdCheckBox")
@@ -139,13 +139,13 @@ class BmsTab:
         self.tempXT1VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT1VoltaqeLineEdit")
         self.tempXT2VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT2VoltaqeLineEdit")
 
-        self.bitOVlabel = self.ui.findChild(QLabel, "bitOVlabel")
-        self.bitOVLOlabel = self.ui.findChild(QLabel, "bitOVLOlabel")
-        self.bitUVlabel = self.ui.findChild(QLabel, "bitUVlabel")
-        self.bitUVLOlabel = self.ui.findChild(QLabel, "bitUVLOlabel")
-        self.bitDOTlabel = self.ui.findChild(QLabel, "bitDOTlabel")
-        self.bitDUTlabel = self.ui.findChild(QLabel, "bitDUTlabel")
-        self.bitCOTlabel = self.ui.findChild(QLabel, "bitCOTlabel")
+        self.bitOV = self.ui.findChild(QLabel, "bitOVlabel")
+        self.bitOVLO = self.ui.findChild(QLabel, "bitOVLOlabel")
+        self.bitUV = self.ui.findChild(QLabel, "bitUVlabel")
+        self.bitUVLO = self.ui.findChild(QLabel, "bitUVLOlabel")
+        self.bitDOT = self.ui.findChild(QLabel, "bitDOTlabel")
+        self.bitDUT = self.ui.findChild(QLabel, "bitDUTlabel")
+        self.bitCOT = self.ui.findChild(QLabel, "bitCOTlabel")
         self.bitCUTlabel = self.ui.findChild(QLabel, "bitCUTlabel")
         self.bitIOTlabel = self.ui.findChild(QLabel, "bitIOTlabel")
         self.bitCOClabel = self.ui.findChild(QLabel, "bitCOClabel")
@@ -246,9 +246,9 @@ class BmsTab:
         cell_config = all_registers.get("cell_config")
 
         if cell_config == 0:
-            self.CellConfigurationLineEdit.setText("0")
+            self.CellConfigurationCombo.setCurrentText("0")
         else:
-            self.CellConfigurationLineEdit.setText(f"{int(cell_config[0])}")
+            self.CellConfigurationCombo.setCurrentText(f"{int(cell_config[0])}")
 
         cell_balance_limits = {
             self.CBUpperLimLineEdit: all_registers.get("cb_max_voltage"),
@@ -401,57 +401,52 @@ class BmsTab:
         self.packCurrentVLineEdit.setText(f"{voltage * 1000:.4f}")  # in millivolts
         self.packCurrentALineEdit.setText(f"{current * 1000:.4f}")  # in milliamperes
 
+    def update_bit_indicators(self, data):
+        for name, state in data.items():
+            checkbox = self.ui.findChild(QCheckBox, name)
+            if checkbox:
+                checkbox.setChecked(state[0])
+
     def ui_update_status_bits(self):
         """Update the status bits in the UI."""
         all_registers = self.isl94203_driver.read_all_registers()
 
-        status_mapping = {
-            # address 0x80
-            self.bitOVlabel: all_registers.get("bit_ov"),
-            self.bitOVLOlabel: all_registers.get("bit_ovlo"),
-            self.bitUVlabel: all_registers.get("bit_uv"),
-            self.bitUVLOlabel: all_registers.get("bit_uvlo"),
-            self.bitDOTlabel: all_registers.get("bit_dot"),
-            self.bitDUTlabel: all_registers.get("bit_dut"),
-            self.bitCOTlabel: all_registers.get("bit_cot"),
-            self.bitCUTlabel: all_registers.get("bit_cut"),
-            # address 0x81
-            self.bitIOTlabel: all_registers.get("bit_iot"),
-            self.bitCOClabel: all_registers.get("bit_coc"),
-            self.bitDOClabel: all_registers.get("bit_doc"),
-            self.bitDSClabel: all_registers.get("bit_dsc"),
-            self.bitCELLFlabel: all_registers.get("bit_cellf"),
-            self.bitOPENlabel: all_registers.get("bit_open"),
-            self.bitEOCHGlabel: all_registers.get("bit_eochg"),
-            # address 0x82
-            self.bitLDPRSNTlabel: all_registers.get("bit_ld_prsnt"),
-            self.bitCHPRSNTlabel: all_registers.get("bit_ch_prsnt"),
-            self.bitCHINGlabel: all_registers.get("bit_ching"),
-            self.bitDCHINGlabel: all_registers.get("bit_dching"),
-            self.bitLVCHRGlabel: all_registers.get("bit_lvchg"),
-            # address 0x83
-            self.bitCBOTlabel: all_registers.get("bit_cbot"),
-            self.bitCBUTlabel: all_registers.get("bit_cbut"),
-            self.bitCBOVlabel: all_registers.get("bit_cbov"),
-            self.bitCBUVlabel: all_registers.get("bit_cbuv"),
-            self.bitIDLElabel: all_registers.get("bit_in_idle"),
-            self.bitDOZElabel: all_registers.get("bit_in_doze"),
-            self.bitSLEEPlabel: all_registers.get("bit_in_sleep")
+        bits_mapping = {
+            # Current/Charging status bits
+            "bitCharging": all_registers.get("bit_ching"),
+            "bitDischarging": all_registers.get("bit_dching"),
+            "bitEOC": all_registers.get("bit_eochg"),   
+            "bitChargerOn": all_registers.get("bit_ch_prsnt"),
+            "bitLoadOn": all_registers.get("bit_ld_prsnt"),
+            "bitCOC": all_registers.get("bit_coc"),
+            "bitDOC": all_registers.get("bit_doc"),
+            "bitDSC": all_registers.get("bit_dsc"),
+            # Voltage status bits
+            "bitOV": all_registers.get("bit_ov"),
+            "bitUV": all_registers.get("bit_uv"),
+            "bitOVLO": all_registers.get("bit_ovlo"),
+            "bitUVLO": all_registers.get("bit_uvlo"),
+            "bitCBOV": all_registers.get("bit_cbov"),
+            "bitCBUV": all_registers.get("bit_cbuv"),
+            "bitLVCHRG": all_registers.get("bit_lvchg"),
+            # Temperature status bits
+            "bitCOT": all_registers.get("bit_cot"),
+            "bitCUT": all_registers.get("bit_cut"),
+            "bitCBOT": all_registers.get("bit_cbot"),
+            "bitCBUT": all_registers.get("bit_cbut"),
+            "bitDOT": all_registers.get("bit_dot"),
+            "bitDUT": all_registers.get("bit_dut"),
+            "bitIOT": all_registers.get("bit_iot"),
+            # Operating mode status bits
+            "bitIDLE": all_registers.get("bit_in_idle"),
+            "bitDOZE": all_registers.get("bit_in_doze"),
+            "bitSLEEP": all_registers.get("bit_in_sleep"),
+            # Fault status bits
+            "bitCELLF": all_registers.get("bit_cellf"),
+            "bitOPEN": all_registers.get("bit_open"),
         }
 
-        for label, value in status_mapping.items():
-            self.ui_show_status_bit(label, value[0])
-
-    def ui_show_status_bit(self, label, bit_config):
-        if bit_config:
-            self.set_label_background_color(label, QColor(0, 255, 0))
-        else:
-            self.set_label_background_color(label, QColor(255, 255, 255))
-
-    def set_label_background_color(self, label, color):
-        # Set the background color using style sheet
-        current_style = label.styleSheet()
-        label.setStyleSheet(f"{current_style} background-color: {color.name()};")
+        self.update_bit_indicators(bits_mapping)
 
     def get_unit_from_combo(self, combo):
         """Read the combobox and return the unit chosen by user."""
@@ -553,7 +548,7 @@ class BmsTab:
         self.isl94203_driver.write_pack_option_registers(options)
 
     def write_cell_config(self):
-        cell_config = int(self.CellConfigurationLineEdit.text())
+        cell_config = int(self.CellConfigurationCombo.currentText())
         self.isl94203_driver.write_cell_config(cell_config)
 
     def set_serial_protocol(self, serial_protocol):
@@ -777,7 +772,7 @@ class BmsTab:
             self.TLInternalOTRecoverLineEdit.setText(str(temp_limits.get('internal ot recover', '')))
 
             cell_config = configuration.get('cell configuration', {})
-            self.CellConfigurationLineEdit.setText(str(cell_config.get('number of cells', '')))
+            self.CellConfigurationCombo.setCurrentText(str(cell_config.get('number of cells', '')))
 
             pack_option = configuration.get('pack options', {})
             self.poT2MonitorsFETTempCheckBox.setChecked(pack_option.get('xt2 monitors fet temp', False))

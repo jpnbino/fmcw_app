@@ -6,8 +6,10 @@ from logging_config import configure_logging
 
 from PySide6.QtGui import QIcon, QFont, QFontDatabase
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar
-from PySide6.QtCore import QFile, QIODevice, Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar, QScrollArea, QCheckBox
+from PySide6.QtCore import QFile, QIODevice, Qt, QPropertyAnimation, QRect
+
+from qt_material import apply_stylesheet
 
 from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
 from bms.isl94203_driver import ISL94203Driver
@@ -25,8 +27,17 @@ def main():
 
     app = QApplication(sys.argv)
 
+    #apply_stylesheet(app, theme='light_blue.xml')
+
     # Load and set Roboto font
     root_directory = os.path.dirname(os.path.abspath(__file__))
+
+    stylesheet_path = os.path.join(root_directory, "../qt/resources/stylesheet.qss")
+
+    with open(stylesheet_path, "r") as f:
+            custom_stylesheet = f.read()
+    app.setStyleSheet(app.styleSheet() + custom_stylesheet)
+
     font_path = os.path.join(root_directory, "../qt/fonts/Roboto/Roboto-Regular.ttf")
 
     if os.path.exists(font_path):
@@ -44,7 +55,7 @@ def main():
         print(f"Font file not found at: {font_path}")
 
     try:
-        app.setStyle("Fusion")
+        #app.setStyle("Fusion")
 
         # Load the UI file using QUiLoader
         ui_file = QFile(UI_FILE_PATH)
@@ -58,6 +69,21 @@ def main():
             print(loader.errorString())
             sys.exit(-1)
 
+        checkbox_names = ["bitCharging","bitDischarging","bitEOC", 
+                           "bitChargerOn","bitLoadOn",
+                           "bitCOC", "bitDOC", "bitDSC", 
+                           "bitOV", "bitUV", "bitOVLO", "bitUVLO",
+                           "bitCBOV", "bitCBUV", "bitLVCHRG",
+                           "bitCOT","bitCUT","bitCBOT","bitCBUT",
+                           "bitDOT", "bitDUT", "bitIOT",
+                           "bitIDLE", "bitDOZE", "bitSLEEP",
+                           "bitCELLF", "bitOPEN"]
+        for name in checkbox_names:
+            checkbox = window.findChild(QCheckBox, name)
+            if checkbox:
+                checkbox.setProperty("class", "bit-indicator")
+                checkbox.setEnabled(True)
+                
         # Set up the main window
         fmcw_app = FMCWApplication(window)
         fmcw_app.show()
@@ -76,6 +102,12 @@ class FMCWApplication(QMainWindow):
         self.setCentralWidget(window)
         self.setWindowTitle(WINDOW_TITLE)
         self.setWindowIcon(QIcon(ICON_PATH))
+
+        # Enable scrolling
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(window)
+        self.setCentralWidget(self.scroll_area)
 
         self.fmcw_serial_manager = SerialManager()
         self.bms_config = ISL94203Driver()
