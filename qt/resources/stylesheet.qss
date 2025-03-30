@@ -1,0 +1,158 @@
+QMenuBar {
+    background-color:#2596be;
+    color: #fff;
+    spacing: 3px; /* spacing between menu bar items */
+}
+
+QMenuBar::item {
+    padding: 2px 4px;
+    background: transparent;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+QMenuBar::item:selected {
+    background-color: rgba(255, 255, 255, 0.15); /* Lighter background on select */
+}
+
+QMenuBar::item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly lighter on hover */
+    color: #e0e0e0; /* Lighter text on hover */
+}
+
+QMenuBar::item:pressed {
+    background-color: rgba(255, 255, 255, 0.2); /* Even lighter on press */
+}
+
+
+QGroupBox {
+    background-color: #f0f0f0;; /* Lighter background */
+    border: 1px solid #d0d0d0; /* Less intense border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px;
+    margin: 5px;
+    
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 2px 4px;
+    color: #fff; /* White text color */
+    font-weight: bold;
+    background-color: #2596be; /* Optional: Add background to title */
+    border: 1px solid #c0c0c0; /* Optional: Add border to title */
+    border-radius: 3px; /* Optional: Round corners of title */
+    
+}
+
+QLabel {
+    color: #333; /* Darker text color */
+    font-size: 12px; /* Slightly larger font size */
+    padding: 5px;
+}
+
+QPushButton {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e0e0e0); /* Subtle gradient */
+    border: 1px solid #adadad;
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 16px;
+    color: #333;
+}
+
+QPushButton:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e0e0e0, stop: 1 #d0d0d0);
+}
+
+QLineEdit {
+    background-color: #fff;
+    border: 1px solid #c0c0c0;
+    padding: 5px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #81d4fa;
+}
+
+QLineEdit:hover {
+    border: 1px solid #2596be; /* Highlight border on hover */
+}
+
+QLineEdit[objectName="ResistorLineEdit"] {
+    background-color: #f0f0f0;
+    border: 1px solid #a0a0a0;
+}
+
+QLineEdit[objectName="ResistorLineEdit"]:hover {
+    border: 1px solid #2596be; /* Highlight border on hover */
+}
+QTextEdit[objectName="serialLogTextEdit"] {
+    background-color: #fff;
+    border: 1px solid #d0d0d0;
+}
+
+QTabWidget::pane {
+    background-color: #fff; /* Lighter background */
+    border: 1px solid #d0d0d0;
+    border-bottom: 1px solid #d0d0d0; /* Bottom border for the tab widget */
+}
+QTabBar::tab {
+    background-color: transparent;
+    border: 1px solid #d0d0d0;
+    padding: 2px;
+    margin: 1px;
+    margin-right: 2px; /* Space between tabs */
+    min-width: 8ex; /* Minimum width for tabs */
+}
+QTabBar::tab:selected {
+    background-color: #fff; /* Highlighted tab color */
+    color: #333; /* White text color for selected tab */
+    border-bottom-color: #fff; /* Remove bottom border for selected tab */
+    margin-bottom: -1px; /* Overlap with the pane */
+    border-bottom: none;
+}
+QTabBar::tab:!selected {
+    background-color: rgba(234, 234, 234, 0.5); /* Default tab color */
+    color: #555; /* Darker text color for unselected tabs */
+    margin-bottom: -1px; /* Overlap with the pane */
+}
+QTabBar::tab:hover {
+    background-color: rgba(129, 212, 250, 0.5); /* Hover color for tabs with 50% opacity */
+}
+
+QCheckBox {
+    padding: 5px;
+    margin: 2px;
+}
+
+QCheckBox.bit-indicator::indicator:checked {
+    background-color: rgba(0, 150, 0, 1); 
+    border: 1px solid darkgreen;
+    border-radius: 4px; /* Rounded corners */
+}
+
+QCheckBox.bit-indicator::indicator:unchecked {
+    background-color: rgba(150, 150, 150, 1); 
+    border: 1px solid darkgray; 
+    border-radius: 4px; /* Rounded corners */
+}
+
+QComboBox {
+    background-color: #fff;
+    padding: 5px;
+}
+
+QSpinBox {
+    background-color: #fff;
+    padding: 5px;
+    margin: 2px;
+}
+
+/* Border Emphasis */
+QGroupBox#controlsEEPROMGroupBox {
+    border: 2px solid #2596be;
+}
+
+QGroupBox#controlsRAMGroupBox {
+    border: 2px solid #2596be;
+}

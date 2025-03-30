@@ -4,9 +4,9 @@ import sys
 import logging
 from logging_config import configure_logging
 
-from PySide6.QtGui import QIcon, QFont, QFontDatabase
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QColor
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar, QScrollArea, QCheckBox
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar, QScrollArea, QCheckBox, QGraphicsDropShadowEffect
 from PySide6.QtCore import QFile, QIODevice, Qt, QPropertyAnimation, QRect
 
 from qt_material import apply_stylesheet
@@ -77,7 +77,7 @@ def main():
                            "bitCOT","bitCUT","bitCBOT","bitCBUT",
                            "bitDOT", "bitDUT", "bitIOT",
                            "bitIDLE", "bitDOZE", "bitSLEEP",
-                           "bitCELLF", "bitOPEN"]
+                           "bitCELLF", "bitOPEN", "bitPortConnected"]
         for name in checkbox_names:
             checkbox = window.findChild(QCheckBox, name)
             if checkbox:
