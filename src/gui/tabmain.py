@@ -38,6 +38,7 @@ class MainTab:
     def setup_serial_controls(self):
         self.serialComboBox = self.ui.findChild(QComboBox, "serialComboBox")
         self.serialOpenCloseButton = self.ui.findChild(QPushButton, "serialOpenCloseButton")
+        self.serialConnectedBox = self.ui.findChild(QCheckBox, "bitPortConnected")
         self.serialOpenCloseButton.clicked.connect(self.toggle_serial)
         self.update_serial_ports()
 
@@ -459,6 +460,7 @@ class MainTab:
         if self.serialOpenCloseButton.text() == "Open":
             self.serial_manager.open_serial_port(com_port)
             if self.serial_manager.is_open():
+                self.serialConnectedBox.setChecked(True)
                 self.serialOpenCloseButton.setText("Close")
                 self.serial_protocol = SerialProtocolFmcw(self.serial_manager, self.append_serial_log)
                 self.serial_protocol.start()
@@ -469,6 +471,7 @@ class MainTab:
                 self.serial_protocol = None
                 self.bms_tab.set_serial_protocol(None)
 
+            self.serialConnectedBox.setChecked(False)
             self.serial_manager.close_serial_port()
             self.serialOpenCloseButton.setText("Open")
 
