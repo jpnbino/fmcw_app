@@ -16,7 +16,7 @@ class MainTab:
         self.serial_manager = self.ui.fmcw_serial_manager
         self.serial_protocol = None
         self.init_ui()
-        self.bms_tab = BmsTab(ui, bms_config, self.append_serial_log)
+        self.bms_tab = BmsTab(ui, bms_config, self.append_message)
 
     def init_ui(self):
         self.setup_status_bar()
@@ -166,40 +166,40 @@ class MainTab:
         if self.serial_manager and self.serial_manager.is_open():
             value = int(self.poti1ComboBox.currentText())
             self.serial_protocol.send_command(CMD_DIGITAL_POTI_1, [value])
-            self.append_serial_log(f"Sent POTI1 cmd with value: {value}\n")
+            self.append_message(f"Sent POTI1 cmd with value: {value}\n")
         else:
-            self.append_serial_log("Serial port not open") 
+            self.append_message("Serial port not open") 
 
     def send_poti2(self):
         if self.serial_manager and self.serial_manager.is_open():
             value = int(self.poti2ComboBox.currentText())
             self.serial_protocol.send_command(CMD_DIGITAL_POTI_2, [value])
-            self.append_serial_log(f"Sent POTI2 cmd with value: {value}\n")
+            self.append_message(f"Sent POTI2 cmd with value: {value}\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_poti3(self):
         if self.serial_manager and self.serial_manager.is_open():
             value = int(self.poti3ComboBox.currentText())
             self.serial_protocol.send_command(CMD_DIGITAL_POTI_3, [value])
-            self.append_serial_log(f"Sent POTI3 cmd with value: {value}\n")
+            self.append_message(f"Sent POTI3 cmd with value: {value}\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_poti4(self):
         if self.serial_manager and self.serial_manager.is_open():
             value = int(self.poti4ComboBox.currentText())
             self.serial_protocol.send_command(CMD_DIGITAL_POTI_4, [value])
-            self.append_serial_log(f"Sent POTI4 cmd with value: {value}\n")
+            self.append_message(f"Sent POTI4 cmd with value: {value}\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def read_filter_config(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_FILTER_REQUEST, [0])
-            self.append_serial_log("Sent read filter config command\n")
+            self.append_message("Sent read filter config command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
     
     def setup_measurement_controls(self):
         self.measurement1ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna1ADCPushButton")
@@ -228,63 +228,63 @@ class MainTab:
     def send_measurement1_adc(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_1, [0])
-            self.append_serial_log("Sent measurement 1 ADC command\n")
+            self.append_message("Sent measurement 1 ADC command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement2_adc(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_2, [0])
-            self.append_serial_log("Sent measurement 2 ADC command\n")
+            self.append_message("Sent measurement 2 ADC command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement3_adc(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_3, [0])
-            self.append_serial_log("Sent measurement 3 ADC command\n")
+            self.append_message("Sent measurement 3 ADC command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement4_adc(self):
         
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_4, [0])
-            self.append_serial_log("Sent measurement 4 ADC command\n")
+            self.append_message("Sent measurement 4 ADC command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement1_fft(self):
         fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_1, [fft_samples])
-            self.append_serial_log(f"Sent measurement 1 FFT command with {fft_samples} samples\n")
+            self.append_message(f"Sent measurement 1 FFT command with {fft_samples} samples\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement2_fft(self):
         fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_2, [fft_samples])
-            self.append_serial_log(f"Sent measurement 2 FFT command with {fft_samples} samples\n")
+            self.append_message(f"Sent measurement 2 FFT command with {fft_samples} samples\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement3_fft(self):
         fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_3, [fft_samples])
-            self.append_serial_log(f"Sent measurement 3 FFT command with {fft_samples} samples\n")
+            self.append_message(f"Sent measurement 3 FFT command with {fft_samples} samples\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_measurement4_fft(self):
         fft_samples = self.get_fft_samples()
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_4, [fft_samples])
-            self.append_serial_log(f"Sent measurement 4 FFT command with {fft_samples} samples\n")
+            self.append_message(f"Sent measurement 4 FFT command with {fft_samples} samples\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def get_fft_samples(self):
         return int(self.measurementFFTSamplesComboBox.currentText())
@@ -309,51 +309,51 @@ class MainTab:
     def send_modem_rssi(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_RSSI, [0])
-            self.append_serial_log("Sent modem RSSI command\n")
+            self.append_message("Sent modem RSSI command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_modem_temp(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_TEMPERATURE, [0])
-            self.append_serial_log("Sent modem temperature command\n")
+            self.append_message("Sent modem temperature command\n")
         else:
-            self.append_serial_log("Serial port not open")  
+            self.append_message("Serial port not open")  
 
     def send_modem_supply(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_BATTERY, [0])
-            self.append_serial_log("Sent modem supply command\n")
+            self.append_message("Sent modem supply command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_modem_atmonp(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_AT_MONP, [0])
-            self.append_serial_log("Sent modem ATMONP command\n")
+            self.append_message("Sent modem ATMONP command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_modem_atsmonc(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_AT_SMONC, [0])
-            self.append_serial_log("Sent modem ATSMONC command\n")
+            self.append_message("Sent modem ATSMONC command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_modem_ati1(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_TYPE, [0])
-            self.append_serial_log("Sent modem ATI1 command\n")
+            self.append_message("Sent modem ATI1 command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_modem_atcops(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_MODEM_OPERATOR, [0])
-            self.append_serial_log("Sent modem ATCOPS command\n")
+            self.append_message("Sent modem ATCOPS command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def setup_var32bits_controls(self):
         self.var8PushButton = self.ui.findChild(QPushButton, "sendVarPushButton")
@@ -365,11 +365,11 @@ class MainTab:
             value = int(self.var8LineEdit.text())
             if 0 <= value <= 255:
                 self.serial_protocol.send_command(CMD_VAR1_UINT32_1, [value])
-                self.append_serial_log(f"Sent 8-bit value: {value}\n")
+                self.append_message(f"Sent 8-bit value: {value}\n")
             else:
-                self.append_serial_log("Value out of range (0-255)")
+                self.append_message("Value out of range (0-255)")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def setup_remote_controls(self):
         self.remoteLogInPushButton = self.ui.findChild(QPushButton, "remoteLogInPushButton")
@@ -381,16 +381,16 @@ class MainTab:
     def send_remote_log_in(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_LOG_IN, [0xff])
-            self.append_serial_log("Sent remote log in command\n")
+            self.append_message("Sent remote log in command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_remote_log_out(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_LOG_OUT, [0xff])
-            self.append_serial_log("Sent remote log out command\n")
+            self.append_message("Sent remote log out command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def setup_test_command(self):
         self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")
@@ -399,31 +399,31 @@ class MainTab:
     def read_device_status(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_GET_DEVICE_STATUS, [0])
-            self.append_serial_log("Sent read device status command\n")
+            self.append_message("Sent read device status command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def read_calibration_status(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_START_CALIBRATION, [0])
-            self.append_serial_log("Sent read calibration status command\n")
+            self.append_message("Sent read calibration status command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def read_bootloader_status(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_GET_BOOTLOADER_STATUS, [0])
-            self.append_serial_log("Sent read bootloader status command\n")
+            self.append_message("Sent read bootloader status command\n")
 
     def read_sdcard_status(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_GET_SDCARD_STATUS, [0])
-            self.append_serial_log("Sent read SD card status command\n")
+            self.append_message("Sent read SD card status command\n")
 
     def read_remote_status(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_GET_REMOTE_STATUS, [0])
-            self.append_serial_log("Sent read remote status command\n")
+            self.append_message("Sent read remote status command\n")
         
     def setup_serial_log(self):
         self.serial_log_text_edit = self.ui.findChild(QTextEdit, "serialLogTextEdit")
@@ -462,7 +462,7 @@ class MainTab:
             if self.serial_manager.is_open():
                 self.serialConnectedBox.setChecked(True)
                 self.serialOpenCloseButton.setText("Close")
-                self.serial_protocol = SerialProtocolFmcw(self.serial_manager, self.append_serial_log)
+                self.serial_protocol = SerialProtocolFmcw(self.serial_manager, self.append_message)
                 self.serial_protocol.start()
                 self.bms_tab.set_serial_protocol(self.serial_protocol)
         else:
@@ -478,9 +478,9 @@ class MainTab:
     def send_test_command(self):
         if self.serial_manager and self.serial_manager.is_open():
             self.serial_protocol.send_command(CMD_TEST, [0xff])
-            self.append_serial_log("Sent test command\n")
+            self.append_message("Sent test command\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_year(self):
         if self.serial_manager and self.serial_manager.is_open():
@@ -488,9 +488,9 @@ class MainTab:
             year_value = selected_year - 2000
             bcd_value = ((year_value // 10) << 4) | (year_value % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_YEAR, [bcd_value])
-            self.append_serial_log(f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_month(self):
         if self.serial_manager and self.serial_manager.is_open():
@@ -503,18 +503,18 @@ class MainTab:
             month_value = month_map[selected_month]
             bcd_value = ((month_value // 10) << 4) | (month_value % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_MONTH, [bcd_value])
-            self.append_serial_log(f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_day(self):
         if self.serial_manager and self.serial_manager.is_open():
             selected_day = int(self.rtcDayComboBox.currentText())
             bcd_value = ((selected_day // 10) << 4) | (selected_day % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_DAY, [bcd_value])
-            self.append_serial_log(f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_day_of_week(self):
         if self.serial_manager and self.serial_manager.is_open():
@@ -526,46 +526,46 @@ class MainTab:
             day_value = day_map[selected_day]
             bcd_value = ((day_value // 10) << 4) | (day_value % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_DOW, [bcd_value])
-            self.append_serial_log(f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_hour(self):
         if self.serial_manager and self.serial_manager.is_open():
             selected_hour = int(self.rtcHourComboBox.currentText())
             bcd_value = ((selected_hour // 10) << 4) | (selected_hour % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_HOUR, [bcd_value])
-            self.append_serial_log(f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_minute(self):
         if self.serial_manager and self.serial_manager.is_open():
             selected_minute = int(self.rtcMinuteComboBox.currentText())
             bcd_value = ((selected_minute // 10) << 4) | (selected_minute % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_MINUTE, [bcd_value])
-            self.append_serial_log(f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_second(self):
         if self.serial_manager and self.serial_manager.is_open():
             selected_second = int(self.rtcSecondComboBox.currentText())
             bcd_value = ((selected_second // 10) << 4) | (selected_second % 10)
             self.serial_protocol.send_command(CMD_SET_RTC_SECOND, [bcd_value])
-            self.append_serial_log(f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
+            self.append_message(f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
     def send_rtc_calibrate(self):
         if self.serial_manager and self.serial_manager.is_open():
             selected_cal = int(self.rtcCalibrateComboBox.currentText())
             self.serial_protocol.send_command(CMD_SET_RTC_CALIBRATION, [selected_cal])
-            self.append_serial_log(f"Sent RTC calibrate cmd with value: {selected_cal}\n")
+            self.append_message(f"Sent RTC calibrate cmd with value: {selected_cal}\n")
         else:
-            self.append_serial_log("Serial port not open")
+            self.append_message("Serial port not open")
 
-    def append_serial_log(self, message, newline=True):
+    def append_message(self, message, newline=True):
         if isinstance(message, bytes):
             try:
                 message = message.decode('utf-8')
@@ -584,6 +584,6 @@ class MainTab:
             try:
                 data = self.serial_manager.read_all()
                 if data:
-                    self.append_serial_log(data.decode('utf-8'))
+                    self.append_message(data.decode('utf-8'))
             except Exception as e:
                 logging.error(f"Failed to read from serial port: {e}")
