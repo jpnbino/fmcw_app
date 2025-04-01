@@ -1,7 +1,6 @@
 import logging
 from bms.isl94203_constants import *
 from bms.isl94203_factory import ISL94203Factory
-from gui.utility import convert_to_hex
 
 from . import cfg_voltage_registers  as VoltageReg
 from . import cfg_cell_balance_registers  as CellBalReg

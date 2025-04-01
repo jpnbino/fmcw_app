@@ -2,6 +2,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QComboBox, QPushButton, QStatusBar, QTextEdit, QLineEdit, QCheckBox
 from PySide6.QtGui import QTextCursor
 from gui.tabbms import BmsTab
+from gui.userlog import UserLog
 from serialbsp.protocol_fmcw import (
     CMD_DIGITAL_POTI_1, CMD_DIGITAL_POTI_2, CMD_DIGITAL_POTI_3, CMD_DIGITAL_POTI_4, CMD_FILTER_REQUEST, CMD_GET_BOOTLOADER_STATUS, CMD_GET_DEVICE_STATUS, CMD_GET_REMOTE_STATUS, CMD_GET_SDCARD_STATUS, CMD_LOG_IN, CMD_LOG_OUT, CMD_MODEM_AT_MONP, CMD_MODEM_AT_SMONC, CMD_MODEM_BATTERY, CMD_MODEM_OPERATOR, CMD_MODEM_RSSI, CMD_MODEM_TEMPERATURE, CMD_MODEM_TYPE, CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_READ_USER_EEPROM, CMD_START_ADC_MEAS_ANTENNA_1, CMD_START_ADC_MEAS_ANTENNA_2, CMD_START_ADC_MEAS_ANTENNA_3, CMD_START_ADC_MEAS_ANTENNA_4, CMD_START_CALIBRATION, CMD_START_FFT_MEAS_ANTENNA_1, CMD_START_FFT_MEAS_ANTENNA_2, CMD_START_FFT_MEAS_ANTENNA_3, CMD_START_FFT_MEAS_ANTENNA_4, CMD_TEST, CMD_SET_RTC_CALIBRATION, CMD_SET_RTC_DAY, CMD_SET_RTC_DOW, CMD_SET_RTC_HOUR,
     CMD_SET_RTC_MINUTE, CMD_SET_RTC_MONTH, CMD_SET_RTC_SECOND, CMD_SET_RTC_YEAR, CMD_VAR1_UINT32_1, CMD_WRITE_EEPROM, CMD_WRITE_USER_EEPROM, SerialProtocolFmcw
@@ -16,10 +17,12 @@ class MainTab:
         self.serial_manager = self.ui.fmcw_serial_manager
         self.serial_protocol = None
         self.init_ui()
-        self.bms_tab = BmsTab(ui, bms_config, self.append_message)
+        self.user_log = UserLog(self.ui)
+        self.bms_tab = BmsTab(ui, bms_config, self.user_log.append_message)
 
     def init_ui(self):
-        self.setup_status_bar()
+        self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
+
         self.setup_serial_controls()
         self.setup_rtc_controls()
         self.setup_status_controls()
@@ -32,8 +35,6 @@ class MainTab:
         self.setup_serial_log()
         self.setup_timers()
 
-    def setup_status_bar(self):
-        self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
 
     def setup_serial_controls(self):
         self.serialComboBox = self.ui.findChild(QComboBox, "serialComboBox")
@@ -162,44 +163,31 @@ class MainTab:
         self.poti4PushButton.clicked.connect(self.send_poti4)
         self.readFilterConfigPushButton.clicked.connect(self.read_filter_config)
 
-    def send_poti1(self):
+    def _execute_serial_command(self, command, data, log_message):
         if self.serial_manager and self.serial_manager.is_open():
-            value = int(self.poti1ComboBox.currentText())
-            self.serial_protocol.send_command(CMD_DIGITAL_POTI_1, [value])
-            self.append_message(f"Sent POTI1 cmd with value: {value}\n")
+            self.serial_protocol.send_command(command, data)
+            self.user_log.append_message(log_message)
         else:
-            self.append_message("Serial port not open") 
+            self.user_log.append_message("Serial port not open")
+
+    def send_poti1(self):
+        value = int(self.poti1ComboBox.currentText())
+        self._execute_serial_command(CMD_DIGITAL_POTI_1, [value], f"Sent POTI1 cmd with value: {value}\n")
 
     def send_poti2(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            value = int(self.poti2ComboBox.currentText())
-            self.serial_protocol.send_command(CMD_DIGITAL_POTI_2, [value])
-            self.append_message(f"Sent POTI2 cmd with value: {value}\n")
-        else:
-            self.append_message("Serial port not open")
+        value = int(self.poti2ComboBox.currentText())
+        self._execute_serial_command(CMD_DIGITAL_POTI_2, [value], f"Sent POTI2 cmd with value: {value}\n")
 
     def send_poti3(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            value = int(self.poti3ComboBox.currentText())
-            self.serial_protocol.send_command(CMD_DIGITAL_POTI_3, [value])
-            self.append_message(f"Sent POTI3 cmd with value: {value}\n")
-        else:
-            self.append_message("Serial port not open")
+        value = int(self.poti3ComboBox.currentText())
+        self._execute_serial_command(CMD_DIGITAL_POTI_3, [value], f"Sent POTI3 cmd with value: {value}\n")
 
     def send_poti4(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            value = int(self.poti4ComboBox.currentText())
-            self.serial_protocol.send_command(CMD_DIGITAL_POTI_4, [value])
-            self.append_message(f"Sent POTI4 cmd with value: {value}\n")
-        else:
-            self.append_message("Serial port not open")
+        value = int(self.poti4ComboBox.currentText())
+        self._execute_serial_command(CMD_DIGITAL_POTI_4, [value], f"Sent POTI4 cmd with value: {value}\n")
 
     def read_filter_config(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_FILTER_REQUEST, [0])
-            self.append_message("Sent read filter config command\n")
-        else:
-            self.append_message("Serial port not open")
+        self._execute_serial_command(CMD_FILTER_REQUEST, [0], "Sent read filter config command\n")
     
     def setup_measurement_controls(self):
         self.measurement1ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna1ADCPushButton")
@@ -225,66 +213,36 @@ class MainTab:
         self.measurementFFTSamplesComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
         self.measurementFFTSamplesComboBox.setCurrentIndex(0)
 
+    def send_measurement_adc(self, antenna_cmd, antenna_number):
+        self._execute_serial_command(antenna_cmd, [0], f"Sent measurement {antenna_number} ADC command\n")
+
+    def send_measurement_fft(self, antenna_cmd, antenna_number):
+        fft_samples = self.get_fft_samples()
+        self._execute_serial_command(antenna_cmd, [fft_samples], f"Sent measurement {antenna_number} FFT command with {fft_samples} samples\n")
+
     def send_measurement1_adc(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_1, [0])
-            self.append_message("Sent measurement 1 ADC command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_adc(CMD_START_ADC_MEAS_ANTENNA_1, 1)
 
     def send_measurement2_adc(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_2, [0])
-            self.append_message("Sent measurement 2 ADC command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_adc(CMD_START_ADC_MEAS_ANTENNA_2, 2)
 
     def send_measurement3_adc(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_3, [0])
-            self.append_message("Sent measurement 3 ADC command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_adc(CMD_START_ADC_MEAS_ANTENNA_3, 3)
 
     def send_measurement4_adc(self):
-        
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_ADC_MEAS_ANTENNA_4, [0])
-            self.append_message("Sent measurement 4 ADC command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_adc(CMD_START_ADC_MEAS_ANTENNA_4, 4)
 
     def send_measurement1_fft(self):
-        fft_samples = self.get_fft_samples()
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_1, [fft_samples])
-            self.append_message(f"Sent measurement 1 FFT command with {fft_samples} samples\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_fft(CMD_START_FFT_MEAS_ANTENNA_1, 1)
 
     def send_measurement2_fft(self):
-        fft_samples = self.get_fft_samples()
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_2, [fft_samples])
-            self.append_message(f"Sent measurement 2 FFT command with {fft_samples} samples\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_fft(CMD_START_FFT_MEAS_ANTENNA_2, 2)
 
     def send_measurement3_fft(self):
-        fft_samples = self.get_fft_samples()
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_3, [fft_samples])
-            self.append_message(f"Sent measurement 3 FFT command with {fft_samples} samples\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_fft(CMD_START_FFT_MEAS_ANTENNA_3, 3)
 
     def send_measurement4_fft(self):
-        fft_samples = self.get_fft_samples()
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_FFT_MEAS_ANTENNA_4, [fft_samples])
-            self.append_message(f"Sent measurement 4 FFT command with {fft_samples} samples\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_measurement_fft(CMD_START_FFT_MEAS_ANTENNA_4, 4)
 
     def get_fft_samples(self):
         return int(self.measurementFFTSamplesComboBox.currentText())
@@ -305,55 +263,30 @@ class MainTab:
         self.modemdATSMONCPushButton.clicked.connect(self.send_modem_atsmonc)
         self.modemATI1PushButton.clicked.connect(self.send_modem_ati1)
         self.modemATCOPSPushButton.clicked.connect(self.send_modem_atcops)
+        
+    def send_modem_command(self, command, log_message):
+        self._execute_serial_command(command, [0], log_message)
 
     def send_modem_rssi(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_RSSI, [0])
-            self.append_message("Sent modem RSSI command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_RSSI, "Sent modem RSSI command\n")
 
     def send_modem_temp(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_TEMPERATURE, [0])
-            self.append_message("Sent modem temperature command\n")
-        else:
-            self.append_message("Serial port not open")  
+        self.send_modem_command(CMD_MODEM_TEMPERATURE, "Sent modem temperature command\n")
 
     def send_modem_supply(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_BATTERY, [0])
-            self.append_message("Sent modem supply command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_BATTERY, "Sent modem supply command\n")
 
     def send_modem_atmonp(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_AT_MONP, [0])
-            self.append_message("Sent modem ATMONP command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_AT_MONP, "Sent modem ATMONP command\n")
 
     def send_modem_atsmonc(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_AT_SMONC, [0])
-            self.append_message("Sent modem ATSMONC command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_AT_SMONC, "Sent modem ATSMONC command\n")
 
     def send_modem_ati1(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_TYPE, [0])
-            self.append_message("Sent modem ATI1 command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_TYPE, "Sent modem ATI1 command\n")
 
     def send_modem_atcops(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_MODEM_OPERATOR, [0])
-            self.append_message("Sent modem ATCOPS command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.send_modem_command(CMD_MODEM_OPERATOR, "Sent modem ATCOPS command\n")
 
     def setup_var32bits_controls(self):
         self.var8PushButton = self.ui.findChild(QPushButton, "sendVarPushButton")
@@ -396,39 +329,26 @@ class MainTab:
         self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")
         self.testPushButton.clicked.connect(self.send_test_command)
 
+    def read_status(self, command, log_message):
+        self._execute_serial_command(command, [0], log_message)
+
     def read_device_status(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_DEVICE_STATUS, [0])
-            self.append_message("Sent read device status command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.read_status(CMD_GET_DEVICE_STATUS, "Sent read device status command\n")
 
     def read_calibration_status(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_START_CALIBRATION, [0])
-            self.append_message("Sent read calibration status command\n")
-        else:
-            self.append_message("Serial port not open")
+        self.read_status(CMD_START_CALIBRATION, "Sent read calibration status command\n")
 
     def read_bootloader_status(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_BOOTLOADER_STATUS, [0])
-            self.append_message("Sent read bootloader status command\n")
+        self.read_status(CMD_GET_BOOTLOADER_STATUS, "Sent read bootloader status command\n")
 
     def read_sdcard_status(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_SDCARD_STATUS, [0])
-            self.append_message("Sent read SD card status command\n")
+        self.read_status(CMD_GET_SDCARD_STATUS, "Sent read SD card status command\n")
 
     def read_remote_status(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            self.serial_protocol.send_command(CMD_GET_REMOTE_STATUS, [0])
-            self.append_message("Sent read remote status command\n")
+        self.read_status(CMD_GET_REMOTE_STATUS, "Sent read remote status command\n")
         
     def setup_serial_log(self):
-        self.serial_log_text_edit = self.ui.findChild(QTextEdit, "serialLogTextEdit")
-        self.serial_log_clear_button = self.ui.findChild(QPushButton, "serialLogClearPushButton")
-        self.serial_log_clear_button.clicked.connect(self.serial_log_text_edit.clear)
+        pass
 
     def setup_timers(self):
         self.timer = QTimer(self.ui)
@@ -482,88 +402,59 @@ class MainTab:
         else:
             self.append_message("Serial port not open")
 
+    def _int_to_bcd(self, value):
+        return ((value // 10) << 4) | (value % 10)
+    
     def send_rtc_year(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_year = int(self.rtcYearComboBox.currentText())
-            year_value = selected_year - 2000
-            bcd_value = ((year_value // 10) << 4) | (year_value % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_YEAR, [bcd_value])
-            self.append_message(f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_year = int(self.rtcYearComboBox.currentText())
+        year_value = selected_year - 2000
+        bcd_value = self._int_to_bcd(year_value)
+        self._execute_serial_command(CMD_SET_RTC_YEAR, [bcd_value], f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_month(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            month_map = {
-                "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
-                "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
-                "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
-            }
-            selected_month = self.rtcMonthComboBox.currentText()
-            month_value = month_map[selected_month]
-            bcd_value = ((month_value // 10) << 4) | (month_value % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_MONTH, [bcd_value])
-            self.append_message(f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        month_map = {
+            "Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4,
+            "May": 5, "Jun": 6, "Jul": 7, "Aug": 8,
+            "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12
+        }
+        selected_month = self.rtcMonthComboBox.currentText()
+        month_value = month_map[selected_month]
+        bcd_value = self._int_to_bcd(month_value)
+        self._execute_serial_command(CMD_SET_RTC_MONTH, [bcd_value], f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_day(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_day = int(self.rtcDayComboBox.currentText())
-            bcd_value = ((selected_day // 10) << 4) | (selected_day % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_DAY, [bcd_value])
-            self.append_message(f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_day = int(self.rtcDayComboBox.currentText())
+        bcd_value = self._int_to_bcd(selected_day)
+        self._execute_serial_command(CMD_SET_RTC_DAY, [bcd_value], f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_day_of_week(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            day_map = {
-                "Mon": 0, "Tue": 1, "Wed": 2, "Thu": 3,
-                "Fri": 4, "Sat": 5, "Sun": 6
-            }
-            selected_day = self.rtcDowComboBox.currentText()
-            day_value = day_map[selected_day]
-            bcd_value = ((day_value // 10) << 4) | (day_value % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_DOW, [bcd_value])
-            self.append_message(f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        day_map = {
+            "Mon": 0, "Tue": 1, "Wed": 2, "Thu": 3,
+            "Fri": 4, "Sat": 5, "Sun": 6
+        }
+        selected_day = self.rtcDowComboBox.currentText()
+        day_value = day_map[selected_day]
+        bcd_value = self._int_to_bcd(day_value)
+        self._execute_serial_command(CMD_SET_RTC_DOW, [bcd_value], f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_hour(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_hour = int(self.rtcHourComboBox.currentText())
-            bcd_value = ((selected_hour // 10) << 4) | (selected_hour % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_HOUR, [bcd_value])
-            self.append_message(f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_hour = int(self.rtcHourComboBox.currentText())
+        bcd_value = self._int_to_bcd(selected_hour)
+        self._execute_serial_command(CMD_SET_RTC_HOUR, [bcd_value], f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_minute(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_minute = int(self.rtcMinuteComboBox.currentText())
-            bcd_value = ((selected_minute // 10) << 4) | (selected_minute % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_MINUTE, [bcd_value])
-            self.append_message(f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_minute = int(self.rtcMinuteComboBox.currentText())
+        bcd_value = self._int_to_bcd(selected_minute)
+        self._execute_serial_command(CMD_SET_RTC_MINUTE, [bcd_value], f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_second(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_second = int(self.rtcSecondComboBox.currentText())
-            bcd_value = ((selected_second // 10) << 4) | (selected_second % 10)
-            self.serial_protocol.send_command(CMD_SET_RTC_SECOND, [bcd_value])
-            self.append_message(f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_second = int(self.rtcSecondComboBox.currentText())
+        bcd_value = self._int_to_bcd(selected_second)
+        self._execute_serial_command(CMD_SET_RTC_SECOND, [bcd_value], f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_calibrate(self):
-        if self.serial_manager and self.serial_manager.is_open():
-            selected_cal = int(self.rtcCalibrateComboBox.currentText())
-            self.serial_protocol.send_command(CMD_SET_RTC_CALIBRATION, [selected_cal])
-            self.append_message(f"Sent RTC calibrate cmd with value: {selected_cal}\n")
-        else:
-            self.append_message("Serial port not open")
+        selected_cal = int(self.rtcCalibrateComboBox.currentText())
+        self._execute_serial_command(CMD_SET_RTC_CALIBRATION, [selected_cal], f"Sent RTC calibrate cmd with value: {selected_cal}\n")
 
     def append_message(self, message, newline=True):
         if isinstance(message, bytes):

@@ -5,7 +5,6 @@ from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCh
 
 from bms.isl94203_constants import *
 
-from gui.utility import convert_time_to_hex, convert_to_hex
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
 
