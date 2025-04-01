@@ -6136,7 +6136,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Vsense</string>
+                          <string>V</string>
                          </property>
                         </widget>
                        </item>
@@ -6149,7 +6149,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Rsense</string>
+                          <string>R</string>
                          </property>
                         </widget>
                        </item>
@@ -6294,7 +6294,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Isense</string>
+                          <string>I</string>
                          </property>
                         </widget>
                        </item>
@@ -8147,6 +8147,9 @@ RAM Memory</string>
              </property>
              <item>
               <widget class="QCheckBox" name="bitPortConnected">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>10</width>
@@ -8156,8 +8159,11 @@ RAM Memory</string>
                <property name="text">
                 <string/>
                </property>
-               <property name="checked">
+               <property name="checkable">
                 <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
@@ -8316,15 +8322,12 @@ RAM Memory</string>
    <property name="defaultUp">
     <bool>false</bool>
    </property>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>About</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionISL94203_datasheet"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -8333,8 +8336,17 @@ RAM Memory</string>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
-   <addaction name="menuAbout"/>
   </widget>
+  <action name="actionISL94203_datasheet">
+   <property name="text">
+    <string>ISL94203 datasheet</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources/resources.qrc"/>

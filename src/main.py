@@ -82,7 +82,7 @@ def main():
             checkbox = window.findChild(QCheckBox, name)
             if checkbox:
                 checkbox.setProperty("class", "bit-indicator")
-                checkbox.setEnabled(True)
+                checkbox.setEnabled(False)
                 
         # Set up the main window
         fmcw_app = FMCWApplication(window)
