@@ -7,7 +7,7 @@ TEMP_VOLT2CELCIUS_TGAIN0 = ((1000/1.8527))
 
 def internal_temp_to_celsius(value: int) -> float:
     voltage = temperature_from_raw(value)
-    return (voltage * TEMP_VOLT2CELCIUS_TGAIN1) - 273.15
+    return (voltage * TEMP_VOLT2CELCIUS_TGAIN0) - 273.15
 
 def temperature_from_raw(value: int) -> float:
     return value * TEMPERATURE_MULTIPLIER
