@@ -12,7 +12,6 @@ class SerialProtocolFmcw:
         self.pause_event = threading.Event()  # Add an event to control pausing
         self.pause_event.set()  # Initially, the thread is not paused
 
-
     def start(self):
         self.running = True
         self.thread = threading.Thread(target=self.read_data)
@@ -83,33 +82,3 @@ class SerialProtocolFmcw:
         self.serial_manager.ser.write(bytearray(packet))
         self.log_callback(f"Sent packet: {packet}")
         
-    def process_received_data(self, cmd, data):
-        hex_data = ' '.join(f'{value:02X}' for value in data)
-        if cmd == STATUS_REQUEST:
-            self.log_callback(f"Status Request:\n {hex_data}")
-        elif cmd == ERROR_BYTE:
-            self.log_callback(f"Error Byte:\n {hex_data}")
-        elif cmd == BOARD_TRIGGERED:
-            self.log_callback(f"Board Triggered:\n {hex_data}")
-        elif cmd == START_CALIBRATION:
-            self.log_callback(f"Start Calibration:\n {hex_data}")
-        elif cmd in [START_FFT_MEAS_ANTENNA_1, START_FFT_MEAS_ANTENNA_2, START_FFT_MEAS_ANTENNA_3, START_FFT_MEAS_ANTENNA_4]:
-            self.log_callback(f"Start FFT Measurement Antenna {cmd - START_FFT_MEAS_ANTENNA_1 + 1}:\n {hex_data}")
-        elif cmd in [START_ADC_MEAS_ANTENNA_1, START_ADC_MEAS_ANTENNA_2, START_ADC_MEAS_ANTENNA_3, START_ADC_MEAS_ANTENNA_4]:
-            self.log_callback(f"Start ADC Measurement Antenna {cmd - START_ADC_MEAS_ANTENNA_1 + 1}:\n {hex_data}")
-        elif cmd in [CMD_SET_RTC_YEAR, CMD_SET_RTC_MONTH, CMD_SET_RTC_DAY, CMD_SET_RTC_HOUR, CMD_SET_RTC_MINUTE, CMD_SET_RTC_SECOND]:
-            self.log_callback(f"Set RTC {cmd - CMD_SET_RTC_YEAR + 1}:\n {hex_data}")
-        elif cmd in [DIGITAL_POTI_1, DIGITAL_POTI_2, DIGITAL_POTI_3, DIGITAL_POTI_4]:
-            self.log_callback(f"Digital Poti {cmd - DIGITAL_POTI_1 + 1}:\n {hex_data}")
-        elif cmd == FILTER_REQUEST:
-            self.log_callback(f"Filter Request:\n {hex_data}")
-        elif cmd in [RESET_TUSB3410, RESET_ISM, RESET_RS485, RESET]:
-            self.log_callback(f"Reset {cmd - RESET_TUSB3410 + 1}:\n {hex_data}")
-        elif cmd == TABLE_FIRST_ENTRY:
-            self.log_callback(f"Table First Entry:\n {hex_data}")
-        elif cmd == TABLE_ENTRY:
-            self.log_callback(f"Table Entry:\n {hex_data}")
-        elif cmd == TABLE_LAST_ENTRY:
-            self.log_callback(f"Table Last Entry:\n {hex_data}")
-        else:
-            self.log_callback(f"Unknown Command {cmd} with Data:\n {hex_data}")
