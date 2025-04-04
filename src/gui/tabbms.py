@@ -10,8 +10,7 @@ from bms.isl94203_factory import ISL94203Factory
 
 import logging
 
-from serialbsp.commands import CMD_READ_ALL_MEMORY, CMD_READ_RAM, CMD_WRITE_EEPROM
-import yaml
+from serialbsp.commands import get_command_by_name
 
 
 class BmsTab:
@@ -24,6 +23,10 @@ class BmsTab:
         self.log_callback = log_callback
         self.serial_setup = self.ui.fmcw_serial_manager
         self.serial_protocol = None
+
+        self.cmd_read_all_memory = get_command_by_name("CMD_READ_ALL_MEMORY")
+        self.cmd_read_ram = get_command_by_name("CMD_READ_RAM")
+        self.cmd_write_eeprom = get_command_by_name("CMD_WRITE_EEPROM")
         
 
 
@@ -597,7 +600,7 @@ class BmsTab:
 
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
-        self.send_serial_command(CMD_WRITE_EEPROM, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
+        self.send_serial_command(self.cmd_write_eeprom.code, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
         #self.statusBar.showMessage("Configuration written successfully.")
 
     def read_bms_config(self):
@@ -617,8 +620,8 @@ class BmsTab:
             self.serial_setup.reset_input_buffer()
             self.serial_setup.reset_output_buffer()
 
-            self.serial_protocol.send_command(CMD_READ_ALL_MEMORY, [0])
-            packet = self.serial_protocol.read_packet(ISL94203_MEMORY_SIZE)
+            self.serial_protocol.send_command(self.cmd_read_all_memory.code, [0])
+            packet = self.serial_protocol.read_packet(self.cmd_read_all_memory.response_size)
             _, configuration = packet
 
             self.isl94203.set_registers(list(configuration))
@@ -645,7 +648,7 @@ class BmsTab:
             self.serial_setup.reset_input_buffer()
             self.serial_setup.reset_output_buffer()
 
-            self.serial_protocol.send_command(CMD_READ_RAM, [0])
+            self.serial_protocol.send_command(self.cmd_read_ram.code, [0])
             packet = self.serial_protocol.read_packet(ISL94203_RAM_SIZE)
             _, configuration = packet
 
