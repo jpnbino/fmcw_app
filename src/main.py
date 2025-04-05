@@ -15,6 +15,8 @@ from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
 from bms.isl94203_driver import ISL94203Driver
 from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
+from gui.global_log_manager import log_manager
+from gui.userlog import UserLog
 
 from serialbsp.serial_manager import SerialManager
 
@@ -109,8 +111,15 @@ class FMCWApplication(QMainWindow):
         self.scroll_area.setWidget(window)
         self.setCentralWidget(self.scroll_area)
 
+        # Initialize SerialManager
         self.fmcw_serial_manager = SerialManager()
+
+        # Initialize BMS configuration
         self.bms_config = ISL94203Driver()
+
+        # Initialize UserLog and LogManager
+        self.user_log = UserLog(window)
+        log_manager.initialize(self.user_log)
 
         self.main_tab = MainTab(self, self.bms_config)
 

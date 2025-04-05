@@ -12,6 +12,7 @@ import logging
 
 from serialbsp.commands import get_command_by_name
 
+from gui.global_log_manager import log_manager
 
 class BmsTab:
     def __init__(self, ui, bms_driver, log_callback):
@@ -603,6 +604,8 @@ class BmsTab:
         self.send_serial_command(self.cmd_write_eeprom.code, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
         #self.statusBar.showMessage("Configuration written successfully.")
 
+            log_manager.log_message(log_message)
+            log_manager.log_message("Serial port not open")
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
 
