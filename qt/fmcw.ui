@@ -81,7 +81,7 @@
            <enum>QTabWidget::TabPosition::North</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_main">
            <property name="sizePolicy">
@@ -1760,7 +1760,7 @@
                <enum>QTabWidget::TabShape::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <property name="elideMode">
                <enum>Qt::TextElideMode::ElideNone</enum>
@@ -8303,7 +8303,7 @@ RAM Memory</string>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
