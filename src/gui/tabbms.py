@@ -11,7 +11,7 @@ from bms.isl94203_factory import ISL94203Factory
 import logging
 
 from serialbsp.commands import get_command_by_name
-
+from serialbsp.protocol_fmcw import SerialProtocolFmcw
 from gui.global_log_manager import log_manager
 
 class BmsTab:
@@ -22,8 +22,8 @@ class BmsTab:
         self.isl94203 = ISL94203Factory.create_instance()
         self.log_file_path = None
         self.log_callback = log_callback
-        self.serial_setup = self.ui.fmcw_serial_manager
-        self.serial_protocol = None
+        self.serial_manager = self.ui.fmcw_serial_manager
+        self.serial_protocol = SerialProtocolFmcw()
 
         self.cmd_read_all_memory = get_command_by_name("CMD_READ_ALL_MEMORY")
         self.cmd_read_ram = get_command_by_name("CMD_READ_RAM")
@@ -554,10 +554,6 @@ class BmsTab:
         cell_config = int(self.CellConfigurationCombo.currentText())
         self.isl94203_driver.write_cell_config(cell_config)
 
-    def set_serial_protocol(self, serial_protocol):
-        """Set or update the serial_protocol instance."""
-        self.serial_protocol = serial_protocol
-
     def send_serial_command(self, command, data):
         """
         Send a command with data over the serial connection.
@@ -566,11 +562,11 @@ class BmsTab:
             command (str): The command to send.
             data (list): The data to send with the command.
         """
-        if self.serial_setup is None:
+        if self.serial_manager is None:
             logging.error("Serial setup is None")
             return
 
-        if not self.serial_setup.is_open():
+        if not self.serial_manager.is_open():
             logging.warning("Serial port is not open")
             return
 
@@ -583,7 +579,7 @@ class BmsTab:
             logging.error(f"Failed to send serial command: {e}")
 
     def write_bms_config(self):
-        if not self.serial_setup or not self.serial_setup.is_open():
+        if not self.serial_manager or not self.serial_manager.is_open():
             logging.error("Serial port is not open")
             #self.statusBar.showMessage("Error: Serial port is not open.")
             return
@@ -601,29 +597,36 @@ class BmsTab:
 
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
-        self.send_serial_command(self.cmd_write_eeprom.code, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
+        self.send_serial_command(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
         #self.statusBar.showMessage("Configuration written successfully.")
 
+    def _encode_and_send(self, command: int, data: list[int], log_message: str) -> None:
+        """
+        Encodes the command and data, sends it via the serial manager, and logs the message.
+        """
+        if self.serial_manager.is_open():
+            self.serial_protocol.encode_command(command, data)
             log_manager.log_message(log_message)
+        else:
             log_manager.log_message("Serial port not open")
+
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
 
         configuration = []
 
-        if not self.serial_setup or not self.serial_setup.is_open():
+        if not self.serial_manager or not self.serial_manager.is_open():
             error_message = "Serial port is not open"
             logging.error(error_message)
             #self.statusBar.showMessage(f"Error: {error_message}.")
             return
 
         try:
-            self.serial_protocol.pause()
+            self.serial_manager.reset_input_buffer()
+            self.serial_manager.reset_output_buffer()
 
-            self.serial_setup.reset_input_buffer()
-            self.serial_setup.reset_output_buffer()
-
-            self.serial_protocol.send_command(self.cmd_read_all_memory.code, [0])
+            self._encode_and_send(self.cmd_read_all_memory, [0], "Reading BMS configuration...")
+        
             packet = self.serial_protocol.read_packet(self.cmd_read_all_memory.response_size)
             _, configuration = packet
 
@@ -640,18 +643,16 @@ class BmsTab:
         """Read RAM memory configuration from the device via serial"""
         configuration = []
 
-        if not self.serial_setup or not self.serial_setup.is_open():
+        if not self.serial_manager or not self.serial_manager.is_open():
             ERROR_MESSAGE = "Serial port is not open"
             logging.error(ERROR_MESSAGE)
             #self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
             return
         try:
-            self.serial_protocol.pause()
+            self.serial_manager.reset_input_buffer()
+            self.serial_manager.reset_output_buffer()
 
-            self.serial_setup.reset_input_buffer()
-            self.serial_setup.reset_output_buffer()
-
-            self.serial_protocol.send_command(self.cmd_read_ram.code, [0])
+            self.serial_protocol.send_command(self.cmd_read_ram, [0])
             packet = self.serial_protocol.read_packet(ISL94203_RAM_SIZE)
             _, configuration = packet
 

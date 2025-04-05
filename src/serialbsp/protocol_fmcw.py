@@ -1,9 +1,10 @@
 from PySide6.QtCore import QObject, Signal, Slot, QByteArray, QTimer
 from serialbsp.crc8 import calculate_crc, check_crc
 from serialbsp.commands import *
+from time import time, sleep
 
 MINIMUM_PACKET_SIZE = 3  # Minimum packet size (cmd, length, checksum)
-MAXIMZE_PACKET_SIZE = 1024  # Maximum packet size
+MAXIMUM_PACKET_SIZE = 1024  # Maximum packet size
 
 
 class SerialProtocolFmcw(QObject):
@@ -18,7 +19,11 @@ class SerialProtocolFmcw(QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.receive_buffer = bytearray()
-        self.expected_response_cmd = None
+        self._expected_response_cmd = None
+        self._expected_packet_length = None
+        self._pending_response = None # Store the pending response from the last command
+
+        # Timer for packet receive timeout
         self.packet_timeout_timer = QTimer()
         self.packet_timeout_timer.setSingleShot(True)
         self.packet_timeout_timer.timeout.connect(self._handle_packet_timeout)
@@ -26,12 +31,36 @@ class SerialProtocolFmcw(QObject):
 
         # Timer for logging command and byte count every 5000ms
         self.logging_timer = QTimer()
-        self.packet_timeout_timer.setSingleShot(True)
+        self.logging_timer.setSingleShot(True)
         self.logging_timer.timeout.connect(self._log_command_and_byte_count)
-        self.logging_timeout = 5000  # milliseconds
+        self.logging_timeout = 5000 # milliseconds
         
+    def read_packet(self, expected_size: int, timeout: float = 5.0) -> bytes:
+        """
+        Reads a packet from the receive buffer, waiting until the expected size is available
+        or the timeout is reached.
 
-    def encode_command(self, cmd: int, data: list[int]) -> None:
+        Args:
+            expected_size (int): The expected size of the packet.
+            timeout (float): The maximum time to wait for the packet (in seconds).
+
+        Returns:
+            bytes: The extracted packet.
+
+        Raises:
+            TimeoutError: If the packet is not received within the timeout period.
+        """
+        start_time = time()
+        while time() - start_time < timeout:
+            if len(self.receive_buffer) >= expected_size:
+                packet = self._extract_expected_packet()
+                if packet:
+                    return packet
+            sleep(0.01)  # Avoid busy-waiting
+
+        raise TimeoutError(f"Timeout waiting for packet of size {expected_size}")
+    
+    def encode_command(self, cmd: Command, data: list[int]) -> None:
         """
         Encodes a command and its data into a byte array with checksum.
 
@@ -39,13 +68,15 @@ class SerialProtocolFmcw(QObject):
         cmd: The command byte.
         data: A list of data bytes.
         """
-        packet = [cmd] + data
+        self._expected_response_cmd = cmd.code
+        self._expected_packet_length = cmd.response_size   
+
+        packet = [cmd.code] + data
         checksum = calculate_crc(packet + [0])
         packet.append(checksum)
         encoded_data = QByteArray(bytearray(packet))
-        self.command_encoded.emit(encoded_data)
-        self.expected_response_cmd = cmd  # Store the sent command       
-        self.packet_timeout_timer.start(self.packet_timeout)  # Start the timeout
+        self.command_encoded.emit(encoded_data)   
+        self.packet_timeout_timer.start(self.packet_timeout)
         
         self.logging_timer.start(self.logging_timeout)
 
@@ -56,50 +87,98 @@ class SerialProtocolFmcw(QObject):
         This method is connected to the SerialManager's data_received signal.
         """
         self.receive_buffer.extend(raw_data)
-        print("\nBuffer:", " ".join(f"0x{byte:02X}" for byte in self.receive_buffer))
-        #self._try_extract_packets()
+        print("\nBuffer:\n", " ".join(f"0x{byte:02X}" for byte in self.receive_buffer))
+
+        self._try_extract_packets()
 
     def _try_extract_packets(self) -> None:
         while True:
-            packet = self._extract_packet()
-            if packet:
-                self._process_packet(packet)
+            if self._expected_response_cmd is not None and self.receive_buffer and self.receive_buffer[0] == self._expected_response_cmd:
+                # Try to extract the expected response
+                packet, consumed = self._extract_expected_packet()
+                if packet:
+                    self.log_message.emit(f"Response received : {' '.join(f'0x{byte:02X}' for byte in packet)}")
+                    self._pending_response = packet # Store the response
+                    self.data_received.emit(packet) # Still emit for potential further processing
+                    if consumed > 0:
+                        del self.receive_buffer[:consumed]
+                    continue # Try to extract more packets
+                else:
+                    break # Need more data for the expected response
             else:
-                break
+                # Try to extract an unsolicited message
+                unsolicited_packet, consumed = self._extract_unsolicited_packet()
+                if unsolicited_packet:
+                    try:
+                        decoded_message = unsolicited_packet.decode('utf-8', errors='ignore').strip()
+                        if decoded_message:
+                            self.log_message.emit(f"Unsolicited: {decoded_message}")
+                            self.data_received.emit(unsolicited_packet) # Emit unsolicited data as well
+                    except UnicodeDecodeError:
+                        self.log_message.emit(f"Unsolicited (bytes): {' '.join(f'0x{byte:02X}' for byte in unsolicited_packet)}")
+                        self.data_received.emit(unsolicited_packet)
+                    if consumed > 0:
+                        del self.receive_buffer[:consumed]
+                    continue # Try to extract more packets
+                else:
+                    break # No more complete packets in the buffer
 
-    def _extract_packet(self) -> bytes | None:
+            break # If neither expected nor unsolicited could be extracted
+
+    def _extract_expected_packet(self) -> tuple[bytes | None, int]:
         """
-        Attempts to extract a complete packet from the receive buffer,
-        using the expected response command as a guide.
-        Clears the buffer if it exceeds the maximum allowed size.
+        Attempts to extract the expected response packet from the buffer.
+        Returns the packet and the number of bytes consumed from the buffer.
         """
-        if len(self.receive_buffer) > MAXIMZE_PACKET_SIZE:
-            self.log_message.emit("Buffer exceeded maximum size, clearing buffer.")
-            self.receive_buffer.clear()
-            return None
+        if self._expected_response_cmd is None or self._expected_packet_length is None:
+            return None, 0
 
-        if self.expected_response_cmd is None:
-            return None  # not expecting a response yet
-
-        # Check if the first byte of the buffer is the expected command
-        if not self.receive_buffer or self.receive_buffer[0] != self.expected_response_cmd:
-            return None  # Command not found or not at the start of the buffer
-
-        # Packet format [CMD DATA_ARRAY CHECKSUM]
         if len(self.receive_buffer) < MINIMUM_PACKET_SIZE:
-            return None
+            return None, 0 # Need at least the minimum size to determine length
 
-        data_length = self.receive_buffer[1]
-        expected_packet_length = 2 + data_length + 1
+        # Assuming the expected packet has a fixed length
+        if len(self.receive_buffer) >= self._expected_packet_length:
+            packet = bytes(self.receive_buffer[:self._expected_packet_length])
+            received_cmd = packet[0]
+            if len(packet) >= MINIMUM_PACKET_SIZE:
+                received_checksum = packet[-1]
+                calculated_checksum = calculate_crc(list(packet[:-1]) + [0])
+                if received_checksum == calculated_checksum and received_cmd == self._expected_response_cmd:
+                    self.packet_timeout_timer.stop()
+                    return packet, self._expected_packet_length
+                else:
+                    self.log_message.emit(f"Checksum or Command mismatch for expected response. Received: 0x{received_checksum:02X}, Expected: 0x{calculated_checksum:02X}, Received CMD: 0x{received_cmd:02X}, Expected CMD: 0x{self._expected_response_cmd:02X}")
+                    return None, 1 # Consume at least one byte to avoid getting stuck
+            else:
+                return None, 1 # Consume at least one byte
+        return None, 0 # Not enough data for the expected length
 
-        if len(self.receive_buffer) < expected_packet_length:
-            return None  # Wait for more data
+    def _extract_unsolicited_packet(self) -> tuple[bytes | None, int]:
+        """
+        Attempts to extract an unsolicited string message from the buffer.
+        Looks for valid UTF-8 encoded substrings delimited by a newline.
+        Returns the packet and the number of bytes consumed.
+        """
+        if not self.receive_buffer or (self._expected_response_cmd is not None and self.receive_buffer[0] == self._expected_response_cmd):
+            return None, 0
 
-        packet = bytes(self.receive_buffer[:expected_packet_length])
-        self.receive_buffer.clear()  # Clear the entire buffer
-        self.packet_timeout_timer.stop()  # Stop the timeout, we got the packet
-        self.expected_response_cmd = None  # Reset
-        return packet
+        try:
+            decoded_buffer = self.receive_buffer.decode('utf-8', errors='ignore')
+            if decoded_buffer:
+                if '\n' in decoded_buffer:
+                    end_index = decoded_buffer.find('\n')
+                    unsolicited_message_bytes = self.receive_buffer[:end_index + 1]
+                    return unsolicited_message_bytes, end_index + 1
+                else:
+                    if len(self.receive_buffer) > 2 * MAXIMUM_PACKET_SIZE:
+                        self.log_message.emit("Potential runaway unsolicited message, clearing buffer.")
+                        self.receive_buffer.clear()
+                        return None, len(self.receive_buffer) # Consume the whole buffer
+                    return None, 0
+            else:
+                return None, 1 # Consume at least one byte if decoding fails at the start
+        except UnicodeDecodeError:
+            return None, 1 # Consume at least one byte if decoding fails at the start
 
     def _process_packet(self, packet: bytes) -> None:
         """
@@ -115,37 +194,21 @@ class SerialProtocolFmcw(QObject):
             self.data_received.emit(packet)
             self.log_message.emit(f"_process_packet: {' '.join(f'0x{byte:02X}' for byte in packet)}")
 
-        # Example of further processing (replace with your logic):
-        if len(packet) > 2:
-            cmd = packet[0]
-            data_length = packet[1]
-            if len(packet) == 3 + data_length:
-                data = packet[2: 2 + data_length]
-                checksum = packet[2 + data_length]
-
-                calculated_checksum = calculate_crc(list(packet[: 2 + data_length]))
-                if checksum == calculated_checksum:
-                    self.log_message.emit(f"Valid packet received. CMD: {cmd}, Data: {data.hex()}")
-                    # Do something with cmd and data
-                else:
-                    self.error_occurred.emit(f"Checksum error in packet: {packet.hex()}")
-            else:
-                self.error_occurred.emit(f"Packet format error: {packet.hex()}")
-        else:
-            self.error_occurred.emit(f"Unknown packet type: {packet.hex()}")
 
     def _handle_packet_timeout(self) -> None:
         """
         Handles the case where we don't receive the expected response
         within the timeout period.
         """
-        self.error_occurred.emit(f"Timeout waiting for response to CMD: {self.expected_response_cmd}")
-        self.expected_response_cmd = None
+        if self._expected_response_cmd is not None:
+            self.error_occurred.emit(f"Timeout waiting for response to CMD: 0x{self._expected_response_cmd:02X}")
+            self._expected_response_cmd = None
+            self._pending_response = None
 
     def _log_command_and_byte_count(self) -> None:
         """
         Logs the command and the number of bytes received in the buffer.
-        This is called every 5000ms by the logging timer.
+        This is called every 1000ms by the logging timer.
         """
         self.logging_timer.stop()
         if self.receive_buffer:
@@ -155,4 +218,5 @@ class SerialProtocolFmcw(QObject):
             self.log_message.emit(f"Data received:\n{' '.join(f'0x{byte:02X}' for byte in self.receive_buffer)}")
             self.receive_buffer.clear()
         else:
-            self.log_message.emit("No data received in the last 5000ms.")
+            self.log_message.emit("Data Rx Timeout.")
+    

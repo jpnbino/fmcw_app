@@ -9,7 +9,8 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QTextCursor
 from gui.tabbms import BmsTab
 from gui.userlog import UserLog
-from serialbsp.commands import get_command_by_name
+from gui.global_log_manager import log_manager
+from serialbsp.commands import *
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 REFRESH_RATE = 5000
@@ -21,8 +22,7 @@ class MainTab:
         self.serial_manager = self.ui.fmcw_serial_manager
         self.serial_protocol = SerialProtocolFmcw()
         self.init_ui()
-        self.user_log = UserLog(self.ui)
-        self.bms_tab = BmsTab(ui, bms_config, self.user_log.append_message)
+        self.bms_tab = BmsTab(ui, bms_config, log_manager.log_message)
 
         self.cmd_start_adc_meas_antenna_1 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_1")
         self.cmd_start_adc_meas_antenna_2 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_2")
@@ -73,7 +73,7 @@ class MainTab:
         #  Connect protocol's command_encoded signal to SerialManager's send_data
         self.serial_protocol.command_encoded.connect(self.serial_manager.send_data)
         self.serial_protocol.command_encoded.connect(self._send_encoded_data)
-        self.serial_protocol.log_message.connect(self.user_log.append_message)
+        self.serial_protocol.log_message.connect(log_manager.log_message)
       
     def init_ui(self):
         self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
@@ -125,7 +125,7 @@ class MainTab:
     @Slot(str)
     def log_serial_error(self, error_message: str):
         """Logs serial port errors to the user log."""
-        self.user_log.append_message(f"Serial Error: {error_message}")
+        log_manager.log_message(f"Serial Error: {error_message}")
 
     @Slot(QByteArray)
     def _send_encoded_data(self, encoded_data: QByteArray):
@@ -135,7 +135,7 @@ class MainTab:
         """
         self.serial_manager.send_data(bytes(encoded_data))
         hex_values = " ".join(f"0x{byte:02X}" for byte in bytes(encoded_data))
-        self.user_log.append_message(f"Sent encoded data: {hex_values}\n")
+        log_manager.log_message(f"Sent encoded data: {hex_values}\n")
 
     def setup_timers(self):
         self.timer = QTimer(self.ui)
@@ -275,34 +275,34 @@ class MainTab:
         self.poti4PushButton.clicked.connect(self.send_poti4)
         self.readFilterConfigPushButton.clicked.connect(self.read_filter_config)
 
-    def _encode_and_send(self, command: int, data: list[int], log_message: str) -> None:
+    def _encode_and_send(self, command: Command, data: list[int], log_message: str) -> None:
         """
         Encodes the command and data, sends it via the serial manager, and logs the message.
         """
         if self.serial_manager.is_open():
             self.serial_protocol.encode_command(command, data)
-            self.user_log.append_message(log_message)
+            log_manager.log_message(log_message)
         else:
-            self.user_log.append_message("Serial port not open")
+            log_manager.log_message("Serial port not open")
 
     def send_poti1(self):
         value = int(self.poti1ComboBox.currentText())
-        self._encode_and_send(self.cmd_digital_poti_1.code, [value], f"Sent POTI1 cmd with value: {value}\n")
+        self._encode_and_send(self.cmd_digital_poti_1, [value], f"Sent POTI1 cmd with value: {value}\n")
 
     def send_poti2(self):
         value = int(self.poti2ComboBox.currentText())
-        self._encode_and_send(self.cmd_digital_poti_2.code, [value], f"Sent POTI2 cmd with value: {value}\n")
+        self._encode_and_send(self.cmd_digital_poti_2, [value], f"Sent POTI2 cmd with value: {value}\n")
 
     def send_poti3(self):
         value = int(self.poti3ComboBox.currentText())
-        self._encode_and_send(self.cmd_digital_poti_3.code, [value], f"Sent POTI3 cmd with value: {value}\n")
+        self._encode_and_send(self.cmd_digital_poti_3, [value], f"Sent POTI3 cmd with value: {value}\n")
 
     def send_poti4(self):
         value = int(self.poti4ComboBox.currentText())
-        self._encode_and_send(self.cmd_digital_poti_4.code, [value], f"Sent POTI4 cmd with value: {value}\n")
+        self._encode_and_send(self.cmd_digital_poti_4, [value], f"Sent POTI4 cmd with value: {value}\n")
 
     def read_filter_config(self):
-        self._encode_and_send(self.cmd_filter_request.code, [0], "Sent read filter config command\n")
+        self._encode_and_send(self.cmd_filter_request, [0], "Sent read filter config command\n")
     
     def setup_measurement_controls(self):
         self.measurement1ADCPushButton = self.ui.findChild(QPushButton, "sendAntenna1ADCPushButton")
@@ -336,28 +336,28 @@ class MainTab:
         self._encode_and_send(antenna_cmd, [fft_samples], f"Sent measurement {antenna_number} FFT command with {fft_samples} samples\n")
 
     def send_measurement1_adc(self):
-        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_1.code, 1)
+        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_1, 1)
 
     def send_measurement2_adc(self):
-        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_2.code, 2)
+        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_2, 2)
 
     def send_measurement3_adc(self):
-        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_3.code, 3)
+        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_3, 3)
 
     def send_measurement4_adc(self):
-        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_4.code, 4)
+        self.send_measurement_adc(self.cmd_start_adc_meas_antenna_4, 4)
 
     def send_measurement1_fft(self):
-        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_1.code, 1)
+        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_1, 1)
 
     def send_measurement2_fft(self):
-        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_2.code, 2)
+        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_2, 2)
 
     def send_measurement3_fft(self):
-        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_3.code, 3)
+        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_3, 3)
 
     def send_measurement4_fft(self):
-        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_4.code, 4)
+        self.send_measurement_fft(self.cmd_start_fft_meas_antenna_4, 4)
 
     def get_fft_samples(self):
         return int(self.measurementFFTSamplesComboBox.currentText())
@@ -383,25 +383,25 @@ class MainTab:
         self._encode_and_send(command, [0], log_message)
 
     def send_modem_rssi(self):
-        self.send_modem_command(self.cmd_modem_rssi.code, "Sent modem RSSI command\n")
+        self.send_modem_command(self.cmd_modem_rssi, "Sent modem RSSI command\n")
 
     def send_modem_temp(self):
-        self.send_modem_command(self.cmd_modem_temperature.code, "Sent modem temperature command\n")
+        self.send_modem_command(self.cmd_modem_temperature, "Sent modem temperature command\n")
 
     def send_modem_supply(self):
-        self.send_modem_command(self.cmd_modem_battery.code, "Sent modem supply command\n")
+        self.send_modem_command(self.cmd_modem_battery, "Sent modem supply command\n")
 
     def send_modem_atmonp(self):
-        self.send_modem_command(self.cmd_modem_at_monp.code, "Sent modem ATMONP command\n")
+        self.send_modem_command(self.cmd_modem_at_monp, "Sent modem ATMONP command\n")
 
     def send_modem_atsmonc(self):
-        self.send_modem_command(self.cmd_modem_at_smonc.code, "Sent modem ATSMONC command\n")
+        self.send_modem_command(self.cmd_modem_at_smonc, "Sent modem ATSMONC command\n")
 
     def send_modem_ati1(self):
         self.send_modem_command(self.cmd_modem_type, "Sent modem ATI1 command\n")
 
     def send_modem_atcops(self):
-        self.send_modem_command(self.cmd_modem_operator.code, "Sent modem ATCOPS command\n")
+        self.send_modem_command(self.cmd_modem_operator, "Sent modem ATCOPS command\n")
 
     def setup_var32bits_controls(self):
         self.var8PushButton = self.ui.findChild(QPushButton, "sendVarPushButton")
@@ -411,10 +411,10 @@ class MainTab:
     def send_var8bits(self):
         value = int(self.var8LineEdit.text())
         if 0 <= value <= 255:
-            self._encode_and_send(self.cmd_var1_uint32_1.code, [value])
-            self.user_log.append_message(f"Sent 8-bit value: {value}\n")
+            self._encode_and_send(self.cmd_var1_uint32_1, [value])
+            log_manager.log_message(f"Sent 8-bit value: {value}\n")
         else:
-            self.user_log.append_message("Value out of range (0-255)")
+            log_manager.log_message("Value out of range (0-255)")
 
     def setup_remote_controls(self):
         self.remoteLogInPushButton = self.ui.findChild(QPushButton, "remoteLogInPushButton")
@@ -424,7 +424,7 @@ class MainTab:
 
     def send_remote(self, command, log_message):
             self._encode_and_send(command, [0xff])
-            self.user_log.append_message(log_message)
+            log_manager.log_message(log_message)
 
     def send_remote_log_in(self):
         self.send_remote(CMD_LOG_IN, "Sent remote log in command\n")
@@ -436,26 +436,26 @@ class MainTab:
         self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")
         self.testPushButton.clicked.connect(self.send_test_command)
 
-    def read_status(self, command, log_message):
+    def read_status(self, command: Command, log_message):
         self._encode_and_send(command, [0], log_message)
 
     def read_device_status(self):
-        self.read_status(self.cmd_get_device_status.code, "Sent read device status command\n")
+        self.read_status(self.cmd_get_device_status, "Sent read device status command\n")
 
     def read_calibration_status(self):
-        self.read_status(CMD_START_CALIBRATION, "Sent read calibration status command\n")
+        self.read_status(self.cmd_start_calibration, "Sent read calibration status command\n")
 
     def read_bootloader_status(self):
-        self.read_status(CMD_GET_BOOTLOADER_STATUS, "Sent read bootloader status command\n")
+        self.read_status(self.cmd_get_bootloader_status, "Sent read bootloader status command\n")
 
     def read_sdcard_status(self):
-        self.read_status(self.cmd_get_sdcard_status.code, "Sent read SD card status command\n")
+        self.read_status(self.cmd_get_sdcard_status, "Sent read SD card status command\n")
 
     def read_remote_status(self):
-        self.read_status(self.cmd_get_remote_status.code, "Sent read remote status command\n")
+        self.read_status(self.cmd_get_remote_status, "Sent read remote status command\n")
 
     def send_test_command(self):
-        self._encode_and_send(self.cmd_test.code, [0xff], "Sent test command\n")
+        self._encode_and_send(self.cmd_test, [0xff], "Sent test command\n")
 
     def _int_to_bcd(self, value):
         return ((value // 10) << 4) | (value % 10)
@@ -464,7 +464,7 @@ class MainTab:
         selected_year = int(self.rtcYearComboBox.currentText())
         year_value = selected_year - 2000
         bcd_value = self._int_to_bcd(year_value)
-        self._encode_and_send(self.cmd_set_rtc_year.code, [bcd_value], f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_year, [bcd_value], f"Sent RTC year cmd with value: {selected_year} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_month(self):
         month_map = {
@@ -475,12 +475,12 @@ class MainTab:
         selected_month = self.rtcMonthComboBox.currentText()
         month_value = month_map[selected_month]
         bcd_value = self._int_to_bcd(month_value)
-        self._encode_and_send(self.cmd_set_rtc_month.code, [bcd_value], f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_month, [bcd_value], f"Sent RTC month cmd with value: {selected_month} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_day(self):
         selected_day = int(self.rtcDayComboBox.currentText())
         bcd_value = self._int_to_bcd(selected_day)
-        self._encode_and_send(self.cmd_set_rtc_day.code, [bcd_value], f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_day, [bcd_value], f"Sent RTC day cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_day_of_week(self):
         day_map = {
@@ -490,24 +490,24 @@ class MainTab:
         selected_day = self.rtcDowComboBox.currentText()
         day_value = day_map[selected_day]
         bcd_value = self._int_to_bcd(day_value)
-        self._encode_and_send(self.cmd_set_rtc_dow.code, [bcd_value], f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_dow, [bcd_value], f"Sent RTC day of week cmd with value: {selected_day} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_hour(self):
         selected_hour = int(self.rtcHourComboBox.currentText())
         bcd_value = self._int_to_bcd(selected_hour)
-        self._encode_and_send(self.cmd_set_rtc_hour.code, [bcd_value], f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_hour, [bcd_value], f"Sent RTC hour cmd with value: {selected_hour} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_minute(self):
         selected_minute = int(self.rtcMinuteComboBox.currentText())
         bcd_value = self._int_to_bcd(selected_minute)
-        self._encode_and_send(self.cmd_set_rtc_minute.code, [bcd_value], f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_minute, [bcd_value], f"Sent RTC minute cmd with value: {selected_minute} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_second(self):
         selected_second = int(self.rtcSecondComboBox.currentText())
         bcd_value = self._int_to_bcd(selected_second)
-        self._encode_and_send(self.cmd_set_rtc_second.code, [bcd_value], f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
+        self._encode_and_send(self.cmd_set_rtc_second, [bcd_value], f"Sent RTC second cmd with value: {selected_second} (BCD: {bcd_value:02X})\n")
 
     def send_rtc_calibrate(self):
         selected_cal = int(self.rtcCalibrateComboBox.currentText())
-        self._encode_and_send(self.cmd_set_rtc_year.code, [selected_cal], f"Sent RTC calibrate cmd with value: {selected_cal}\n")
+        self._encode_and_send(self.cmd_set_rtc_year, [selected_cal], f"Sent RTC calibrate cmd with value: {selected_cal}\n")
     

@@ -15,11 +15,11 @@ class Command:
 
 # Define all commands
 COMMANDS = [
-    Command(name="CMD_GET_DEVICE_STATUS", code=0x08, response_size=20, description="Get device status"),
+    Command(name="CMD_GET_DEVICE_STATUS", code=0x08, response_size=25, description="Get device status"),
     Command(name="CMD_START_CALIBRATION", code=0x0B, response_size=20, description="Start calibration"),
-    Command(name="CMD_GET_BOOTLOADER_STATUS", code=0x0C, response_size=20, description="Get bootloader status"),
+    Command(name="CMD_GET_BOOTLOADER_STATUS", code=0x0C, response_size=11, description="Get bootloader status"),
     Command(name="CMD_GET_SDCARD_STATUS", code=0x0D, response_size=20, description="Get SD card status"),
-    Command(name="CMD_GET_REMOTE_STATUS", code=0x0E, response_size=20, description="Get remote status"),
+    Command(name="CMD_GET_REMOTE_STATUS", code=0x0E, response_size=26, description="Get remote status"),
     Command(name="CMD_START_FFT_MEAS_ANTENNA_1", code=0x10, response_size=10, description="Start FFT measurement on antenna 1"),
     Command(name="CMD_START_ADC_MEAS_ANTENNA_1", code=0x11, response_size=12, description="Start ADC measurement on antenna 1"),
     Command(name="CMD_START_FFT_MEAS_ANTENNA_2", code=0x12, response_size=10, description="Start FFT measurement on antenna 2"),
