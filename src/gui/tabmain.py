@@ -17,12 +17,12 @@ REFRESH_RATE = 5000
 MESSAGE_DURATION = 5000
 
 class MainTab:
-    def __init__(self, ui, bms_config):
+    def __init__(self, ui, serial_manager, serial_protocol):
         self.ui = ui
-        self.serial_manager = self.ui.fmcw_serial_manager
-        self.serial_protocol = SerialProtocolFmcw()
+        self.serial_manager = serial_manager
+        self.serial_protocol = serial_protocol
         self.init_ui()
-        self.bms_tab = BmsTab(ui, bms_config, log_manager.log_message)
+        
 
         self.cmd_start_adc_meas_antenna_1 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_1")
         self.cmd_start_adc_meas_antenna_2 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_2")
@@ -65,15 +65,10 @@ class MainTab:
         self.cmd_set_rtc_second = get_command_by_name("CMD_SET_RTC_SECOND")
         self.cmd_set_rtc_calibration = get_command_by_name("CMD_SET_RTC_CALIBRATION")
         self.cmd_set_rtc_dow = get_command_by_name("CMD_SET_RTC_DOW")
-
-        #  Connect SerialManager's data_received to the protocol handler
-        self.serial_manager.data_received.connect(
-            self.serial_protocol.handle_raw_data
-        )
+ 
         #  Connect protocol's command_encoded signal to SerialManager's send_data
-        self.serial_protocol.command_encoded.connect(self.serial_manager.send_data)
         self.serial_protocol.command_encoded.connect(self._send_encoded_data)
-        self.serial_protocol.log_message.connect(log_manager.log_message)
+
       
     def init_ui(self):
         self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
@@ -422,15 +417,15 @@ class MainTab:
         self.remoteLogInPushButton.clicked.connect(self.send_remote_log_in)
         self.remoteLogOutPushButton.clicked.connect(self.send_remote_log_out)
 
-    def send_remote(self, command, log_message):
-            self._encode_and_send(command, [0xff])
+    def send_remote(self, command: Command, log_message):
+            self._encode_and_send(command, [0xff], command.description)
             log_manager.log_message(log_message)
 
     def send_remote_log_in(self):
-        self.send_remote(CMD_LOG_IN, "Sent remote log in command\n")
+        self.send_remote(self.cmd_log_in, "Sent remote log in command\n")
 
     def send_remote_log_out(self):
-        self.send_remote(CMD_LOG_OUT, "Sent remote log out command\n")
+        self.send_remote(self.cmd_log_out, "Sent remote log out command\n")
 
     def setup_test_command(self):
         self.testPushButton = self.ui.findChild(QPushButton, "sendTestCmdPushButton")

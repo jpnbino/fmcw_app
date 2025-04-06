@@ -10,26 +10,26 @@ from bms.isl94203_factory import ISL94203Factory
 
 import logging
 
-from serialbsp.commands import get_command_by_name
+from serialbsp.commands import *
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
 from gui.global_log_manager import log_manager
 
 class BmsTab:
-    def __init__(self, ui, bms_driver, log_callback):
+    def __init__(self, ui, serial_manager, serial_protocol, bms_driver):
         self.ui = ui
+        self.serial_manager = serial_manager
+        self.serial_protocol = serial_protocol
+        
         self.resistor = 0.005
         self.isl94203_driver = bms_driver
         self.isl94203 = ISL94203Factory.create_instance()
         self.log_file_path = None
-        self.log_callback = log_callback
-        self.serial_manager = self.ui.fmcw_serial_manager
-        self.serial_protocol = SerialProtocolFmcw()
 
         self.cmd_read_all_memory = get_command_by_name("CMD_READ_ALL_MEMORY")
         self.cmd_read_ram = get_command_by_name("CMD_READ_RAM")
         self.cmd_write_eeprom = get_command_by_name("CMD_WRITE_EEPROM")
-        
 
+        self.serial_protocol.data_received.connect(self.process_bms_response)
 
         # Connect button click to Send Serial Command
         self.ui.findChild(QPushButton, "readPackButton").clicked.connect(self.read_bms_config)
@@ -600,7 +600,7 @@ class BmsTab:
         self.send_serial_command(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
         #self.statusBar.showMessage("Configuration written successfully.")
 
-    def _encode_and_send(self, command: int, data: list[int], log_message: str) -> None:
+    def _encode_and_send(self, command: Command, data: list[int], log_message: str) -> None:
         """
         Encodes the command and data, sends it via the serial manager, and logs the message.
         """
@@ -610,10 +610,27 @@ class BmsTab:
         else:
             log_manager.log_message("Serial port not open")
 
+    def process_bms_response(self, packet: bytes) -> None:
+        """
+        Process the response packet from the BMS.
+        """
+        try:
+            print("packet[0]:", packet[0])
+            if packet[0] != self.cmd_read_all_memory.code:
+                return
+            print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
+            print("packet length:", len(packet))
+            self.isl94203.set_registers(list(packet[2:-1]))
+            self.ui_update_fields()
+            register_cfg = self.isl94203.get_registers()
+            logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
+            # self.statusBar.showMessage("Configuration read successfully.")
+        except Exception as e:
+            logging.error(f"Failed to process BMS response: {e}")
+            # self.statusBar.showMessage(f"Error: {e}")
+
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
-
-        configuration = []
 
         if not self.serial_manager or not self.serial_manager.is_open():
             error_message = "Serial port is not open"
@@ -626,18 +643,10 @@ class BmsTab:
             self.serial_manager.reset_output_buffer()
 
             self._encode_and_send(self.cmd_read_all_memory, [0], "Reading BMS configuration...")
-        
-            packet = self.serial_protocol.read_packet(self.cmd_read_all_memory.response_size)
-            _, configuration = packet
-
-            self.isl94203.set_registers(list(configuration))
-            self.ui_update_fields()
-            register_cfg = self.isl94203.get_registers()
-            logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-            #self.statusBar.showMessage("Configuration read successfully.")
         except Exception as e:
-            logging.error(f"Failed to read BMS configuration: {e}")
-            #self.statusBar.showMessage(f"Error: {e}")
+            logging.error(f"Failed to send command to read BMS configuration: {e}")
+            # self.statusBar.showMessage(f"Error: {e}")
+            
 
     def read_bms_ram_config(self):
         """Read RAM memory configuration from the device via serial"""

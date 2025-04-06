@@ -19,6 +19,7 @@ from gui.global_log_manager import log_manager
 from gui.userlog import UserLog
 
 from serialbsp.serial_manager import SerialManager
+from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
 def main():
     configure_logging()
@@ -112,7 +113,14 @@ class FMCWApplication(QMainWindow):
         self.setCentralWidget(self.scroll_area)
 
         # Initialize SerialManager
-        self.fmcw_serial_manager = SerialManager()
+        self.serial_manager = SerialManager()
+        self.serial_protocol = SerialProtocolFmcw()
+
+        # Connect SerialManager and SerialProtocolFmcw
+        self.serial_manager.data_received.connect(self.serial_protocol.handle_raw_data)
+        self.serial_protocol.command_encoded.connect(self.serial_manager.send_data)
+        self.serial_protocol.log_message.connect(log_manager.log_message)
+
 
         # Initialize BMS configuration
         self.bms_config = ISL94203Driver()
@@ -121,7 +129,8 @@ class FMCWApplication(QMainWindow):
         self.user_log = UserLog(window)
         log_manager.initialize(self.user_log)
 
-        self.main_tab = MainTab(self, self.bms_config)
+        self.main_tab = MainTab(self, self.serial_manager, self.serial_protocol)
+        self.bms_tab = BmsTab(self, self.serial_manager, self.serial_protocol, self.bms_config)
 
         self.logRateSpinBox = window.findChild(QSpinBox, "logRateSpinBox")
         self.logRateSpinBox.setMinimum(1)
