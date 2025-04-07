@@ -1,16 +1,14 @@
 import os
 import sys
 import logging
-from logging_config import configure_logging
 
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QColor
+
+from PySide6.QtGui import QIcon, QFont, QFontDatabase
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar, QScrollArea, QCheckBox, QGraphicsDropShadowEffect
-from PySide6.QtCore import QFile, QIODevice, Qt, QPropertyAnimation, QRect
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QSpinBox, QStatusBar, QScrollArea, QCheckBox
+from PySide6.QtCore import QFile, QIODevice, Qt
 
-from qt_material import apply_stylesheet
-
-from app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH
+from config.app_config import WINDOW_TITLE, ICON_PATH, UI_FILE_PATH, get_resource_path
 from bms.isl94203_driver import ISL94203Driver
 from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
@@ -19,6 +17,9 @@ from gui.userlog import UserLog
 
 from serialbsp.serial_manager import SerialManager
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
+
+from logger.logging_config import configure_logging
+
 
 def main():
     configure_logging()
@@ -30,15 +31,13 @@ def main():
     app = QApplication(sys.argv)
 
     # Load and set Roboto font
-    root_directory = os.path.dirname(os.path.abspath(__file__))
-
-    stylesheet_path = os.path.join(root_directory, "../qt/resources/stylesheet.qss")
+    stylesheet_path = get_resource_path("qt/resources/stylesheet.qss")
 
     with open(stylesheet_path, "r") as f:
             custom_stylesheet = f.read()
     app.setStyleSheet(app.styleSheet() + custom_stylesheet)
 
-    font_path = os.path.join(root_directory, "../qt/fonts/Roboto/Roboto-Regular.ttf")
+    font_path = get_resource_path("qt/fonts/Roboto/Roboto-Regular.ttf")
 
     if os.path.exists(font_path):
         print(f"Font file found at: {font_path}")
