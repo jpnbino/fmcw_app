@@ -605,8 +605,9 @@ class BmsTab:
         Encodes the command and data, sends it via the serial manager, and logs the message.
         """
         if self.serial_manager.is_open():
-            self.serial_protocol.encode_command(command, data)
             log_manager.log_message(log_message)
+            self.serial_protocol.encode_command(command, data)
+            
         else:
             log_manager.log_message("Serial port not open")
 
@@ -615,7 +616,6 @@ class BmsTab:
         Process the response packet from the BMS.
         """
         try:
-            print("packet[0]:", packet[0])
             if packet[0] != self.cmd_read_all_memory.code:
                 return
             print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
@@ -624,7 +624,7 @@ class BmsTab:
             self.ui_update_fields()
             register_cfg = self.isl94203.get_registers()
             logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-            # self.statusBar.showMessage("Configuration read successfully.")
+            self.statusBar.showMessage("Configuration read successfully.")
         except Exception as e:
             logging.error(f"Failed to process BMS response: {e}")
             # self.statusBar.showMessage(f"Error: {e}")
@@ -641,8 +641,8 @@ class BmsTab:
         try:
             self.serial_manager.reset_input_buffer()
             self.serial_manager.reset_output_buffer()
+            self._encode_and_send(self.cmd_read_all_memory, [0], self.cmd_read_all_memory.description)
 
-            self._encode_and_send(self.cmd_read_all_memory, [0], "Reading BMS configuration...")
         except Exception as e:
             logging.error(f"Failed to send command to read BMS configuration: {e}")
             # self.statusBar.showMessage(f"Error: {e}")

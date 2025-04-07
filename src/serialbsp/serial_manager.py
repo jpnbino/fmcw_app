@@ -24,6 +24,7 @@ class SerialManager(QObject):
 
         # Start the reader when the thread starts
         self.read_thread.started.connect(self.reader.run)
+        print("SerialManager is running")
 
     def get_available_ports(self) -> list[tuple[str, str]]:
         """Returns a list of available serial ports."""
@@ -106,7 +107,7 @@ class SerialPortReader(QObject):
                 data = self.serial_port.read_all()
                 if data:
                     self.data_received.emit(data)
-                    print (f"Data received: {data}\n")
+
             except SerialException as e:
                 self.error_occurred.emit(f"Serial exception: {e}")
                 break  # Exit the loop on error

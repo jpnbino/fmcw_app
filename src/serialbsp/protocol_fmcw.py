@@ -29,10 +29,10 @@ class SerialProtocolFmcw(QObject):
         self.packet_rx_timeout_timer.timeout.connect(self._handle_packet_timeout)
         self.packet_timeout = 4000  # milliseconds
 
-        # Timer for logging command and byte count every 2000ms
-        self.logging_timer = QTimer()
-        self.logging_timer.setSingleShot(True)
-        self.logging_timer.timeout.connect(self._log_command_and_byte_count)
+        # Timer Used for debugging purposes to log the command and byte count
+        self.dbg_logging_timer = QTimer()
+        self.dbg_logging_timer.setSingleShot(True)
+        self.dbg_logging_timer.timeout.connect(self._log_command_and_byte_count)
         self.logging_timeout = 5000 # milliseconds
         
     def read_packet(self, expected_size: int, timeout: float = 4.0) -> bytes:
@@ -77,7 +77,7 @@ class SerialProtocolFmcw(QObject):
         self.command_encoded.emit(encoded_data)   
         self.packet_rx_timeout_timer.start(self.packet_timeout)
         
-        self.logging_timer.start(self.logging_timeout)
+        #self.dbg_logging_timer.start(self.logging_timeout)
 
     @Slot(bytes)
     def handle_raw_data(self, raw_data: bytes) -> None:
@@ -104,7 +104,7 @@ class SerialProtocolFmcw(QObject):
                 # Try to extract the expected response
                 packet, consumed = self._extract_expected_packet()
                 if packet:
-                    self.log_message.emit(f"Response received : {' '.join(f'0x{byte:02X}' for byte in packet)}")
+                    self.log_message.emit(f"Rx: {' '.join(f'0x{byte:02X}' for byte in packet)}\n")
                     self._pending_response = packet # Store the response
                     self.data_received.emit(packet) # Still emit for potential further processing
                     if consumed > 0:
@@ -211,7 +211,6 @@ class SerialProtocolFmcw(QObject):
             self.data_received.emit(packet)
             self.log_message.emit(f"_process_packet: {' '.join(f'0x{byte:02X}' for byte in packet)}")
 
-
     def _handle_packet_timeout(self) -> None:
         """
         Handles the case where we don't receive the expected response
@@ -228,7 +227,7 @@ class SerialProtocolFmcw(QObject):
         Debugging function to log the command and byte count every 5 seconds.
         This is useful for checking the command size without knowing it beforehand.
         """
-        self.logging_timer.stop()
+        self.dbg_logging_timer.stop()
         if self.receive_buffer:
             cmd = self.receive_buffer[0] if len(self.receive_buffer) > 0 else None
             byte_count = len(self.receive_buffer)

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from bms.isl94203_constants import ISL94203_MEMORY_SIZE
+from bms.isl94203_constants import ISL94203_MEMORY_SIZE, ISL94203_RAM_SIZE
 
 ERROR_BYTE = 0x09
 BOARD_TRIGGERED = 0x0A
@@ -69,12 +69,12 @@ COMMANDS = [
     Command(name="CMD_SDCARD_WRITE", code=0x4B, response_size=64, description="Write to SD card"),
     Command(name="CMD_SDCARD_READ", code=0x4C, response_size=64, description="Read from SD card"),
     Command(name="CMD_SDCARD_DELETE", code=0x4D, response_size=64, description="Delete from SD card"),
-    Command(name="CMD_READ_ALL_MEMORY", code=0x51, response_size=ISL94203_MEMORY_SIZE+3, description="Read all memory"),
-    Command(name="CMD_READ_EEPROM", code=0x52, response_size=64, description="Read EEPROM"),
-    Command(name="CMD_WRITE_EEPROM", code=0x53, response_size=64, description="Write EEPROM"),
-    Command(name="CMD_READ_RAM", code=0x54, response_size=64, description="Read RAM"),
-    Command(name="CMD_WRITE_USER_EEPROM", code=0x55, response_size=64, description="Write user EEPROM"),
-    Command(name="CMD_READ_USER_EEPROM", code=0x56, response_size=64, description="Read user EEPROM"),
+    Command(name="CMD_READ_ALL_MEMORY", code=0x51, response_size=ISL94203_MEMORY_SIZE+3, description="BMS - Read all memory ( EEPROM + RAM )"),
+    Command(name="CMD_READ_EEPROM", code=0x52, response_size=ISL94203_RAM_SIZE + 3, description="BMS - Read EEPROM"),
+    Command(name="CMD_WRITE_EEPROM", code=0x53, response_size=64, description="BMS - Write EEPROM"),
+    Command(name="CMD_READ_RAM", code=0x54, response_size=64, description="BMS - Read RAM"),
+    Command(name="CMD_WRITE_USER_EEPROM", code=0x55, response_size=64, description="BMS - Write user EEPROM"),
+    Command(name="CMD_READ_USER_EEPROM", code=0x56, response_size=64, description="BMS - Read user EEPROM"),
     Command(name="CMD_TEST", code=0xFF, response_size=1, description="Test command"),
 ]
 

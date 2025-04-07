@@ -1,4 +1,3 @@
-import atexit
 import os
 import sys
 import logging
@@ -30,8 +29,6 @@ def main():
 
     app = QApplication(sys.argv)
 
-    #apply_stylesheet(app, theme='light_blue.xml')
-
     # Load and set Roboto font
     root_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -58,8 +55,6 @@ def main():
         print(f"Font file not found at: {font_path}")
 
     try:
-        #app.setStyle("Fusion")
-
         # Load the UI file using QUiLoader
         ui_file = QFile(UI_FILE_PATH)
         if not ui_file.open(QIODevice.ReadOnly):
@@ -90,9 +85,6 @@ def main():
         # Set up the main window
         fmcw_app = FMCWApplication(window)
         fmcw_app.show()
-
-        # Register cleanup function
-        atexit.register(fmcw_app.cleanup)
 
         sys.exit(app.exec())
     except Exception as e:
@@ -148,12 +140,7 @@ class FMCWApplication(QMainWindow):
         # Correctly set the alignment flags
         self.logging_status_label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
 
-    def cleanup(self):
-        logging.info("Cleaning up resources")
-        # Ensure all threads are stopped
-        if hasattr(self.main_tab, 'serial_protocol') and self.main_tab.serial_protocol:
-            self.main_tab.serial_protocol.stop()
-        logging.info("Cleanup complete")
+
 
     def update_logging_status(self, message):
         self.logging_status_label.setText(message)

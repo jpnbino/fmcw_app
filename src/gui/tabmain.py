@@ -13,7 +13,7 @@ from gui.global_log_manager import log_manager
 from serialbsp.commands import *
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
 
-REFRESH_RATE = 5000
+REFRESH_RATE = 2000
 MESSAGE_DURATION = 5000
 
 class MainTab:
@@ -130,7 +130,7 @@ class MainTab:
         """
         self.serial_manager.send_data(bytes(encoded_data))
         hex_values = " ".join(f"0x{byte:02X}" for byte in bytes(encoded_data))
-        log_manager.log_message(f"Sent encoded data: {hex_values}\n")
+        log_manager.log_message(f"Tx: {hex_values}\n")
 
     def setup_timers(self):
         self.timer = QTimer(self.ui)
@@ -275,8 +275,8 @@ class MainTab:
         Encodes the command and data, sends it via the serial manager, and logs the message.
         """
         if self.serial_manager.is_open():
-            self.serial_protocol.encode_command(command, data)
             log_manager.log_message(log_message)
+            self.serial_protocol.encode_command(command, data)
         else:
             log_manager.log_message("Serial port not open")
 
