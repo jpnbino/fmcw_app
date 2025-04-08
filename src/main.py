@@ -13,7 +13,9 @@ from bms.isl94203_driver import ISL94203Driver
 from gui.tabbms import BmsTab
 from gui.tabmain import MainTab
 from gui.global_log_manager import log_manager
+from gui.global_status_bar_manager import status_bar_manager
 from gui.userlog import UserLog
+
 
 from serialbsp.serial_manager import SerialManager
 from serialbsp.protocol_fmcw import SerialProtocolFmcw
@@ -93,6 +95,7 @@ def main():
 class FMCWApplication(QMainWindow):
     def __init__(self, window):
         super().__init__()
+  
         self.setCentralWidget(window)
         self.setWindowTitle(WINDOW_TITLE)
         self.setWindowIcon(QIcon(ICON_PATH))
@@ -131,16 +134,12 @@ class FMCWApplication(QMainWindow):
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
-        # Create a QLabel for logging status
-        self.logging_status_label = QLabel("Logging: Not started")
-        self.logging_status_label.setStyleSheet("padding-right: 10px;")
-        self.status_bar.addPermanentWidget(self.logging_status_label)
+        status_bar_manager.initialize_status_bar_manager(self.status_bar)
+        
+        print(f"After initialize_status_bar_manager: {status_bar_manager}")
+        print(f"LogManager: {log_manager}")
+      
 
-        # Correctly set the alignment flags
-        self.logging_status_label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-
-    def update_logging_status(self, message):
-        self.logging_status_label.setText(message)
 
 if __name__ == '__main__':
     main()

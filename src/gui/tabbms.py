@@ -1,8 +1,7 @@
 import os
 import yaml
-from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
+from PySide6.QtWidgets import QPushButton, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
 
 from bms.isl94203_constants import *
 
@@ -12,8 +11,8 @@ from bms.isl94203_factory import ISL94203Factory
 import logging
 
 from serialbsp.commands import *
-from serialbsp.protocol_fmcw import SerialProtocolFmcw
 from gui.global_log_manager import log_manager
+from gui.global_status_bar_manager import status_bar_manager
 
 class BmsTab:
     def __init__(self, ui, serial_manager, serial_protocol, bms_driver):
@@ -39,7 +38,6 @@ class BmsTab:
         self.ui.findChild(QPushButton, "loadDefaultButton").clicked.connect(self.load_default_config)
         self.ui.findChild(QPushButton, "startStopLogButton").clicked.connect(self.log_bms_ram_config)
 
-        self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
         self.startStopLogButton = self.ui.findChild(QPushButton, "startStopLogButton")
 
         # Access QLineEdit elements using findChild
@@ -582,7 +580,8 @@ class BmsTab:
     def write_bms_config(self):
         if not self.serial_manager or not self.serial_manager.is_open():
             logging.error("Serial port is not open")
-            #self.statusBar.showMessage("Error: Serial port is not open.")
+
+            status_bar_manager.update_message("Serial port is not open.",category="error")
             return
 
         register_cfg = self.isl94203.get_registers()
@@ -599,7 +598,7 @@ class BmsTab:
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
         self.send_serial_command(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
-        #self.statusBar.showMessage("Configuration written successfully.")
+        status_bar_manager.update_message("Configuration written successfully.", category="success")
 
     def _encode_and_send(self, command: Command, data: list[int], log_message: str) -> None:
         """
@@ -625,10 +624,10 @@ class BmsTab:
             self.ui_update_fields()
             register_cfg = self.isl94203.get_registers()
             logging.info(f"read_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
-            self.statusBar.showMessage("Configuration read successfully.")
+            status_bar_manager.update_message("Configuration read successfully.", category="success")
         except Exception as e:
             logging.error(f"Failed to process BMS response: {e}")
-            # self.statusBar.showMessage(f"Error: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
 
     def read_bms_config(self):
         """Read the BMS configuration from the device."""
@@ -636,7 +635,7 @@ class BmsTab:
         if not self.serial_manager or not self.serial_manager.is_open():
             error_message = "Serial port is not open"
             logging.error(error_message)
-            #self.statusBar.showMessage(f"Error: {error_message}.")
+            status_bar_manager.update_message(f"Error: {error_message}.", category="error")
             return
 
         try:
@@ -646,7 +645,7 @@ class BmsTab:
 
         except Exception as e:
             logging.error(f"Failed to send command to read BMS configuration: {e}")
-            # self.statusBar.showMessage(f"Error: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
             
 
     def read_bms_ram_config(self):
@@ -656,7 +655,7 @@ class BmsTab:
         if not self.serial_manager or not self.serial_manager.is_open():
             ERROR_MESSAGE = "Serial port is not open"
             logging.error(ERROR_MESSAGE)
-            #self.statusBar.showMessage(f"Error: {ERROR_MESSAGE}.")
+            status_bar_manager.update_message(f"Error: {ERROR_MESSAGE}.", category="error")
             return
         try:
             self.serial_manager.reset_input_buffer()
@@ -671,13 +670,13 @@ class BmsTab:
             self.ui_update_fields()
 
             logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
-            #self.statusBar.showMessage("RAM configuration read successfully.")
+            status_bar_manager.update_message("RAM configuration read successfully.", category="success")
 
             return list(configuration)
 
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
-            #self.statusBar.showMessage(f"Error: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
 
     def log_bms_ram_config(self):
         if self.startStopLogButton.isChecked():

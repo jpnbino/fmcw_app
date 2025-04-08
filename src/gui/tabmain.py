@@ -4,14 +4,11 @@ from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit,
     QPushButton,
-    QStatusBar,
 )
-from PySide6.QtGui import QTextCursor
-from gui.tabbms import BmsTab
-from gui.userlog import UserLog
+
 from gui.global_log_manager import log_manager
 from serialbsp.commands import *
-from serialbsp.protocol_fmcw import SerialProtocolFmcw
+from gui.global_status_bar_manager import status_bar_manager
 
 REFRESH_RATE = 2000
 MESSAGE_DURATION = 5000
@@ -22,8 +19,6 @@ class MainTab:
         self.serial_manager = serial_manager
         self.serial_protocol = serial_protocol
         self.init_ui()
-        
-
         self.cmd_start_adc_meas_antenna_1 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_1")
         self.cmd_start_adc_meas_antenna_2 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_2")
         self.cmd_start_adc_meas_antenna_3 = get_command_by_name("CMD_START_ADC_MEAS_ANTENNA_3")
@@ -71,8 +66,6 @@ class MainTab:
 
       
     def init_ui(self):
-        self.statusBar = self.ui.findChild(QStatusBar, "statusBar")
-
         self.setup_serial_controls()
         self.setup_rtc_controls()
         self.setup_status_controls()
@@ -111,11 +104,11 @@ class MainTab:
         if is_connected:
             self.serialOpenCloseButton.setText("Close")
             self.serialComboBox.setEnabled(False)
-            self.statusBar.showMessage("Serial port connected", MESSAGE_DURATION)
+            status_bar_manager.update_message("Serial port connected", category="success", timeout=MESSAGE_DURATION)
         else:
             self.serialOpenCloseButton.setText("Open")
             self.serialComboBox.setEnabled(True)
-            self.statusBar.showMessage("Serial port disconnected", MESSAGE_DURATION)
+            status_bar_manager.update_message("Serial port disconnected", category="error", timeout=MESSAGE_DURATION)
 
     @Slot(str)
     def log_serial_error(self, error_message: str):
@@ -177,7 +170,7 @@ class MainTab:
             if selected_port:
                 self.serial_manager.open_serial_port(selected_port)
             else:
-                self.statusBar.showMessage("No serial port selected", MESSAGE_DURATION)
+                status_bar_manager.update_message("No serial port selected", category="warning", timeout=MESSAGE_DURATION)
      
     def setup_rtc_controls(self):
         self.setup_rtc_year_controls()
