@@ -139,8 +139,6 @@ class FMCWApplication(QMainWindow):
         # Correctly set the alignment flags
         self.logging_status_label.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
 
-
-
     def update_logging_status(self, message):
         self.logging_status_label.setText(message)
 
