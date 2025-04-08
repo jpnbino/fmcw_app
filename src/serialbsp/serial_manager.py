@@ -26,10 +26,20 @@ class SerialManager(QObject):
         self.read_thread.started.connect(self.reader.run)
         print("SerialManager is running")
 
-    def get_available_ports(self) -> list[tuple[str, str]]:
-        """Returns a list of available serial ports."""
+    def get_available_ports(self) -> list[tuple[str, str, str, str]]:
+        """
+        Returns a list of available serial ports with their descriptions, VID, and PID.
+
+        Returns:
+            list[tuple[str, str, str, str]]: A list of tuples containing port name, description, VID, and PID.
+        """
         ports = list_ports.comports()
-        return [(port.device, port.description) for port in ports]
+        available_ports = []
+        for port in ports:
+            vid = f"{port.vid:04X}" if port.vid else None
+            pid = f"{port.pid:04X}" if port.pid else None
+            available_ports.append((port.device, port.description, vid, pid))
+        return available_ports
 
     def open_serial_port(self, port: str, baudrate: int = 9600, timeout: float = 2) -> None:
         """Opens the specified serial port."""

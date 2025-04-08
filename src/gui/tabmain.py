@@ -139,10 +139,34 @@ class MainTab:
 
     def update_serial_ports(self):
         """Populates the serial port combo box with available ports."""
+        TARGET_VID = 0x2047
+        TARGET_PID = 0x03DF
+
+        current_selection = self.serialComboBox.currentData()
         available_ports = self.serial_manager.get_available_ports()
         self.serialComboBox.clear()
-        for port, description in available_ports:
+
+        # Track the index of the target device
+        target_index = -1
+
+        # Repopulate the combo box with the available ports
+        for index, (port, description, vid, pid) in enumerate(available_ports):
             self.serialComboBox.addItem(f"{port} - {description}", port)
+
+            # Check if this port matches the target device's VID and PID
+            if vid == TARGET_VID and pid == TARGET_PID:
+                target_index = index
+
+        # Restore the previous selection if it is still available
+        if current_selection:
+            index = self.serialComboBox.findData(current_selection)
+            if index != -1:
+                self.serialComboBox.setCurrentIndex(index)
+                return
+
+        # If the target device is found, select it
+        if target_index != -1:
+            self.serialComboBox.setCurrentIndex(target_index)
 
     def toggle_serial(self):
         """Opens or closes the serial port based on its current state."""
