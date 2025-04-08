@@ -1,4 +1,5 @@
 import os
+import yaml
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QPushButton, QStatusBar, QLineEdit, QComboBox, QCheckBox, QLabel, QSpinBox
