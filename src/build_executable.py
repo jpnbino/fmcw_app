@@ -13,6 +13,7 @@ def build_executable():
         "--add-data", "../qt/fonts;qt/fonts",
         "--add-data", "../config;config",
         "--add-data", "../images;images",
+        "--add-data", "../../docs/isl94203/datasheet;datasheet",
         "--hidden-import", "config",
         "--hidden-import", "serial",
         "--hidden-import", "serialbsp",
