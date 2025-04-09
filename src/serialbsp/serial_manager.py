@@ -58,6 +58,7 @@ class SerialManager(QObject):
     def close_serial_port(self) -> None:
         """Closes the currently open serial port."""
         if self.serial_port.is_open:
+            self.stop_reading()
             self.serial_port.close()
             self.serial_port.port = None
             self.stop_reading()
@@ -79,6 +80,7 @@ class SerialManager(QObject):
 
     def stop_reading(self) -> None:
         """Stops the serial reading thread."""
+        self.reader.stop()
         self.read_thread.quit()
         self.read_thread.wait()
         self.reader.set_serial_port(None)
@@ -105,6 +107,11 @@ class SerialPortReader(QObject):
     def __init__(self):
         super().__init__()
         self.serial_port = None
+        self._stop_flag = False
+
+    def stop(self):
+        """Sets the stop flag to exit the reading loop."""
+        self._stop_flag = True
 
     @Slot()
     def run(self) -> None:
@@ -112,7 +119,8 @@ class SerialPortReader(QObject):
         Continuously reads data from the serial port.
         This method should be called when the QThread starts.
         """
-        while self.serial_port and self.serial_port.is_open:
+        self._stop_flag = False 
+        while self.serial_port and self.serial_port.is_open and not self._stop_flag:
             try:
                 data = self.serial_port.read_all()
                 if data:
