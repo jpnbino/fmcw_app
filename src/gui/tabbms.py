@@ -29,7 +29,8 @@ class BmsTab:
         self.cmd_read_ram = get_command_by_name("CMD_READ_RAM")
         self.cmd_write_eeprom = get_command_by_name("CMD_WRITE_EEPROM")
 
-        self.serial_protocol.data_received.connect(self.process_bms_response)
+        self.serial_protocol.data_received.connect(self.process_bms_read_config_response)
+        self.serial_protocol.data_received.connect(self.process_bms_ram_read_config_response)
 
         # Connect button click to Send Serial Command
         self.ui.findChild(QPushButton, "readPackButton").clicked.connect(self.read_bms_config)
@@ -611,7 +612,7 @@ class BmsTab:
         else:
             log_manager.log_message("Serial port not open")
 
-    def process_bms_response(self, packet: bytes) -> None:
+    def process_bms_read_config_response(self, packet: bytes) -> None:
         """
         Process the response packet from the BMS.
         """
@@ -648,6 +649,24 @@ class BmsTab:
             status_bar_manager.update_message(f"Error: {e}", category="error")
             
 
+    def process_bms_ram_read_config_response(self, packet: bytes) -> None:
+        """
+        Process the response packet from the BMS RAM read command.
+        """
+        try:
+            if packet[0] != self.cmd_read_ram.code:
+                return
+            print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
+            print("packet length:", len(packet))
+            self.isl94203.set_ram_registers(list(packet[2:-1]))
+            self.ui_update_ram_fields()
+            ram_values = self.isl94203.get_registers()
+            logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in ram_values)}")
+            status_bar_manager.update_message("RAM configuration read successfully.", category="success")
+        except Exception as e:
+            logging.error(f"Failed to process BMS RAM response: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
+
     def read_bms_ram_config(self):
         """Read RAM memory configuration from the device via serial"""
         configuration = []
@@ -660,19 +679,7 @@ class BmsTab:
         try:
             self.serial_manager.reset_input_buffer()
             self.serial_manager.reset_output_buffer()
-
-            self.serial_protocol.send_command(self.cmd_read_ram, [0])
-            packet = self.serial_protocol.read_packet(ISL94203_RAM_SIZE)
-            _, configuration = packet
-
-            self.isl94203.set_ram_registers(list(configuration))
-            self.isl94203_driver.update_registers()
-            self.ui_update_fields()
-
-            logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in configuration)}")
-            status_bar_manager.update_message("RAM configuration read successfully.", category="success")
-
-            return list(configuration)
+            self._encode_and_send(self.cmd_read_ram, [0], self.cmd_read_ram.description)
 
         except Exception as e:
             logging.error(f"Failed to read BMS RAM configuration: {e}")
@@ -681,7 +688,7 @@ class BmsTab:
     def log_bms_ram_config(self):
         if self.startStopLogButton.isChecked():
             self.startStopLogButton.setText("Stop Log")
-            self.ui.update_logging_status("Logging: In Progress")
+            status_bar_manager.update_logging_status(True)
             delay = self.logRateSpinBox.value()
 
             if not hasattr(self, 'ram_log_handler'):
@@ -705,7 +712,7 @@ class BmsTab:
             QTimer.singleShot(delay * 1000, self.log_bms_ram_config)
         else:
             self.startStopLogButton.setText("Start Log")
-            self.ui.update_logging_status("Logging: Not started")
+            status_bar_manager.update_logging_status(False)
             self.ram_log_handler.stop_log()
             if hasattr(self, 'parsed_log_handler'):
                 self.parsed_log_handler.stop_log()
@@ -800,6 +807,7 @@ class BmsTab:
             self.tGainCheckBox.setChecked(temp_config.get('tgain', ''))
 
             logging.info("Default configuration loaded successfully from %s.", config_path)
+            status_bar_manager.update_message("Default configuration loaded successfully.", category="success")
         except FileNotFoundError:
             logging.error("Default configuration file not found: %s", config_path)
         except yaml.YAMLError as e:

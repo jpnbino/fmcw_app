@@ -72,7 +72,7 @@ COMMANDS = [
     Command(name="CMD_READ_ALL_MEMORY", code=0x51, response_size=ISL94203_MEMORY_SIZE+3, description="BMS - Read all memory ( EEPROM + RAM )"),
     Command(name="CMD_READ_EEPROM", code=0x52, response_size=ISL94203_RAM_SIZE + 3, description="BMS - Read EEPROM"),
     Command(name="CMD_WRITE_EEPROM", code=0x53, response_size=64, description="BMS - Write EEPROM"),
-    Command(name="CMD_READ_RAM", code=0x54, response_size=64, description="BMS - Read RAM"),
+    Command(name="CMD_READ_RAM", code=0x54, response_size=ISL94203_RAM_SIZE + 3, description="BMS - Read RAM"),
     Command(name="CMD_WRITE_USER_EEPROM", code=0x55, response_size=64, description="BMS - Write user EEPROM"),
     Command(name="CMD_READ_USER_EEPROM", code=0x56, response_size=64, description="BMS - Read user EEPROM"),
     Command(name="CMD_TEST", code=0xFF, response_size=1, description="Test command"),

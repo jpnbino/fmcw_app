@@ -108,7 +108,7 @@ class MainTab:
         else:
             self.serialOpenCloseButton.setText("Open")
             self.serialComboBox.setEnabled(True)
-            status_bar_manager.update_message("Serial port disconnected", category="error", timeout=MESSAGE_DURATION)
+            status_bar_manager.update_message("Serial port disconnected", category="success", timeout=MESSAGE_DURATION)
 
     @Slot(str)
     def log_serial_error(self, error_message: str):
