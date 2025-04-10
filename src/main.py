@@ -134,12 +134,7 @@ class FMCWApplication(QMainWindow):
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
-        status_bar_manager.initialize_status_bar_manager(self.status_bar)
-        
-        print(f"After initialize_status_bar_manager: {status_bar_manager}")
-        print(f"LogManager: {log_manager}")
-      
-
+        status_bar_manager.initialize_status_bar_manager(self.status_bar)   
 
 if __name__ == '__main__':
     main()
