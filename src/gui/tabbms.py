@@ -660,7 +660,7 @@ class BmsTab:
             print("packet length:", len(packet))
             self.isl94203.set_ram_registers(list(packet[2:-1]))
             self.ui_update_ram_fields()
-            ram_values = self.isl94203.get_registers()
+            ram_values = self.isl94203.get_ram_registers()
             logging.info(f"read_bms_ram_config():\n{' '.join(f'{value:02X}' for value in ram_values)}")
             status_bar_manager.update_message("RAM configuration read successfully.", category="success")
         except Exception as e:
@@ -696,26 +696,23 @@ class BmsTab:
 
             self.ram_log_handler.start_log()
 
-            ram_values = self.read_bms_ram_config()
+            self.read_bms_ram_config()
+
+            ram_values =  self.isl94203.get_ram_registers()
 
             if ram_values:
-                # Write to the RAM log file
-                self.ram_log_handler.write_ram_log(ram_values)
-
-                # Optionally: Parse values and log to the parsed log file
+                # Parse the raw data
                 parsed_values = self.parse_bms_values(ram_values)
-                if not hasattr(self, 'parsed_log_handler'):
-                    self.parsed_log_handler = LogHandler(log_type='parsed')
-                self.parsed_log_handler.start_log()
-                self.parsed_log_handler.write_parsed_log(parsed_values)
+
+                # Write the log entry (raw + parsed data)
+                self.ram_log_handler.write_log_entry(raw_data=ram_values, parsed_data=parsed_values)
 
             QTimer.singleShot(delay * 1000, self.log_bms_ram_config)
         else:
             self.startStopLogButton.setText("Start Log")
             status_bar_manager.update_logging_status(False)
-            self.ram_log_handler.stop_log()
-            if hasattr(self, 'parsed_log_handler'):
-                self.parsed_log_handler.stop_log()
+            if hasattr(self, 'ram_log_handler'):
+                self.ram_log_handler.stop_log()
 
     def load_default_config(self):
         config_path = os.path.join(os.path.dirname(__file__), '../..', 'config', 'default_config.yaml')
@@ -817,12 +814,30 @@ class BmsTab:
 
     def parse_bms_values(self, ram_values):
         """Parse raw RAM values into meaningful values."""
-        cell_values = ram_values[:3]  # Assume first 3 values are Cell1, Cell2, Cell3
+        # Example parsing logic (adjust based on your RAM structure)
+        cell_values = ram_values[:8]  # Assume first 8 values are cell voltages
         cell_min = min(cell_values)
         cell_max = max(cell_values)
-        icurrent = ram_values[3]  # Assume 4th value is Icurrent
-        status_bit0 = (ram_values[4] & 0x01)  # Assume 5th value is a status byte, bit 0
-        status_bit1 = (ram_values[4] & 0x02) >> 1  # Assume 5th value, bit 1
+        icurrent = ram_values[8]  # Assume 9th value is current
+        status_bits = ram_values[9]  # Assume 10th value contains status bits
 
-        # Return a list of parsed values in the expected format
-        return [cell_values[0], cell_values[1], cell_values[2], cell_min, cell_max, icurrent, status_bit0, status_bit1]
+        # Extract individual status bits
+        status_bit0 = (status_bits & 0x01)
+        status_bit1 = (status_bits & 0x02) >> 1
+
+        # Return parsed values as a dictionary
+        return {
+            "Cell1": cell_values[0],
+            "Cell2": cell_values[1],
+            "Cell3": cell_values[2],
+            "Cell4": cell_values[3],
+            "Cell5": cell_values[4],
+            "Cell6": cell_values[5],
+            "Cell7": cell_values[6],
+            "Cell8": cell_values[7],
+            "CellMin": cell_min,
+            "CellMax": cell_max,
+            "Current": icurrent,
+            "StatusBit0": status_bit0,
+            "StatusBit1": status_bit1
+        }

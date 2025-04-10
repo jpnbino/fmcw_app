@@ -109,6 +109,15 @@ class ISL94203_HAL:
         for i, value in enumerate(values):
             self.all_registers[ADDR_RAM_OFFSET + i] = value
 
+    def get_ram_registers(self) -> list[int]:
+        """
+        Get the current RAM values.
+
+        Returns:
+            list[int]: List of current RAM values.
+        """
+        return self.all_registers[ADDR_RAM_OFFSET:ADDR_RAM_OFFSET + ISL94203_RAM_SIZE]
+
     def reg_write(self, address: int, value: int, mask: Mask = Mask.MASK_16BIT, shift: int = 0) -> int:
         """
         Write a value to a register based on the specified address, mask, and shift. Because some values are 16-bit, the function writes to two consecutive registers.
