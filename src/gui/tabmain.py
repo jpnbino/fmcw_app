@@ -84,7 +84,7 @@ class MainTab:
         self.serialConnectedBox = self.ui.findChild(QCheckBox, "bitPortConnected")
         self.serialOpenCloseButton.clicked.connect(self.toggle_serial)
         self.update_serial_ports()
-        self.serial_manager.connection_status_changed.connect(self.update_connection_status)
+        self.serial_manager.connection_status_changed.connect(self.update_ui_connection_status)
         self.serial_manager.error_occurred.connect(self.log_serial_error)
 
     @Slot(bytes)
@@ -98,17 +98,19 @@ class MainTab:
         self.serial_protocol.handle_raw_data(raw_data)
 
     @Slot(bool)
-    def update_connection_status(self, is_connected: bool):
+    def update_ui_connection_status(self, is_connected: bool):
         """Updates the UI based on the serial connection status."""
         self.serialConnectedBox.setChecked(is_connected)
         if is_connected:
             self.serialOpenCloseButton.setText("Close")
             self.serialComboBox.setEnabled(False)
             status_bar_manager.update_message("Serial port connected", category="success", timeout=MESSAGE_DURATION)
+            status_bar_manager.update_connection_status(True)
         else:
             self.serialOpenCloseButton.setText("Open")
             self.serialComboBox.setEnabled(True)
             status_bar_manager.update_message("Serial port disconnected", category="success", timeout=MESSAGE_DURATION)
+            status_bar_manager.update_connection_status(False)
 
     @Slot(str)
     def log_serial_error(self, error_message: str):
