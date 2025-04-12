@@ -2,21 +2,28 @@ import os
 import sys
 import json
 from datetime import datetime
+from typing import Dict, Any
 
 
 class LogHandler:
-    def __init__(self, log_type, log_dir=None):
+    def __init__(self, log_type, log_dir=None, device_id="Unknown"):
         """
         Initialize the LogHandler.
 
         Args:
             log_type (str): The type of log ('ram' or 'parsed').
             log_dir (str): The directory where logs will be stored. Defaults to the current directory.
+            device_id (str): The ID of the device being logged.
         """
         self.log_file_path = None
         self.log_type = log_type
         self.log_dir = log_dir or self.get_default_log_dir()
         self.data = [] # Store all log entries in memory
+        self.metadata = {
+            "log_type": log_type,
+            "start_time": datetime.now().isoformat(),
+            "device_id": device_id
+        }
 
     def get_default_log_dir(self):
         """Determine the default log directory, compatible with executables."""
@@ -43,17 +50,37 @@ class LogHandler:
             raw_data (list[int]): The raw 44-byte payload as a list of integers.
             parsed_data (dict): The parsed values (e.g., cell voltages, status bits).
         """
-        entry = {
+        if not isinstance(raw_data, list):
+            raise TypeError("raw_data must be a list of integers.")
+        if not isinstance(parsed_data, dict):
+            raise TypeError("parsed_data must be a dictionary.")
+
+        entry: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "raw_data": raw_data,
-            **parsed_data  # Merge parsed data into the entry
         }
+
+        if parsed_data:  # Only update if parsed_data is not None or empty
+            entry.update(parsed_data)
+
         self.data.append(entry)
 
     def save_to_file(self):
         """Save all logged data to the JSON file."""
-        with open(self.log_file_path, mode='w') as file:
-            json.dump({"data": self.data}, file, indent=2)
+        if not self.data:
+            print("No data to save.")
+            return
+
+        try:
+            with open(self.log_file_path, mode='w') as file:
+                json.dump(
+                    {"metadata": self.metadata, "data": self.data},
+                    file,
+                    indent=None,  # Remove indentation for smaller file size
+                    separators=(',', ':')  # Compact JSON format
+                )
+        except IOError as e:
+            print(f"Failed to save log file: {e}")
 
     def stop_log(self):
         """Stop logging and save all data to the file."""
@@ -63,3 +90,11 @@ class LogHandler:
         self.save_to_file()
         self.log_file_path = None
         self.data = []  # Clear in-memory data
+
+
+if __name__ == "__main__":
+    log_handler = LogHandler(log_type='parsed')
+    log_handler.start_log()
+    log_handler.write_log_entry([1, 2, 3], {"voltage": [3.7, 3.6, 3.8, 3.7, 3.6, 3.8, 3.7, 3.6], "status": "OK"})
+    log_handler.write_log_entry([4, 5, 6], {"voltage": [3.6, 3.5, 3.7, 3.6, 3.5, 3.7, 3.6, 3.5], "status": "OK"})
+    log_handler.stop_log()
