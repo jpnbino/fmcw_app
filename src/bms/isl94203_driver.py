@@ -314,6 +314,15 @@ class ISL94203Driver:
             cell_balance_limits[field_name] = self.read_config_field(field_name)
         return cell_balance_limits
     
+    def set_resistor_value(self, resistor_value):
+        """Set the current sense resistor value."""
+        self.resistor = resistor_value
+        logging.debug(f"Current sense resistor value set to: {self.resistor} Ohm")
+
+    def get_resistor_value(self):
+        """Get the current sense resistor value."""
+        return self.resistor
+    
 if __name__ == "__main__":
     isl9420x = ISL94203Driver()
     

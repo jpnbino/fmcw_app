@@ -22,7 +22,12 @@ class LogHandler:
         self.metadata = {
             "log_type": log_type,
             "start_time": datetime.now().isoformat(),
-            "device_id": device_id
+            "device_id": device_id,
+            "units": {
+            "voltage": "V",
+            "current": "A",
+            "raw_data": "byte"
+             }
         }
 
     def get_default_log_dir(self):

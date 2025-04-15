@@ -811,33 +811,3 @@ class BmsTab:
             logging.error("Error parsing YAML configuration file: %s", e)
         except Exception as e:
             logging.error("Failed to load default configuration: %s", e)
-
-    def parse_bms_values(self, ram_values):
-        """Parse raw RAM values into meaningful values."""
-        # Example parsing logic (adjust based on your RAM structure)
-        cell_values = ram_values[:8]  # Assume first 8 values are cell voltages
-        cell_min = min(cell_values)
-        cell_max = max(cell_values)
-        icurrent = ram_values[8]  # Assume 9th value is current
-        status_bits = ram_values[9]  # Assume 10th value contains status bits
-
-        # Extract individual status bits
-        status_bit0 = (status_bits & 0x01)
-        status_bit1 = (status_bits & 0x02) >> 1
-
-        # Return parsed values as a dictionary
-        return {
-            "Cell1": cell_values[0],
-            "Cell2": cell_values[1],
-            "Cell3": cell_values[2],
-            "Cell4": cell_values[3],
-            "Cell5": cell_values[4],
-            "Cell6": cell_values[5],
-            "Cell7": cell_values[6],
-            "Cell8": cell_values[7],
-            "CellMin": cell_min,
-            "CellMax": cell_max,
-            "Current": icurrent,
-            "StatusBit0": status_bit0,
-            "StatusBit1": status_bit1
-        }
