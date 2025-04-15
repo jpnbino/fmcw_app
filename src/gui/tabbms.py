@@ -471,6 +471,7 @@ class BmsTab:
             "undervoltage_lockout": float(self.uvLockoutLineEdit.text())
         }
         self.isl94203_driver.write_voltage_limits(voltage_limits)
+
         
     def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
@@ -554,30 +555,6 @@ class BmsTab:
         cell_config = int(self.CellConfigurationCombo.currentText())
         self.isl94203_driver.write_cell_config(cell_config)
 
-    def send_serial_command(self, command, data):
-        """
-        Send a command with data over the serial connection.
-
-        Args:
-            command (str): The command to send.
-            data (list): The data to send with the command.
-        """
-        if self.serial_manager is None:
-            logging.error("Serial setup is None")
-            return
-
-        if not self.serial_manager.is_open():
-            logging.warning("Serial port is not open")
-            return
-
-        try:
-            self.serial_protocol.send_command(command, data)
-            #packet = self.serial_protocol.read_packet(MEMORY_SIZE)
-            #_, response = packet
-            #print(f"response: {response}")
-        except Exception as e:
-            logging.error(f"Failed to send serial command: {e}")
-
     def write_bms_config(self):
         if not self.serial_manager or not self.serial_manager.is_open():
             logging.error("Serial port is not open")
@@ -598,7 +575,7 @@ class BmsTab:
 
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
-        self.send_serial_command(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1])
+        self._encode_and_send(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1], self.cmd_write_eeprom.description)
         status_bar_manager.update_message("Configuration written successfully.", category="success")
 
     def _encode_and_send(self, command: Command, data: list[int], log_message: str) -> None:
