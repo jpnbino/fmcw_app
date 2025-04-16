@@ -463,7 +463,7 @@ class BmsTab:
             "overvoltage_lockout": float(self.ovLockoutLineEdit.text()),
             "overvoltage_threshold": float(self.ovLineEdit.text()),
             "overvoltage_recovery": float(self.ovRecoverLineEdit.text()),
-            "eoc_voltage": float(self.eocVoltageLineEdit.text()),
+            "end_of_charge_voltage": float(self.eocVoltageLineEdit.text()),
             "undervoltage_recovery": float(self.uvRecoverLineEdit.text()),
             "undervoltage_threshold": float(self.underVoltageLineEdit.text()),
             "sleep_voltage": float(self.sleepVoltageLineEdit.text()),
@@ -485,9 +485,9 @@ class BmsTab:
 
     def write_timers(self):
         timer_values = {
-            'timer_wdt': self.timerWDTLineEdit.text(),
-            'timer_idle_doze': self.timerIdleDozeCombo.currentText(),
-            'timer_sleep': self.timerSleepCombo.currentText()
+            'timer_wdt': int(self.timerWDTLineEdit.text()),
+            'timer_idle_doze': int(self.timerIdleDozeCombo.currentText()),
+            'timer_sleep': int(self.timerSleepCombo.currentText())
         }
         self.isl94203_driver.write_timers(timer_values)
 
@@ -539,15 +539,15 @@ class BmsTab:
 
     def write_pack_option_registers(self):
         options = {
-            'poT2MonitorsFETTemp': self.poT2MonitorsFETTempCheckBox.isChecked(),
-            'poEnableCELLFpsd': self.poEnableCELLFpsdCheckBox.isChecked(),
-            'poEnableOpenWirePSD': self.poEnableOpenWirePSDCheckBox.isChecked(),
-            'poEnableUVLO': self.poEnableUVLOCheckBox.isChecked(),
-            'poEnableOpenWireScan': self.poEnableOpenWireScanCheckBox.isChecked(),
-            'CBDuringCharge': self.CBDuringChargeCheckBox.isChecked(),
-            'CBDuringDischarge': self.CBDuringDischargeCheckBox.isChecked(),
-            'CBDuringEOC': self.CBDuringEOCCheckBox.isChecked(),
-            'tGain': self.tGainCheckBox.isChecked()
+            'po_t2_monitors_fet': self.poT2MonitorsFETTempCheckBox.isChecked(),
+            'po_enable_cellf_psd': self.poEnableCELLFpsdCheckBox.isChecked(),
+            'po_enable_openwire_psd': self.poEnableOpenWirePSDCheckBox.isChecked(),
+            'po_enable_uvlo_pd': self.poEnableUVLOCheckBox.isChecked(),
+            'po_enable_openwire_scan': self.poEnableOpenWireScanCheckBox.isChecked(),
+            'cb_during_charge': self.CBDuringChargeCheckBox.isChecked(),
+            'cb_during_discharge': self.CBDuringDischargeCheckBox.isChecked(),
+            'cb_during_eoc': self.CBDuringEOCCheckBox.isChecked(),
+            'tgain': self.tGainCheckBox.isChecked()
         }
         self.isl94203_driver.write_pack_option_registers(options)
 
@@ -751,6 +751,8 @@ class BmsTab:
             self.CBUnderTempLineEdit.setText(str(cb_limits.get('cb under temp', '')))
             self.CBOnTimeLineEdit.setText(str(cb_limits.get('cb on time', '')))
             self.CBOffTimeLineEdit.setText(str(cb_limits.get('cb off time', '')))
+            self.CBOnTimeUnitCombo.setCurrentText(str(cb_limits.get('cb on time unit', '')))
+            self.CBOffTimeUnitCombo.setCurrentText(str(cb_limits.get('cb off time unit', '')))
             self.CBDuringChargeCheckBox.setChecked(cb_limits.get('cb during charge', False))
             self.CBDuringDischargeCheckBox.setChecked(cb_limits.get('cb during discharge', False))
             self.CBDuringEOCCheckBox.setChecked(cb_limits.get('cb during eoc', False))

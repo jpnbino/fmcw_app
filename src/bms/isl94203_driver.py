@@ -273,7 +273,13 @@ class ISL94203Driver:
                 raise ValueError(f"Field {field_name} not found in config registers.")
                 
     def write_timers(self, timer_values):
-        pass
+        """Writes timer values to registers from a dictionary."""
+        for field_name, value in timer_values.items():
+            if field_name in self.config_registers:
+                self.write_register(field_name, value)
+            else:
+                raise ValueError(f"Field {field_name} not found in config registers.")
+
     def write_cell_balance_registers(self, cell_balance_values):
         for field_name, value in cell_balance_values.items():
             if isinstance(value, tuple):
@@ -284,6 +290,7 @@ class ISL94203Driver:
                 self.write_register(field_name, value, value_unit)
             else:
                 raise ValueError(f"Field {field_name} not found in config registers.")
+    
     def write_temperature_registers(self, temp_values):
         for field_name, value in temp_values.items():
             if field_name in self.config_registers:
@@ -306,7 +313,14 @@ class ISL94203Driver:
 
 
     def write_pack_option_registers(self, options):
-        pass   
+        for field_name, value in options.items():
+            if field_name in self.config_registers:
+                self.write_register(field_name, value)
+            else:
+                raise ValueError(f"Field {field_name} not found in config registers.")
+
+
+
     def read_cell_balance_limits(self):
         """Reads cell balance limits from registers and returns a dictionary."""
         cell_balance_limits = {}
