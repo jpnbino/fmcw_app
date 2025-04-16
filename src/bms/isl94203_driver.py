@@ -50,7 +50,7 @@ class ISL94203Driver:
             "cb_over_temp": CellBalReg.v_reg["cell_balance_max_temp"],
             "cb_ot_recover": CellBalReg.v_reg["cell_balance_max_temp_recovery"],
 
-
+            # Charge and Discharge Current Limits
             "cl_discharge_oc": CurrentReg.reg["discharge_oc_current"],
             "cl_charge_oc": CurrentReg.reg["charge_oc_current"],
             "cl_discharge_sc": CurrentReg.reg["discharge_sc_current"],
@@ -311,15 +311,12 @@ class ISL94203Driver:
 
         self.write_register("cell_config", cell_config)
 
-
     def write_pack_option_registers(self, options):
         for field_name, value in options.items():
             if field_name in self.config_registers:
                 self.write_register(field_name, value)
             else:
                 raise ValueError(f"Field {field_name} not found in config registers.")
-
-
 
     def read_cell_balance_limits(self):
         """Reads cell balance limits from registers and returns a dictionary."""

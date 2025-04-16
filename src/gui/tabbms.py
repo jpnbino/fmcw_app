@@ -42,6 +42,7 @@ class BmsTab:
         self.startStopLogButton = self.ui.findChild(QPushButton, "startStopLogButton")
 
         # Access QLineEdit elements using findChild
+        # Voltage limits
         self.ovLockoutLineEdit = self.ui.findChild(QLineEdit, "ovLockoutLineEdit")
         self.ovLineEdit = self.ui.findChild(QLineEdit, "ovLineEdit")
         self.ovRecoverLineEdit = self.ui.findChild(QLineEdit, "ovRecoverLineEdit")
@@ -52,6 +53,7 @@ class BmsTab:
         self.lowVoltageChargeLineEdit = self.ui.findChild(QLineEdit, "LowVoltageChargeLineEdit")
         self.uvLockoutLineEdit = self.ui.findChild(QLineEdit, "uvLockoutLineEdit")
 
+        # Voltage limits timing
         self.ovDelayTimeoutLineEdit = self.ui.findChild(QLineEdit, "ovDelayTimeoutLineEdit")
         self.uvDelayTimeoutLineEdit = self.ui.findChild(QLineEdit, "uvDelayTimeoutLineEdit")
         self.sleepDelayLineEdit = self.ui.findChild(QLineEdit, "sleepDelayLineEdit")
@@ -61,18 +63,22 @@ class BmsTab:
         self.sleepDelayUnitCombo = self.ui.findChild(QComboBox, "sleepDelayUnitCombo")
         self.openWireTimingCombo = self.ui.findChild(QComboBox, "openWireTimingCombo")
 
+        # Timer fields
         self.timerIdleDozeCombo = self.ui.findChild(QComboBox, "timerIdleDozeCombo")
         self.timerSleepCombo = self.ui.findChild(QComboBox, "timerSleepCombo")
         self.timerWDTLineEdit = self.ui.findChild(QLineEdit, "timerWDTLineEdit")
 
+        # Cell balance limits
         self.CellConfigurationCombo = self.ui.findChild(QComboBox, "cellConfigurationCombo")
 
+        # Pack options
         self.poT2MonitorsFETTempCheckBox = self.ui.findChild(QCheckBox, "poT2MonitorsFETTempCheckBox")
         self.poEnableCELLFpsdCheckBox = self.ui.findChild(QCheckBox, "poEnableCELLFpsdCheckBox")
         self.poEnableOpenWirePSDCheckBox = self.ui.findChild(QCheckBox, "poEnableOpenWirePSDCheckBox")
         self.poEnableUVLOCheckBox = self.ui.findChild(QCheckBox, "poEnableUVLOCheckBox")
         self.poEnableOpenWireScanCheckBox = self.ui.findChild(QCheckBox, "poEnableOpenWireScanCheckBox")
 
+        # Cell balance limits
         self.CBUpperLimLineEdit = self.ui.findChild(QLineEdit, "CBUpperLimLineEdit")
         self.CBLowerLimLineEdit = self.ui.findChild(QLineEdit, "CBLowerLimLineEdit")
         self.CBMaxDeltaLineEdit = self.ui.findChild(QLineEdit, "CBMaxDeltaLineEdit")
@@ -90,6 +96,7 @@ class BmsTab:
         self.CBDuringDischargeCheckBox = self.ui.findChild(QCheckBox, "CBDuringDischargeCheckBox")
         self.CBDuringEOCCheckBox = self.ui.findChild(QCheckBox, "CBDuringEOCCheckBox")
 
+        # Current limits
         self.CLDischargeOCVoltageCombo = self.ui.findChild(QComboBox, "CLDischargeOCVoltageCombo")
         self.CLChargeOCVoltageCombo = self.ui.findChild(QComboBox, "CLChargeOCVoltageCombo")
         self.CLDischargeSCVoltageCombo = self.ui.findChild(QComboBox, "CLDischargeSCVoltageCombo")
@@ -119,6 +126,7 @@ class BmsTab:
         self.tGainCheckBox = self.ui.findChild(QCheckBox, "tGainCheckBox")
         self.TemperatureGainLabel = self.ui.findChild(QLabel, "TemperatureGainLabel")
 
+        # RAM fields
         self.vcell1LineEdit = self.ui.findChild(QLineEdit, "vcell1LineEdit")
         self.vcell2LineEdit = self.ui.findChild(QLineEdit, "vcell2LineEdit")
         self.vcell3LineEdit = self.ui.findChild(QLineEdit, "vcell3LineEdit")

@@ -188,7 +188,6 @@ class MainTab:
         self.rtcYearPushButton = self.ui.findChild(QPushButton, "sendRTCYearPushButton")
         self.rtcYearPushButton.clicked.connect(self.send_rtc_year)
         self.rtcYearComboBox = self.ui.findChild(QComboBox, "rtcYearComboBox")
-        self.rtcYearComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
         for year in range(2025, 2100):
             self.rtcYearComboBox.addItem(str(year))
 
@@ -215,28 +214,24 @@ class MainTab:
         self.rtcHourPushButton.clicked.connect(self.send_rtc_hour)
         self.rtcHourComboBox = self.ui.findChild(QComboBox, "rtcHourComboBox")
         self.rtcHourComboBox.addItems([str(hour) for hour in range(0, 24)])
-        self.rtcHourComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
 
     def setup_rtc_minute_controls(self):
         self.rtcMinutePushButton = self.ui.findChild(QPushButton, "sendRTCMinutePushButton")
         self.rtcMinutePushButton.clicked.connect(self.send_rtc_minute)
         self.rtcMinuteComboBox = self.ui.findChild(QComboBox, "rtcMinuteComboBox")
         self.rtcMinuteComboBox.addItems([str(minute) for minute in range(0, 60)])
-        self.rtcMinuteComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
 
     def setup_rtc_second_controls(self):
         self.rtcSecondPushButton = self.ui.findChild(QPushButton, "sendRTCSecondPushButton")
         self.rtcSecondPushButton.clicked.connect(self.send_rtc_second)
         self.rtcSecondComboBox = self.ui.findChild(QComboBox, "rtcSecondComboBox")
         self.rtcSecondComboBox.addItems([str(second) for second in range(0, 60)])
-        self.rtcSecondComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
 
     def setup_rtc_calibrate_controls(self):
         self.rtcCalibratePushButton = self.ui.findChild(QPushButton, "sendRTCCalibratePushButton")
         self.rtcCalibratePushButton.clicked.connect(self.send_rtc_calibrate)
         self.rtcCalibrateComboBox = self.ui.findChild(QComboBox, "rtcCalibrateComboBox")
         self.rtcCalibrateComboBox.addItems([str(cal) for cal in range(0, 31)])
-        self.rtcCalibrateComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
 
     def setup_status_controls(self):
         self.setup_status_device_controls()
@@ -339,7 +334,6 @@ class MainTab:
         self.measurement4FFTPushButton.clicked.connect(self.send_measurement4_fft)
 
         self.measurementFFTSamplesComboBox.addItems([str(samples) for samples in range(1, 256)])
-        self.measurementFFTSamplesComboBox.setStyleSheet("QComboBox { combobox-popup: 0; } QComboBox QAbstractItemView { max-height: 200px; }")
         self.measurementFFTSamplesComboBox.setCurrentIndex(0)
 
     def send_measurement_adc(self, antenna_cmd, antenna_number):
