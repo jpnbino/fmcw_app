@@ -38,6 +38,7 @@ class BmsTab:
         self.ui.findChild(QPushButton, "readRamButton").clicked.connect(self.read_bms_ram_config)
         self.ui.findChild(QPushButton, "loadDefaultButton").clicked.connect(self.load_default_config)
         self.ui.findChild(QPushButton, "startStopLogButton").clicked.connect(self.log_bms_ram_config)
+        self.ui.findChild(QCheckBox, "tGainCheckBox").clicked.connect(self.ui_update_gain_text)
 
         self.startStopLogButton = self.ui.findChild(QPushButton, "startStopLogButton")
 
@@ -179,6 +180,13 @@ class BmsTab:
         self.bitSLEEPlabel = self.ui.findChild(QLabel, "bitSLEEPlabel")
 
         self.logRateSpinBox = self.ui.findChild(QSpinBox, "logRateSpinBox")
+
+    def ui_update_gain_text(self):
+        """Update the gain text based on the checkbox state."""
+        if self.tGainCheckBox.isChecked():
+            self.TemperatureGainLabel.setText("(Gain is now 1x)")
+        else:
+            self.TemperatureGainLabel.setText("(Gain is now 2x)")
 
     def ui_update_ram_fields(self):
         self.ui_update_ram_values()
