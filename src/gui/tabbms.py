@@ -67,7 +67,8 @@ class BmsTab:
         # Timer fields
         self.timerIdleDozeCombo = self.ui.findChild(QComboBox, "timerIdleDozeCombo")
         self.timerSleepCombo = self.ui.findChild(QComboBox, "timerSleepCombo")
-        self.timerWDTLineEdit = self.ui.findChild(QLineEdit, "timerWDTLineEdit")
+        self.timerWDTCombo = self.ui.findChild(QComboBox, "timerWDTCombo")
+        self.timerWDTCombo.addItems([str(i) for i in range(32)])
 
         # Cell balance limits
         self.CellConfigurationCombo = self.ui.findChild(QComboBox, "cellConfigurationCombo")
@@ -250,13 +251,11 @@ class BmsTab:
         timer_fields = {
             self.timerIdleDozeCombo: all_registers.get("timer_idle_doze"),
             self.timerSleepCombo: all_registers.get("timer_sleep"),
+            self.timerWDTCombo: all_registers.get("timer_wdt")
         }   
 
         for line_edit, value in timer_fields.items():
             line_edit.setCurrentText(f"{int(value[0])}")
-
-        wdt_line_edit = self.timerWDTLineEdit
-        wdt_line_edit.setText(f"{int(all_registers.get('timer_wdt')[0])}")
 
     def ui_update_cell_balance_limits(self):
         """Update cell balance limits fields."""
@@ -400,11 +399,11 @@ class BmsTab:
         gain = 0
         if bit_tgain:
             gain = 1
-            self.TemperatureGainLabel.setText("Now the gain is 1x")
+            self.TemperatureGainLabel.setText("(Gain is now 1x)")
             self.tGainCheckBox.setChecked(True)
         else:
             gain = 2
-            self.TemperatureGainLabel.setText("Now the gain is 2x")
+            self.TemperatureGainLabel.setText("(Gain is now 2x)")
             self.tGainCheckBox.setChecked(False)
 
         self.tempITVoltaqeLineEdit.setText(f"{all_registers.get('temp_internal')[0]:.2f}")
@@ -510,7 +509,7 @@ class BmsTab:
 
     def write_timers(self):
         timer_values = {
-            'timer_wdt': int(self.timerWDTLineEdit.text()),
+            'timer_wdt': int(self.timerWDTCombo.currentText()),
             'timer_idle_doze': int(self.timerIdleDozeCombo.currentText()),
             'timer_sleep': int(self.timerSleepCombo.currentText())
         }
@@ -765,7 +764,7 @@ class BmsTab:
             timers = configuration.get('timers', {})
             self.timerIdleDozeCombo.setCurrentText(str(timers.get('idle/doze mode timer', '')))
             self.timerSleepCombo.setCurrentText(str(timers.get('sleep mode timer', '')))
-            self.timerWDTLineEdit.setText(str(timers.get('wd timer', '')))
+            self.timerWDTCombo.setCurrentText(str(timers.get('wd timer', '')))
 
             cb_limits = configuration.get('cell balance limits', {})
             self.CBUpperLimLineEdit.setText(str(cb_limits.get('cb upper lim', '')))
