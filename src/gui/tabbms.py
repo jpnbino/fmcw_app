@@ -289,8 +289,8 @@ class BmsTab:
             line_edit.setText(f"{int(value[0])}")  
 
         cell_balance_timing_units = {
-            self.CBOnTimeUnitCombo: all_registers.get("cb_on_time"),
-            self.CBOffTimeUnitCombo: all_registers.get("cb_off_time")
+            self.CBOnTimeUnitCombo: all_registers.get("cb_on_time_unit"),
+            self.CBOffTimeUnitCombo: all_registers.get("cb_off_time_unit")
         }
         for combo, value in cell_balance_timing_units.items():
             combo.setCurrentText(value[1])
@@ -338,9 +338,9 @@ class BmsTab:
             line_edit.setText(f"{int(value[0])}")
 
         current_timeout_units = {           
-            self.CLDischargeOCTimeoutCombo: all_registers.get("cl_discharge_oc_delay"),
-            self.CLChargeOCTimeoutCombo: all_registers.get("cl_charge_oc_delay"),
-            self.CLDischargeSCTimeoutCombo: all_registers.get("cl_discharge_sc_delay")
+            self.CLDischargeOCTimeoutCombo: all_registers.get("cl_discharge_oc_delay_unit"),
+            self.CLChargeOCTimeoutCombo: all_registers.get("cl_charge_oc_delay_unit"),
+            self.CLDischargeSCTimeoutCombo: all_registers.get("cl_discharge_sc_delay_unit")
         }
         for combo, value in current_timeout_units.items():
             combo.setCurrentText(value[1])
@@ -554,9 +554,12 @@ class BmsTab:
             'cl_discharge_oc': self.CLDischargeOCVoltageCombo.currentText(),
             'cl_charge_oc': self.CLChargeOCVoltageCombo.currentText(),
             'cl_discharge_sc': self.CLDischargeSCVoltageCombo.currentText(),
-            'cl_discharge_oc_delay': (int(self.CLDischargeOCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLDischargeOCTimeoutCombo)),
-            'cl_charge_oc_delay': (int(self.CLChargeOCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLChargeOCTimeoutCombo)),
-            'cl_discharge_sc_delay': (int(self.CLDischargeSCTimeoutLineEdit.text()), self.get_unit_from_combo(self.CLDischargeSCTimeoutCombo)),
+            'cl_discharge_oc_delay': int(self.CLDischargeOCTimeoutLineEdit.text()),
+            'cl_discharge_oc_delay_unit': (self.CLDischargeOCTimeoutCombo.currentText()),
+            'cl_charge_oc_delay': int(self.CLChargeOCTimeoutLineEdit.text()),
+            'cl_charge_oc_delay_unit': (self.CLChargeOCTimeoutCombo.currentText()),
+            'cl_discharge_sc_delay': int(self.CLDischargeSCTimeoutLineEdit.text()),
+            'cl_discharge_sc_delay_unit': (self.CLDischargeSCTimeoutCombo.currentText()),
             'cl_pulse_width_charge': self.chargeDetectPulseCombo.currentText(), 
             'cl_pulse_width_load': self.loadDetectPulseCombo.currentText()
         }

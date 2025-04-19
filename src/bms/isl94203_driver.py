@@ -61,6 +61,10 @@ class ISL94203Driver:
             "cl_charge_oc_delay": CurrentReg.reg["charge_oc_delay"],
             "cl_discharge_sc_delay": CurrentReg.reg["discharge_sc_delay"],
 
+            "cl_discharge_oc_delay_unit": CurrentReg.reg["discharge_oc_delay_unit"],
+            "cl_charge_oc_delay_unit": CurrentReg.reg["charge_oc_delay_unit"],
+            "cl_discharge_sc_delay_unit": CurrentReg.reg["discharge_sc_delay_unit"],
+
             "cl_pulse_width_charge": CurrentReg.reg["charge_detect_pulse_width"],
             "cl_pulse_width_load": CurrentReg.reg["discharge_detect_pulse_width"],
             
@@ -296,14 +300,8 @@ class ISL94203Driver:
     
     def write_current_registers(self, current_values):
         for field_name, value in current_values.items():
-            if isinstance(value, tuple):
-                value, value_unit = value
-            else:
-                value_unit = None
             if field_name in self.config_registers:
-                self.write_register(field_name, value, value_unit)
-            else:
-                raise ValueError(f"Field {field_name} not found in config registers.")
+                self.write_register(field_name, value)
 
     def write_cell_config(self, cell_config):
 
