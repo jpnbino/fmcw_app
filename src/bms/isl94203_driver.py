@@ -43,12 +43,14 @@ class ISL94203Driver:
             "cb_max_voltage": CellBalReg.v_reg["cell_balance_max_voltage"],
             "cb_min_delta": CellBalReg.v_reg["cell_balance_min_delta"],
             "cb_max_delta": CellBalReg.v_reg["cell_balance_max_delta"],
-            "cb_on_time": CellBalReg.t_reg["cell_balance_on_time"],
-            "cb_off_time": CellBalReg.t_reg["cell_balance_off_time"],
             "cb_under_temp": CellBalReg.v_reg["cell_balance_min_temp"],
             "cb_ut_recover": CellBalReg.v_reg["cell_balance_min_temp_recovery"],
             "cb_over_temp": CellBalReg.v_reg["cell_balance_max_temp"],
             "cb_ot_recover": CellBalReg.v_reg["cell_balance_max_temp_recovery"],
+            "cb_on_time": CellBalReg.t_reg["cell_balance_on_time"],
+            "cb_off_time": CellBalReg.t_reg["cell_balance_off_time"],
+            "cb_on_time_unit": CellBalReg.t_reg["cell_balance_on_time_unit"],
+            "cb_off_time_unit": CellBalReg.t_reg["cell_balance_off_time_unit"],
 
             # Charge and Discharge Current Limits
             "cl_discharge_oc": CurrentReg.reg["discharge_oc_current"],
@@ -58,7 +60,6 @@ class ISL94203Driver:
             "cl_discharge_oc_delay": CurrentReg.reg["discharge_oc_delay"],
             "cl_charge_oc_delay": CurrentReg.reg["charge_oc_delay"],
             "cl_discharge_sc_delay": CurrentReg.reg["discharge_sc_delay"],
-    
 
             "cl_pulse_width_charge": CurrentReg.reg["charge_detect_pulse_width"],
             "cl_pulse_width_load": CurrentReg.reg["discharge_detect_pulse_width"],
@@ -83,9 +84,13 @@ class ISL94203Driver:
             "charge_detect_pulse_width": TimeoutReg.reg["charge_detect_pulse_width"],
             "load_detect_pulse_width": TimeoutReg.reg["load_detect_pulse_width"],
             "ov_delay_timeout": TimeoutReg.reg["overvoltage_delay_timeout"],
+            "ov_delay_timeout_unit": TimeoutReg.reg["overvoltage_delay_timeout_unit"],
             "uv_delay_timeout": TimeoutReg.reg["undervoltage_delay_timeout"],
+            "uv_delay_timeout_unit": TimeoutReg.reg["undervoltage_delay_timeout_unit"],
             "open_wire_timing": TimeoutReg.reg["open_wire_timeout"],
+            "open_wire_timing_unit": TimeoutReg.reg["open_wire_timeout_unit"],
             "sleep_delay": TimeoutReg.reg["sleep_delay"],
+            "sleep_delay_unit": TimeoutReg.reg["sleep_delay_unit"],
             
             "po_t2_monitors_fet": BitReg.reg["xt2m"],
             "po_enable_cellf_psd": BitReg.reg["cfpsd"],
@@ -222,6 +227,7 @@ class ISL94203Driver:
         
         self.isl94203_hal.reg_write(field.address, raw_value, field.bit_mask, field.bit_position)
 
+
     def get_register_list(self):
         """Return a single dictionary of all registers."""
         all_registers_dict = {**self.config_registers, **self.ram_registers}
@@ -263,12 +269,8 @@ class ISL94203Driver:
     def write_voltage_limits_timing(self, timing_limits):
         """Writes voltage limits timing to registers from a dictionary."""
         for field_name, value in timing_limits.items():
-            if isinstance(value, tuple):
-                value, value_unit = value
-            else:
-                value_unit = None
             if field_name in self.config_registers:
-                self.write_register(field_name, value, value_unit)
+                self.write_register(field_name, value)
             else:
                 raise ValueError(f"Field {field_name} not found in config registers.")
                 
@@ -282,12 +284,8 @@ class ISL94203Driver:
 
     def write_cell_balance_registers(self, cell_balance_values):
         for field_name, value in cell_balance_values.items():
-            if isinstance(value, tuple):
-                value, value_unit = value
-            else:
-                value_unit = None
             if field_name in self.config_registers:
-                self.write_register(field_name, value, value_unit)
+                self.write_register(field_name, value)
             else:
                 raise ValueError(f"Field {field_name} not found in config registers.")
     

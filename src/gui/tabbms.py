@@ -227,10 +227,10 @@ class BmsTab:
             line_edit.setText(f"{int(value[0])}")
 
         combo_boxes = [
-            (self.ovDelayTimeoutCombo, all_registers.get("ov_delay_timeout")),
-            (self.uvDelayTimeoutCombo, all_registers.get("uv_delay_timeout")),
-            (self.sleepDelayUnitCombo, all_registers.get("sleep_delay")),
-            (self.openWireTimingCombo, all_registers.get("open_wire_timing"))
+            (self.ovDelayTimeoutCombo, all_registers.get("ov_delay_timeout_unit")),
+            (self.uvDelayTimeoutCombo, all_registers.get("uv_delay_timeout_unit")),
+            (self.sleepDelayUnitCombo, all_registers.get("sleep_delay_unit")),
+            (self.openWireTimingCombo, all_registers.get("open_wire_timing_unit"))
         ]
         for combo, value in combo_boxes:
             combo.setCurrentText(value[1])
@@ -393,9 +393,11 @@ class BmsTab:
         if bit_tgain:
             gain = 1
             self.TemperatureGainLabel.setText("Now the gain is 1x")
+            self.tGainCheckBox.setChecked(True)
         else:
             gain = 2
             self.TemperatureGainLabel.setText("Now the gain is 2x")
+            self.tGainCheckBox.setChecked(False)
 
         self.tempITVoltaqeLineEdit.setText(f"{all_registers.get('temp_internal')[0]:.2f}")
         
@@ -484,12 +486,19 @@ class BmsTab:
     def write_voltage_limits_timing(self):
         # Extract values from QLineEdit fields
         voltage_limits_timing = {
-            "ov_delay_timeout": (int(self.ovDelayTimeoutLineEdit.text()), self.ovDelayTimeoutCombo.currentText()),
-            "uv_delay_timeout": (int(self.uvDelayTimeoutLineEdit.text()), self.uvDelayTimeoutCombo.currentText()),
-            "sleep_delay": (int(self.sleepDelayLineEdit.text()), self.sleepDelayUnitCombo.currentText()),
-            "open_wire_timing": (int(self.openWireTimingLineEdit.text()), self.openWireTimingCombo.currentText())
+            "ov_delay_timeout": int(self.ovDelayTimeoutLineEdit.text()),
+            "uv_delay_timeout": int(self.uvDelayTimeoutLineEdit.text()),
+            "sleep_delay":      int(self.sleepDelayLineEdit.text()),
+            "open_wire_timing": int(self.openWireTimingLineEdit.text()),
+            "ov_delay_timeout_unit": self.ovDelayTimeoutCombo.currentText(),
+            "uv_delay_timeout_unit": self.uvDelayTimeoutCombo.currentText(),
+            "sleep_delay_unit": self.sleepDelayUnitCombo.currentText(),
+            "open_wire_timing_unit": self.openWireTimingCombo.currentText()
         }
-        self.isl94203_driver.write_voltage_limits_timing(voltage_limits_timing)
+        try:
+           self.isl94203_driver.write_voltage_limits_timing(voltage_limits_timing)
+        except Exception as e:
+            logging.error(f"Failed to write voltage limits timing: {e}")
 
     def write_timers(self):
         timer_values = {
@@ -509,8 +518,10 @@ class BmsTab:
             'cb_ut_recover': float(self.CBUTRecoverLineEdit.text()),
             'cb_over_temp': float(self.CBOverTempLineEdit.text()),
             'cb_ot_recover': float(self.CBOTRecoverLineEdit.text()),
-            'cb_on_time': (int(self.CBOnTimeLineEdit.text()), self.CBOnTimeUnitCombo.currentText()),
-            'cb_off_time': (int(self.CBOffTimeLineEdit.text()), self.CBOffTimeUnitCombo.currentText())
+            'cb_on_time': int(self.CBOnTimeLineEdit.text()), 
+            'cb_off_time': int(self.CBOffTimeLineEdit.text()),
+            'cb_on_time_unit': self.CBOnTimeUnitCombo.currentText(),
+            'cb_off_time_unit': self.CBOffTimeUnitCombo.currentText(),
         }
 
         self.isl94203_driver.write_cell_balance_registers(cell_balance_values)

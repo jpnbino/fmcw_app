@@ -1,4 +1,5 @@
 
+from bms.cfg_current_limits_registers import unit_from_raw, unit_to_raw
 from .cfg_voltage_registers import VoltageRegisterField, voltage_cell_from_raw, voltage_cell_to_raw
 from .cfg_timeout_registers import TimeRegisterField, TimeUnitRegisterField
 
@@ -48,14 +49,13 @@ for name, address in t_map:
         from_raw = lambda x: x,
     )
 
-for name, address in t_map:
-    t_reg[name] = TimeUnitRegisterField(
+    t_reg[f"{name}_unit"] = TimeUnitRegisterField(
         name=name,
         address=address,
         bit_mask=Mask.MASK_2BIT,
         bit_position=10,
-        to_raw= lambda x: x,
-        from_raw = lambda x: x,
-        unit_mapping= UNIT_MAPPING,
-        unit = "ms"
+        to_raw=unit_to_raw,
+        from_raw=unit_from_raw,
+        unit_mapping=UNIT_MAPPING,
+        unit="ms"
     )

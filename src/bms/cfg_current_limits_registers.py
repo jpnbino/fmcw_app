@@ -13,6 +13,13 @@ def voltage_to_raw(voltage: str, mapping: dict) -> int:
 def voltage_from_raw(raw: int, mapping: dict) -> str:
     return mapping[raw]
 
+def unit_to_raw(unit: str) -> int:
+    reversed_mapping = reverse_mapping(UNIT_MAPPING)
+    return reversed_mapping[unit]
+
+def unit_from_raw(raw: int) -> str:
+    return UNIT_MAPPING[raw]
+
 voltage_map = [
     ("discharge_oc_current",0x16, DOC_MAPPING),
     ("charge_oc_current",0x18,COC_MAPPING),
@@ -54,13 +61,13 @@ for name, address in time_map:
     )
 
 for name, address in time_map:
-    reg[name] = TimeUnitRegisterField(
+    reg[f"{name}_unit"] = TimeUnitRegisterField(
         name=name,
         address=address,
         bit_mask=Mask.MASK_2BIT,
         bit_position=10,
-        to_raw=lambda x: x,
-        from_raw=lambda x: x,
+        to_raw=unit_to_raw,
+        from_raw=unit_from_raw,
         unit_mapping=UNIT_MAPPING,
         unit="ms",
     )
