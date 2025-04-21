@@ -1847,7 +1847,7 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>0</width>
+                           <width>100</width>
                            <height>25</height>
                           </size>
                          </property>
@@ -3619,31 +3619,6 @@ Sample</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="7" column="0">
-                        <widget class="QLabel" name="label_48">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>85</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Under Temp</string>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="1" column="2">
                         <widget class="QLabel" name="label_97">
                          <property name="sizePolicy">
@@ -3651,34 +3626,6 @@ Sample</string>
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="2">
-                        <widget class="QLabel" name="label_109">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
                          </property>
                          <property name="font">
                           <font>
@@ -3757,6 +3704,31 @@ Sample</string>
                          </property>
                         </widget>
                        </item>
+                       <item row="7" column="0">
+                        <widget class="QLabel" name="label_48">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>85</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Under Temp</string>
+                         </property>
+                        </widget>
+                       </item>
                        <item row="10" column="2">
                         <widget class="QComboBox" name="CBOffTimeUnitCombo">
                          <property name="sizePolicy">
@@ -3799,6 +3771,56 @@ Sample</string>
                          </item>
                         </widget>
                        </item>
+                       <item row="7" column="1">
+                        <widget class="QLineEdit" name="CBUnderTempLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="2">
+                        <widget class="QLabel" name="label_109">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
                        <item row="6" column="2">
                         <widget class="QLabel" name="label_108">
                          <property name="sizePolicy">
@@ -3837,28 +3859,6 @@ Sample</string>
                          </property>
                          <property name="text">
                           <string>Upper Lim</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="1">
-                        <widget class="QLineEdit" name="CBUnderTempLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
                          </property>
                         </widget>
                        </item>
@@ -5812,7 +5812,7 @@ Settings </string>
                            </property>
                            <property name="text">
                             <string>Write 
-Setings</string>
+Settings</string>
                            </property>
                            <property name="checkable">
                             <bool>false</bool>
@@ -5843,6 +5843,13 @@ Settings</string>
                            </property>
                            <property name="checkable">
                             <bool>false</bool>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QCheckBox" name="writePermanentCheckBox">
+                           <property name="text">
+                            <string>write settings permanent</string>
                            </property>
                           </widget>
                          </item>
@@ -6427,6 +6434,9 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Vadc</string>
+                         </property>
                          <property name="readOnly">
                           <bool>true</bool>
                          </property>
@@ -6484,6 +6494,9 @@ Settings</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Vadc</string>
                          </property>
                          <property name="readOnly">
                           <bool>true</bool>
@@ -6558,7 +6571,7 @@ Settings</string>
                         </widget>
                        </item>
                        <item row="0" column="1">
-                        <widget class="QLineEdit" name="tempITVoltaqeLineEdit">
+                        <widget class="QLineEdit" name="tempITVoltageLineEdit">
                          <property name="minimumSize">
                           <size>
                            <width>60</width>

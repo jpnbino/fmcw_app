@@ -28,6 +28,7 @@ class BmsTab:
         self.cmd_read_all_memory = get_command_by_name("CMD_READ_ALL_MEMORY")
         self.cmd_read_ram = get_command_by_name("CMD_READ_RAM")
         self.cmd_write_eeprom = get_command_by_name("CMD_WRITE_EEPROM")
+        self.cmd_write_persistent = get_command_by_name("CMD_WRITE_EEPROM_PERSISTENT")
 
         self.serial_protocol.data_received.connect(self.process_bms_read_config_response)
         self.serial_protocol.data_received.connect(self.process_bms_ram_read_config_response)
@@ -147,7 +148,7 @@ class BmsTab:
         self.packCurrentALineEdit = self.ui.findChild(QLineEdit, "packCurrentALineEdit")
         self.ResistorLineEdit = self.ui.findChild(QLineEdit, "ResistorLineEdit")
 
-        self.tempITVoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempITVoltaqeLineEdit")
+        self.tempITVoltageLineEdit = self.ui.findChild(QLineEdit, "tempITVoltageLineEdit")
         self.tempITDegLineEdit = self.ui.findChild(QLineEdit, "tempITDegLineEdit")
         self.tempXT1VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT1VoltaqeLineEdit")
         self.tempXT2VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT2VoltaqeLineEdit")
@@ -406,9 +407,10 @@ class BmsTab:
             self.TemperatureGainLabel.setText("(Gain is now 2x)")
             self.tGainCheckBox.setChecked(False)
 
-        self.tempITVoltaqeLineEdit.setText(f"{all_registers.get('temp_internal')[0]:.2f}")
+        temp_volts = all_registers.get("temp_internal")[0]
+        self.tempITVoltageLineEdit.setText(f"{temp_volts:.2f}")
         
-        internal_temp_celsius = all_registers.get("temp_internal")[0] * gain
+        internal_temp_celsius = self.isl94203_driver.convert_voltage2celsius("temp_internal",temp_volts, gain)
         self.tempITDegLineEdit.setText(f"{internal_temp_celsius:.2f}")
 
         self.tempXT1VoltaqeLineEdit.setText(f"{all_registers.get('temp_xt1')[0]:.2f}")
@@ -604,8 +606,18 @@ class BmsTab:
 
         logging.info(f"write_bms_config():\n{' '.join(f'{value:02X}' for value in register_cfg)}")
 
-        self._encode_and_send(self.cmd_write_eeprom, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1], self.cmd_write_eeprom.description)
+        cmd = None
+        write_permanent_checkbox = self.ui.findChild(QCheckBox, "writePermanentCheckBox")
+        if write_permanent_checkbox and write_permanent_checkbox.isChecked():
+            cmd = self.cmd_write_persistent
+            logging.info("Write Permanent checkbox is checked.")
+        else:
+            cmd = self.cmd_write_eeprom
+            logging.info("Write Permanent checkbox is not checked.")
+        
+        self._encode_and_send(cmd, register_cfg[ADDR_EEPROM_BEGIN:ADDR_EEPROM_END + 1], cmd.description)
         status_bar_manager.update_message("Configuration written successfully.", category="success")
+
 
     def _encode_and_send(self, command: Command, data: list[int], log_message: str) -> None:
         """
