@@ -18,6 +18,9 @@ from . import ram_status_register as RamStatusReg
 
 logging.basicConfig(level=logging.DEBUG)
 
+TEMP_VOLT2CELCIUS_TGAIN1 = ((1000/0.92635))
+
+TEMP_VOLT2CELCIUS_TGAIN0 = ((1000/1.8527))
 
 class ISL94203Driver:
     """This class provides operations to read and update the configuration values of the ISL94203 battery management system IC. It can translate back and fourth the raw values from the registers to the actual configuration values based on the datasheet.
@@ -264,6 +267,21 @@ class ISL94203Driver:
             voltage_limits[field_name] = self.read_register(field_name)
         return voltage_limits
 
+    def convert_voltage2celsius(self, register_name: str, voltage: float, gain: int = 0) -> float:
+        """Convert voltage to Celsius."""
+        field = self._lookup_register_info(register_name)
+
+        if register_name == "temp_internal":
+            if gain == 1:
+                temp_celsius = TEMP_VOLT2CELCIUS_TGAIN1 * voltage - 273.15
+            else:
+                temp_celsius = TEMP_VOLT2CELCIUS_TGAIN0 * voltage - 273.15
+            
+        return temp_celsius
+
+
+
+        
     def write_voltage_limits(self, voltage_limits):
         """Writes voltage limits to registers from a dictionary."""
         for field_name, value in voltage_limits.items():
