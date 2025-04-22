@@ -1,5 +1,7 @@
 import os
+import sys
 import logging
+
 '''
 This script is used to parse a CSV file containing NTC thermistor data and calculate the
 temperature based on the resistance of the thermistor.
@@ -11,7 +13,13 @@ It uses linear interpolation to find the temperature corresponding to a given re
 VREG = 2.5  # Reference voltage of the NTC circuit. Values in Volts
 R1 = 22000  # Resistor connected between the NTC and the TEMPO pin. Values in Ohms
 Rp = 10000  # Parallel resistor to the NTC. Values in Ohms
-CONFIG_DIR = os.path.join(os.path.dirname(__file__), '../..', 'config')
+
+if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
+    base_dir = sys._MEIPASS
+else:
+    BASE_DIR = os.getcwd()
+
+CONFIG_DIR = os.path.join(BASE_DIR, 'config')
 NTC_FILE = os.path.join(CONFIG_DIR, 'ntc_temp_resistor_table.csv')
 CSV_DELIMITER = ';'
 CSV_HEADER = '"T[°C]"'
@@ -109,18 +117,16 @@ def calculate_resistance(measured_voltage: float) -> float:
         raise ValueError("Measured voltage cannot be greater than or equal to VREG.")
     return (R1 * measured_voltage) / (VREG - measured_voltage)
 
-def estimate_temperature(measured_voltage: float, ntc_data: list[tuple[float, float]]) -> float:
+def estimate_temperature(measured_voltage: float) -> float:      
     """Estimates the temperature based on the measured voltage."""
+    ntc_data = load_ntc_data(NTC_FILE)
     r_parallel = calculate_resistance(measured_voltage)
     return get_temperature(r_parallel, ntc_data)
 
-
 def main():
     try:
-        ntc_data = load_ntc_data(NTC_FILE)
         measured_voltage = 0.463
-        temperature = estimate_temperature(measured_voltage, ntc_data)
-
+        temperature = estimate_temperature(measured_voltage)
         logging.info(f"Measured voltage: {measured_voltage:.3f} V")
         logging.info(f"Estimated temperature: {temperature:.2f} °C")
     except ValueError as e:
@@ -130,3 +136,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
