@@ -1,0 +1,83 @@
+voltage limits:
+  ov lockout: 3.75
+  over voltage: 3.70
+  ov recover: 3.20
+  end of charge: 3.70
+  uv recover: 2.40
+  under voltage: 2.10
+  sleep voltage: 2.00
+  low v charge: 2.36
+  uv lockout: 2.00
+
+voltage timeouts:
+  ov delay: 5
+  ov delay unit: s
+  uv delay: 5
+  uv delay unit: s
+  sleep delay: 1
+  sleep delay unit: s
+  open wire: 20
+  open wire unit: ms
+
+current limits:
+  discharge oc: 48mV
+  doc delay: 200
+  doc delay unit: ms
+  charge oc: 24mV
+  coc delay: 200
+  coc delay unit: ms
+  discharge sc: 64mV
+  dsc delay: 200
+  dsc delay unit: µs
+  detect pulse width:
+    charge: 1 #ms
+    load: 1 #ms
+
+timers:
+  idle/doze mode timer: 8 #min
+  sleep mode timer: 240 #min
+  wd timer: 31 #sec
+
+cell balance limits:
+  cb upper lim: 3.65
+  cb lower lim: 2.50
+  cb max delta: 0.02
+  cb min delta: 0.5
+  cb over temp: 0.53
+  cb ot recover: 0.59
+  cb ut recover: 1.19
+  cb under temp: 1.344
+  cb on time: 2
+  cb on time unit: s
+  cb off time: 2
+  cb off time unit: s
+  cb during charge: true
+  cb during discharge: false
+  cb during eoc: false
+
+temperature limits:
+  charge over temp: 0.24
+  charge ot recover: 0.26
+  charge ut recover: 1.36
+  charge under temp: 1.40
+  discharge over temp: 0.24
+  discharge ot recover: 0.26
+  discharge ut recover: 1.36
+  discharge under temp: 1.40
+  internal over temp: 0.72
+  internal ot recover: 0.68
+
+cell configuration:
+  number of cells: 4
+
+pack options:
+  xt2 monitors fet temp: false
+  enable cellf psd action: false
+  enable open wire psd: false
+  enable uvlo power down: false
+  enable open wire scan: false
+
+temp reading:
+  tgain: false  # (Gain is now 2x)
+  unit: degc
+
