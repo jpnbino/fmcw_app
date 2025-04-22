@@ -26,6 +26,19 @@ CSV_HEADER = '"T[°C]"'
 
 logging.basicConfig(level=logging.INFO)
 
+_ntc_data_cache: list[tuple[float, float]] = None
+
+def load_ntc_data(file_path: str) -> list[tuple[float, float]]:
+    """Loads and prepares the NTC data."""
+    global _ntc_data_cache
+    if _ntc_data_cache is None:  # Load the data only if it hasn't been loaded yet
+        ntc_data = parse_ntc_data(file_path)
+        if not ntc_data:
+            raise ValueError("No NTC data loaded. Please check the data file.")
+        ntc_data.sort(key=lambda x: x[1])
+        _ntc_data_cache = calculate_parallel_resistance(ntc_data, Rp)
+    return _ntc_data_cache
+
 def parse_ntc_data(filename: str) -> list[tuple[float, float]]:
     """
     Parses the NTC resistance-temperature data from the given file.
@@ -103,14 +116,6 @@ def calculate_parallel_resistance(ntc_table: list[tuple[float, float]], parallel
             continue
     return parallel_ntc_data
 
-def load_ntc_data(file_path: str) -> list[tuple[float, float]]:
-    """Loads and prepares the NTC data."""
-    ntc_data = parse_ntc_data(file_path)
-    if not ntc_data:
-        raise ValueError("No NTC data loaded. Please check the data file.")
-    ntc_data.sort(key=lambda x: x[1])
-    return calculate_parallel_resistance(ntc_data, Rp)
-
 def calculate_resistance(measured_voltage: float) -> float:
     """Calculates the parallel resistance using the voltage divider formula."""
     if measured_voltage >= VREG:
@@ -119,7 +124,9 @@ def calculate_resistance(measured_voltage: float) -> float:
 
 def estimate_temperature(measured_voltage: float) -> float:      
     """Estimates the temperature based on the measured voltage."""
-    ntc_data = load_ntc_data(NTC_FILE)
+    global ntc_data
+    if 'ntc_data' not in globals():
+        ntc_data = load_ntc_data(NTC_FILE)
     r_parallel = calculate_resistance(measured_voltage)
     return get_temperature(r_parallel, ntc_data)
 
