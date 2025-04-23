@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QPushButton, QLineEdit, QComboBox, QCheckBox, QLab
 
 from bms.isl94203_constants import *
 
+from bms.thermistor import estimate_temperature
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
 
@@ -118,13 +119,25 @@ class BmsTab:
         self.TLChargeOTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLChargeOTRecoverLineEdit")
         self.TLChargeUTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLChargeUTRecoverLineEdit")
         self.TLChargeUnderTempLineEdit = self.ui.findChild(QLineEdit, "TLChargeUnderTempLineEdit")
+
         self.TLDiscOverTempLineEdit = self.ui.findChild(QLineEdit, "TLDiscOverTempLineEdit")
         self.TLDischOTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLDischOTRecoverLineEdit")
         self.TLDischUTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLDischUTRecoverLineEdit")
-
         self.TLDischUnderTempLineEdit = self.ui.findChild(QLineEdit, "TLDischUnderTempLineEdit")
+
         self.TLInternalOverTempLineEdit = self.ui.findChild(QLineEdit, "TLInternalOverTempLineEdit")
         self.TLInternalOTRecoverLineEdit = self.ui.findChild(QLineEdit, "TLInternalOTRecoverLineEdit")
+
+        self.TLChargeOverTempLabel = self.ui.findChild(QLabel, "TLChargeOverTempLabel")
+        self.TLChargeOTRecoverLabel = self.ui.findChild(QLabel, "TLChargeOTRecoverLabel")
+        self.TLChargeUTRecoverLabel = self.ui.findChild(QLabel, "TLChargeUTRecoverLabel")
+        self.TLChargeUnderTempLabel = self.ui.findChild(QLabel, "TLChargeUnderTempLabel")
+        self.TLDiscOverTempLabel = self.ui.findChild(QLabel, "TLDiscOverTempLabel")
+        self.TLDischOTRecoverLabel = self.ui.findChild(QLabel, "TLDischOTRecoverLabel")
+        self.TLDischUTRecoverLabel = self.ui.findChild(QLabel, "TLDischUTRecoverLabel")
+        self.TLDischUnderTempLabel = self.ui.findChild(QLabel, "TLDischUnderTempLabel")
+        self.TLInternalOverTempLabel = self.ui.findChild(QLabel, "TLInternalOverTempLabel")
+        self.TLInternalOTRecoverLabel = self.ui.findChild(QLabel, "TLInternalOTRecoverLabel")
 
         self.tGainCheckBox = self.ui.findChild(QCheckBox, "tGainCheckBox")
         self.TemperatureGainLabel = self.ui.findChild(QLabel, "TemperatureGainLabel")
@@ -150,8 +163,10 @@ class BmsTab:
 
         self.tempITVoltageLineEdit = self.ui.findChild(QLineEdit, "tempITVoltageLineEdit")
         self.tempITDegLineEdit = self.ui.findChild(QLineEdit, "tempITDegLineEdit")
-        self.tempXT1VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT1VoltaqeLineEdit")
-        self.tempXT2VoltaqeLineEdit = self.ui.findChild(QLineEdit, "tempXT2VoltaqeLineEdit")
+        self.tempXT1VoltageLineEdit = self.ui.findChild(QLineEdit, "tempXT1VoltageLineEdit")
+        self.tempXT1DegLineEdit = self.ui.findChild(QLineEdit, "tempXT1DegLineEdit")
+        self.tempXT2VoltageLineEdit = self.ui.findChild(QLineEdit, "tempXT2VoltageLineEdit")
+        self.tempXT2DegLineEdit = self.ui.findChild(QLineEdit, "tempXT2DegLineEdit")
 
         self.bitOV = self.ui.findChild(QLabel, "bitOVlabel")
         self.bitOVLO = self.ui.findChild(QLabel, "bitOVLOlabel")
@@ -316,6 +331,26 @@ class BmsTab:
         for line_edit, value in temp_limits.items():
             line_edit.setText(f"{value[0]:.2f}")
 
+        temp_labels = {
+            self.TLChargeOverTempLabel: all_registers.get("tl_charge_ot"),
+            self.TLChargeOTRecoverLabel: all_registers.get("tl_charge_ot_recover"),
+            self.TLChargeUTRecoverLabel: all_registers.get("tl_charge_ut_recover"),
+            self.TLChargeUnderTempLabel: all_registers.get("tl_charge_ut"),
+            self.TLDiscOverTempLabel: all_registers.get("tl_discharge_ot"),
+            self.TLDischOTRecoverLabel: all_registers.get("tl_discharge_ot_recover"),
+            self.TLDischUTRecoverLabel: all_registers.get("tl_discharge_ut_recover"),
+            self.TLDischUnderTempLabel: all_registers.get("tl_discharge_ut"),
+            self.TLInternalOverTempLabel: all_registers.get("tl_internal_ot"),
+            self.TLInternalOTRecoverLabel: all_registers.get("tl_internal_ot_recover"),
+        }
+
+        for label, value in temp_labels.items():
+            if label == self.TLInternalOverTempLabel or label == self.TLInternalOTRecoverLabel:
+                temp_in_degrees = self.isl94203_driver.convert_voltage2celsius(value[0], False)
+
+            temp_in_degrees = self.isl94203_driver.convert_voltage2celsius(value[0])
+            label.setText(f"{temp_in_degrees:.2f}°C")
+
     def ui_update_current_limits(self):
         """Update current limits fields."""
         
@@ -408,14 +443,23 @@ class BmsTab:
             self.tGainCheckBox.setChecked(False)
 
         temp_volts = all_registers.get("temp_internal")[0]
-        self.tempITVoltageLineEdit.setText(f"{temp_volts:.2f}")
+        self.tempITVoltageLineEdit.setText(f"{temp_volts:.3f}")
         
-        internal_temp_celsius = self.isl94203_driver.convert_voltage2celsius("temp_internal",temp_volts, gain)
+        internal_temp_celsius = self.isl94203_driver.convert_voltage2celsius(temp_volts,False, bit_tgain)
         self.tempITDegLineEdit.setText(f"{internal_temp_celsius:.2f}")
 
-        self.tempXT1VoltaqeLineEdit.setText(f"{all_registers.get('temp_xt1')[0]:.2f}")
-        self.tempXT2VoltaqeLineEdit.setText(f"{all_registers.get('temp_xt2')[0]:.2f}")
-
+        xt1_temp_volts = all_registers.get("temp_xt1")[0]
+        self.tempXT1VoltageLineEdit.setText(f"{xt1_temp_volts:.3f}")
+        
+        xt1_deg_celsius = self.isl94203_driver.convert_voltage2celsius(xt1_temp_volts, is_gain = bit_tgain)  
+        self.tempXT1DegLineEdit.setText(f"{xt1_deg_celsius:.2f}")
+        
+        xt2_temp_volts = all_registers.get("temp_xt2")[0] 
+        self.tempXT2VoltageLineEdit.setText(f"{xt2_temp_volts:.3f}")
+        
+        xt2_deg_celsius = self.isl94203_driver.convert_voltage2celsius(xt2_temp_volts,is_gain = bit_tgain)
+        self.tempXT2DegLineEdit.setText(f"{xt2_deg_celsius:.2f}")
+        
         current = all_registers.get("current_i")[0]
         voltage = current * self.resistor
 

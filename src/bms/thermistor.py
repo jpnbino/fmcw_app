@@ -15,11 +15,12 @@ R1 = 22000  # Resistor connected between the NTC and the TEMPO pin. Values in Oh
 Rp = 10000  # Parallel resistor to the NTC. Values in Ohms
 
 if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
-    base_dir = sys._MEIPASS
+    BASE_DIR = sys._MEIPASS
 else:
     BASE_DIR = os.getcwd()
 
-CONFIG_DIR = os.path.join(BASE_DIR, 'config')
+
+CONFIG_DIR = os.path.join(BASE_DIR, '..', 'config')
 NTC_FILE = os.path.join(CONFIG_DIR, 'ntc_temp_resistor_table.csv')
 CSV_DELIMITER = ';'
 CSV_HEADER = '"T[°C]"'

@@ -1,6 +1,7 @@
 import logging
 from bms.isl94203_constants import *
 from bms.isl94203_factory import ISL94203Factory
+from bms.thermistor import estimate_temperature
 
 from . import cfg_voltage_registers  as VoltageReg
 from . import cfg_cell_balance_registers  as CellBalReg
@@ -267,16 +268,22 @@ class ISL94203Driver:
             voltage_limits[field_name] = self.read_register(field_name)
         return voltage_limits
 
-    def convert_voltage2celsius(self, register_name: str, voltage: float, gain: int = 0) -> float:
+    def convert_voltage2celsius(self,  voltage: float, xt_sensor:bool = True ,is_gain: bool = False) -> float:
         """Convert voltage to Celsius."""
-        field = self._lookup_register_info(register_name)
 
-        if register_name == "temp_internal":
-            if gain == 1:
+        if xt_sensor == True:
+            if is_gain == True:
+                temp_celsius = estimate_temperature(voltage)
+            else:
+                voltage = voltage/2
+                temp_celsius = estimate_temperature(voltage)
+        else:
+            #for internal sensor
+            if is_gain == True:
                 temp_celsius = TEMP_VOLT2CELCIUS_TGAIN1 * voltage - 273.15
             else:
                 temp_celsius = TEMP_VOLT2CELCIUS_TGAIN0 * voltage - 273.15
-            
+                   
         return temp_celsius
 
 

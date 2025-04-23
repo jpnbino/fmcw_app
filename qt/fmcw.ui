@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1695</width>
-    <height>938</height>
+    <width>1697</width>
+    <height>943</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,8 +55,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1693</width>
-         <height>903</height>
+         <width>1695</width>
+         <height>908</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="1,0">
@@ -1847,7 +1847,7 @@
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>100</width>
+                           <width>80</width>
                            <height>25</height>
                           </size>
                          </property>
@@ -2340,68 +2340,6 @@
                          <property name="spacing">
                           <number>8</number>
                          </property>
-                         <item row="1" column="1">
-                          <widget class="QLabel" name="TemperatureGainLabel">
-                           <property name="font">
-                            <font>
-                             <family>Roboto</family>
-                             <pointsize>10</pointsize>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>(Gain is now 2x)</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QCheckBox" name="tGainCheckBox">
-                           <property name="font">
-                            <font>
-                             <family>Roboto</family>
-                             <pointsize>10</pointsize>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>TGain</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="0">
-                          <widget class="QRadioButton" name="radioButton_2">
-                           <property name="font">
-                            <font>
-                             <family>Roboto</family>
-                             <pointsize>10</pointsize>
-                            </font>
-                           </property>
-                           <property name="mouseTracking">
-                            <bool>true</bool>
-                           </property>
-                           <property name="text">
-                            <string>degC</string>
-                           </property>
-                           <property name="autoExclusive">
-                            <bool>true</bool>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="0">
-                          <widget class="QRadioButton" name="radioButton">
-                           <property name="font">
-                            <font>
-                             <family>Roboto</family>
-                             <pointsize>10</pointsize>
-                             <kerning>true</kerning>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>V</string>
-                           </property>
-                           <property name="checked">
-                            <bool>true</bool>
-                           </property>
-                          </widget>
-                         </item>
                          <item row="2" column="0">
                           <spacer name="verticalSpacer_2">
                            <property name="orientation">
@@ -2417,6 +2355,32 @@
                             </size>
                            </property>
                           </spacer>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QLabel" name="TemperatureGainLabel">
+                           <property name="font">
+                            <font>
+                             <family>Roboto</family>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>(Gain is now 2x)</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="1" column="0">
+                          <widget class="QCheckBox" name="tGainCheckBox">
+                           <property name="font">
+                            <font>
+                             <family>Roboto</family>
+                             <pointsize>10</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>TGain</string>
+                           </property>
+                          </widget>
                          </item>
                         </layout>
                        </widget>
@@ -2572,6 +2536,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Low Voltage Charge Level</string>
+                         </property>
                          <property name="text">
                           <string>Low V Charge</string>
                          </property>
@@ -2639,6 +2606,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Undervoltage Recovery</string>
+                         </property>
                          <property name="text">
                           <string>Under Voltage</string>
                          </property>
@@ -2651,6 +2621,9 @@
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Overvoltage Threshold</string>
                          </property>
                          <property name="text">
                           <string>Over Voltage</string>
@@ -2710,6 +2683,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Undervoltage Threshold</string>
+                         </property>
                          <property name="text">
                           <string>UV Recover</string>
                          </property>
@@ -2738,6 +2714,9 @@
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Sleep Level Voltage</string>
                          </property>
                          <property name="text">
                           <string>Sleep Voltage</string>
@@ -2833,6 +2812,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Overvoltage Recovery</string>
+                         </property>
                          <property name="text">
                           <string>OV Recover</string>
                          </property>
@@ -2845,6 +2827,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Undervoltage Lockout Threshold</string>
                          </property>
                          <property name="text">
                           <string>UV Lockout</string>
@@ -2865,8 +2850,11 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>End-of-Charge (EOC) Threshold</string>
+                         </property>
                          <property name="text">
-                          <string>End of Charge</string>
+                          <string>EOC</string>
                          </property>
                         </widget>
                        </item>
@@ -3056,7 +3044,7 @@ Sample</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string/>
+                          <string>Overvoltage Lockout Threshold</string>
                          </property>
                          <property name="text">
                           <string>OV Lockout</string>
@@ -3567,6 +3555,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Cell Balance On Time (CBON)</string>
+                         </property>
                          <property name="text">
                           <string> Time On</string>
                          </property>
@@ -3588,6 +3579,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Cell Balance Minimum Differential Voltage (CBMINDV)</string>
                          </property>
                          <property name="text">
                           <string>Min Delta</string>
@@ -3613,6 +3607,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Maximum Temperature Recovery Level (CBOTR)</string>
                          </property>
                          <property name="text">
                           <string>OT Recover</string>
@@ -3677,6 +3674,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Cell Balance Maximum Differential Voltage (CBMAXDV)</string>
+                         </property>
                          <property name="text">
                           <string>Max Delta</string>
                          </property>
@@ -3723,6 +3723,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Minimum Temperature Limit (CBUTS)</string>
                          </property>
                          <property name="text">
                           <string>Under Temp</string>
@@ -3857,6 +3860,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Cell Balance Maximum Voltage (CBMAX)</string>
+                         </property>
                          <property name="text">
                           <string>Upper Lim</string>
                          </property>
@@ -3875,6 +3881,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Cell Balance Off Time (CBOFF)</string>
                          </property>
                          <property name="text">
                           <string> Time Off</string>
@@ -3980,6 +3989,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Cell Balance Minimum Voltage (CBMIN)</string>
+                         </property>
                          <property name="text">
                           <string>Lower Lim</string>
                          </property>
@@ -4027,6 +4039,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Maximum Temperature Limit (CBOTS)</string>
+                         </property>
                          <property name="text">
                           <string>Over Temp</string>
                          </property>
@@ -4051,6 +4066,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Minimum Temperature Recovery Level (CBUTR)</string>
                          </property>
                          <property name="text">
                           <string>UT Recover</string>
@@ -4986,607 +5004,8 @@ Sample</string>
                        <property name="verticalSpacing">
                         <number>8</number>
                        </property>
-                       <item row="13" column="0">
-                        <widget class="QLabel" name="label_111">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="10" column="1">
-                        <widget class="QLineEdit" name="TLDischUnderTempLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="8" column="1">
-                        <widget class="QLineEdit" name="TLDischOTRecoverLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="4" column="1">
-                        <widget class="QLineEdit" name="TLChargeUnderTempLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="1">
-                        <widget class="QLineEdit" name="TLChargeUTRecoverLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="11" column="0">
-                        <spacer name="verticalSpacer_15">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>10</width>
-                           <height>15</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="6" column="0" colspan="3">
-                        <widget class="QLabel" name="label_400">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Discharging</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="0">
-                        <widget class="QLabel" name="label_83">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>UT Recover</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="14" column="0">
-                        <widget class="QLabel" name="label_121">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT Recover</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0" colspan="3">
-                        <widget class="QLabel" name="label">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Charging</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_88">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="10" column="0">
-                        <widget class="QLabel" name="label_76">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>UT</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="0">
-                        <widget class="QLabel" name="label_78">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>UT Recover</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="15" column="0">
-                        <spacer name="verticalSpacer_8">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="13" column="1">
-                        <widget class="QLineEdit" name="TLInternalOverTempLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="1">
-                        <widget class="QLineEdit" name="TLDischUTRecoverLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QLineEdit" name="TLChargeOTRecoverLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="1">
-                        <widget class="QLineEdit" name="TLDiscOverTempLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="0">
-                        <spacer name="verticalSpacer_16">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>10</width>
-                           <height>15</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QLineEdit" name="TLChargeOverTempLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QLabel" name="label_123">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT  Recover</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="4" column="0">
-                        <widget class="QLabel" name="label_89">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>UT</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="0">
-                        <widget class="QLabel" name="label_135">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="12" column="0" colspan="3">
-                        <widget class="QLabel" name="label_401">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Internal</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="14" column="1">
-                        <widget class="QLineEdit" name="TLInternalOTRecoverLineEdit">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="8" column="0">
-                        <widget class="QLabel" name="label_98">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>OT Recover</string>
-                         </property>
-                         <property name="indent">
-                          <number>5</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="2">
-                        <widget class="QLabel" name="label_122">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="2">
-                        <widget class="QLabel" name="label_134">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="2">
-                        <widget class="QLabel" name="label_136">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="4" column="2">
-                        <widget class="QLabel" name="label_151">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="2">
-                        <widget class="QLabel" name="label_154">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="8" column="2">
-                        <widget class="QLabel" name="label_155">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="2">
-                        <widget class="QLabel" name="label_158">
+                       <item row="13" column="2">
+                        <widget class="QLabel" name="label_160">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -5641,8 +5060,143 @@ Sample</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="13" column="2">
-                        <widget class="QLabel" name="label_160">
+                       <item row="0" column="0" colspan="3">
+                        <widget class="QLabel" name="label">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Charging</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QLineEdit" name="TLChargeOverTempLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="13" column="0">
+                        <widget class="QLabel" name="label_111">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Over-Temperature Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="6" column="0" colspan="3">
+                        <widget class="QLabel" name="label_400">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Discharging</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="9" column="0">
+                        <widget class="QLabel" name="label_78">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Under-Temperature Recovery Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>UT Recover</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="13" column="1">
+                        <widget class="QLineEdit" name="TLInternalOverTempLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_88">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Charge Over-Temperature Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="9" column="2">
+                        <widget class="QLabel" name="label_158">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -5669,6 +5223,377 @@ Sample</string>
                          </property>
                         </widget>
                        </item>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_123">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Charge Over-Temperature Recovery Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT  Recover</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="14" column="1">
+                        <widget class="QLineEdit" name="TLInternalOTRecoverLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="2">
+                        <widget class="QLabel" name="label_155">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="10" column="1">
+                        <widget class="QLineEdit" name="TLDischUnderTempLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="1">
+                        <widget class="QLineEdit" name="TLChargeUTRecoverLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="1">
+                        <widget class="QLineEdit" name="TLChargeUnderTempLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="0">
+                        <widget class="QLabel" name="label_89">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Charge Under-Temperature Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>UT</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="0">
+                        <widget class="QLabel" name="label_98">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Over-Temperature Recovery Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT Recover</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="14" column="0">
+                        <widget class="QLabel" name="label_121">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Over-Temperature Recovery Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT Recover</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="2">
+                        <widget class="QLabel" name="label_122">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="0">
+                        <spacer name="verticalSpacer_16">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="7" column="0">
+                        <widget class="QLabel" name="label_135">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Over-Temperature Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>OT</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="2">
+                        <widget class="QLabel" name="label_151">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="1">
+                        <widget class="QLineEdit" name="TLDiscOverTempLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <widget class="QLabel" name="label_83">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Charge Under-Temperature Recovery Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>UT Recover</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="11" column="0">
+                        <spacer name="verticalSpacer_15">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="7" column="2">
+                        <widget class="QLabel" name="label_154">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="12" column="0" colspan="3">
+                        <widget class="QLabel" name="label_401">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Internal</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="15" column="0">
+                        <spacer name="verticalSpacer_8">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                        <item row="14" column="2">
                         <widget class="QLabel" name="label_161">
                          <property name="sizePolicy">
@@ -5694,6 +5619,211 @@ Sample</string>
                          </property>
                          <property name="alignment">
                           <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="1">
+                        <widget class="QLineEdit" name="TLDischOTRecoverLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2">
+                        <widget class="QLabel" name="label_134">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="10" column="0">
+                        <widget class="QLabel" name="label_76">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>Under-Temperature Voltage</string>
+                         </property>
+                         <property name="text">
+                          <string>UT</string>
+                         </property>
+                         <property name="indent">
+                          <number>5</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="9" column="1">
+                        <widget class="QLineEdit" name="TLDischUTRecoverLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="2">
+                        <widget class="QLabel" name="label_136">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLineEdit" name="TLChargeOTRecoverLineEdit">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="3">
+                        <widget class="QLabel" name="TLChargeOverTempLabel">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>         </string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="3">
+                        <widget class="QLabel" name="TLChargeOTRecoverLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="3" column="3">
+                        <widget class="QLabel" name="TLChargeUTRecoverLabel">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="4" column="3">
+                        <widget class="QLabel" name="TLChargeUnderTempLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="3">
+                        <widget class="QLabel" name="TLDiscOverTempLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="3">
+                        <widget class="QLabel" name="TLDischOTRecoverLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="9" column="3">
+                        <widget class="QLabel" name="TLDischUTRecoverLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="10" column="3">
+                        <widget class="QLabel" name="TLDischUnderTempLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="13" column="3">
+                        <widget class="QLabel" name="TLInternalOverTempLabel">
+                         <property name="text">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="14" column="3">
+                        <widget class="QLabel" name="TLInternalOTRecoverLabel">
+                         <property name="text">
+                          <string/>
                          </property>
                         </widget>
                        </item>
@@ -6427,7 +6557,7 @@ Settings</string>
                         </widget>
                        </item>
                        <item row="4" column="1">
-                        <widget class="QLineEdit" name="tempXT2VoltaqeLineEdit">
+                        <widget class="QLineEdit" name="tempXT2VoltageLineEdit">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
@@ -6435,7 +6565,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Vadc</string>
+                          <string>Vadc, not xT2 pin voltage</string>
                          </property>
                          <property name="readOnly">
                           <bool>true</bool>
@@ -6488,7 +6618,7 @@ Settings</string>
                         </widget>
                        </item>
                        <item row="2" column="1">
-                        <widget class="QLineEdit" name="tempXT1VoltaqeLineEdit">
+                        <widget class="QLineEdit" name="tempXT1VoltageLineEdit">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
@@ -6496,7 +6626,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Vadc</string>
+                          <string>Vadc, not xT1 pin voltage</string>
                          </property>
                          <property name="readOnly">
                           <bool>true</bool>
@@ -8299,7 +8429,7 @@ RAM Memory</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1695</width>
+     <width>1697</width>
      <height>33</height>
     </rect>
    </property>
