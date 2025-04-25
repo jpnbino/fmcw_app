@@ -5,7 +5,6 @@ from PySide6.QtWidgets import QPushButton, QLineEdit, QComboBox, QCheckBox, QLab
 
 from bms.isl94203_constants import *
 
-from bms.thermistor import estimate_temperature
 from logger.log_handler import LogHandler
 from bms.isl94203_factory import ISL94203Factory
 

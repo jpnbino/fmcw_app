@@ -526,17 +526,35 @@ class MainTab:
         Processes the received data from the serial manager.
 
         This method is connected to the SerialManager's data_received signal.
-        It updates the corresponding comboboxes for the read_filter_request command.
+        It delegates the processing to specific parsers based on the command code.
         """
         try:
-            if packet[0] != self.cmd_filter_request.code:
-                return
+            command_code = packet[0]
 
-            print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
-            print("packet length:", len(packet))
+            # Map command codes to their respective parsers
+            command_parsers = {
+                self.cmd_filter_request.code: self._parse_filter_config_response,
+                self.cmd_get_device_status.code: self._parse_device_status_response,
+                # Add more command parsers here as needed
+            }
 
+            # Check if a parser exists for the command code
+            if command_code in command_parsers:
+                command_parsers[command_code](packet)
+            else:
+                logging.warning(f"No parser available for command code: 0x{command_code:02X}")
+
+        except Exception as e:
+            logging.error(f"Failed to process received data: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
+
+    def _parse_filter_config_response(self, packet: bytes) -> None:
+        """
+        Parses the response for the filter configuration command.
+        """
+        try:
             # Assuming the packet structure is [cmd_code, poti1, poti2, poti3, poti4]
-            if len(packet) >= 5:
+            if len(packet) >= self.cmd_filter_request.response_size:
                 poti1_value = packet[2]
                 poti2_value = packet[3]
                 poti3_value = packet[4]
@@ -551,5 +569,100 @@ class MainTab:
             else:
                 raise ValueError("Packet length is insufficient to update filter configuration.")
         except Exception as e:
-            logging.error(f"Failed to process filter configuration response: {e}")
+            logging.error(f"Failed to parse filter configuration response: {e}")
             status_bar_manager.update_message(f"Error: {e}", category="error")
+
+    def _parse_device_status_response(self, packet: bytes) -> None:
+        """
+        Parses the response for the device status command, including voltage and time data.
+        """
+        try:
+            if packet[0] == self.cmd_get_device_status.code:
+                
+                if len(packet) >= self.cmd_get_device_status.response_size:
+                    adc_battery = (packet[3] << 8) | packet[2]
+                    adc_3v3 = (packet[5] << 8) | packet[4]
+                    adc_5v = (packet[7] << 8) | packet[6]
+                    adc_12v = (packet[9] << 8) | packet[8]
+                    adc_20v = (packet[11] << 8) | packet[10]
+                    adc_temp = (packet[13] << 8) | packet[12]
+
+
+                    # Decode time values
+                    tm_min = packet[14]
+                    tm_hour = packet[15]
+                    tm_mday = packet[16]
+                    tm_sec =packet[17]
+                    tm_mon = packet[18]
+                    tm_wday = packet[19]
+                    tm_year = (packet[21] << 8) | packet[20]  + 1900
+                    software_version = (packet[23] << 8) | packet[22]
+                    # Example resistor values for the voltage dividers
+                    R1_BATTERY = 680000
+                    R2_BATTERY = 82000
+
+                    R1_3V3 = 10000
+                    R2_3V3 = 10000
+
+                    R1_12V = 105000
+                    R2_12V = 18700
+
+                    R1_20V = 1000000
+                    R2_20V = 100000
+
+                    # Convert ADC values to millivolts
+                    battery_mv = convert_adc_to_millivolts(adc_battery, R1_BATTERY, R2_BATTERY)
+                    rail_3v3_mv = convert_adc_to_millivolts(adc_3v3, R1_3V3, R2_3V3)
+                    rail_12v_mv = convert_adc_to_millivolts(adc_12v, R1_12V, R2_12V)
+                    rail_20v_mv = convert_adc_to_millivolts(adc_20v, R1_20V, R2_20V)
+
+                    # Log the results
+                    day_of_week_map = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+                    day_of_week_str = day_of_week_map[tm_wday]
+
+                    log_message = (
+                        f"Voltage Measurements:\n"
+                        f"  Battery Rail: {battery_mv / 1000:.2f} V\n"
+                        f"  3.3V Rail: {rail_3v3_mv / 1000:.2f} V\n"
+                        f"  12V Rail: {rail_12v_mv / 1000:.2f} V\n"
+                        f"  20V Rail: {rail_20v_mv / 1000:.2f} V\n"
+                        f"\n"
+                        f"Time Information:\n"
+                        f"  Time: {tm_hour:02}:{tm_min:02}:{tm_sec:02}\n"
+                        f"  Date: {tm_year}-{tm_mon:02}-{tm_mday:02}\n"
+                        f"  Day of Week: {day_of_week_str}\n"
+                        f"\n"
+                        f"Software Version: {software_version >> 8}.{software_version & 0xFF:02}\n"
+                    )
+                    log_manager.log_message(log_message)
+
+                else:
+                    raise ValueError("Packet length is insufficient to update device status.")
+        except Exception as e:
+            logging.error(f"Failed to process received data: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")
+    
+def convert_adc_to_millivolts(adc_val: int, r1: int, r2: int, vref_mv: int = 2500, adc_max: int = 4095) -> float:
+    """
+    Converts an ADC value to millivolts, considering a voltage divider circuit.
+
+    Args:
+        adc_val (int): The raw ADC value.
+        r1 (int): The resistor value connected to the ADC input (top of the divider).
+        r2 (int): The resistor value connected to ground (bottom of the divider).
+        vref_mv (int): The reference voltage in millivolts. Default is 2500 mV (2.5V).
+        adc_max (int): The maximum ADC value. Default is 4095 for a 12-bit ADC.
+
+    Returns:
+        float: The calculated voltage in millivolts.
+    """
+    # Calculate the voltage divider ratio
+    voltage_divider_ratio = r2 / (r1 + r2)
+
+    # Calculate the voltage at the ADC input
+    adc_input_voltage = (adc_val / adc_max) * vref_mv
+
+    # Calculate the actual voltage based on the voltage divider
+    millivolts = adc_input_voltage / voltage_divider_ratio
+
+    return millivolts
