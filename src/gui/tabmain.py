@@ -1,3 +1,4 @@
+import logging
 from PySide6.QtCore import QTimer, QByteArray, Slot
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -63,8 +64,9 @@ class MainTab:
  
         #  Connect protocol's command_encoded signal to SerialManager's send_data
         self.serial_protocol.command_encoded.connect(self._send_encoded_data)
+        self.serial_protocol.data_received.connect(self._process_received_data)
 
-      
+
     def init_ui(self):
         self.setup_serial_controls()
         self.setup_rtc_controls()
@@ -519,3 +521,35 @@ class MainTab:
         selected_cal = int(self.rtcCalibrateComboBox.currentText())
         self._encode_and_send(self.cmd_set_rtc_year, [selected_cal], f"Sent RTC calibrate cmd with value: {selected_cal}\n")
     
+    def _process_received_data(self, packet: bytes) -> None:
+        """
+        Processes the received data from the serial manager.
+
+        This method is connected to the SerialManager's data_received signal.
+        It updates the corresponding comboboxes for the read_filter_request command.
+        """
+        try:
+            if packet[0] != self.cmd_filter_request.code:
+                return
+
+            print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
+            print("packet length:", len(packet))
+
+            # Assuming the packet structure is [cmd_code, poti1, poti2, poti3, poti4]
+            if len(packet) >= 5:
+                poti1_value = packet[2]
+                poti2_value = packet[3]
+                poti3_value = packet[4]
+                poti4_value = packet[5]
+
+                self.poti1ComboBox.setCurrentText(str(poti1_value))
+                self.poti2ComboBox.setCurrentText(str(poti2_value))
+                self.poti3ComboBox.setCurrentText(str(poti3_value))
+                self.poti4ComboBox.setCurrentText(str(poti4_value))
+
+                status_bar_manager.update_message("Configuration read successfully.", category="success")
+            else:
+                raise ValueError("Packet length is insufficient to update filter configuration.")
+        except Exception as e:
+            logging.error(f"Failed to process filter configuration response: {e}")
+            status_bar_manager.update_message(f"Error: {e}", category="error")

@@ -40,7 +40,7 @@ COMMANDS = [
     Command(name="CMD_DIGITAL_POTI_2", code=0x21, response_size=8, description="Set digital potentiometer 2"),
     Command(name="CMD_DIGITAL_POTI_3", code=0x22, response_size=8, description="Set digital potentiometer 3"),
     Command(name="CMD_DIGITAL_POTI_4", code=0x23, response_size=8, description="Set digital potentiometer 4"),
-    Command(name="CMD_FILTER_REQUEST", code=0x24, response_size=16, description="Request filter data"),
+    Command(name="CMD_FILTER_REQUEST", code=0x24, response_size=7, description="Request filter data"),
     Command(name="CMD_RESET_TUSB3410", code=0x28, response_size=2, description="Reset TUSB3410"),
     Command(name="CMD_RESET_ISM", code=0x29, response_size=2, description="Reset ISM module"),
     Command(name="CMD_RESET_RS485", code=0x2A, response_size=2, description="Reset RS485 module"),
@@ -71,11 +71,11 @@ COMMANDS = [
     Command(name="CMD_SDCARD_DELETE", code=0x4D, response_size=64, description="Delete from SD card"),
     Command(name="CMD_READ_ALL_MEMORY", code=0x51, response_size=ISL94203_MEMORY_SIZE+3, description="BMS - Read all memory ( EEPROM + RAM )"),
     Command(name="CMD_READ_EEPROM", code=0x52, response_size=ISL94203_RAM_SIZE + 3, description="BMS - Read EEPROM"),
-    Command(name="CMD_WRITE_EEPROM", code=0x53, response_size=None, description="BMS - Write EEPROM"),
+    Command(name="CMD_WRITE_EEPROM", code=0x53, response_size=0, description="BMS - Write EEPROM"),
     Command(name="CMD_READ_RAM", code=0x54, response_size=ISL94203_RAM_SIZE + 3, description="BMS - Read RAM"),
     Command(name="CMD_WRITE_USER_EEPROM", code=0x55, response_size=64, description="BMS - Write user EEPROM"),
     Command(name="CMD_READ_USER_EEPROM", code=0x56, response_size=64, description="BMS - Read user EEPROM"),
-    Command(name="CMD_WRITE_EEPROM_PERSISTENT", code=0x57, response_size=64, description="BMS - Write EEPROM Persistent"),
+    Command(name="CMD_WRITE_EEPROM_PERSISTENT", code=0x57, response_size=0, description="BMS - Write EEPROM Persistent"),
     Command(name="CMD_TEST", code=0xFF, response_size=1, description="Test command"),
 ]
 
