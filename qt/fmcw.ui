@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1697</width>
-    <height>943</height>
+    <width>1695</width>
+    <height>938</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -55,8 +55,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1695</width>
-         <height>908</height>
+         <width>1693</width>
+         <height>903</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="1,0">
@@ -1953,6 +1953,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Watchdog Timer (WDT)&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x47&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;The Watchdog Timer prevents an external MCU from initiating an action that it cannot undo through the I2C port, which can result in poor or unexpected operation of the pack. The watchdog timer is normally inactive when the device is operating stand-alone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Watchdog</string>
                          </property>
@@ -2096,6 +2099,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;SLEEP Timer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x48&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits:&lt;/span&gt; 0x82[bits3:2]&lt;/p&gt;&lt;p&gt;If no Discharge event or Charging event is detected, the device enters from NORMAL(or IDLE) to DOZE mode.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Idle/Doze</string>
                          </property>
@@ -2161,6 +2167,9 @@
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;SLEEP Timer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x48&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits:&lt;/span&gt; 0x82[bits3:2]&lt;/p&gt;&lt;p&gt;If no Discharge event or Charging event is detected, the device enters from DOZE to SLEEP mode.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Sleep</string>
@@ -2520,6 +2529,9 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Overvoltage Delay Timer setting&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x10-0x11&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;For the device to enter an overvoltage condition, a V&lt;span style=&quot; vertical-align:sub;&quot;&gt;CELL&lt;/span&gt;OV condition must be present for at least the time specified by this setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>OV Delay</string>
                          </property>
@@ -2537,7 +2549,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Low Voltage Charge Level</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Low Voltage Charge Level(LVCL) Threshold&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x0E-0x0F&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes:&lt;/span&gt; PCFET on, CFET off.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If any cell voltage falls below this level, the device turns on the PCFET output instead of the CFET output to &lt;span style=&quot; font-weight:700;&quot;&gt;enable initial trickle charging&lt;/span&gt; of the cells. After the cell voltages rise above V&lt;span style=&quot; vertical-align:sub;&quot;&gt;CELL&lt;/span&gt;LVCL, CFET is enabled, and PCFET is disabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Low V Charge</string>
@@ -2607,7 +2619,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Undervoltage Recovery</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Recovery&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x04-0x05&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits&lt;/span&gt;: 0x80[bit2]&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Exit Condition: V&lt;span style=&quot; vertical-align:sub;&quot;&gt;cell min &lt;/span&gt;must be higher than the Under Voltage Recovery setting.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If any cell voltage falls below this threshold voltage, DFET is turned OFF.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Under Voltage</string>
@@ -2623,7 +2635,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Overvoltage Threshold</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Overvoltage Threshold &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x00-0x01 &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits:&lt;/span&gt; OVF (0x80:[bit0])&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Exit Condition:&lt;/span&gt; The OverVoltage Recovery threshold determines the voltage at which this fault clears and allows CFET to turn back on.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Sets the upper operational voltage limit for selected cells, the charge FET (CFET) is turned OFF, and the OVF fault bit is set. This action is also influenced by the CFET On During Overvoltage bit (0x49). &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Over Voltage</string>
@@ -2684,7 +2696,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Undervoltage Threshold</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Recovery(UVR) Threshold&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x06-0x07&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits&lt;/span&gt;: 0x80[bit2]&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;UVR must be set &lt;span style=&quot; font-weight:700;&quot;&gt;greater&lt;/span&gt; than the Undervoltage(UV) Threshold to provide hysteresis.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If an undervoltage fault is detected, the cell voltages must rise above the UVR threshold for the setting “0x12-13 VCELL UV Timer”  for the fault bit to clear, then the device enables the power FETs (assuming no faults present).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>UV Recover</string>
@@ -2716,7 +2728,7 @@
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Sleep Level Voltage</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sleep Level Voltage&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x44-0x45&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Related Timer:&lt;/span&gt; 0x46-0x47 (Sleep Delay Timer/Watchdog Timer)&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If any cell voltage is below this threshold voltage for a sleep delay time, the device goes into the Sleep mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Sleep Voltage</string>
@@ -2731,9 +2743,12 @@
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Open Wire Timing (OWT)&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x14-0x15&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;This value sets the width of the open-wire test pulse for each cell input.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Pack Option: &lt;span style=&quot; font-style:italic;&quot;&gt;Enable Open Wire Scan&lt;/span&gt; enable/disable the Open-Wire test.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Open Wire 
-Sample</string>
+Timing</string>
                          </property>
                          <property name="indent">
                           <number>-1</number>
@@ -2813,7 +2828,7 @@ Sample</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Overvoltage Recovery</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Overvoltage Recovery threshold (OVR)&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x02-0x03 &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits:&lt;/span&gt; OVF (0x80:[bit0])&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;This threshold must be set &lt;span style=&quot; font-weight:700;&quot;&gt;lower&lt;/span&gt; than the Overvoltage Threshold (OV) to provide hysteresis.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If an overvoltage fault is detected, the cell voltages must drop below the OVR threshold for the fault bit to clear, then the device enables the power FETs (assuming no faults present).&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>OV Recover</string>
@@ -2829,7 +2844,7 @@ Sample</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Undervoltage Lockout Threshold</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Lockout (UVLO) Threshold&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x0A-0x0B&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bits: 0x80[bit3]&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes: &lt;/span&gt;DFET to turn OFF, and the cell balance FETs are turned OFF, if the voltage in any cell is below this threshold.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Pack Option:&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Enable UVLO Power Down&lt;/span&gt; forces the part into the Power Down State when set &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>UV Lockout</string>
@@ -2851,7 +2866,7 @@ Sample</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>End-of-Charge (EOC) Threshold</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Voltage End-of-Charge (EOC) Threshold &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x0C-0xD&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit7]&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;If any cell voltage rises above the VCELLEOC threshold, the device enters an End-of-Charge condition.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>EOC</string>
@@ -2925,6 +2940,9 @@ Sample</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sleep Delay Timer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x46-0x47&lt;/p&gt;&lt;p&gt;This value sets the time that is required for any cell to be below the sleep voltage threshold before the device enters the Sleep mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Sleep Delay</string>
                          </property>
@@ -2940,6 +2958,9 @@ Sample</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Delay Timer setting&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x12-0x13&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;For the device to enter an undervoltage condition, a V&lt;span style=&quot; vertical-align:sub;&quot;&gt;CELL&lt;/span&gt;UV condition must be present for at least the time specified by this setting.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>UV Delay</string>
@@ -3044,7 +3065,7 @@ Sample</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Overvoltage Lockout Threshold</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Over Voltage Lockout Threshold&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x08-0x09&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Related Status Bits:&lt;/span&gt; OVLO (0x80:[bit1])&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes: &lt;/span&gt;CFET/PCFET to turn OFF&lt;/p&gt;&lt;p&gt;If any cell's voltage remains above this level for 5 consecutive samples, the device enters a protected state, disabling power FETs and indicating the fault. Turns CFET/PCFET off. V&lt;span style=&quot; vertical-align:sub;&quot;&gt;CELL&lt;/span&gt;OVLO must be set greater than V&lt;span style=&quot; vertical-align:sub;&quot;&gt;CELL&lt;/span&gt;OV for proper operation.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>OV Lockout</string>
@@ -5754,7 +5775,7 @@ Sample</string>
                           </size>
                          </property>
                          <property name="text">
-                          <string>         </string>
+                          <string/>
                          </property>
                         </widget>
                        </item>
@@ -6727,6 +6748,9 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>External Temperature 1</string>
+                         </property>
                          <property name="text">
                           <string>xT1</string>
                          </property>
@@ -6739,6 +6763,9 @@ Settings</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>External Temperature 2</string>
                          </property>
                          <property name="text">
                           <string>xT2</string>
@@ -6901,6 +6928,9 @@ Logging</string>
                            <kerning>true</kerning>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>Updates the field in this tab with current readings</string>
+                         </property>
                          <property name="autoFillBackground">
                           <bool>false</bool>
                          </property>
@@ -6947,6 +6977,9 @@ RAM Memory</string>
                       <family>Roboto</family>
                       <pointsize>10</pointsize>
                      </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>Cell Voltage monitoring</string>
                     </property>
                     <property name="title">
                      <string>Voltage</string>
@@ -7021,6 +7054,9 @@ RAM Memory</string>
                          <family>Roboto</family>
                          <pointsize>10</pointsize>
                         </font>
+                       </property>
+                       <property name="toolTip">
+                        <string>The highest cell voltage in battery pack</string>
                        </property>
                        <property name="text">
                         <string>Cell Max</string>
@@ -7347,6 +7383,9 @@ RAM Memory</string>
                          <pointsize>10</pointsize>
                         </font>
                        </property>
+                       <property name="toolTip">
+                        <string>Battery pack voltage</string>
+                       </property>
                        <property name="text">
                         <string>VBATT    </string>
                        </property>
@@ -7410,6 +7449,9 @@ RAM Memory</string>
                          <family>Roboto</family>
                          <pointsize>10</pointsize>
                         </font>
+                       </property>
+                       <property name="toolTip">
+                        <string>2.5V Regulated Voltage</string>
                        </property>
                        <property name="text">
                         <string>VRGO</string>
@@ -7533,6 +7575,9 @@ RAM Memory</string>
                          <pointsize>10</pointsize>
                         </font>
                        </property>
+                       <property name="toolTip">
+                        <string>The lowest cell voltage in the battery pack</string>
+                       </property>
                        <property name="text">
                         <string>Cell Min</string>
                        </property>
@@ -7626,6 +7671,9 @@ RAM Memory</string>
                      </property>
                      <item row="1" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitChargerOn">
+                       <property name="toolTip">
+                        <string>A Charger Present detection wakes a device from Powerdown or SLEEP into NORMAL Mode.</string>
+                       </property>
                        <property name="text">
                         <string>CHARGER ON</string>
                        </property>
@@ -7658,6 +7706,10 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Undervoltage Lockout Fault bit is set when the ISL94202 detects at least one cell voltage is below the
+threshold “0x0A-0B VCELL UVLO” on page 39 for 5 consecutive sample cycles (measurements)..</string>
+                       </property>
                        <property name="text">
                         <string>OVLO</string>
                        </property>
@@ -7674,8 +7726,14 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Open-Wire Fault bit is set when an open wire is detected on any of the cell voltage measurement pins. When
+detected, the OWF condition turns off the cell balance and power FETs, but only if bit “0x87.6 μCFET” on page 82
+is 0. Setting the μCFET bit = 1 prevents the power FETs from turning off during a CELLF condition.</string>
+                       </property>
                        <property name="text">
-                        <string>OPEN</string>
+                        <string>OPEN
+ WIRE</string>
                        </property>
                        <property name="checked">
                         <bool>true</bool>
@@ -7689,6 +7747,12 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>The Internal Over-Temperature Fault bit is set to 1 if the internal temperature of the IC goes above the threshold
+“0x40-41 IOT” on page 62. When the ISL94202 sets the IOTF bit, it also stops/prevents cell balancing and turns
+off the power FETs. When IOTF is set, the device continues to prevent turn on of the FETs until the internal
+temperature drops below the recovery threshold “0x42-43 IOTR” on page 63.</string>
                        </property>
                        <property name="text">
                         <string>IOT</string>
@@ -7722,6 +7786,11 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Cell Balance Overvoltage bit is set during a Cell Balance Overvoltage condition, when all cell voltages are
+above threshold “0x1E-1F CBMAX” on page 50. At least one cell voltage must drop below the CBMAX threshold
+to recover from a Cell Balance Overvoltage condition, then the ISL94202 automatically clears the CBOV bit.</string>
+                       </property>
                        <property name="text">
                         <string>CBOV</string>
                        </property>
@@ -7738,6 +7807,12 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Cell Balance Over-Temperature Fault bit is set during a Cell Balance Over-Temperature condition. This
+occurs when the external temperature sensing thermistors indicate a battery pack temperature above the
+threshold defined by register “0x2C-2D CBOT” on page 55. When the pack temperature drops below the
+threshold the ISL94202 automatically clears the CBOTF bit.</string>
+                       </property>
                        <property name="text">
                         <string>CBOT</string>
                        </property>
@@ -7753,6 +7828,14 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>No scans. RGO
+remains on,
+VREF off.
+Monitors for a
+charger or load
+connection.</string>
                        </property>
                        <property name="text">
                         <string>SLEEP</string>
@@ -7821,6 +7904,9 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Charge Over-Temperature Fault bit is set following a Charge Over-Temperature condition detection.</string>
+                       </property>
                        <property name="text">
                         <string>COT</string>
                        </property>
@@ -7839,6 +7925,9 @@ RAM Memory</string>
                          <bold>true</bold>
                          <kerning>true</kerning>
                         </font>
+                       </property>
+                       <property name="toolTip">
+                        <string>Related to power consumption mode</string>
                        </property>
                        <property name="text">
                         <string>Operating Mode</string>
@@ -7863,6 +7952,9 @@ RAM Memory</string>
                      </item>
                      <item row="1" column="0" colspan="2">
                       <widget class="QCheckBox" name="bitCharging">
+                       <property name="toolTip">
+                        <string>When set, this bit indicates current flowing into the pack.</string>
+                       </property>
                        <property name="text">
                         <string>CHARGING</string>
                        </property>
@@ -7878,6 +7970,12 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>The Cell Balance Under-Temperature Fault bit is set during a Cell Balance Under-Temperature condition. This
+occurs when the external temperature sensing thermistors indicate a battery pack temperature below the
+threshold defined by register “0x28-29 CBUT” on page 53. When the pack temperature rises above the threshold
+the ISL94202 automatically clears the CBUTF bit.</string>
                        </property>
                        <property name="text">
                         <string>CBUT</string>
@@ -7905,6 +8003,9 @@ RAM Memory</string>
                      </item>
                      <item row="2" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitLoadOn">
+                       <property name="toolTip">
+                        <string>A Load Present detection wakes a device from SLEEP into NORMAL Mode.</string>
+                       </property>
                        <property name="text">
                         <string>LOAD ON</string>
                        </property>
@@ -7937,6 +8038,9 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>Scans Every 512ms</string>
+                       </property>
                        <property name="text">
                         <string>DOZE</string>
                        </property>
@@ -7947,6 +8051,10 @@ RAM Memory</string>
                      </item>
                      <item row="9" column="0">
                       <widget class="QCheckBox" name="bitOV">
+                       <property name="toolTip">
+                        <string>The Overvoltage Fault bit is set when at least one cell is above threshold “VCELL OV” on page 35 for the time
+period set by “0x10-11 VCELL OV Timer” on page 41.</string>
+                       </property>
                        <property name="text">
                         <string>OV</string>
                        </property>
@@ -7963,6 +8071,12 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Cell Fail fault bit is set when the difference between the lowest voltage cell (“0x8A-8B CELMIN” on page 89)
+and highest voltage cell (“0x8C-8D CELMAX” on page 89) exceeds threshold “0x22-23 CBMAXDV” on page 51.
+When detected, the CELLF condition turns off the cell balance FETs and the power FETs, but only if bit “0x87.6
+μCFET” on page 82 is 0.</string>
+                       </property>
                        <property name="text">
                         <string>CELLF</string>
                        </property>
@@ -7978,6 +8092,9 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>The Charge Under-Temperature Fault bit is set following a Charge Under-Temperature condition detection</string>
                        </property>
                        <property name="text">
                         <string>CUT</string>
@@ -8001,6 +8118,9 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Discharge Over-Temperature Fault bit is set following a Discharge Over-Temperature condition detection.</string>
+                       </property>
                        <property name="text">
                         <string>DOT</string>
                        </property>
@@ -8017,6 +8137,9 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>Scan every 256ms</string>
+                       </property>
                        <property name="text">
                         <string>IDLE</string>
                        </property>
@@ -8027,6 +8150,13 @@ RAM Memory</string>
                      </item>
                      <item row="10" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitLVCHRG">
+                       <property name="toolTip">
+                        <string>The Low Voltage Charge bit is set if at least one cell voltage is below the threshold “0x0E-0F VCELL LVCL” on
+page 40. If LVCHG is 1, the PCFET turns on instead of CFET as long as at least one cell is below the VCELL LVCL
+setting.
+When all cells are above the Low Voltage Charge threshold, the PCFET output turns off and the CFET output
+turns on</string>
+                       </property>
                        <property name="text">
                         <string>LVCHRG</string>
                        </property>
@@ -8059,6 +8189,11 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Cell Balance Undervoltage bit is set during a Cell Balance Undervoltage condition, when all cell voltages are
+below threshold “0x1C-1D CBMIN” on page 49. At least one cell voltage must rise above the CBMIN threshold to
+recover from a Cell Balance Undervoltage condition, then the ISL94202 automatically clears the CBUV bit.</string>
+                       </property>
                        <property name="text">
                         <string>CBUV</string>
                        </property>
@@ -8081,6 +8216,9 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Discharge Under-Temperature Fault bit is set following a Discharge Under-Temperature condition detection.</string>
+                       </property>
                        <property name="text">
                         <string>DUT</string>
                        </property>
@@ -8091,6 +8229,9 @@ RAM Memory</string>
                      </item>
                      <item row="2" column="0" colspan="2">
                       <widget class="QCheckBox" name="bitDischarging">
+                       <property name="toolTip">
+                        <string>When set, this bit indicates current flowing out of the pack.</string>
+                       </property>
                        <property name="text">
                         <string>DISCHARGING</string>
                        </property>
@@ -8101,6 +8242,10 @@ RAM Memory</string>
                      </item>
                      <item row="9" column="1">
                       <widget class="QCheckBox" name="bitUV">
+                       <property name="toolTip">
+                        <string>The Undervoltage Fault bit is set when at least one cell is below threshold “VCELL UV” on page 37 for the time
+period set by “0x12-13 VCELL UV Timer” on page 42.</string>
+                       </property>
                        <property name="text">
                         <string>UV</string>
                        </property>
@@ -8116,6 +8261,11 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>The Discharge Overcurrent Fault bit is set when the discharge current induces a voltage across the current sense
+resistor that exceeds the voltage threshold “0x17.[6:4] DOC” on page 44 for a time greater than the setting of
+“0x17.[3:2] DOCTU” on page 44 and “0x16-17 DOCT” on page 44.</string>
                        </property>
                        <property name="text">
                         <string>DOC</string>
@@ -8133,6 +8283,10 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The End-of-Charge detection bit is set when any cell voltage is above the end-of-charge voltage threshold
+“0x0C-0D VCELL EOC”.</string>
+                       </property>
                        <property name="text">
                         <string>EOC</string>
                        </property>
@@ -8149,6 +8303,11 @@ RAM Memory</string>
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="toolTip">
+                        <string>The Discharge Short Circuit Fault bit is set when the discharge current induces a voltage across the current sense
+resistor that exceeds the voltage threshold “0x1B.[6:4] DSC” on page 48 for a time greater than the setting of
+“0x1B.[3:2] DSCTU” on page 48 and “0x1B.[1:0] - 0x1A.[7:0] DSCT” on page 49.</string>
+                       </property>
                        <property name="text">
                         <string>DSC</string>
                        </property>
@@ -8164,6 +8323,11 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>The Charge Overcurrent Fault bit is set when the charge current induces a voltage across the current sense
+resistor that exceeds the voltage threshold “0x19.[6:4] COC” on page 46 for a time greater than the setting of
+“0x19.[3:2] COCTU” on page 46 and “0x18-19 COCT” on page 47.</string>
                        </property>
                        <property name="text">
                         <string>COC</string>
@@ -8276,6 +8440,9 @@ RAM Memory</string>
                  <width>10</width>
                  <height>0</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Serial connection status</string>
                </property>
                <property name="text">
                 <string/>
@@ -8429,7 +8596,7 @@ RAM Memory</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1697</width>
+     <width>1695</width>
      <height>33</height>
     </rect>
    </property>
