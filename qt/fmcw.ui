@@ -1760,7 +1760,7 @@
                <enum>QTabWidget::TabShape::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <property name="elideMode">
                <enum>Qt::TextElideMode::ElideNone</enum>
@@ -3259,8 +3259,581 @@ Timing</string>
                        <property name="spacing">
                         <number>10</number>
                        </property>
-                       <item row="6" column="1">
+                       <item row="5" column="1">
+                        <widget class="QLineEdit" name="CBOverTempLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="0">
+                        <widget class="QLabel" name="label_47">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>80</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Minimum Temperature Recovery Level (CBUTR)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x2A-0x2B&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit:&lt;/span&gt; 0x83 [bit 1] - CBUT&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Given an NTC thermistor, if the measured temperature at either thermistor input is greater than the value represented by this register, the CBUT fault is cleared.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBUTR</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="2">
+                        <widget class="QLabel" name="label_75">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="2">
+                        <widget class="QLabel" name="label_108">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="2">
+                        <widget class="QLabel" name="label_113">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QLineEdit" name="CBUpperLimLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="5" column="0">
+                        <widget class="QLabel" name="label_93">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>70</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Maximum Temperature Limit (CBOTS)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x2C-0x2D&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x83 [bit 0]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes: &lt;/span&gt;Cell balancing stops&lt;/p&gt;&lt;p&gt;Condition: voltage measured at either of the thermistor pins is less than the CBOTS threshold&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBOTS</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="11" column="2">
+                        <widget class="QComboBox" name="CBOffTimeUnitCombo">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>μs</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>ms</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>s</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>min</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="8" column="2">
+                        <widget class="QLabel" name="label_109">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>10</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="10" column="1">
+                        <widget class="QLineEdit" name="CBOnTimeLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLineEdit" name="CBMaxDeltaLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="0">
+                        <widget class="QLabel" name="label_48">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>85</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Minimum Temperature Limit (CBUTS)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x28-0x29&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit: &lt;/span&gt;0x83 [bit 1]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes&lt;/span&gt;: Cell balancing stops. Generates CBUT fault&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Given an NTC thermistor, this means that when the measured temperature at either thermistor input is less than the value represented by this register, a fault is declared.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBUTS</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="7" column="1">
                         <widget class="QLineEdit" name="CBUTRecoverLineEdit">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="13" column="0" colspan="3">
+                        <widget class="QCheckBox" name="CBDuringChargeCheckBox">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>140</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance During Charge bit&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x4B [bit 6]&lt;/p&gt;&lt;p&gt;The Cell Balance During Charge bit controls whether or not cell balancing is performed during charge.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CB During Charge</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="9" column="1">
+                        <spacer name="verticalSpacer_27">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>5</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="6" column="2">
+                        <widget class="QLabel" name="label_94">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>V</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_110">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Minimum Voltage (CBMIN)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x1C-0x1D&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit:&lt;/span&gt; 0x83 [bit 3] CBUV&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Cell Balancing is inhibited, and the bit “0x83.3 CBUV” on page 78 is set to 1 if all cell voltages are below this threshold. This is a Cell Balance Undervoltage condition. At least one cell voltage must rise above the CBMIN threshold to recover from a Cell Balance Undervoltage condition and clear the CBUV bit.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBMIN</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="6" column="0">
+                        <widget class="QLabel" name="label_95">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>80</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Maximum Temperature Recovery Level (CBOTR)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x2E-0x2F&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x83 [bit 0]&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Given an NTC thermistor, this means that when the measured temperature at both thermistors&lt;/p&gt;&lt;p&gt;input is less than the value represented by this register, the previously existing fault is cleared.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBOTR</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="15" column="0" colspan="3">
+                        <widget class="QCheckBox" name="CBDuringEOCCheckBox">
+                         <property name="enabled">
+                          <bool>true</bool>
+                         </property>
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>140</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance During End-of-Charge&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x4B [bit 0]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81 [bit 7]&lt;/p&gt;&lt;p&gt;bit controls whether cell balancing is performed following a VCELL end-of-charge condition detection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CB During EOC</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="16" column="1">
+                        <spacer name="verticalSpacer_6">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="12" column="1">
+                        <spacer name="verticalSpacer_14">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>15</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="10" column="2">
+                        <widget class="QComboBox" name="CBOnTimeUnitCombo">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>25</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>μs</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>ms</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>s</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>min</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="10" column="0">
+                        <widget class="QLabel" name="label_137">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance On Time (CBON)&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x24-0x25&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;This setting determines how long the cell balancing outputs are turned ON during a cell balancing cycle.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string> Time On</string>
+                         </property>
+                         <property name="indent">
+                          <number>-1</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="8" column="1">
+                        <widget class="QLineEdit" name="CBUnderTempLineEdit">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                            <horstretch>0</horstretch>
@@ -3303,90 +3876,8 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="15" column="1">
-                        <spacer name="verticalSpacer_6">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QLineEdit" name="CBUpperLimLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="2">
-                        <widget class="QLabel" name="label_94">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="13" column="0" colspan="3">
-                        <widget class="QCheckBox" name="CBDuringDischargeCheckBox">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>140</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>CB During Discharge</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QLineEdit" name="CBMaxDeltaLineEdit">
+                       <item row="6" column="1">
+                        <widget class="QLineEdit" name="CBOTRecoverLineEdit">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                            <horstretch>0</horstretch>
@@ -3404,6 +3895,50 @@ Timing</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_49">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cell Balance Maximum Voltage (CBMAX)&lt;/p&gt;&lt;p&gt;Address: 0x1E-0x1F&lt;/p&gt;&lt;p&gt;StatusBit: 0x83 [bit 2]&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Cell Balancing is inhibited, and the bit “0x83.2 CBOV” on page 78 is set to 1 if all cell voltages are above this threshold. This is a Cell Balance Overvoltage condition. At least one cell voltage must drop below the CBMAX threshold to recover from a Cell Balance Overvoltage condition and clear the CBOV bit.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBMAX</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_91">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Maximum Differential Voltage (CBMAXDV)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x22-0x23&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;StatusBit&lt;/span&gt;: 0x81 [bit 4]&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes&lt;/span&gt;: Disable battery pack and Cell Balancing stops for a specific cell.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Condition&lt;/span&gt;: the difference between CELL&lt;span style=&quot; vertical-align:sub;&quot;&gt;N&lt;/span&gt; and the lowest voltage cell is &lt;span style=&quot; font-weight:700;&quot;&gt;greater&lt;/span&gt; than this value.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Note: Cell balancing for CELLN is not enabled if its voltage is less than CBMIN or greater than CBMAX. Otherwise, enabled.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Note 2: If the difference between CELLN and the lowest voltage cell is larger than CBMAXDV, cell balancing for CELLN is disabled, and the fault bit “0x81.4 CELLF” is set to 1.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CBMAXDV</string>
                          </property>
                         </widget>
                        </item>
@@ -3435,24 +3970,8 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="11" column="1">
-                        <spacer name="verticalSpacer_14">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>10</width>
-                           <height>15</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="2" column="2">
-                        <widget class="QLabel" name="label_75">
+                       <item row="3" column="2">
+                        <widget class="QLabel" name="label_99">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                            <horstretch>0</horstretch>
@@ -3473,120 +3992,6 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="5" column="1">
-                        <widget class="QLineEdit" name="CBOTRecoverLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="2">
-                        <widget class="QComboBox" name="CBOnTimeUnitCombo">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>25</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <item>
-                          <property name="text">
-                           <string>μs</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>ms</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>s</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>min</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="12" column="0" colspan="3">
-                        <widget class="QCheckBox" name="CBDuringChargeCheckBox">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>140</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>CB During Charge</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="0">
-                        <widget class="QLabel" name="label_137">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Cell Balance On Time (CBON)</string>
-                         </property>
-                         <property name="text">
-                          <string> Time On</string>
-                         </property>
-                         <property name="indent">
-                          <number>-1</number>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="3" column="0">
                         <widget class="QLabel" name="label_79">
                          <property name="sizePolicy">
@@ -3602,38 +4007,10 @@ Timing</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Cell Balance Minimum Differential Voltage (CBMINDV)</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Minimum Differential Voltage (CBMINDV)&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x20-0x21&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Causes&lt;/span&gt;: Cell Balancing stops for a specific cell &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Condition&lt;/span&gt;: the difference between CELL&lt;span style=&quot; vertical-align:sub;&quot;&gt;N&lt;/span&gt; and the lowest voltage cell is less than this value.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Note: Cell balancing for CELLN is not enabled if its voltage is less than CBMIN or greater than CBMAX. Otherwise, enabled.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Note2: Setting CBMINDV to less than 10mV can result in cell balance algorithm non-convergence and is not recommended&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
-                          <string>Min Delta</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="0">
-                        <widget class="QLabel" name="label_95">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>80</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Maximum Temperature Recovery Level (CBOTR)</string>
-                         </property>
-                         <property name="text">
-                          <string>OT Recover</string>
+                          <string>CBMINDV</string>
                          </property>
                         </widget>
                        </item>
@@ -3659,237 +4036,7 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="1">
-                        <widget class="QLineEdit" name="CBOverTempLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QLabel" name="label_91">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Cell Balance Maximum Differential Voltage (CBMAXDV)</string>
-                         </property>
-                         <property name="text">
-                          <string>Max Delta</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="2">
-                        <widget class="QLabel" name="label_99">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="0">
-                        <widget class="QLabel" name="label_48">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>85</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Minimum Temperature Limit (CBUTS)</string>
-                         </property>
-                         <property name="text">
-                          <string>Under Temp</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="10" column="2">
-                        <widget class="QComboBox" name="CBOffTimeUnitCombo">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>25</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <item>
-                          <property name="text">
-                           <string>μs</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>ms</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>s</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>min</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="7" column="1">
-                        <widget class="QLineEdit" name="CBUnderTempLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="2">
-                        <widget class="QLabel" name="label_109">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>10</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="6" column="2">
-                        <widget class="QLabel" name="label_108">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="label_49">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Cell Balance Maximum Voltage (CBMAX)</string>
-                         </property>
-                         <property name="text">
-                          <string>Upper Lim</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="10" column="0">
+                       <item row="11" column="0">
                         <widget class="QLabel" name="label_116">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -3904,7 +4051,7 @@ Timing</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Cell Balance Off Time (CBOFF)</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cell Balance Off Time (CBOFF)&lt;/p&gt;&lt;p&gt;Address: 0x26-0x27&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This setting determines how long the cell balancing outputs are turned OFF following a cell balancing cycle.&lt;/p&gt;&lt;p&gt;Note: The CBOFF setting should be long enough to allow the ISL9420x to complete at least two measurement scans after the CB FETs have been turned off and all CB induced transients have settled out. If CBOFF is too short, internal decisions on which cells to balance can be made during a CBON period (or during post CB transients). This can lead to poor results. CBOFF also allows time for the CB FETs to cool.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string> Time Off</string>
@@ -3914,30 +4061,8 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="2">
-                        <widget class="QLabel" name="label_113">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>V</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="9" column="1">
-                        <widget class="QLineEdit" name="CBOnTimeLineEdit">
+                       <item row="11" column="1">
+                        <widget class="QLineEdit" name="CBOffTimeLineEdit">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                            <horstretch>0</horstretch>
@@ -3955,6 +4080,34 @@ Timing</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="14" column="0" colspan="3">
+                        <widget class="QCheckBox" name="CBDuringDischargeCheckBox">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>140</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance During Discharge&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x4B [bit 7]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x82 [bit 3]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Note&lt;/span&gt;: According to the Datasheet, in most cases, cell balancing during discharge wastes system power and provides no positive benefits.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>CB During Discharge</string>
                          </property>
                         </widget>
                        </item>
@@ -3980,13 +4133,10 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="8" column="1">
-                        <spacer name="verticalSpacer_27">
+                       <item row="4" column="1">
+                        <spacer name="verticalSpacer_22">
                          <property name="orientation">
                           <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
                          </property>
                          <property name="sizeHint" stdset="0">
                           <size>
@@ -3995,134 +4145,6 @@ Timing</string>
                           </size>
                          </property>
                         </spacer>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_110">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Cell Balance Minimum Voltage (CBMIN)</string>
-                         </property>
-                         <property name="text">
-                          <string>Lower Lim</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="10" column="1">
-                        <widget class="QLineEdit" name="CBOffTimeLineEdit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="4" column="0">
-                        <widget class="QLabel" name="label_93">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>70</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Maximum Temperature Limit (CBOTS)</string>
-                         </property>
-                         <property name="text">
-                          <string>Over Temp</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="6" column="0">
-                        <widget class="QLabel" name="label_47">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>80</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="toolTip">
-                          <string>Minimum Temperature Recovery Level (CBUTR)</string>
-                         </property>
-                         <property name="text">
-                          <string>UT Recover</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="14" column="0" colspan="3">
-                        <widget class="QCheckBox" name="CBDuringEOCCheckBox">
-                         <property name="enabled">
-                          <bool>true</bool>
-                         </property>
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>140</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>CB During EOC</string>
-                         </property>
-                        </widget>
                        </item>
                       </layout>
                      </widget>
@@ -4163,17 +4185,17 @@ Timing</string>
                        <property name="verticalSpacing">
                         <number>8</number>
                        </property>
-                       <item row="2" column="2">
-                        <widget class="QComboBox" name="CLDischargeOCTimeoutCombo">
+                       <item row="1" column="1" colspan="2">
+                        <widget class="QComboBox" name="CLDischargeOCVoltageCombo">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>50</width>
+                           <width>0</width>
                            <height>25</height>
                           </size>
                          </property>
@@ -4185,91 +4207,45 @@ Timing</string>
                          </property>
                          <item>
                           <property name="text">
-                           <string>μs</string>
+                           <string>4mV</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>ms</string>
+                           <string>8mV</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>s</string>
+                           <string>16mV</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>min</string>
+                           <string>24mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>32mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>48mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>64mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>96mV</string>
                           </property>
                          </item>
                         </widget>
-                       </item>
-                       <item row="6" column="2">
-                        <widget class="QComboBox" name="CLChargeOCTimeoutCombo">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>25</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <item>
-                          <property name="text">
-                           <string>μs</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>ms</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>s</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>min</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="8" column="0" colspan="3">
-                        <widget class="QLabel" name="label_28">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Discharge Short Circuit:</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="7" column="0">
-                        <spacer name="verticalSpacer_18">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>10</width>
-                           <height>10</height>
-                          </size>
-                         </property>
-                        </spacer>
                        </item>
                        <item row="10" column="2">
                         <widget class="QComboBox" name="CLDischargeSCTimeoutCombo">
@@ -4307,18 +4283,8 @@ Timing</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="10" column="1">
-                        <widget class="QLineEdit" name="CLDischargeSCTimeoutLineEdit">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="3" column="0">
-                        <spacer name="verticalSpacer_19">
+                       <item row="7" column="0">
+                        <spacer name="verticalSpacer_18">
                          <property name="orientation">
                           <enum>Qt::Orientation::Vertical</enum>
                          </property>
@@ -4333,6 +4299,51 @@ Timing</string>
                          </property>
                         </spacer>
                        </item>
+                       <item row="6" column="1">
+                        <widget class="QLineEdit" name="CLChargeOCTimeoutLineEdit">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="1">
+                        <widget class="QLineEdit" name="CLDischargeOCTimeoutLineEdit">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="14" column="0">
+                        <widget class="QLabel" name="label_198">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Load Detection Pulse Width&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x05 [bits 7:4]&lt;/p&gt;&lt;p&gt;The Load Detection Pulse Width bits set the length of time the ISL94202 LDMON pin function is enabled. If the pin voltage is below the Load Monitor Input threshold (“VLDMON” on page 16 or “VWKUP2” on page 19) at the end of the set time, the device assumes a load is present and reacts accordingly.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>Load</string>
+                         </property>
+                         <property name="indent">
+                          <number>10</number>
+                         </property>
+                        </widget>
+                       </item>
                        <item row="13" column="0">
                         <widget class="QLabel" name="label_200">
                          <property name="font">
@@ -4341,13 +4352,58 @@ Timing</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charge Detection Pulse Width &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x01 [bits 7:4]&lt;/p&gt;&lt;p&gt;The Charge Detection Pulse Width bits set the length of time the ISL94202 CHMON pin function is enabled. If the pin voltage is above the Charge Monitor Input threshold (“VCHMON” on page 16 or “VWKUP1” on page 19) at the end of the set time, the device assumes a charger is present and reacts accordingly&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
-                          <string>Charge</string>
+                          <string>Charger</string>
                          </property>
                          <property name="indent">
                           <number>10</number>
                          </property>
                         </widget>
+                       </item>
+                       <item row="10" column="1">
+                        <widget class="QLineEdit" name="CLDischargeSCTimeoutLineEdit">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="10" column="0">
+                        <widget class="QLabel" name="label_217">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Short-Circuit Timing&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x1A-0x1B&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81 [bit 3]&lt;/p&gt;&lt;p&gt;Debounce time to recognize a DSC fault.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>Delay</string>
+                         </property>
+                         <property name="indent">
+                          <number>10</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="15" column="0">
+                        <spacer name="verticalSpacer_9">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                        </spacer>
                        </item>
                        <item row="13" column="1">
                         <widget class="QComboBox" name="chargeDetectPulseCombo">
@@ -4445,119 +4501,114 @@ Timing</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="14" column="2">
-                        <widget class="QLabel" name="label_203">
+                       <item row="4" column="0" colspan="3">
+                        <widget class="QLabel" name="label_25">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
+                           <bold>true</bold>
                           </font>
                          </property>
                          <property name="text">
-                          <string>ms</string>
-                         </property>
-                         <property name="alignment">
-                          <set>Qt::AlignmentFlag::AlignCenter</set>
-                         </property>
-                         <property name="indent">
-                          <number>1</number>
+                          <string>Charge Overcurrent (COC)</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="9" column="1" colspan="2">
-                        <widget class="QComboBox" name="CLDischargeSCVoltageCombo">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>25</height>
-                          </size>
-                         </property>
+                       <item row="5" column="0">
+                        <widget class="QLabel" name="label_216">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
-                         <item>
-                          <property name="text">
-                           <string>16mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>24mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>32mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>48mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>64mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>96mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>128mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>256mV</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="6" column="0">
-                        <widget class="QLabel" name="label_207">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
+                         <property name="toolTip">
+                          <string>&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Threshold (mV)&lt;/th&gt;
+      &lt;th colspan=&quot;5&quot;&gt;Equivalent Current (A)&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;0.3mΩ&lt;/th&gt;
+      &lt;th&gt;0.5mΩ&lt;/th&gt;
+      &lt;th&gt;1mΩ&lt;/th&gt;
+      &lt;th&gt;2mΩ&lt;/th&gt;
+      &lt;th&gt;5mΩ&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;3.33&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0.5&lt;/td&gt;
+      &lt;td&gt;0.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;6.67&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;0.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;13.33&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;0.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;20&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;1.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;26.67&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;40&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;6&lt;/td&gt;
+      &lt;td&gt;2.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;53.33&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;3.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;80&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;4.8&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</string>
                          </property>
                          <property name="text">
-                          <string>Delay</string>
-                         </property>
-                         <property name="indent">
-                          <number>10</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="14" column="0">
-                        <widget class="QLabel" name="label_198">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                           <horstretch>0</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Load</string>
+                          <string>Voltage</string>
                          </property>
                          <property name="indent">
                           <number>10</number>
@@ -4666,23 +4717,186 @@ Timing</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="2" column="1">
-                        <widget class="QLineEdit" name="CLDischargeOCTimeoutLineEdit">
+                       <item row="1" column="0">
+                        <widget class="QLabel" name="label_204">
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>0</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Threshold (mV)&lt;/th&gt;
+      &lt;th colspan=&quot;5&quot;&gt;Equivalent Current (A)&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;0.3mΩ&lt;/th&gt;
+      &lt;th&gt;0.5mΩ&lt;/th&gt;
+      &lt;th&gt;1mΩ&lt;/th&gt;
+      &lt;th&gt;2mΩ&lt;/th&gt;
+      &lt;th&gt;5mΩ&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;13.3&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;0.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;26.6&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+      &lt;td&gt;1.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;53.3&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;3.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;80&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;4.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;106.7&lt;/td&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;6.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;96&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;9.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;12.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;96&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;19.2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;These selections may not be reasonable due to sense resistor power dissipation.&lt;/p&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>Voltage</string>
+                         </property>
+                         <property name="indent">
+                          <number>10</number>
+                         </property>
                         </widget>
                        </item>
-                       <item row="10" column="0">
-                        <widget class="QLabel" name="label_217">
+                       <item row="9" column="1" colspan="2">
+                        <widget class="QComboBox" name="CLDischargeSCVoltageCombo">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>25</height>
+                          </size>
+                         </property>
                          <property name="font">
                           <font>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>16mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>24mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>32mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>48mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>64mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>96mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>128mV</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>256mV</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QLabel" name="label_206">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Overcurrent Timing&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x16-0x17&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81 [bit 3]&lt;/p&gt;&lt;p&gt;Debounce time to recognize a DOC fault.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Delay</string>
@@ -4691,6 +4905,38 @@ Timing</string>
                           <number>10</number>
                          </property>
                         </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <spacer name="verticalSpacer_19">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>10</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item row="11" column="0">
+                        <spacer name="verticalSpacer_17">
+                         <property name="orientation">
+                          <enum>Qt::Orientation::Vertical</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Policy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>10</width>
+                           <height>10</height>
+                          </size>
+                         </property>
+                        </spacer>
                        </item>
                        <item row="13" column="2">
                         <widget class="QLabel" name="label_199">
@@ -4711,62 +4957,6 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="4" column="0" colspan="3">
-                        <widget class="QLabel" name="label_25">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                           <bold>true</bold>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Charge Open Circuit: </string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="11" column="0">
-                        <spacer name="verticalSpacer_17">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Policy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>10</width>
-                           <height>10</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QLabel" name="label_206">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Delay</string>
-                         </property>
-                         <property name="indent">
-                          <number>10</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="6" column="1">
-                        <widget class="QLineEdit" name="CLChargeOCTimeoutLineEdit">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                        </widget>
-                       </item>
                        <item row="12" column="0" colspan="3">
                         <widget class="QLabel" name="label_208">
                          <property name="font">
@@ -4781,27 +4971,63 @@ Timing</string>
                          </property>
                         </widget>
                        </item>
-                       <item row="15" column="0">
-                        <spacer name="verticalSpacer_9">
-                         <property name="orientation">
-                          <enum>Qt::Orientation::Vertical</enum>
+                       <item row="14" column="2">
+                        <widget class="QLabel" name="label_203">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
                          </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>20</width>
-                           <height>0</height>
-                          </size>
+                         <property name="text">
+                          <string>ms</string>
                          </property>
-                        </spacer>
+                         <property name="alignment">
+                          <set>Qt::AlignmentFlag::AlignCenter</set>
+                         </property>
+                         <property name="indent">
+                          <number>1</number>
+                         </property>
+                        </widget>
                        </item>
-                       <item row="0" column="0" colspan="3">
-                        <widget class="QLabel" name="label_3">
+                       <item row="6" column="2">
+                        <widget class="QComboBox" name="CLChargeOCTimeoutCombo">
                          <property name="minimumSize">
                           <size>
-                           <width>0</width>
-                           <height>20</height>
+                           <width>50</width>
+                           <height>25</height>
                           </size>
                          </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <item>
+                          <property name="text">
+                           <string>μs</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>ms</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>s</string>
+                          </property>
+                         </item>
+                         <item>
+                          <property name="text">
+                           <string>min</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                       <item row="8" column="0" colspan="3">
+                        <widget class="QLabel" name="label_28">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
@@ -4810,7 +5036,7 @@ Timing</string>
                           </font>
                          </property>
                          <property name="text">
-                          <string>Discharge Open Circuit: </string>
+                          <string>Discharge Short Circuit (DSC)</string>
                          </property>
                         </widget>
                        </item>
@@ -4870,17 +5096,17 @@ Timing</string>
                          </item>
                         </widget>
                        </item>
-                       <item row="1" column="1" colspan="2">
-                        <widget class="QComboBox" name="CLDischargeOCVoltageCombo">
+                       <item row="2" column="2">
+                        <widget class="QComboBox" name="CLDischargeOCTimeoutCombo">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
                          </property>
                          <property name="minimumSize">
                           <size>
-                           <width>0</width>
+                           <width>50</width>
                            <height>25</height>
                           </size>
                          </property>
@@ -4892,82 +5118,24 @@ Timing</string>
                          </property>
                          <item>
                           <property name="text">
-                           <string>4mV</string>
+                           <string>μs</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>8mV</string>
+                           <string>ms</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>16mV</string>
+                           <string>s</string>
                           </property>
                          </item>
                          <item>
                           <property name="text">
-                           <string>24mV</string>
+                           <string>min</string>
                           </property>
                          </item>
-                         <item>
-                          <property name="text">
-                           <string>32mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>48mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>64mV</string>
-                          </property>
-                         </item>
-                         <item>
-                          <property name="text">
-                           <string>96mV</string>
-                          </property>
-                         </item>
-                        </widget>
-                       </item>
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_204">
-                         <property name="minimumSize">
-                          <size>
-                           <width>50</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Voltage</string>
-                         </property>
-                         <property name="indent">
-                          <number>10</number>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="5" column="0">
-                        <widget class="QLabel" name="label_216">
-                         <property name="font">
-                          <font>
-                           <family>Roboto</family>
-                           <pointsize>10</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>Voltage</string>
-                         </property>
-                         <property name="indent">
-                          <number>10</number>
-                         </property>
                         </widget>
                        </item>
                        <item row="9" column="0">
@@ -4978,11 +5146,135 @@ Timing</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Threshold (mV)&lt;/th&gt;
+      &lt;th colspan=&quot;5&quot;&gt;Equivalent Current (A)&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;0.3mΩ&lt;/th&gt;
+      &lt;th&gt;0.5mΩ&lt;/th&gt;
+      &lt;th&gt;1mΩ&lt;/th&gt;
+      &lt;th&gt;2mΩ&lt;/th&gt;
+      &lt;th&gt;5mΩ&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;53.3&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;8&lt;/td&gt;
+      &lt;td&gt;3.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;80&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+      &lt;td&gt;4.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;106.67&lt;/td&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+      &lt;td&gt;6.4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;160&lt;/td&gt;
+      &lt;td&gt;96&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;24&lt;/td&gt;
+      &lt;td&gt;9.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;213.33&lt;/td&gt;
+      &lt;td&gt;128&lt;/td&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;32&lt;/td&gt;
+      &lt;td&gt;12.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;96&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;192&lt;/td&gt;
+      &lt;td&gt;96&lt;/td&gt;
+      &lt;td&gt;48&lt;/td&gt;
+      &lt;td&gt;19.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;128&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;128&lt;/td&gt;
+      &lt;td&gt;64&lt;/td&gt;
+      &lt;td&gt;25.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;256&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;(Note)&lt;/td&gt;
+      &lt;td&gt;128&lt;/td&gt;
+      &lt;td&gt;51.2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; These selections may not be reasonable due to sense resistor power dissipation.&lt;/p&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Voltage</string>
                          </property>
                          <property name="indent">
                           <number>10</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="6" column="0">
+                        <widget class="QLabel" name="label_207">
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                          </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charge Overcurrent Timing&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x18-0x19&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81 [bit 1]&lt;/p&gt;&lt;p&gt;Debounce time to recognize a COC fault.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
+                         <property name="text">
+                          <string>Delay</string>
+                         </property>
+                         <property name="indent">
+                          <number>10</number>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0" colspan="3">
+                        <widget class="QLabel" name="label_3">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <family>Roboto</family>
+                           <pointsize>10</pointsize>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>Discharge Overcurrent (DOC)</string>
                          </property>
                         </widget>
                        </item>
@@ -5925,6 +6217,9 @@ Timing</string>
                              <pointsize>10</pointsize>
                             </font>
                            </property>
+                           <property name="toolTip">
+                            <string/>
+                           </property>
                            <property name="layoutDirection">
                             <enum>Qt::LayoutDirection::LeftToRight</enum>
                            </property>
@@ -5958,6 +6253,9 @@ Settings </string>
                              <kerning>true</kerning>
                             </font>
                            </property>
+                           <property name="toolTip">
+                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
                            <property name="autoFillBackground">
                             <bool>false</bool>
                            </property>
@@ -5985,11 +6283,14 @@ Settings</string>
                              <kerning>true</kerning>
                             </font>
                            </property>
+                           <property name="toolTip">
+                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
                            <property name="autoFillBackground">
                             <bool>false</bool>
                            </property>
                            <property name="text">
-                            <string>Load Default 
+                            <string>Load Radar Default 
 Settings</string>
                            </property>
                            <property name="checkable">
@@ -5999,6 +6300,9 @@ Settings</string>
                          </item>
                          <item>
                           <widget class="QCheckBox" name="writePermanentCheckBox">
+                           <property name="toolTip">
+                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When selecting this option, the configuration in the EEPROM tab is written permanently to the ISL9420x, and the configuration will remain through a power cycle.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
                            <property name="text">
                             <string>write settings permanent</string>
                            </property>
@@ -6078,6 +6382,9 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;xT2 Monitors FET temp&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;xT2 has two functions: monitor temperature or FETs temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Mark this option if the xT2 pin connects to a thermistor that monitors FET temperature. With this setting, the xT2 will not respond to the temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Unmark this option if the xT2 pin connects to a thermistor that monitors cell temperature, for normal operation.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>xT2 Monitors FET Temp</string>
                          </property>
@@ -6096,6 +6403,9 @@ Settings</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable CELLF PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;:  0x4A[bit7]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit4]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if a CELLF condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Enable CELLF PSD Action</string>
@@ -6116,6 +6426,9 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable Open Wire PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;:  0x4A[bit0]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit5]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if an Open Wire condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>Enable Open Wire PSD</string>
                          </property>
@@ -6134,6 +6447,9 @@ Settings</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable Undervoltage Lockout (UVLO) Power Down &lt;/span&gt;&lt;/p&gt;&lt;p&gt;Address: 0x4B [bit 3] &lt;/p&gt;&lt;p&gt;Status Bit: 0x80 [bit 3] &lt;/p&gt;&lt;p&gt;If not set, the device does not power down when a UVLO condition is detected. &lt;/p&gt;&lt;p&gt;If set, UVLOPD to 1 forces the device to power down upon detecting a UVLO condition. This selection, combined with the VCELL UVLO threshold, is intended to prevent further use of the pack.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Enable UVLO Power Down</string>
@@ -6154,8 +6470,11 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable Open Wire Detection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Address: 0x4A [bit 1]&lt;/p&gt;&lt;p&gt;Status Bit: 0x81[bit 4]&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Mark this option to prevent an open-wire detection scan following a CELLF detection. &lt;/p&gt;&lt;p&gt;Unmark this option to enable an open-wire detection scan following a CELLF detection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
-                          <string>Enable Open Wire Scan</string>
+                          <string>Disable Open Wire Detection</string>
                          </property>
                         </widget>
                        </item>
@@ -6271,6 +6590,9 @@ Settings</string>
                            <bold>false</bold>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Voltage over Rsense&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Calculated value based on the Rsense value and the IPACK.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>V</string>
                          </property>
@@ -6284,8 +6606,11 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Resistor value on hardware.&lt;/p&gt;&lt;p&gt;See ISL9420x Pins (47, 48)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
-                          <string>R</string>
+                          <string>Rsense</string>
                          </property>
                         </widget>
                        </item>
@@ -6397,6 +6722,9 @@ Settings</string>
                            <pointsize>10</pointsize>
                           </font>
                          </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Current-Sense Gain Amplifier&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x85 bit5:4&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Range:&lt;/span&gt; x5/x50/x500 GAIN&lt;/p&gt;&lt;p&gt;In the used mode (standalone operation of ISL9320x), the gain is only read but not set. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                         </property>
                          <property name="text">
                           <string>CS Gain</string>
                          </property>
@@ -6428,6 +6756,9 @@ Settings</string>
                            <family>Roboto</family>
                            <pointsize>10</pointsize>
                           </font>
+                         </property>
+                         <property name="toolTip">
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;IPACK&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x8E-0x8F&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit:&lt;/span&gt; 0x82 [bits 3:2]&lt;/p&gt;&lt;p&gt;The Pack's current measurement result registers store the voltage measured across the current sense resistor from the last system scan.&lt;/p&gt;&lt;p&gt;The value in this register is only valid if either “0x82 [bit 2] CHING” or “0x82[bit 3] DCHING” bit is set. If neither of these bits is set, the value in this register is invalid and must be ignored.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>I</string>
@@ -6688,7 +7019,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>Internal Temperature</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Internal Temperature&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The voltage is read directly from the ISL9420x register&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>iT</string>
@@ -6741,7 +7072,7 @@ Settings</string>
                         </widget>
                        </item>
                        <item row="2" column="0" rowspan="2">
-                        <widget class="QLabel" name="label_142">
+                        <widget class="QLabel" name="xT1_label">
                          <property name="font">
                           <font>
                            <family>Roboto</family>
@@ -6749,7 +7080,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>External Temperature 1</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;External Temperature 1&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0xA2-A3&lt;/p&gt;&lt;p&gt;Shows voltage on the xT1 Pin and the corresponding temperature based on the NTC.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>xT1</string>
@@ -6765,7 +7096,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>External Temperature 2</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;External Temperature 2&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0xA4-A5&lt;/p&gt;&lt;p&gt;Shows voltage on the xT2 Pin and the corresponding temperature based on the NTC.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>xT2</string>
@@ -7672,7 +8003,7 @@ RAM Memory</string>
                      <item row="1" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitChargerOn">
                        <property name="toolTip">
-                        <string>A Charger Present detection wakes a device from Powerdown or SLEEP into NORMAL Mode.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charger Present (CH_PRSNT)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x82 bit 1 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;during&lt;/span&gt;: COC condition while charger is attached. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Reset&lt;/span&gt; (μCCMON=0): Automatically when CHMON pin voltage &amp;lt; VCHMON. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Reset&lt;/span&gt; (μCCMON=1): Only on MCU read of Status 2 (0x82). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Wake-up&lt;/span&gt;: Wakes device from Powerdown/SLEEP to NORMAL Mode. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CHARGER ON</string>
@@ -7689,6 +8020,9 @@ RAM Memory</string>
                          <width>70</width>
                          <height>0</height>
                         </size>
+                       </property>
+                       <property name="toolTip">
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Lockout Fault (UVLOF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x80 bit3 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when:&lt;/span&gt; At least one cell voltage is below VCELL UVLO (0x0A-0B) for 5 consecutive cycles.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect:&lt;/span&gt; SD pin driven low. If UVLOPD (0x4B bit3) = 1, device enters Powerdown. Force FETs off. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared when:&lt;/span&gt; All cell voltages rise above VCELL UVR (0x06-07). Remains in Powerdown after wake-up if any cell is below UVR.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable:&lt;/span&gt; Set VCELL UVLO threshold to 0V.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>UVLO</string>
@@ -7707,8 +8041,7 @@ RAM Memory</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Undervoltage Lockout Fault bit is set when the ISL94202 detects at least one cell voltage is below the
-threshold “0x0A-0B VCELL UVLO” on page 39 for 5 consecutive sample cycles (measurements)..</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Overvoltage Lockout Fault (OVLOF) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x80 bit1 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when: &lt;/span&gt;At least one cell voltage exceeds VCELL OVLO (0x08-09) for 5 consecutive cycles. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect:&lt;/span&gt; Disables CFET/CBn, PSD pin is driven high.  &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared when:&lt;/span&gt; All cell voltages are below VCELL OVR (0x02-03).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>OVLO</string>
@@ -7727,9 +8060,7 @@ threshold “0x0A-0B VCELL UVLO” on page 39 for 5 consecutive sample cycles (m
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Open-Wire Fault bit is set when an open wire is detected on any of the cell voltage measurement pins. When
-detected, the OWF condition turns off the cell balance and power FETs, but only if bit “0x87.6 μCFET” on page 82
-is 0. Setting the μCFET bit = 1 prevents the power FETs from turning off during a CELLF condition.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Open-Wire Fault (OWF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 bit5 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when&lt;/span&gt;: Open wire detected on any cell voltage measurement pin. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Turns off cell balance and power FETs.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared when&lt;/span&gt;: No open wire detected in subsequent scan. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Trigger&lt;/span&gt;: Requires a CELLF condition (large voltage difference between cells) to initiate the Open-Wire test. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable/Disable&lt;/span&gt;: Controlled by DOWD bit (0x4A bit1).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Note&lt;/span&gt;: Dependent on CELLF detection: If CBMAXDV (0x22-23) is too high, CELLF may never occur.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>OPEN
@@ -7749,10 +8080,7 @@ is 0. Setting the μCFET bit = 1 prevents the power FETs from turning off during
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Internal Over-Temperature Fault bit is set to 1 if the internal temperature of the IC goes above the threshold
-“0x40-41 IOT” on page 62. When the ISL94202 sets the IOTF bit, it also stops/prevents cell balancing and turns
-off the power FETs. When IOTF is set, the device continues to prevent turn on of the FETs until the internal
-temperature drops below the recovery threshold “0x42-43 IOTR” on page 63.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Internal Over-Temperature Fault (IOTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 bit0 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Internal IC temperature exceeds IOT (0x40-41). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Stops cell balancing and turns off power FETs. Prevents FETs turn-on.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt;:  Temperature drops below IOTR (0x42-43).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>IOT</string>
@@ -7787,9 +8115,7 @@ temperature drops below the recovery threshold “0x42-43 IOTR” on page 63.</s
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Cell Balance Overvoltage bit is set during a Cell Balance Overvoltage condition, when all cell voltages are
-above threshold “0x1E-1F CBMAX” on page 50. At least one cell voltage must drop below the CBMAX threshold
-to recover from a Cell Balance Overvoltage condition, then the ISL94202 automatically clears the CBOV bit.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Overvoltage (CBOV)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit2&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when&lt;/span&gt;: All cell voltages are above CBMAX (0x1E-1F). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Stops Cell Balancing&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared when&lt;/span&gt;: At least one cell voltage drops below CBMAX.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CBOV</string>
@@ -7808,10 +8134,7 @@ to recover from a Cell Balance Overvoltage condition, then the ISL94202 automati
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Cell Balance Over-Temperature Fault bit is set during a Cell Balance Over-Temperature condition. This
-occurs when the external temperature sensing thermistors indicate a battery pack temperature above the
-threshold defined by register “0x2C-2D CBOT” on page 55. When the pack temperature drops below the
-threshold the ISL94202 automatically clears the CBOTF bit.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Over-Temperature Fault (CBOTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit0 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Battery pack temperature (via thermistors) is above CBOT (0x2C-2D). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Pack temperature drops below CBOT.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CBOT</string>
@@ -7830,12 +8153,7 @@ threshold the ISL94202 automatically clears the CBOTF bit.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>No scans. RGO
-remains on,
-VREF off.
-Monitors for a
-charger or load
-connection.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In SLEEP Mode (IN_SLEEP)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit6&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when&lt;/span&gt;: Device is in SLEEP Mode.&lt;/p&gt;&lt;p&gt;- Cell voltage drops below SLV (0x44-45) for the duration of SLT (0x46[7:0]-0x47[0]). (Disabled if μCFET (0x87 bit6) = 1 or if SLV = 0). &lt;/p&gt;&lt;p&gt;- No charge (CHING = 0) or discharge (DCHING = 0) current for the duration of SLEEP Timer (0x48[7:4]) after entering DOZE Mode (timer range 0-240 minutes in 16-minute steps). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Power Consumption&lt;/span&gt;: Lowest. Everything is off (including power FETs) except for the 2.5V regulator and wake-up circuits.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Wake-up Conditions&lt;/span&gt;: Connection of a load to LDMON pin or a charger to CHMON pin. Timers (IDLE/DOZE) must be set to non-zero values for wake-up after immediate SLEEP.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable&lt;/span&gt;: Set Sleep Voltage threshold in the EEPROM tab to 0V to disable entering sleep mode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>SLEEP</string>
@@ -7905,7 +8223,7 @@ connection.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Charge Over-Temperature Fault bit is set following a Charge Over-Temperature condition detection.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charge Over-Temperature Fault (COTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x80 bit6 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: External thermistor temperature rises above COT (0x30-31).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Charging): Forces CFET off. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Discharging): FET status determined by DOT (0x38-39). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Thermistor temperature drops below COTR (0x32-33).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>COT</string>
@@ -7953,7 +8271,7 @@ connection.</string>
                      <item row="1" column="0" colspan="2">
                       <widget class="QCheckBox" name="bitCharging">
                        <property name="toolTip">
-                        <string>When set, this bit indicates current flowing into the pack.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charging (CHING)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Address: 0x82 bit2&lt;/p&gt;&lt;p&gt;Set when: Charge current &amp;lt; -100μV across sense resistor for &amp;gt; 2ms. &lt;/p&gt;&lt;p&gt;Valid Current Reading: IPACK (0x8E-8F) is valid only when CHING or DCHING is set. &lt;/p&gt;&lt;p&gt;This status bit indicatesCurrent flowing into the pack.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CHARGING</string>
@@ -7972,10 +8290,7 @@ connection.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Cell Balance Under-Temperature Fault bit is set during a Cell Balance Under-Temperature condition. This
-occurs when the external temperature sensing thermistors indicate a battery pack temperature below the
-threshold defined by register “0x28-29 CBUT” on page 53. When the pack temperature rises above the threshold
-the ISL94202 automatically clears the CBUTF bit.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Under-Temperature Fault (CBUTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit1 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Battery pack temperature (via thermistors) is below CBUT (0x28-29).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Pack temperature rises above CBUT.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CBUT</string>
@@ -8004,10 +8319,10 @@ the ISL94202 automatically clears the CBUTF bit.</string>
                      <item row="2" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitLoadOn">
                        <property name="toolTip">
-                        <string>A Load Present detection wakes a device from SLEEP into NORMAL Mode.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Load Present (LD_PRSNT)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x82 bit0 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;During&lt;/span&gt;: DOC or DSC condition while the load is attached.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt; (μCLMON=0): Automatically when LDMON pin voltage &amp;gt; VLDMON. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt; (μCLMON=1): Only on MCU read of Status 2 (0x82). Wake-up: Wakes device from SLEEP to NORMAL Mode. Can prevent FET turn-on from Powerdown. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
-                        <string>LOAD ON</string>
+                        <string>LOAD PRESENT</string>
                        </property>
                        <property name="checked">
                         <bool>true</bool>
@@ -8039,7 +8354,7 @@ the ISL94202 automatically clears the CBUTF bit.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>Scans Every 512ms</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In DOZE Mode (IN_DOZE)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit5 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Device is in DOZE Mode. No charge (CHING = 0) or discharge (DCHING = 0) current for a duration set by IDLE/DOZE Timer (0x48[3:0]), ranging from 0 to 15 minutes (same timer as IDLE). Transition is from IDLE mode. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Voltage&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scan&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Rate&lt;/span&gt;: Reduced to once every 512ms (slower than IDLE).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;FETs&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;and&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;LDO&lt;/span&gt;: Remain ON. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Power&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Consumption&lt;/span&gt;: Lower than IDLE Mode due to further reduced scan frequency. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Exit&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Condition&lt;/span&gt;: Detection of any charge or discharge current, returning to NORMAL Mode.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DOZE</string>
@@ -8052,8 +8367,7 @@ the ISL94202 automatically clears the CBUTF bit.</string>
                      <item row="9" column="0">
                       <widget class="QCheckBox" name="bitOV">
                        <property name="toolTip">
-                        <string>The Overvoltage Fault bit is set when at least one cell is above threshold “VCELL OV” on page 35 for the time
-period set by “0x10-11 VCELL OV Timer” on page 41.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Overvoltage&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Fault&lt;/span&gt; (OVF)&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x80 bit0 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: At least one cell voltage is above VCELL OV (0x00-0x01) for the duration set by VCELL OV Timer (0x10-11). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Triggers an Overvoltage condition. If μCFET (0x87 bit6) = 0, it also shuts off CFET. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt;: If cells recover below VCELL OVR (0x02-03) for longer than VCELL OVT, the OV bit clears and, if μCFET = 0, CFET turns on. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>OV</string>
@@ -8072,10 +8386,7 @@ period set by “0x10-11 VCELL OV Timer” on page 41.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Cell Fail fault bit is set when the difference between the lowest voltage cell (“0x8A-8B CELMIN” on page 89)
-and highest voltage cell (“0x8C-8D CELMAX” on page 89) exceeds threshold “0x22-23 CBMAXDV” on page 51.
-When detected, the CELLF condition turns off the cell balance FETs and the power FETs, but only if bit “0x87.6
-μCFET” on page 82 is 0.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Fail Fault (CELLF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 bit4 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Setwhen&lt;/span&gt;: Difference between CELMIN (0x8A-8B) and CELMAX (0x8C-8D) exceeds CBMAXDV (0x22-23).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Turns off cell balance and power FETs. Triggers Open-Wire Scan&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Clearedwhen&lt;/span&gt;: Voltage difference is below CBMAXDV in subsequent measurements. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable&lt;/span&gt;: Set CBMAXDV to 0x0FFF (disables open-wire detection).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CELLF</string>
@@ -8094,7 +8405,7 @@ When detected, the CELLF condition turns off the cell balance FETs and the power
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Charge Under-Temperature Fault bit is set following a Charge Under-Temperature condition detection</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charge Under-Temperature Fault (CUTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x80 bit7 Set when: External thermistor temperature drops below CUT (0x34-35). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Charging): Forces CFET off. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Discharging): FET status determined by DUT (0x3C-3D). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Thermistor temperature rises above CUTR (0x36-37).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CUT</string>
@@ -8119,7 +8430,7 @@ When detected, the CELLF condition turns off the cell balance FETs and the power
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Discharge Over-Temperature Fault bit is set following a Discharge Over-Temperature condition detection.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Over-Temperature Fault (DOTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x80 bit4 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: External thermistor temperature rises above DOT (0x38-39). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Discharging): Forces DFET off. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Charging): FET status determined by COT (0x30-31). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Thermistor temperature drops below DOTR (0x3A-3B).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DOT</string>
@@ -8138,7 +8449,7 @@ When detected, the CELLF condition turns off the cell balance FETs and the power
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>Scan every 256ms</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;In IDLE Mode (IN_IDLE)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit4 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Device is in IDLE Mode. No charge (CHING = 0) or discharge (DCHING = 0) current for a duration set by IDLE/DOZE Timer (0x48[3:0]), ranging from 0 to 15 minutes.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Voltage&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scan&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Rate&lt;/span&gt;: Reduced to once every 256ms. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;FETs&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;and&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;VRGO&lt;/span&gt;: Remain ON. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Power&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Consumption&lt;/span&gt;: Lower due to reduced scan frequency.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Exit&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Condition&lt;/span&gt;: Detection of any charge or discharge current. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>IDLE</string>
@@ -8151,11 +8462,7 @@ When detected, the CELLF condition turns off the cell balance FETs and the power
                      <item row="10" column="2" colspan="2">
                       <widget class="QCheckBox" name="bitLVCHRG">
                        <property name="toolTip">
-                        <string>The Low Voltage Charge bit is set if at least one cell voltage is below the threshold “0x0E-0F VCELL LVCL” on
-page 40. If LVCHG is 1, the PCFET turns on instead of CFET as long as at least one cell is below the VCELL LVCL
-setting.
-When all cells are above the Low Voltage Charge threshold, the PCFET output turns off and the CFET output
-turns on</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Low Voltage Charge (LVCHG)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x82 bit7 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: At least one cell voltage is below VCELL LVCL (0x0E-0F). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: PCFET turns on instead of CFET while any cell is below VCELL LVCL. PCFET turns off and CFET turns on when all cells are above VCELL LVCL. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>LVCHRG</string>
@@ -8190,9 +8497,7 @@ turns on</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Cell Balance Undervoltage bit is set during a Cell Balance Undervoltage condition, when all cell voltages are
-below threshold “0x1C-1D CBMIN” on page 49. At least one cell voltage must rise above the CBMIN threshold to
-recover from a Cell Balance Undervoltage condition, then the ISL94202 automatically clears the CBUV bit.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cell Balance Undervoltage (CBUV)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x83 bit3 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when&lt;/span&gt;: All cell voltages are below CBMIN (0x1C-1D). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Stops Cell Balancing&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared when&lt;/span&gt;: At least one cell voltage rises above CBMIN.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>CBUV</string>
@@ -8217,7 +8522,7 @@ recover from a Cell Balance Undervoltage condition, then the ISL94202 automatica
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Discharge Under-Temperature Fault bit is set following a Discharge Under-Temperature condition detection.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Under-Temperature Fault (DUTF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x80 bit5&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: External thermistor temperature drops below DUT (0x3C-3D). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Discharging): Forces DFET off. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt; (Charging): FET status determined by CUT (0x34-35). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Thermistor temperature rises above DUTR (0x3E-3F).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DUT</string>
@@ -8230,7 +8535,7 @@ recover from a Cell Balance Undervoltage condition, then the ISL94202 automatica
                      <item row="2" column="0" colspan="2">
                       <widget class="QCheckBox" name="bitDischarging">
                        <property name="toolTip">
-                        <string>When set, this bit indicates current flowing out of the pack.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharging (DCHING)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address:&lt;/span&gt; 0x82 bit3 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when:&lt;/span&gt; Discharge current &amp;gt; ~100μV across sense resistor for &amp;gt; 2ms. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Valid Current Reading: &lt;/span&gt;IPACK (0x8E-8F) is valid only when DCHING or CHING is set. &lt;/p&gt;&lt;p&gt;This status bit indicates Current flowing out of the pack.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DISCHARGING</string>
@@ -8243,8 +8548,7 @@ recover from a Cell Balance Undervoltage condition, then the ISL94202 automatica
                      <item row="9" column="1">
                       <widget class="QCheckBox" name="bitUV">
                        <property name="toolTip">
-                        <string>The Undervoltage Fault bit is set when at least one cell is below threshold “VCELL UV” on page 37 for the time
-period set by “0x12-13 VCELL UV Timer” on page 42.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Undervoltage Fault (UVF) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address: &lt;/span&gt;0x80 bit2 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when:&lt;/span&gt; At least one cell voltage is below VCELL UV for the duration set by VCELL UV Timer (0x12-13). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect: &lt;/span&gt;Triggers Undervoltage condition. it also shuts off DFET. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery: &lt;/span&gt;If cells recover above VCELL UVR (0x06-07) for VCELL UVT + 3 seconds, LDMON pulses every 256ms to detect load removal. UV bit clears, and DFET turns on when the load is removed and cells are above VCELL UVR.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable:&lt;/span&gt; Set VCELL UV threshold to 0V.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>UV</string>
@@ -8263,9 +8567,7 @@ period set by “0x12-13 VCELL UV Timer” on page 42.</string>
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Discharge Overcurrent Fault bit is set when the discharge current induces a voltage across the current sense
-resistor that exceeds the voltage threshold “0x17.[6:4] DOC” on page 44 for a time greater than the setting of
-“0x17.[3:2] DOCTU” on page 44 and “0x16-17 DOCT” on page 44.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Overcurrent Fault (DOCF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 bit2 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Discharge current causes voltage across sense resistor to exceed DOC (0x17[6:4]) for longer than DOCTU (0x17[3:2]) and DOCT (0x16-17). LD_PRSNT (0x82 bit0) is set.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Turns off cell balance and power FETs if μCFET (0x87 bit6) = 0; otherwise, MCU controls FETs.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Load removed for two consecutive scans if μCLMON (0x87 bit4) = 0. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=0): Power FETs re-enabled automatically. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=1): MCU monitors LD_PRSNT via LMON_EN (0x86 bit6), clears error with CLR_LERR (0x86 bit7), and re-enables FETs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DOC</string>
@@ -8284,8 +8586,7 @@ resistor that exceeds the voltage threshold “0x17.[6:4] DOC” on page 44 for 
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The End-of-Charge detection bit is set when any cell voltage is above the end-of-charge voltage threshold
-“0x0C-0D VCELL EOC”.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Voltage End-of-Charge (VEOC) Detection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 [bit 7]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set when&lt;/span&gt;: Any cell voltage exceeds VCELL EOC (0x0C-0D).&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: EOC pin (35) pulled low. Cleared when all cells are below VCELL EOC minus hysteresis (VEOCTH =~117mV). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Clearing Mechanism&lt;/span&gt;: Typically requires enabling CB_EOC (0x4B bit0) for balancing during end-of-charge, allowing high cells to be drained. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Note&lt;/span&gt;: Does not disable CFET; OV threshold controls CFET shut-off at end of charge.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>EOC</string>
@@ -8304,9 +8605,10 @@ resistor that exceeds the voltage threshold “0x17.[6:4] DOC” on page 44 for 
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Discharge Short Circuit Fault bit is set when the discharge current induces a voltage across the current sense
-resistor that exceeds the voltage threshold “0x1B.[6:4] DSC” on page 48 for a time greater than the setting of
-“0x1B.[3:2] DSCTU” on page 48 and “0x1B.[1:0] - 0x1A.[7:0] DSCT” on page 49.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Short Circuit Fault (DSCF)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x81 bit3 Set when: Discharge current causes voltage across sense resistor to exceed DSC (0x1B[6:4]) for longer than DSCTU (0x1B[3:2]) and DSCT (0x1A[7:0]-0x1B[1:0]). LD_PRSNT (0x82 bit0) is set to 1 while the load remains attached.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Automatically turns off cell balance and power FETs (regardless of μCFET). &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Load removed for two consecutive scans if μCLMON (0x87 bit4) = 0. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=0): Power FETs re-enabled automatically. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=1): MCU monitors LD_PRSNT via LMON_EN (0x86 bit6), clears error with CLR_LERR (0x86 bit7), and re-enables FETs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       </property>
+                       <property name="whatsThis">
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Discharge Short Circuit Fault (DSCF)&lt;/span&gt; Address: 0x81 bit3 Set when: Discharge current causes voltage across sense resistor to exceed DSC (0x1B[6:4]) for longer than DSCTU (0x1B[3:2]) and DSCT (0x1A[7:0]-0x1B[1:0]). LD_PRSNT (0x82 bit0) is set. Effect: Automatically turns off cell balance and power FETs (regardless of μCFET). Cleared when: Load removed for two consecutive scans if μCLMON (0x87 bit4) = 0. Recovery (μCFET=0): Power FETs re-enabled automatically. Recovery (μCFET=1): MCU monitors LD_PRSNT via LMON_EN (0x86 bit6), clears error with CLR_LERR (0x86 bit7), and re-enables FETs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>DSC</string>
@@ -8325,9 +8627,7 @@ resistor that exceeds the voltage threshold “0x1B.[6:4] DSC” on page 48 for 
                         </size>
                        </property>
                        <property name="toolTip">
-                        <string>The Charge Overcurrent Fault bit is set when the charge current induces a voltage across the current sense
-resistor that exceeds the voltage threshold “0x19.[6:4] COC” on page 46 for a time greater than the setting of
-“0x19.[3:2] COCTU” on page 46 and “0x18-19 COCT” on page 47.</string>
+                        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Charge Overcurrent Fault (COCF)&lt;/span&gt; Address: 0x81 bit1 &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Set&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Charge current causes voltage across sense resistor to exceed COC (0x19[6:4]) for longer than COCTU (0x19[3:2]) and COCT (0x18-19). CH_PRSNT (0x82 bit1) is set while the charger remains attached. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Effect&lt;/span&gt;: Turns off cell balance and power FETs if μCFET (0x87 bit6) = 0; otherwise, MCU controls FETs. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Cleared&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;when&lt;/span&gt;: Charger removed for two consecutive scans if μCCMON (0x87 bit3) = 0. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=0): Power FETs re-enabled automatically. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Recovery&lt;/span&gt; (μCFET=1): MCU monitors CH_PRSNT via CMON_EN (0x86 bit4), clears error with CLR_CERR (0x86 bit5), and re-enables FETs.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                        </property>
                        <property name="text">
                         <string>COC</string>
