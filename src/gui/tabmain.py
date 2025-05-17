@@ -535,6 +535,7 @@ class MainTab:
             command_parsers = {
                 self.cmd_filter_request.code: self._parse_filter_config_response,
                 self.cmd_get_device_status.code: self._parse_device_status_response,
+                self.cmd_get_sdcard_status.code: self._parse_sd_info_response,
                 # Add more command parsers here as needed
             }
 
@@ -571,6 +572,42 @@ class MainTab:
         except Exception as e:
             logging.error(f"Failed to parse filter configuration response: {e}")
             status_bar_manager.update_message(f"Error: {e}", category="error")
+
+    def _parse_sd_info_response(self, packet: bytes) -> None:
+        """
+        Parses the response for the CMD_SUB_SD_INFO command.
+
+        Args:
+            packet (bytes): The raw data packet received from the serial manager.
+        """
+        try:
+            # Ensure the packet length is sufficient
+            if len(packet) < self.cmd_get_sdcard_status.response_size:
+                raise ValueError("Packet length is insufficient for CMD_SUB_SD_INFO.")
+
+            # Parse sector_address (8 bytes, big-endian)
+            sector_address = int.from_bytes(packet[2:10], byteorder='big')
+
+            # Parse sector_cnt (4 bytes, big-endian)
+            sector_cnt = int.from_bytes(packet[10:14], byteorder='big')
+
+            # Parse CardType (2 bytes, big-endian)
+            card_type = int.from_bytes(packet[14:16], byteorder='big')
+
+            # Log the parsed data
+            log_message = (
+                f"SD Card Info:\n"
+                f"  Card capacity: {sector_cnt * 512 / (1024 ** 3):.2f} GB\n"
+                f"  Sector Address: {sector_address}\n"
+                f"  Sector Count: {sector_cnt}\n"
+                f"  Sector Size: 512 bytes\n"
+                f"  Card Type: {card_type}\n"
+            )
+            log_manager.log_message(log_message)
+
+        except Exception as e:
+            logging.error(f"Failed to parse SD card info response: {e}")
+            log_manager.log_message(f"Error: {e}")
 
     def _parse_device_status_response(self, packet: bytes) -> None:
         """
