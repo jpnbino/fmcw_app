@@ -3,10 +3,10 @@ import logging
 
 from bms.cfg_voltage_registers import voltage_cell_from_raw
 from bms.ram_current_registers import current_from_raw
-from bms.isl94203_driver import get_resistor_value
+
 from bms.ram_voltage_status_registers import voltage_vbatt_from_raw
 
-def parse_bms_values(self, ram_values):
+def parse_bms_values(ram_values):
     """Parse raw RAM values into meaningful values."""
 
     try:
@@ -16,7 +16,7 @@ def parse_bms_values(self, ram_values):
         cell_max = voltage_cell_from_raw(ram_values[0x82 - RAM_BASE_ADDRESS] + ram_values[0x83 - RAM_BASE_ADDRESS])
         icurrent = current_from_raw(
             ram_values[0x84 - RAM_BASE_ADDRESS] + ram_values[0x85 - RAM_BASE_ADDRESS],
-            get_resistor_value(),
+            0.005,  # Resistor value in ohms,
             1
         )
 
