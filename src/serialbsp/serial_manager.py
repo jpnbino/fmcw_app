@@ -21,6 +21,7 @@ class SerialManager(QObject):
         self.reader.moveToThread(self.read_thread)
         self.reader.data_received.connect(self.data_received)
         self.reader.error_occurred.connect(self.error_occurred)
+        self.reader.connection_status_changed.connect(self.connection_status_changed)
 
         # Start the reader when the thread starts
         self.read_thread.started.connect(self.reader.run)
@@ -103,6 +104,7 @@ class SerialPortReader(QObject):
 
     data_received = Signal(bytes)
     error_occurred = Signal(str)
+    connection_status_changed = Signal(bool) 
 
     def __init__(self):
         super().__init__()
@@ -128,6 +130,9 @@ class SerialPortReader(QObject):
 
             except SerialException as e:
                 self.error_occurred.emit(f"Serial exception: {e}")
+                if self.serial_port and self.serial_port.is_open:
+                    self.serial_port.close()
+                self.connection_status_changed.emit(False) 
                 break  # Exit the loop on error
 
     def set_serial_port(self, serial_port: serial.Serial) -> None:
