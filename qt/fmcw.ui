@@ -7157,7 +7157,8 @@ Settings</string>
                             </size>
                            </property>
                            <property name="text">
-                            <string>Log Rate: (sec)</string>
+                            <string>Log Rate: (sec)
+range: 1-3600</string>
                            </property>
                           </widget>
                          </item>
@@ -7171,12 +7172,21 @@ Settings</string>
                            </property>
                            <property name="minimumSize">
                             <size>
-                             <width>0</width>
-                             <height>25</height>
+                             <width>120</width>
+                             <height>30</height>
                             </size>
                            </property>
                            <property name="alignment">
                             <set>Qt::AlignmentFlag::AlignCenter</set>
+                           </property>
+                           <property name="showGroupSeparator" stdset="0">
+                            <bool>false</bool>
+                           </property>
+                           <property name="minimum">
+                            <number>1</number>
+                           </property>
+                           <property name="maximum">
+                            <number>3600</number>
                            </property>
                           </widget>
                          </item>

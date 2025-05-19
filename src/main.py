@@ -125,10 +125,6 @@ class FMCWApplication(QMainWindow):
         self.main_tab = MainTab(self, self.serial_manager, self.serial_protocol)
         self.bms_tab = BmsTab(self, self.serial_manager, self.serial_protocol, self.bms_config)
 
-        self.logRateSpinBox = window.findChild(QSpinBox, "logRateSpinBox")
-        self.logRateSpinBox.setMinimum(1)
-        self.logRateSpinBox.setMaximum(3600)
-
         # Create and set up the status bar
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
