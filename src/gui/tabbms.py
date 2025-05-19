@@ -13,8 +13,9 @@ import logging
 from serialbsp.commands import *
 from gui.global_log_manager import log_manager
 from gui.global_status_bar_manager import status_bar_manager
+from gui.bms_parser import parse_bms_values
 
-REPLY_TIMEOUT = 2  # seconds
+REPLY_TIMEOUT = 2000  # seconds
 
 class BmsTab:
     def __init__(self, ui, serial_manager, serial_protocol, bms_driver):
@@ -44,6 +45,7 @@ class BmsTab:
         self.ui.findChild(QCheckBox, "tGainCheckBox").clicked.connect(self.ui_update_gain_text)
 
         self.startStopLogButton = self.ui.findChild(QPushButton, "startStopLogButton")
+        self.startStopLogButton.setCheckable(True)
 
         # Access QLineEdit elements using findChild
         # Voltage limits
@@ -776,7 +778,7 @@ class BmsTab:
 
             if ram_values:
                 # Parse the raw data
-                parsed_values = self.parse_bms_values(ram_values)
+                parsed_values = parse_bms_values(ram_values)
 
                 # Write the log entry (raw + parsed data)
                 self.ram_log_handler.write_log_entry(raw_data=ram_values, parsed_data=parsed_values)
