@@ -346,8 +346,8 @@ class BmsTab:
         for label, value in temp_labels.items():
             if label == self.TLInternalOverTempLabel or label == self.TLInternalOTRecoverLabel:
                 temp_in_degrees = self.isl94203_driver.convert_voltage2celsius(value[0], False)
-
-            temp_in_degrees = self.isl94203_driver.convert_voltage2celsius(value[0])
+            else:
+                temp_in_degrees = self.isl94203_driver.convert_voltage2celsius(value[0])
             label.setText(f"{temp_in_degrees:.2f}°C")
 
     def ui_update_current_limits(self):
