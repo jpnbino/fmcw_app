@@ -11,7 +11,7 @@ from gui.global_log_manager import log_manager
 from serialbsp.commands import *
 from gui.global_status_bar_manager import status_bar_manager
 
-REFRESH_RATE = 2000
+REFRESH_RATE = 1000
 MESSAGE_DURATION = 5000
 
 class MainTab:
@@ -85,7 +85,6 @@ class MainTab:
         self.serialOpenCloseButton = self.ui.findChild(QPushButton, "serialOpenCloseButton")
         self.serialConnectedBox = self.ui.findChild(QCheckBox, "bitPortConnected")
         self.serialOpenCloseButton.clicked.connect(self.toggle_serial)
-        self.update_serial_ports()
         self.serial_manager.connection_status_changed.connect(self.update_ui_connection_status)
         self.serial_manager.error_occurred.connect(self.log_serial_error)
 
@@ -135,35 +134,28 @@ class MainTab:
         self.timer.start(REFRESH_RATE)
 
     def update_serial_ports(self):
-        """Populates the serial port combo box with available ports."""
-        TARGET_VID = 0x2047
-        TARGET_PID = 0x03DF
+        """Populates the serial port combo box with available ports and auto-connects to the target device."""
+        TARGET_VID = "2047"
+        TARGET_PID = "03DF"
 
-        current_selection = self.serialComboBox.currentData()
         available_ports = self.serial_manager.get_available_ports()
         self.serialComboBox.clear()
 
-        # Track the index of the target device
         target_index = -1
+        target_port = None
 
-        # Repopulate the combo box with the available ports
+        # Repopulate the combo box and find the target device
         for index, (port, description, vid, pid) in enumerate(available_ports):
             self.serialComboBox.addItem(f"{port} - {description}", port)
-
-            # Check if this port matches the target device's VID and PID
             if vid == TARGET_VID and pid == TARGET_PID:
                 target_index = index
+                target_port = port
 
-        # Restore the previous selection if it is still available
-        if current_selection:
-            index = self.serialComboBox.findData(current_selection)
-            if index != -1:
-                self.serialComboBox.setCurrentIndex(index)
-                return
-
-        # If the target device is found, select it
+        # If the target device is found, select it and open the port if not already open
         if target_index != -1:
             self.serialComboBox.setCurrentIndex(target_index)
+            if not self.serial_manager.is_open() :
+                self.toggle_serial()
 
     def toggle_serial(self):
         """Opens or closes the serial port based on its current state."""
