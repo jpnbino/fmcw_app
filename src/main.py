@@ -112,7 +112,6 @@ class FMCWApplication(QMainWindow):
 
         # Connect SerialManager and SerialProtocolFmcw
         self.serial_manager.data_received.connect(self.serial_protocol.handle_raw_data)
-        self.serial_protocol.command_encoded.connect(self.serial_manager.send_data)
         self.serial_protocol.log_message.connect(log_manager.log_message)
 
 
