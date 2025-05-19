@@ -119,11 +119,11 @@ class SerialProtocolFmcw(QObject):
                     try:
                         decoded_message = unsolicited_packet.decode('utf-8', errors='ignore').strip()
                         if decoded_message:
-                            self.log_message.emit(f"Unsolicited: {decoded_message}")
-                            self.data_received.emit(unsolicited_packet) # Emit unsolicited data as well
+                            self.log_message.emit(f"{decoded_message}")
+                            #self.data_received.emit(unsolicited_packet) # Emit unsolicited data as well
                     except UnicodeDecodeError:
-                        self.log_message.emit(f"Unsolicited (bytes): {' '.join(f'0x{byte:02X}' for byte in unsolicited_packet)}")
-                        self.data_received.emit(unsolicited_packet)
+                        self.log_message.emit(f"FMCW (bytes): {' '.join(f'0x{byte:02X}' for byte in unsolicited_packet)}")
+                        #self.data_received.emit(unsolicited_packet)
                     if consumed > 0:
                         del self.receive_buffer[:consumed]
                     continue # Try to extract more packets

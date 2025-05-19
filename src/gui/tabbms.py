@@ -14,6 +14,8 @@ from serialbsp.commands import *
 from gui.global_log_manager import log_manager
 from gui.global_status_bar_manager import status_bar_manager
 
+REPLY_TIMEOUT = 2  # seconds
+
 class BmsTab:
     def __init__(self, ui, serial_manager, serial_protocol, bms_driver):
         self.ui = ui
@@ -196,6 +198,13 @@ class BmsTab:
         self.bitSLEEPlabel = self.ui.findChild(QLabel, "bitSLEEPlabel")
 
         self.logRateSpinBox = self.ui.findChild(QSpinBox, "logRateSpinBox")
+
+        self.reply_timer = QTimer()
+        self.reply_timer.setSingleShot(True)
+        self.reply_timer.timeout.connect(self.on_bms_reply_timeout)
+
+    def on_bms_reply_timeout(self):
+        log_manager.log_message("No reply from BMS (timeout).")
 
     def ui_update_gain_text(self):
         """Update the gain text based on the checkbox state."""
@@ -680,6 +689,7 @@ class BmsTab:
         try:
             if packet[0] != self.cmd_read_all_memory.code:
                 return
+            self.reply_timer.stop()
             print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
             print("packet length:", len(packet))
             self.isl94203.set_registers(list(packet[2:-1]))
@@ -701,6 +711,7 @@ class BmsTab:
             return
 
         try:
+            self.reply_timer.start(REPLY_TIMEOUT)
             self.serial_manager.reset_input_buffer()
             self.serial_manager.reset_output_buffer()
             self._encode_and_send(self.cmd_read_all_memory, [0], self.cmd_read_all_memory.description)
@@ -717,6 +728,7 @@ class BmsTab:
         try:
             if packet[0] != self.cmd_read_ram.code:
                 return
+            self.reply_timer.stop()
             print("packet:", " ".join(f"0x{byte:02x}" for byte in packet))
             print("packet length:", len(packet))
             self.isl94203.set_ram_registers(list(packet[2:-1]))
@@ -738,6 +750,7 @@ class BmsTab:
             status_bar_manager.update_message(f"Error: {ERROR_MESSAGE}.", category="error")
             return
         try:
+            self.reply_timer.start(REPLY_TIMEOUT)
             self.serial_manager.reset_input_buffer()
             self.serial_manager.reset_output_buffer()
             self._encode_and_send(self.cmd_read_ram, [0], self.cmd_read_ram.description)
