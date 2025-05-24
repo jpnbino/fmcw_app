@@ -4,10 +4,10 @@ from typing import Dict, Callable, Optional
 from .isl94203_constants import CURRENT_CELL_MULTIPLIER, CURRENT_GAIN_MAPPING, Mask
 
 def current_to_raw(value: int, resistor: float, gain: int) -> int:
-    return value / (CURRENT_CELL_MULTIPLIER * gain * resistor)
+    return (value * gain * resistor) / (CURRENT_CELL_MULTIPLIER )
 
 def current_from_raw(value: int, resistor: float, gain: int) -> float:
-    return value * (CURRENT_CELL_MULTIPLIER * gain * resistor)
+    return value * CURRENT_CELL_MULTIPLIER / ( gain * resistor)
 
 @dataclass
 class CurrentGainRegisterField:
