@@ -142,9 +142,12 @@ class SerialProtocolFmcw(QObject):
         if len(self.receive_buffer) < MINIMUM_PACKET_SIZE:
             return None, 0
 
-        # Assuming the expected packet has a fixed length
+        # Ensure the buffer has enough data for the expected packet length
         if len(self.receive_buffer) >= self._expected_packet_length:
             packet = bytes(self.receive_buffer[:self._expected_packet_length])
+            if not packet:  # Check if the packet is empty
+                return None, 0 
+                      
             received_cmd = packet[0]
             if len(packet) >= MINIMUM_PACKET_SIZE:
                 received_checksum = packet[-1]
@@ -182,10 +185,14 @@ class SerialProtocolFmcw(QObject):
         try:
             decoded_buffer = self.receive_buffer.decode('utf-8', errors='ignore')
             if decoded_buffer:
-                if '\n' in decoded_buffer:
-                    end_index = decoded_buffer.find('\n')
-                    unsolicited_message_bytes = self.receive_buffer[:end_index + 1]
-                    return unsolicited_message_bytes, end_index + 1
+                # Look for any of the common line endings: \r\n, \n, or \r
+                for delimiter in ['\r\n', '\n', '\r']:
+                    end_index = decoded_buffer.find(delimiter)
+                    if end_index != -1:
+                        # Include the delimiter in the returned bytes
+                        delimiter_len = len(delimiter)
+                        unsolicited_message_bytes = self.receive_buffer[:end_index + delimiter_len]
+                        return unsolicited_message_bytes, end_index + delimiter_len
                 else:
                     if len(self.receive_buffer) > 2 * MAXIMUM_PACKET_SIZE:
                         self.log_message.emit("Potential runaway unsolicited message, clearing buffer.")

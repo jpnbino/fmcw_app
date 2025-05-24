@@ -6254,7 +6254,7 @@ Settings </string>
                             </font>
                            </property>
                            <property name="toolTip">
-                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                            <string/>
                            </property>
                            <property name="autoFillBackground">
                             <bool>false</bool>
@@ -6284,7 +6284,7 @@ Settings</string>
                             </font>
                            </property>
                            <property name="toolTip">
-                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                            <string/>
                            </property>
                            <property name="autoFillBackground">
                             <bool>false</bool>
