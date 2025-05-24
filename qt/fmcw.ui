@@ -1760,7 +1760,7 @@
                <enum>QTabWidget::TabShape::Rounded</enum>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <property name="elideMode">
                <enum>Qt::TextElideMode::ElideNone</enum>
@@ -6383,7 +6383,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;xT2 Monitors FET temp&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;xT2 has two functions: monitor temperature or FETs temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Mark this option if the xT2 pin connects to a thermistor that monitors FET temperature. With this setting, the xT2 will not respond to the temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Unmark this option if the xT2 pin connects to a thermistor that monitors cell temperature, for normal operation.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;xT2 Monitors FET temp&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;xT2 has two functions: monitor temperature or FETs temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Mark this option if the xT2 pin connects to a thermistor that monitors FET temperature. With this setting, the xT2 will not respond to the temperature.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Unmark this option if the xT2 pin connects to a thermistor that monitors cell temperature, for normal operation.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>xT2 Monitors FET Temp</string>
@@ -6405,7 +6405,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable CELLF PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;:  0x4A[bit7]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit4]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if a CELLF condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable CELLF PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x4A[bit7]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit4]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if a CELLF condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Enable CELLF PSD Action</string>
@@ -6427,7 +6427,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable Open Wire PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;:  0x4A[bit0]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit5]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if an Open Wire condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Enable Open Wire PSD Action&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Address&lt;/span&gt;: 0x4A[bit0]&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Status Bit&lt;/span&gt;: 0x81[bit5]&lt;/p&gt;&lt;p&gt;If set, the PSD pin is asserted if an Open Wire condition is found&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Enable Open Wire PSD</string>
@@ -6471,7 +6471,7 @@ Settings</string>
                           </font>
                          </property>
                          <property name="toolTip">
-                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable Open Wire Detection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Address: 0x4A [bit 1]&lt;/p&gt;&lt;p&gt;Status Bit: 0x81[bit 4]&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Mark this option to prevent an open-wire detection scan following a CELLF detection. &lt;/p&gt;&lt;p&gt;Unmark this option to enable an open-wire detection scan following a CELLF detection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Disable Open Wire Detection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Address: 0x4A [bit 1]&lt;/p&gt;&lt;p&gt;Status Bit: 0x81[bit 4]&lt;/p&gt;&lt;p&gt;Mark this option to prevent an open-wire detection scan following a CELLF detection. &lt;/p&gt;&lt;p&gt;Unmark this option to enable an open-wire detection scan following a CELLF detection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                          <property name="text">
                           <string>Disable Open Wire Detection</string>
