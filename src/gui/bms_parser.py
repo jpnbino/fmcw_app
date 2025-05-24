@@ -4,7 +4,7 @@ import logging
 from bms.cfg_voltage_registers import voltage_cell_from_raw
 from bms.ram_current_registers import current_from_raw
 
-from bms.ram_voltage_status_registers import voltage_vbatt_from_raw
+from bms.ram_voltage_status_registers import voltage_vbatt_from_raw, voltage_vrgo_from_raw
 
 def parse_bms_values(ram_values):
     """Parse raw RAM values into meaningful values."""
@@ -12,22 +12,32 @@ def parse_bms_values(ram_values):
     try:
         RAM_BASE_ADDRESS = 0x80  # Base address for RAM values
 
-        cell_min = voltage_cell_from_raw(ram_values[0x80 - RAM_BASE_ADDRESS] + ram_values[0x81 - RAM_BASE_ADDRESS])
-        cell_max = voltage_cell_from_raw(ram_values[0x82 - RAM_BASE_ADDRESS] + ram_values[0x83 - RAM_BASE_ADDRESS])
+        cell_min = voltage_cell_from_raw(
+            ram_values[0x8A - RAM_BASE_ADDRESS] + (ram_values[0x8B - RAM_BASE_ADDRESS] << 8)
+        )
+        cell_max = voltage_cell_from_raw(
+            ram_values[0x8C - RAM_BASE_ADDRESS] + (ram_values[0x8D - RAM_BASE_ADDRESS] << 8)
+        )
         icurrent = current_from_raw(
-            ram_values[0x84 - RAM_BASE_ADDRESS] + ram_values[0x85 - RAM_BASE_ADDRESS],
+            ram_values[0x8E - RAM_BASE_ADDRESS] + (ram_values[0x8F - RAM_BASE_ADDRESS] << 8),
             0.005,  # Resistor value in ohms,
             1
         )
 
         # Parse cell voltages (first 8 values)
         cell_values = [
-            voltage_cell_from_raw(ram_values[i - RAM_BASE_ADDRESS] + ram_values[i + 1 - RAM_BASE_ADDRESS])
+            voltage_cell_from_raw(
+            ram_values[i - RAM_BASE_ADDRESS] + (ram_values[i + 1 - RAM_BASE_ADDRESS] << 8)
+            )
             for i in range(0x90, 0x9F, 2)
         ]
 
-        vbatt = voltage_vbatt_from_raw(ram_values[0xA6 - RAM_BASE_ADDRESS] + ram_values[0xA7 - RAM_BASE_ADDRESS])
-        vrgo = voltage_cell_from_raw(ram_values[0xA8 - RAM_BASE_ADDRESS] + ram_values[0xA9 - RAM_BASE_ADDRESS])
+        vbatt = voltage_vbatt_from_raw(
+            ram_values[0xA6 - RAM_BASE_ADDRESS] + (ram_values[0xA7 - RAM_BASE_ADDRESS] << 8)
+        )
+        vrgo = voltage_vrgo_from_raw(
+            ram_values[0xA8 - RAM_BASE_ADDRESS] + (ram_values[0xA9 - RAM_BASE_ADDRESS] << 8)
+        )
 
         # Parse status bits (address 0x80 to 0x83)
         status_bits = ram_values[0x80 - RAM_BASE_ADDRESS:0x84 - RAM_BASE_ADDRESS]
@@ -79,12 +89,12 @@ def parse_bms_values(ram_values):
         # Construct the parsed data as a dictionary
         parsed_data = {
             "timestamp": datetime.now().isoformat(),
-            "vbatt": vbatt,
-            "vrgo": vrgo,
-            "cell_min": cell_min,
-            "cell_max": cell_max,
-            "cell_voltages": cell_values,
-            "current": icurrent,
+            "vbatt": round(vbatt, 2),
+            "vrgo": round(vrgo, 2),
+            "cell_min": round(cell_min, 2),
+            "cell_max": round(cell_max, 2),
+            "cell_voltages": [round(v, 2) for v in cell_values],
+            "current": round(icurrent, 2),
             "status_bits": status_bits_parsed,
         }
 
