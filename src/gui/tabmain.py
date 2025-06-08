@@ -117,6 +117,9 @@ class MainTab:
     def log_serial_error(self, error_message: str):
         """Logs serial port errors to the user log."""
         log_manager.log_message(f"Serial Error: {error_message}")
+        if self.serial_manager.is_open():
+            self.serial_manager.close_serial_port()
+            print("Serial port closed due to error.")
 
     @Slot(QByteArray)
     def _send_encoded_data(self, encoded_data: QByteArray):
@@ -139,6 +142,7 @@ class MainTab:
         TARGET_PID = "03DF"
 
         available_ports = self.serial_manager.get_available_ports()
+        port_names = [port for port, *_ in available_ports]
         self.serialComboBox.clear()
 
         target_index = -1
@@ -150,11 +154,19 @@ class MainTab:
             if vid == TARGET_VID and pid == TARGET_PID:
                 target_index = index
                 target_port = port
+                break  # Stop searching after finding the target device
+
+        # If the currently opened port is no longer available, close it
+        if self.serial_manager.current_port and self.serial_manager.current_port not in port_names:
+            self.serial_manager.close_serial_port()
+            status_bar_manager.update_message(
+                "Serial port disconnected (device removed)", category="warning", timeout=MESSAGE_DURATION
+            )
 
         # If the target device is found, select it and open the port if not already open
         if target_index != -1:
             self.serialComboBox.setCurrentIndex(target_index)
-            if not self.serial_manager.is_open() :
+            if not self.serial_manager.is_open():
                 self.toggle_serial()
 
     def toggle_serial(self):

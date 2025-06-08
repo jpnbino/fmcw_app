@@ -25,6 +25,7 @@ class SerialManager(QObject):
 
         # Start the reader when the thread starts
         self.read_thread.started.connect(self.reader.run)
+        self.current_port = None
         print("SerialManager is running")
 
     def get_available_ports(self) -> list[tuple[str, str, str, str]]:
@@ -47,10 +48,23 @@ class SerialManager(QObject):
         self.serial_port.port = port
         self.serial_port.baudrate = baudrate
         self.serial_port.timeout = timeout
+        self.current_port = port
         try:
             self.serial_port.open()
-            self.reader.set_serial_port(self.serial_port)  # Give the reader the port
-            self.read_thread.start()
+
+            # If the thread is not running, create a new thread and a new reader
+            if not self.read_thread.isRunning():
+                self.read_thread = QThread()
+                self.reader = SerialPortReader()  # <-- Create a new instance!
+                self.reader.set_serial_port(self.serial_port)
+                self.reader.moveToThread(self.read_thread)
+                self.read_thread.started.connect(self.reader.run)
+                self.reader.data_received.connect(self.data_received)
+                self.reader.error_occurred.connect(self.error_occurred)
+                self.reader.connection_status_changed.connect(self.connection_status_changed)
+                self.read_thread.start()
+            else:
+                self.reader.set_serial_port(self.serial_port)
             self.connection_status_changed.emit(True)
         except SerialException as e:
             self.error_occurred.emit(f"Error opening serial port: {e}")
@@ -58,11 +72,17 @@ class SerialManager(QObject):
 
     def close_serial_port(self) -> None:
         """Closes the currently open serial port."""
-        if self.serial_port.is_open:
-            self.stop_reading()
-            self.serial_port.close()
-            self.serial_port.port = None
-            self.stop_reading()
+        try:
+            if self.serial_port.is_open:
+                self.stop_reading()
+                try:
+                    self.serial_port.close()
+                    self.current_port = None
+                except Exception as e:
+                    self.error_occurred.emit(f"Error closing serial port: {e}")
+                self.serial_port.port = None
+        finally:
+            # Always emit status change, even if already closed or error
             self.connection_status_changed.emit(False)
 
     def is_open(self) -> bool:
@@ -81,10 +101,14 @@ class SerialManager(QObject):
 
     def stop_reading(self) -> None:
         """Stops the serial reading thread."""
-        self.reader.stop()
-        self.read_thread.quit()
-        self.read_thread.wait()
-        self.reader.set_serial_port(None)
+        if self.reader:
+            self.reader.stop()
+        if self.read_thread.isRunning():
+            self.read_thread.quit()
+            self.read_thread.wait()
+        if self.reader:
+            self.reader.set_serial_port(None)
+            self.reader = None
 
     def reset_input_buffer(self) -> None:
         """Clears the input buffer of the serial port."""
@@ -122,6 +146,7 @@ class SerialPortReader(QObject):
         This method should be called when the QThread starts.
         """
         self._stop_flag = False 
+        print("SerialPortReader: run() started")
         while self.serial_port and self.serial_port.is_open and not self._stop_flag:
             try:
                 data = self.serial_port.read_all()
@@ -134,6 +159,7 @@ class SerialPortReader(QObject):
                     self.serial_port.close()
                 self.connection_status_changed.emit(False) 
                 break  # Exit the loop on error
+        print("SerialPortReader: run() stopped")
 
     def set_serial_port(self, serial_port: serial.Serial) -> None:
         """Sets the serial port for the reader."""
