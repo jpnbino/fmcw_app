@@ -11,7 +11,7 @@ from gui.global_log_manager import log_manager
 from serialbsp.commands import *
 from gui.global_status_bar_manager import status_bar_manager
 
-REFRESH_RATE = 1000
+REFRESH_RATE = 2000
 MESSAGE_DURATION = 5000
 
 class MainTab:
@@ -137,9 +137,12 @@ class MainTab:
         self.timer.start(REFRESH_RATE)
 
     def update_serial_ports(self):
-        """Populates the serial port combo box with available ports and auto-connects to the target device."""
         TARGET_VID = "2047"
         TARGET_PID = "03DF"
+        """
+        Populates the serial port combo box with available ports and auto-connects to the target device.
+        Also checks if the currently opened port is still available and closes it if not.
+        """
 
         available_ports = self.serial_manager.get_available_ports()
         port_names = [port for port, *_ in available_ports]

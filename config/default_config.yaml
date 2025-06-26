@@ -41,8 +41,8 @@ timers:
 cell balance limits:
   cb upper lim: 3.65
   cb lower lim: 2.50
-  cb max delta: 0.02
-  cb min delta: 0.5
+  cb max delta: 4
+  cb min delta: 0.05
   cb over temp: 0.53
   cb ot recover: 0.59
   cb ut recover: 1.19
