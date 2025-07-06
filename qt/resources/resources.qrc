@@ -2,8 +2,4 @@
   <qresource prefix="font">
     <file>../fonts/Roboto/Roboto-Regular.ttf</file>
   </qresource>
-  <qresource prefix="images">
-    <file>images/temperature_circuit.png</file>
-    <file>images/DOC_Current.png</file>
-  </qresource>
 </RCC>
