@@ -18,8 +18,8 @@ def voltage_temperature_to_raw(value: float) -> int:
 v_map = [
     ("cell_balance_min_voltage", 0x1C, voltage_cell_from_raw, voltage_cell_to_raw),
     ("cell_balance_max_voltage", 0x1E, voltage_cell_from_raw, voltage_cell_to_raw),
-    ("cell_balance_max_delta", 0x20, voltage_cell_from_raw, voltage_cell_to_raw),
-    ("cell_balance_min_delta", 0x22, voltage_cell_from_raw, voltage_cell_to_raw),
+    ("cell_balance_max_delta", 0x22, voltage_cell_from_raw, voltage_cell_to_raw),
+    ("cell_balance_min_delta", 0x20, voltage_cell_from_raw, voltage_cell_to_raw),
     ("cell_balance_min_temp", 0x28, voltage_temperature_from_raw, voltage_temperature_to_raw),
     ("cell_balance_min_temp_recovery", 0x2A, voltage_temperature_from_raw, voltage_temperature_to_raw),
     ("cell_balance_max_temp", 0x2C, voltage_temperature_from_raw, voltage_temperature_to_raw),
